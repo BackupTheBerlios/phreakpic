@@ -41,8 +41,8 @@ $error['custom_search'] = '';
 //admin
 $error['no_admin'] = '';
 $error['get_usergroups_of_user'] = '';
-$error[''] = '';
-$error[''] = '';
+$error['get_usergroups'] = '';
+$error['enter_name'] = 'You must enter a name';
 $error[''] = '';
 $error[''] = '';
 $error[''] = '';

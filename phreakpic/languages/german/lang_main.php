@@ -107,6 +107,8 @@ $lang['cat_remove'] = 'Categorien entfernen';
 $lang['add_to_group'] = 'Zur Gruppe hinzufügen';
 $lang['remove_from_group'] = 'Von der Gruppe entfernen';
 $lang['change_group'] = 'Gruppe ändern';
+$lang['cat_auth'] = 'Kategorie Rechte';
+$lang['content_auth'] = 'Content Rechte';
 
 
 

@@ -106,6 +106,8 @@ $lang['cat_remove'] = 'remove categorie';
 $lang['add_to_group'] = 'add to group';
 $lang['remove_from_group'] = 'remove from group';
 $lang['change_group'] = 'change group';
+$lang['cat_auth'] = 'Categorie Permissions';
+$lang['content_auth'] = 'Content 	Permissions';
 
 
 
