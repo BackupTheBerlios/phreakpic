@@ -78,7 +78,7 @@ table_cols = <!--{$table_cols|default:0}-->
 												<!--{$lang.move}-->:<input id="move" name="move[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
 											<!--{/if}-->
 									<!--{/if}-->
-									<!--{if  $$thumbs[thumb_cols][thumb_cell].allow_remove_from_group == true}-->
+									<!--{if  $thumbs[thumb_cols][thumb_cell].allow_remove_from_group == true}-->
 										<!--{$lang.change_group}--> (<!--{$thumbs[thumb_cols][thumb_cell].contentgroup_name}-->): <input id="change_group" name="change_group[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
 									<!--{/if}-->-->
 								<!--{/if}-->
