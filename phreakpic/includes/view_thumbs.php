@@ -121,7 +121,7 @@ if (is_array($contents))
 	$smarty->assign('thumbs',$thumbs);
 	$smarty->assign('is_content', true);
 }
-	$smarty->assign('basket_enable',$userdata['basket_enable']);
+	$smarty->assign('basket_enable',$userdata['phreakpic_basket_enable']);
 
 
 ?>

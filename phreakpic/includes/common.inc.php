@@ -31,9 +31,9 @@ if (!isset($userdata['phreakpic_content_per_page']))
 	$userdata['content_per_page'] = $config_vars['default_content_per_page'];
 }
 
-if (!isset($userdata['basket_enable']))
+if (!isset($userdata['phreakpic_basket_enable']))
 {
-	$userdata['basket_enable'] = $config_vars['default_basket_enable'];
+	$userdata['phreakpic_basket_enable'] = $config_vars['default_basket_enable'];
 }
 
 
