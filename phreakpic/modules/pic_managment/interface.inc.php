@@ -12,30 +12,34 @@ function get_cats_of_cat($parent_id)
 
 	// get the sql where to limit the query to categories which the user is allowed to view
 	$auth_where=get_allowed_catgroups_where($userdata['user_id'],'view');
+	if (!isset($auth_where))
+	{
+		return;
+	}
 
 	$sql = "SELECT * FROM " . $config_vars['table_prefix'] . "cats WHERE (parent_id = '$parent_id') and ($auth_where)";
 
 	if (!$result = $db->sql_query($sql))
 	{
-	message_die(GENERAL_ERROR, "Konnte Kategorie nicht auswählen", '', __LINE__, __FILE__, $sql);
+		message_die(GENERAL_ERROR, "Konnte Kategorie nicht auswählen", '', __LINE__, __FILE__, $sql);
 	}
 
 	// generate categorie objects for each categorie that is returned by the query
 	while ($row = $db->sql_fetchrow($result))
 	{
-	$catobj= new categorie();
-	if ($catobj->generate_from_row($row) != OP_SUCCESSFUL)
-	{
-		return OP_FAILED;
-	}
+		$catobj= new categorie();
+		if ($catobj->generate_from_row($row) != OP_SUCCESSFUL)
+		{
+			return OP_FAILED;
+		}
 
-	$cat_objects[]=$catobj;
+		$cat_objects[]=$catobj;
 	}
 	return $cat_objects;
 
 }
 
-function get_content_of_cat($cat_id)
+function get_content_of_cat($cat_id = 0)
 {
 	// Returns an Array of album_content objects of all content which is in the categorie with id $cat_id
 	global $db,$config_vars,$userdata,$filetypes;
@@ -57,13 +61,19 @@ function get_content_of_cat($cat_id)
 		
 	}
 	
-	$content_where = generate_where('id',$content_ids);
-	$auth_where = get_allowed_contentgroups_where($userdata['user_id'], "view");
+	if (!isset($content_ids))
+	{
+		return OP_NO_CONTENT;
+	}
+	
+	$content_where = generate_where('content.id',$content_ids);
+	$auth_where = get_allowed_contentgroups_where('content.contentgroup_id',$userdata['user_id'], "view");
 	
 	// get all content
 	
-	$sql = 	'SELECT * FROM ' .  $config_vars['table_prefix'] . "content 
-		WHERE ($content_where) and ($auth_where)";
+	$sql = 	'SELECT content.*,content_in_cat.place_in_cat FROM ' .  $config_vars['table_prefix'] . "content as content,"  . $config_vars['table_prefix'] . "content_in_cat as content_in_cat
+		WHERE ($content_where) and ($auth_where) and (content.id = content_in_cat.content_id) ORDER BY content_in_cat.place_in_cat";
+		
 		
 	
 	if (!$result = $db->sql_query($sql))
