@@ -62,7 +62,7 @@
 			<td>
 				<div align="center">
 			<!--{$lang.full_size}--> <input type="radio" name="size" checked onclick="imageSize(0)"> <!--{$lang.fit_size}--> <input type="radio" name="size" onclick="imageSize(1)">
-					<a name="pic">A</a>
+					<a name="pic"></a>
 						<table width="1" border="0" cellpadding="0" cellspacing="0">
 							<tr>
 								<td width="1"><img src="templates/<!--{$template_name}-->/img/elo.gif" width="14" height="14" /></td>
@@ -109,7 +109,7 @@
 							</tr>
 						</table>
 						
-						<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->&slideshow=5<!--{$sid}-->#pic">Slideshow</a>
+						<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->&slideshow=5<!--{$sid}-->#pic"><!--{$lang.slideshow}--></a>
 						
 							
 						
