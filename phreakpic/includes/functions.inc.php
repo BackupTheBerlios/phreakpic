@@ -103,6 +103,10 @@ function make_comments($comment, $level)
 	$comment_infos['text'] = $comment->get_feedback();
 	$user_data = get_userdata(intval($comment->get_user_id()));
 	$comment_infos['username'] = $user_data['username'];
+	$comment_infos['topic'] = $comment->get_topic();
+	$comment_infos['creation_date'] = $comment->get_creation_date();
+	$comment_infos['changed_count'] = $comment->get_changed_count();
+	$comment_infos['last_changed_date'] = $comment->get_last_changed_date();
 	
 	$comments[] = $comment_infos;
 	
