@@ -9,9 +9,19 @@ class phreak_auth
 	var $delete;
 	var $edit;
 	var $comment_edit;
+	var $add_to_group;
+	var $remove_from_group;
 	
 	// need to save those becuase object is identified by them
 	var $old_usergroup_id;
+	
+	// this array indicated which vars should be processed by external automatic processing
+	var $processing_vars = Array('view','delete','edit','comment_edit','add_to_group','remove_from_group');
+	
+
+	// this vars will be stored in the db
+	var $db_vars = Array('view','delete','edit','comment_edit','add_to_group','usergroup_id','remove_from_group');
+
 	
 
 	function delete()
@@ -19,6 +29,7 @@ class phreak_auth
 		global $db,$config_vars;
 		// remove from content table
 		$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE id = " . $this->id;
+		
 		if (!$result = $db->sql_query($sql))
 		{
 			message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
@@ -26,8 +37,63 @@ class phreak_auth
 		unset($this->id);
 	}
 	
-	function commit()
+	function commit($where)
 	{
+	
+				global $db,$config_vars;
+		if (!$this->in_db)
+		{
+			// this is object is not yet in the datebase, make a new entry
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this). ' (';
+			
+			// get the set vars from db_vars
+			foreach ($this->db_vars as $value)
+			{			
+				$sql = $sql . "`$value`, ";
+			}
+			// unset the last ','
+			$sql{strlen($sql)-2}=' ';
+
+			$sql = $sql . ') VALUES ( ';
+			
+			foreach ($this->db_vars as $value)
+			{			
+				$sql = $sql . "'{$this->$value}', ";
+			}
+			$sql{strlen($sql)-2}=' ';
+			
+			$sql = $sql . ')';
+			
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Error while submitting a new auth object to the db", '', __LINE__, __FILE__, $sql);
+			}
+			return OP_SUCCESSFULL;
+			
+			$this->in_db = true;
+			
+		}
+		else
+		{
+			// object is already in the database just du an update
+			$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . ' SET ';
+			
+			// get the set vars from db_vars
+			foreach ($this->db_vars as $value)
+			{			
+				$sql = $sql . "`$value` = '{$this->$value}', ";
+			}
+			// unset the last ','
+			$sql{strlen($sql)-2}=' ';
+
+			$sql = $sql . "WHERE $where";
+			
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Error while updating an existing cat_auth object to the db", '', __LINE__, __FILE__, $sql);
+			}
+			return OP_SUCCESSFUL;
+		}
 	
 	}
 	
@@ -68,6 +134,10 @@ class phreak_auth
 		}
 	
 	}
+	
+	
+	
+
 	
 	function get_usergroup_id()
 	{
@@ -110,6 +180,48 @@ class phreak_auth
 		$this->view = 0;
 		return OP_SUCCESFULL;
 	}
+	
+	
+	function get_add_to_group()
+	{
+		return $this->add_to_group;
+	}
+
+	
+	function set_add_to_group($add_to_group=1)
+	{
+		$this->add_to_group = $add_to_group;
+		return OP_SUCCESFULL;
+	}
+
+
+	function unset_add_to_group()
+	{
+		$this->add_to_group = 0;
+		return OP_SUCCESFULL;
+	}
+	
+	
+	function get_remove_from_group()
+	{
+		return $this->remove_from_group;
+	}
+
+	
+	function set_remove_from_group($d=1)
+	{
+		$this->remove_from_group = $d;
+		return OP_SUCCESFULL;
+	}
+
+
+	function unset_remove_from_group()
+	{
+		$this->remove_from_group = 0;
+		return OP_SUCCESFULL;
+	}
+
+
 	
 	function get_delete()
 	{
@@ -160,12 +272,30 @@ class cat_auth extends phreak_auth
 	var $content_add;
 	var $content_remove;
 	
+	function cat_auth()
+	{
+		$this->processing_vars[] = 'cat_add';
+		$this->processing_vars[] = 'cat_remove';
+		$this->processing_vars[] = 'content_add';
+		$this->processing_vars[] = 'content_remove';
+	
+		$this->db_vars[] = 'cat_add';
+		$this->db_vars[] = 'content_add';
+		$this->db_vars[] = 'cat_remove';
+		$this->db_vars[] = 'content_remove';
+		$this->db_vars[] = 'catgroup_id';
+
+		
+	}
+
+		
 	
 	function delete()
 	{
 		global $db,$config_vars;
 		// remove from content table
 		$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE (usergroup_id = $this->usergroup_id) and (catgroup_id = $this->catgroup_id)";
+		
 		if (!$result = $db->sql_query($sql))
 		{
 			message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
@@ -235,42 +365,8 @@ class cat_auth extends phreak_auth
 	
 	function commit()
 	{
-		global $db,$config_vars;
-		if (!$this->in_db)
-		{
-			// this is object is not yet in the datebase, make a new entry
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . " (`usergroup_id`,`catgroup_id`,`view`,`delete`,`edit`,`comment_edit`,`cat_add`,`cat_remove`,`content_add`,`content_remove`)
-				VALUES ('$this->usergroup_id', '$this->catgroup_id','$this->view','$this->delete','$this->edit','$this->comment_edit','$this->cat_add','$this->cat_remove','$this->content_add','$this->content_remove')";
-			if (!$result = $db->sql_query($sql))
-			{
-				message_die(GENERAL_ERROR, "Error while submitting a new auth object to the db", '', __LINE__, __FILE__, $sql);
-			}
-			return OP_SUCCESSFULL;
-			
-			$this->in_db = true;
-			
-		}
-		else
-		{
-			// object is already in the database just du an update
-			$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . " 
-				SET 	`usergroup_id` = '$this->usergroup_id', 
-					`catgroup_id` = '$this->catgroup_id',
-					`view` = '$this->view',
-					`delete` = '$this->delete',
-					`edit` = '$this->edit',
-					`comment_edit` = '$this->comment_edit',
-					`cat_add` = '$this->cat_add',
-					`cat_remove` = '$this->cat_remove',
-					`content_add` = '$this->content_add',
-					`content_remove` = '$this->content_remove'
-				WHERE (usergroup_id = $this->old_usergroup_id) and (catgroup_id = $this->old_catgroup_id)";
-			if (!$result = $db->sql_query($sql))
-			{
-				message_die(GENERAL_ERROR, "Error while updating an existing cat_auth object to the db", '', __LINE__, __FILE__, $sql);
-			}
-			return OP_SUCCESSFUL;
-		}
+		$where = "(usergroup_id = $this->old_usergroup_id) and (catgroup_id = $this->old_catgroup_id)";
+		phreak_auth::commit($where);
 
 	}
 	
@@ -284,6 +380,17 @@ class cat_auth extends phreak_auth
 	{
 		return $this->catgroup_id;
 	}
+	
+	function set_catgroup_id($id)
+	{
+		$this->catgroup_id = $id;
+		return OP_SUCCSESSFUL;
+	}
+	
+	function get_catgroup_id()
+	{
+		return $this->catgroup_id;
+	}
 }
 
 class content_auth extends phreak_auth
@@ -291,6 +398,18 @@ class content_auth extends phreak_auth
 	var $contentgroup_id;
 	
 	var $old_contentgroup_id;
+	
+	function content_auth()
+	{
+	
+		
+	
+		$this->db_vars[] = 'contentgroup_id';
+		
+	
+		
+		
+	}
 	
 	function generate($usergroup_id,$group_id)
 	{
@@ -320,45 +439,28 @@ class content_auth extends phreak_auth
 		return OP_SUCCSESSFUL;
 	}
 	
-	function get_group_id($id)
+	function get_group_id()
 	{
 		return $this->contentgroup_id;
 	}
 	
+	function set_contentgroup_id($id)
+	{
+		$this->contentgroup_id = $id;
+		return OP_SUCCSESSFUL;
+	}
+	
+	function get_contentgroup_id()
+	{
+		return $this->contentgroup_id;
+	}
+
+	
 	function commit()
 	{
-		global $db,$config_vars;
-		if (!$this->in_db)
-		{
-			// this is object is not yet in the datebase, make a new entry
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . " (`usergroup_id`,`contentgroup_id`,`view`,`delete`,`edit`,`comment_edit`)
-				VALUES ('$this->usergroup_id', '$this->contentgroup_id','$this->view','$this->delete','$this->edit','$this->comment_edit')";
-			if (!$result = $db->sql_query($sql))
-			{
-				message_die(GENERAL_ERROR, "Error while submitting a new auth object to the db", '', __LINE__, __FILE__, $sql);
-			}
-			return OP_SUCCESSFULL;
-			
-			$this->in_db = true;
-			
-		}
-		else
-		{
-			// object is already in the database just du an update
-			$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . " 
-				SET 	`usergroup_id` = '$this->usergroup_id', 
-					`contentgroup_id` = '$this->contentgroup_id',
-					`view` = '$this->view',
-					`delete` = '$this->delete',
-					`edit` = '$this->edit',
-					`comment_edit` = '$this->comment_edit'
-				WHERE (usergroup_id = $this->old_usergroup_id) and (contentgroup_id = $this->old_contentgroup_id)";
-			if (!$result = $db->sql_query($sql))
-			{
-				message_die(GENERAL_ERROR, "Error while updating an existing cat_auth object to the db", '', __LINE__, __FILE__, $sql);
-			}
-			return OP_SUCCESSFUL;
-		}
+		$where = "(usergroup_id = $this->old_usergroup_id) and (contentgroup_id = $this->old_contentgroup_id)";
+		phreak_auth::commit($where);
+
 
 	}
 
