@@ -130,4 +130,18 @@ function make_comments($comment, $level,$editable)
 		}
 	}
 }
+
+function stop_view($start_view,$content_id)
+{
+	global $db,$config_vars,$userdata;
+	$now = date("Y-m-d H:i:s");
+	$sql = 'UPDATE  '. $config_vars['table_prefix'] ."views 
+		SET	end = '$now'
+		WHERE (user_id = " . $userdata['user_id'] . ") and (start = '$start_view') and (content_id = $content_id)";
+	if (!$result = $db->sql_query($sql))
+	{
+		message_die(GENERAL_ERROR, "Couldn't start view", '', __LINE__, __FILE__, $sql);
+	}
+}
+
 ?>
