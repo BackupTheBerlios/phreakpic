@@ -132,7 +132,10 @@ class categorie
 			{
 				message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
 			}
+			
+			$this->id = $db->sql_nextid();
 			return OP_SUCCESSFULL;
+			
 
 			
 		}
@@ -221,7 +224,7 @@ class categorie
 			if (check_cat_action_allowed($parent->catgroup_id,$userdata['user_id'],'cat_add'))
 			{
 				// if this categoris is already in the db you also need move rights
-				if (isset($this->id) and !check_car_action_allowed($this->catgroup_id,$userdata['user_id'],'move')
+				if (isset($this->id) and (!check_car_action_allowed($this->catgroup_id,$userdata['user_id'],'move')))
 				{
 					return OP_NP_MISSING_CAT_MOVE;
 				}
