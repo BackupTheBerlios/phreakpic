@@ -69,6 +69,11 @@ class comment extends user_feedback
 	var $parent_id;
 	var $topic;
 	
+	function comment()
+	{
+		
+	}
+	
 	function set_parent_id($new_parent_id)
 	{
 		$this->parent_id = $new_parent_id;
@@ -153,6 +158,7 @@ class comment extends user_feedback
 		global $db,$config_vars;
 		if (!isset($this->id))
 		{
+			$this->creation_date=date("Y-m-d H:i:s");
 			// this is object is not yet in the datebase, make a new entry
 			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . "s 
 				(owner_id, feedback, user_id, creation_date, changed_count, parent_id, topic, last_changed_date)
