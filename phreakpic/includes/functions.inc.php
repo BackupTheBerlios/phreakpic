@@ -1,4 +1,23 @@
 <?php
+function generate_array_from_row($row)
+{
+	global $db;
+	while ($row = $db->sql_fetchrow($result))
+	{
+		foreach ($row as $key => $value)
+		{
+			// filter out all keys which are not strings, because the array containt both assoziativ and numbers
+			if (is_string($key))
+			{
+				$item[$key] = $value;
+			}
+		}
+		$array[]=$item;
+	}
+	return $array;
+
+}
+
 function generate_where($field,$array)
 {
 	// generates an string that can be used in an sql where, which limits the query to all entry where $field is in $array
