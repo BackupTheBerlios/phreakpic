@@ -44,6 +44,10 @@ class album_content
 	var $remove_from_group;
 	var $new_filename;
 	
+	var $old_cat;
+	var $delete_content_cat;
+	var $new_cat;
+	
 	
 	function get_editable_values($cat_id)
 	{
@@ -436,9 +440,8 @@ class album_content
 			$del_content_cat = new categorie();
 			$del_content_cat->generate_from_id($config_vars['deleted_content_cat']);
 			$del_content_cat->content_amount++;
-			$del_content_cat->commit();
-			
 			$this->cat_ids[0] = $config_vars['deleted_content_cat'];
+			$this->new_filename=$this->generate_filename();
 			
 		}
 		
@@ -462,7 +465,7 @@ class album_content
 			}
 			else 
 			{
-				die('content rename failed');
+				die('content rename failed '.$this->file.' to '.$this->new_filename);
 			}
 			
 			//echo "rename pic" .$this->file." -> ".$new_file."<br>";
@@ -471,10 +474,6 @@ class album_content
 			if (!is_dir(dirname($this->get_thumbfile())))
 			{
 				makedir(dirname($this->get_thumbfile()));
-			}
-			else 
-			{
-				die('content rename failed');
 			}
 		}
 
@@ -485,9 +484,13 @@ class album_content
 		//echo "rename({$this->thumbfile},".$this->get_thumbfile().")<br>";
 		if (is_file($this->thumbfile))
 		{
-			if (rename($this->thumbfile,$this->get_thumbfile()));
+			if (rename($this->thumbfile,$this->get_thumbfile()))
 			{
 				$this->thumbfile = $this->get_thumbfile();
+			}
+			else 
+			{
+				die('thumb rename failed');
 			}
 		}
 		
@@ -502,7 +505,8 @@ class album_content
 
 			// update entry in content table
 			$sql = "UPDATE " . $config_vars['table_prefix'] . "content
-				SET	file = '$this->file',
+				SET	
+					file = '$this->file',
 					name = '$this->name',
 					views = '$this->views',
 					current_rating = '$this->current_rating', 
@@ -550,7 +554,18 @@ class album_content
 		
 		$this->fill_content_in_cat();	
 		
-
+		if (is_object($delete_content_cat))
+		{
+			$delete_content_cat->commit();
+		}
+		if (is_object($new_cat))
+		{
+			$new_cat->commit();
+		}
+		if (is_object($old_cat))
+		{
+			$old_cat->commit();
+		}
 		
 		return OP_SUCESSFUL;
 	}
@@ -671,7 +686,7 @@ class album_content
 		{
 			$this->cat_ids[] = $new_cat_id;
 			$new_cat->set_content_amount($new_cat->get_content_amount()+1);
-			$new_cat->commit();
+			$this->new_filename=$this->generate_filename();
 			return OP_SUCCESSFUL;
 		}
 		else
@@ -691,7 +706,10 @@ class album_content
 		}
 				
 		$old_cat = new categorie();
-		$old_cat->generate_from_id($old_cat_id);
+		if ($old_cat->generate_from_id($old_cat_id) != OP_SUCCESSFUL)
+		{
+			message_die(GENERAL_ERROR, "Error generate_form_id in remove_from_cat", '', __LINE__, __FILE__);
+		}
 
 		
 
@@ -704,7 +722,6 @@ class album_content
 				// unset the key that contains the cat to be removed
 				array_splice($this->cat_ids,array_search($old_cat_id,$this->cat_ids),1);
 				$old_cat->set_content_amount($old_cat->get_content_amount()-1);
-				$old_cat->commit();
 				$this->new_filename=$this->generate_filename();
 				return OP_SUCCESSFUL;
 			}
