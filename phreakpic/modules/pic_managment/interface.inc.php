@@ -1,8 +1,10 @@
 <?php
-require_once('includes/common.inc.php');
-require_once('classes/album_content.inc.php');
-require_once('classes/categorie.inc.php');
-require_once('classes/user_feedback.inc.php');
+
+require_once(ROOT_PATH . 'includes/common.inc.php');
+require_once(ROOT_PATH . 'classes/album_content.inc.php');
+require_once(ROOT_PATH . 'classes/categorie.inc.php');
+require_once(ROOT_PATH . 'classes/user_feedback.inc.php');
+
 
 // Get Functions
 
@@ -348,9 +350,9 @@ function add_dir_to_cat($dir,$cat_id, $contentgroup_id, $name_mode = GENERATE_NA
 	closedir($dir_handle);
 }
 
-function add_dir_parsed($dir,$contentgroup_id,$parent_id=-1)
+function add_dir_parsed($dir,$contentgroup_id,$catgroup_id,$parent_id=-1)
 {
-		// Add all pictures under the Directory $dir to categories and series depending on the relativ path to $dir
+	// Add all pictures under the Directory $dir to categories and series depending on the relativ path to $dir
 	global $db,$config_vars,$filetypes;
 	
 	if ($parent_id == -1)
@@ -392,13 +394,13 @@ function add_dir_parsed($dir,$contentgroup_id,$parent_id=-1)
 					$cat->set_name(substr($file,4));
 					$cat->set_parent_id($parent_id);
 					$cat->fill_up();
-					
+					$cat->set_catgroup_id($catgroup_id);
 					if (!isset($cat->id))
 					{
 					
 						$cat->commit();
 					}
-					add_dir_parsed($dir.'/'.$file,$contentgroup_id,$cat->get_id());
+					add_dir_parsed($dir.'/'.$file,$contentgroup_id,$catgroup_id,$cat->get_id());
 				}
 				elseif (strpos($file,"serie_") === 0)
 				{
@@ -413,7 +415,7 @@ function add_dir_parsed($dir,$contentgroup_id,$parent_id=-1)
 					
 						$cat->commit();
 					}
-					add_dir_parsed($dir.'/'.$file,$contentgroup_id,$cat->get_id());
+					add_dir_parsed($dir.'/'.$file,$contentgroup_id,$catgroup_id,$cat->get_id());
 				// subdir serie
 				}
 			}
