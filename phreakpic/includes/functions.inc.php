@@ -1,12 +1,6 @@
 <?php
 include_once(ROOT_PATH . './classes/album_content.inc.php');
 
-DEFINE('NO_ERROR','0');
-DEFINE('INFORMATION','1');
-DEFINE('SQL_ERROR','2');
-DEFINE('AUTH_ERROR','3');
-DEFINE('FILE_ERROR','4');
-DEFINE('GENERAL_ERROR','5');
 
 function database_encode($string)
 {
@@ -15,48 +9,6 @@ function database_encode($string)
 }
 
 
-function error_report($type, $ident , $line, $file,$sql='')
-{
-	global $userdata,$smarty,$db,$config_vars,$QUERY_STRING,$error;
-
-	switch ($type)
-	{
-		case SQL_ERROR:
-			$error_info['type'] = 'SQL_ERROR';
-			$error_info['sql_error'] = $db->sql_error();
-			break;
-		case AUTH_ERROR: $error_info['type'] = 'AUTH_ERROR'; break;
-		case FILE_ERROR: $error_info['type'] = 'FILE_ERROR'; break;
-		case GENERAL_ERROR: $error_info['type'] = 'GENERAL_ERROR'; break;
-		case INFORMATION: $error_info['type'] = 'INFORMATION'; break;
-	}
-	
-	$error_info['ident'] = $ident;
-	$error_info['text'] = $error[$ident];
-	$error_info['line'] = $line;
-	$error_info['file'] = $file;
-	$error_info['sql'] = $sql;
-	$error_info['debug'] = DEBUG;
-	
-	
-	if ($type != INFORMATION)
-	{
-		// submit error to db
-		$sql = "INSERT INTO " . $config_vars['table_prefix'] . "error_reports
-					(type,file,line,sql,ident,user_id,query_string,error_time)
-					VALUES ('{$type}','{$error_info['file']}','{$error_info['line']}','" . addslashes($error_info['sql']) . "','{$error_info['ident']}','{$userdata['user_id']}','$QUERY_STRING','" . date("Y-m-d H:i:s") . "')";
-		if (!$result = $db->sql_query($sql))
-		{
-			message_die(GENERAL_ERROR, "Error report failed", '', __LINE__, __FILE__, $sql);
-		}
-		$error_info['id'] = $db->sql_nextid();
-	}
-
-	$smarty->assign('error_info',$error_info);
-	$smarty->assign('ROOT_PATH',ROOT_PATH);
-	$smarty->display($userdata['photo_user_template']."/error_msg.tpl");
-	die();
-}
 
 function write_config($Smarty_dir,$phpBB_Path,$phreakpic_path,$Server_name)
 {
@@ -196,12 +148,12 @@ function validate_config()
 	{
 		$error['thumb_size']=2;
 	}
-	elseif ((isset($config_vars['thumb_size']['percent']) or isset($config_vars['thumb_size']['maxsize'])) 
+	elseif ((isset($config_vars['thumb_size']['percent']) or isset($config_vars['thumb_size']['maxsize']))
 		and (isset($config_vars['thumb_size']['width']) or isset($config_vars['thumb_size']['height'])))
 	{
 		$error['thumb_size']=3;
 	}
-	
+
 	// deleted content cat
 	if (!isset($config_vars['deleted_content_cat']))
 	{
@@ -215,7 +167,7 @@ function validate_config()
 			$error['deleted_content_cat']=2;
 		}
 	}
-	
+
 	// root cat
 	if (!isset($config_vars['root_categorie']))
 	{
@@ -233,10 +185,10 @@ function validate_config()
 			$error['root_categorie']=3;
 		}
 	}
-	
-	
+
+
 	// show errors
-	
+
 	if (isset($error))
 	{
 		echo "The following Vars in the config file make no sense <br><br>";
@@ -244,7 +196,7 @@ function validate_config()
 		{
 			echo "content_path_prefix: Is not a directory";
 		}
-		
+
 		if ($error['thumb_size'] == 1)
 		{
 			echo "thumb_size: Not set<br>";
@@ -598,7 +550,9 @@ function stop_view($start_view,$content_id)
 		WHERE (user_id = " . $userdata['user_id'] . ") and (start = '$start_view') and (content_id = $content_id)";
 	if (!$result = $db->sql_query($sql))
 	{
-		error_report(SQL_ERROR, 'stop_view' , __LINE__, __FILE__,$sql);
+		$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'stop_view',$this->id,0,0,$sql);
+		$error->commit();
+//		error_report(SQL_ERROR, 'stop_view' , __LINE__, __FILE__,$sql);
 	}
 }
 
