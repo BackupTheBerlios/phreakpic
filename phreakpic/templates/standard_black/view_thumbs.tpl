@@ -1,11 +1,15 @@
 <!--{config_load file="$template_name/config.cfg"}-->
 <script type="text/javascript" language="javascript">
 table_cols = <!--{$table_cols|default:0}-->
+
 </script>
 <script src="templates/<!--{$template_name}-->/functions.js" type="text/javascript" language="javascript">
 </script>
 <script type="text/javascript" language="javascript">
 	document.onkeypress = getkey_cat;
+	var cookie_name='<!--{$cookie_name}-->'	
+	var cookie_content_amount=0;
+	var template_name='<!--{$template_name}-->';
 	var px=0;
 	var py=0;
 	var cursorColor='<!--{#cursorColor#}-->'
@@ -20,9 +24,14 @@ table_cols = <!--{$table_cols|default:0}-->
 	var selected=new Array();
 	var sx=0;
 	var sy=0;
+		
 </script>
 
+
 <!--{if $is_content == true}-->
+	<span id="basket_content_amount">0</span>
+
+
 	<!--{if $mode == edit}-->
 		<form action="view_cat.php?cat_id=<!--{$cat_id}-->&content_per_page=<!--{$content_per_page}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content" name="edit_content" >
 	<!--{/if}-->
@@ -45,7 +54,11 @@ table_cols = <!--{$table_cols|default:0}-->
 <!--				<table border="0" cellspacing="0" cellpadding="5" bgcolor="333333">
 					<tr>-->
 						<a name="<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->">
+						
 						<!--<td width="<!--{$thumb_size}-->" bgcolor="333333">-->
+						
+							<img name="basket_icon[<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->]" src="templates/<!--{$template_name}-->/img/add.gif" onclick="add_to_basket(<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->)">
+							
 							<a name="link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}--><!--{$sid}-->#pic"><!--{$thumbs[thumb_cols][thumb_cell].html}--></a><br />
 						<!--</td>
 						<td>-->
@@ -177,3 +190,6 @@ For all Change
 	</form>
 <!--{/if}-->
 
+<script type="text/javascript" language="javascript">
+	var cookie_content_string=get_basket();
+</script>

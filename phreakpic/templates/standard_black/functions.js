@@ -503,3 +503,131 @@ function saveImage()
 width=document.getElementsByName('image')[0].width;
 height=document.getElementsByName('image')[0].height;
 }
+
+function display_cookie_content_amount()
+{
+	document.getElementById("basket_content_amount").firstChild.nodeValue = cookie_content_amount;
+
+}
+
+function add_to_basket(content_id)
+{
+	
+	if (document.getElementsByName("basket_icon["+content_id+"]")[0].added)
+	{
+		remove_from_basket(content_id);
+		return;
+	}
+	cookie_content_string+=content_id+":";
+	document.cookie=cookie_name+"basket="+cookie_content_string;	
+	cookie_content_amount++;
+	display_cookie_content_amount();
+	
+	set_remove_icon(content_id)
+	
+	
+}
+
+
+function remove_from_basket(content_id)
+{
+
+	content_array=cookie_content_string.split(':');
+	
+	cookie_content_string='';
+	for (var loop=0; loop < content_array.length-1; loop++)
+	{
+		
+		if (content_array[loop]!=content_id)
+		{
+			cookie_content_string+=content_array[loop]+":";
+		}
+	}
+	document.cookie=cookie_name+"basket="+cookie_content_string;	
+	cookie_content_amount--;
+	display_cookie_content_amount();
+	
+	set_add_icon(content_id)
+
+}
+
+function set_add_icon(content_id)
+{
+	document.getElementsByName("basket_icon["+content_id+"]")[0].src="templates/"+template_name+"/img/add.gif";
+	document.getElementsByName("basket_icon["+content_id+"]")[0].added=false;	
+}
+
+
+function set_remove_icon(content_id)
+{
+	if (document.getElementsByName("basket_icon["+content_id+"]")[0])
+	{
+		document.getElementsByName("basket_icon["+content_id+"]")[0].src="templates/"+template_name+"/img/remove.gif";
+		document.getElementsByName("basket_icon["+content_id+"]")[0].added=true;
+	}
+}
+
+
+function get_basket()
+{
+	cookie=WM_readCookie(cookie_name+"basket");
+	cookie_content_string='';
+	if (cookie)
+	{
+		content_array = cookie.split(":");
+	
+	
+		
+		if (content_array)
+		{
+			for (var loop=0; loop < content_array.length-1; loop++)
+			{
+				set_remove_icon(content_array[loop]);
+				cookie_content_string+=content_array[loop]+':';
+			}
+		}
+		cookie_content_amount=content_array.length-1;
+		display_cookie_content_amount();
+	}
+	return cookie_content_string;
+}
+
+
+function WM_readCookie(name) 
+{
+
+	if (document.cookie == '') 
+	{ 
+		// there's no cookie, so go no further
+		return false;
+	} 
+	else 
+	{
+		// there is a cookie
+		var firstChar, lastChar;
+		var theBigCookie = document.cookie;
+		firstChar = theBigCookie.indexOf(name);
+
+		// find the start of 'name'
+
+		if(firstChar != -1)  
+		{
+			// if you found the cookie
+			firstChar += name.length + 1;
+			// skip 'name' and '='
+			lastChar = theBigCookie.indexOf(';', firstChar);
+			// Find the end of the value string (i.e. the next ';').
+			if	(lastChar == -1) 
+			{
+				lastChar = theBigCookie.length;
+			}
+			return unescape(theBigCookie.substring(firstChar, lastChar));
+		} 
+		else 
+		{
+			// If there was no cookie of that name, return false.
+			return false;
+		}
+
+	}
+}

@@ -85,6 +85,8 @@ if (is_array($contents))
 	}
 	$thumbs[]=$array_row;
 	
+	$smarty->assign('cookie_name',$config_vars['cookie_name']);
+	
 	$smarty->assign('table_cols',$config_vars['thumb_table_cols']);
 	$smarty->assign('thumbs',$thumbs);
 	$smarty->assign('is_content', true);
