@@ -47,7 +47,7 @@ function get_content_of_cat($cat_id = 0)
 
 	// all content in cat $cat_id	
 	
-	$sql = "SELECT content_id FROM " . $config_vars['table_prefix'] . "content_in_cat WHERE cat_id = '$cat_id' ORDER BY place_in_cat";
+/*	$sql = "SELECT content_id FROM " . $config_vars['table_prefix'] . "content_in_cat WHERE cat_id = '$cat_id' ORDER BY place_in_cat";
 
 	if (!$result = $db->sql_query($sql))
 	{
@@ -67,13 +67,13 @@ function get_content_of_cat($cat_id = 0)
 		return OP_NO_CONTENT;
 	}
 	
-	$content_where = generate_where('content.id',$content_ids);
+	$content_where = generate_where('content.id',$content_ids);*/
 	$auth_where = get_allowed_contentgroups_where('content.contentgroup_id',$userdata['user_id'], "view");
 	
 	// get all content
 	
 	$sql = 	'SELECT content.*,content_in_cat.place_in_cat FROM ' .  $config_vars['table_prefix'] . "content as content,"  . $config_vars['table_prefix'] . "content_in_cat as content_in_cat
-		WHERE ($content_where) and ($auth_where) and 
+		WHERE  ($auth_where) and 
 			(content.id = content_in_cat.content_id) and (content_in_cat.cat_id = $cat_id)
 		ORDER BY content_in_cat.place_in_cat";
 		
@@ -271,7 +271,6 @@ function add_dir_parsed($dir)
    global $config_vars;
 
    $dir_handle = opendir($dir);
-   
 }
 
 

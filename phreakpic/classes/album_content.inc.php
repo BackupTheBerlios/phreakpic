@@ -43,38 +43,40 @@ class album_content
 
 		// all content in cat $cat_id	
 
-		$sql = "SELECT content_id FROM " . $config_vars['table_prefix'] . "content_in_cat WHERE cat_id = '$cat_id' ORDER BY place_in_cat";
+//		$sql = "SELECT content_id FROM " . $config_vars['table_prefix'] . "content_in_cat WHERE cat_id = '$cat_id' ";
 
-		if (!$result = $db->sql_query($sql))
-		{
-			message_die(GENERAL_ERROR, "Couldnt get content in cat", '', __LINE__, __FILE__, $sql);
-		}
+// 		if (!$result = $db->sql_query($sql))
+// 		{
+// 			message_die(GENERAL_ERROR, "Couldnt get content in cat", '', __LINE__, __FILE__, $sql);
+// 		}
+// 
+// 
+// 		while ($row = $db->sql_fetchrow($result))
+// 		{
+// 			// put all ids in one array
+// 			$content_ids[]=$row['content_id'];	
+// 
+// 		}
 
-
-		while ($row = $db->sql_fetchrow($result))
-		{
-			// put all ids in one array
-			$content_ids[]=$row['content_id'];	
-
-		}
-
-		$content_where = generate_where('id',$content_ids);
-		$auth_where = get_allowed_contentgroups_where('contentgroup_id',$userdata['user_id'], "view");
+//		$content_where = generate_where('content.id',$content_ids);
+		$auth_where = get_allowed_contentgroups_where('content.contentgroup_id',$userdata['user_id'], "view");
 
 		// get all content
 
-		$sql = 	'SELECT * FROM ' .  $config_vars['table_prefix'] . "content 
-			WHERE ($content_where) and ($auth_where)";
+		$sql = 	'SELECT content.id,content.file,content_in_cat.place_in_cat FROM ' .  $config_vars['table_prefix'] . "content as content,"  . $config_vars['table_prefix'] . "content_in_cat as content_in_cat
+			WHERE ($auth_where) and 
+				(content.id = content_in_cat.content_id) and (content_in_cat.cat_id = $cat_id) 
+			ORDER BY content_in_cat.place_in_cat";
 
 
-		if (!$result = $db->sql_query($sql))
-		{
-			message_die(GENERAL_ERROR, "Couldnt get data of the of the content in the cat", '', __LINE__, __FILE__, $sql);
-		}
+
+ 		if (!$result = $db->sql_query($sql))
+ 		{
+ 			message_die(GENERAL_ERROR, "Couldnt get data of the of the content in the cat", '', __LINE__, __FILE__, $sql);
+ 		}
 
 		while ($row = $db->sql_fetchrow($result))
 		{
-			
 			if ($row['id'] == $this->id)
 			{
 				$objarray['prev']=get_content_from_row($lastrow);
