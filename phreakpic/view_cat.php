@@ -400,6 +400,7 @@ if (!isset($template_file))
 
 $smarty->assign('nav_string', build_nav_string($cat_id));
 $smarty->assign('redirect', PHREAKPIC_PATH . "$template_file.php");
+$smarty->assign('thumb_size', $config_vars['thumb_size']['maxsize']);
 
 
 $end_time = getmicrotime();
