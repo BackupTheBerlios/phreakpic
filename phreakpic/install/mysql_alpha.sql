@@ -238,3 +238,14 @@ CREATE TABLE `phreakpic_views` (
   `end` datetime NOT NULL default '0000-00-00 00:00:00'
 ) TYPE=MyISAM;
 
+
+
+
+CREATE TABLE phreakpic_usergroup_auth (
+  usergroup_id int(11) NOT NULL default '0',
+  usergroupgroup_id int(11) NOT NULL default '0',
+  add_user enum('0','1') NOT NULL default '0',
+  remove_user enum('0','1') NOT NULL default '0'
+) TYPE=MyISAM;
+
+
