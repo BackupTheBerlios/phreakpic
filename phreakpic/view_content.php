@@ -10,12 +10,14 @@ include_once('classes/user_feedback.inc.php');
 
 session_start();
 
+
 stop_view($HTTP_SESSION_VARS['view_start'],$HTTP_SESSION_VARS['view_content_id']);
 $HTTP_SESSION_VARS['view_start'] = 0;
 $HTTP_SESSION_VARS['view_content_id'] = 0;
 
 // proceed comments
 $comment_type='content';
+
 include ('includes/proceed_comment.inc.php');
 
 $content = get_content_object_from_id($content_id);
@@ -25,13 +27,16 @@ if (!is_object($content))
 	
 }
 
+
 // if there is no cat_id assigned take the first cat of the content
 
-if (!isset($cat_id))
+if ((!isset($cat_id)) or ($cat_id==''))
 {
 	$ids=$content->get_cat_ids();
 	$cat_id=$ids[0];
 }
+
+
 
 //get previous and next content and display the thumbnail if aviable 
 // $surrounding_content = $content->get_surrounding_content($cat_id);
@@ -87,7 +92,6 @@ if ($mode=='commit')
 	$vals['delete']=$HTTP_POST_VARS['delete'];
 	$redirect_to_cat=$content->edit_content($vals,$cat_id);
 }
-
 //check if in edit mode
 $edit_info['allow_edit'] = $content->check_perm('edit');
 if ($mode=="edit")
