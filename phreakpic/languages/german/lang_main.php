@@ -75,6 +75,18 @@ $lang['check_all'] = 'Alle Markieren';
 $lang['uncheck_all'] = 'Alle Demarkieren';
 
 
+//admin
+$lang['sync'] = 'Datenbank Synchronisieren';
+$lang['config'] = 'Konfiguration';
+$lang['default_template'] = 'Standard Template';
+$lang['default_language'] = 'Standard Sprache';
+
+
+//admin/config
+$lang['thumb_table_cols'] = 'Spalten in der Thumbansicht';
+$lang['content_per_page'] = 'Thumbanails pro Seite';
+
+
 //admin/auths.php
 $lang['usergroups'] = 'Benutzergruppen';
 $lang['perms'] = 'Rechte';

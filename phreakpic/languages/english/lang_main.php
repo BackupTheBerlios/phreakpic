@@ -75,6 +75,16 @@ $lang['add_selected'] = 'Add Selected';
 $lang['check_all'] = 'Check All';
 $lang['uncheck_all'] = 'Uncheck All';
 
+//admin
+$lang['sync'] = 'Sync Database';
+$lang['config'] = 'Configuration';
+
+//admin/config
+$lang['thumb_table_cols'] = 'Cols in the Thumbnail view';
+$lang['content_per_page'] = 'Thumbs per page';
+$lang['default_template'] = 'Default Template';
+$lang['default_language'] = 'Default language';
+
 
 
 //admin/auths.php
@@ -101,7 +111,7 @@ $lang['change_group'] = 'change group';
 
 
 //admin/user_in_group
-$lang['new_usergroup'] = 'Create new user';
+$lang['new_usergroup'] = 'Create new usergroup';
 $lang['add_user_to_group'] = 'Add user to group';
 $lang['users_not_in_group'] = 'User not in group';
 $lang['users_in_group'] = 'User in group';
