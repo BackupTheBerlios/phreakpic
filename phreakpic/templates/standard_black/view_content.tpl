@@ -1,3 +1,4 @@
+<!--{config_load file="$template_name/config.cfg"}-->
 <!--{include file="$template_name/header.tpl"}-->
 <script src="templates/<!--{$template_name}-->/functions.js" type="text/javascript" language="javascript">
 </script>
@@ -42,10 +43,10 @@
 		</tr>
 		<tr> 
 			<td colspan="2">
-				<a href="index.php?<!--{$sid}-->"><!--{$lang.home}--></a> --
+				<a href="index.php?<!--{$sid}-->"><!--{$lang.home}--></a><!--{#navbar_seperator#}-->
 				<!--{section name=id loop=$nav_string}-->
 					<a href="view_cat.php?cat_id=<!--{$nav_string[id].id}--><!--{$sid}-->">
-						<!--{$nav_string[id].name}--></a> --
+						<!--{$nav_string[id].name}--></a><!--{#navbar_seperator#}-->
 				<!--{/section}-->
 				<!--{$name}-->
 			</td>
