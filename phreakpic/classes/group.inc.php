@@ -34,6 +34,10 @@ class group
 			}
 			return OP_SUCCESSFULL;
 			
+			// set id;
+			$this->id = $db->sql_nextid();
+
+			
 		}
 		else
 		{
