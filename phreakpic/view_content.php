@@ -143,6 +143,12 @@ $smarty->assign('thumb_link',$HTTP_SESSION_VARS['thumb_link']);
 
 $smarty->assign('content_height',$content->height);
 $smarty->assign('content_width',$content->width);
+
+//titel
+$smarty->assign('title_site',$board_config['sitename']);
+$smarty->assign('title_page',$lang['view_content']);
+$smarty->assign('title_name',$content->get_name());
+
 //$smarty->assign('id',$id);
 $end_time = getmicrotime();
 $execution_time = $end_time - $start_time;
