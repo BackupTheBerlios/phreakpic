@@ -1,24 +1,30 @@
 <?php
 require_once('includes/common.inc.php');
+require_once('classes/album_content.inc.php');
+require_once('classes/categorie.inc.php');
 
 // Get Functions
 
-function get_cats_of_cat($parent_id, $requested_fields)
+function get_cats_of_cat($parent_id)
 {
-        // Returns an Array of the requested fields of all categories which are under the categorie with ihe id $parent_id
-   global $db;
-   global $config_vars;
-
-   $sql = "SELECT $requested_fields FROM " . $config_vars['table_prefix'] . "cats WHERE parent_id = '$parent_id'";
+	// Returns an array of categorie Objects of all categories which are under the categorie with ihe id $parent_id
+   global $db,$config_vars;
+   
+   // get the sql where to limit the query to categories which the user is allowed to view
+   $auth_where=get_allowed_catgroups_where($userdata['user_id'],"view");
+   
+   $sql = "SELECT * FROM " . $config_vars['table_prefix'] . "cats WHERE (parent_id = '$parent_id') and $auth_where";
 
    if (!$result = $db->query($sql))
    {
       message_die(GENERAL_ERROR, "Konnte Kategorie nicht auswählen", '', __LINE__, __FILE__, $sql);
    }
 
+   // generate categorie objects for each categorie that is returned by the query
    while ($row = $db->sql_fetchrow($result))
    {
-      $cat_data[] = $row;
+      $catobj= new categorie();
+      $cat_objects[]=$catobj;
    }
 
 
@@ -26,9 +32,9 @@ function get_cats_of_cat($parent_id, $requested_fields)
 
 }
 
-function get_pics_of_cat($cat_id, $requested_fields)
+function get_content_of_cat($cat_id, $requested_fields)
 {
-        // Returns an Array of requested fields of all Pictures which are in the categorie with id $cat_id
+        // Returns an Array of album_content objects of all content which is in the categorie with id $cat_id
    global $db;
         global $config_vars;
 
@@ -49,7 +55,7 @@ function get_pics_of_cat($cat_id, $requested_fields)
 
 }
 
-function get_pics_from_sql($sql_where_clause, $requested_fields)
+function get_content_from_sql($sql_where_clause, $requested_fields)
 {
    // Returns an Array of the requested fields of the pictures that are returned by the sql where clause $sql_where_clause
    global $db;
