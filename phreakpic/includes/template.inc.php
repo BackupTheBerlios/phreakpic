@@ -7,4 +7,6 @@
 	$smarty->compile_dir = './templates_c/';
 	$smarty->config_dir = './templates/';
 	$smarty->cache_dir = './smarty_cache/';
+	$smarty->left_delimiter = '<!--{';
+	$smarty->right_delimiter = '}-->';
 ?>
