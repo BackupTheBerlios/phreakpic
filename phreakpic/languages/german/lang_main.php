@@ -50,6 +50,8 @@ $lang['rotate_left'] = 'Links';
 $lang['rotate_right'] = 'Rechts';
 $lang['rotate_180'] = '180';
 $lang['view_content']="Sachen anzeigen";
+$lang['full_size']="Vollbild";
+$lang['fit_size']="Auf seite anpassen";
 
 //view_cat.tpl
 $lang['view_cat']="Kategorie anzeigen";

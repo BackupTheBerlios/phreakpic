@@ -51,6 +51,10 @@ $lang['rotate_right'] = 'right';
 $lang['rotate_180'] = '180';
 $lang['to_group'] = 'to group';
 $lang['view_content']="View Content";
+$lang['full_size']="Original Size";
+$lang['fit_size']="Fit to page";
+
+
 
 //view_cat.tpl
 $lang['view_cat']="View Categories";
