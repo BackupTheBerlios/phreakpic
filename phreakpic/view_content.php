@@ -1,8 +1,8 @@
 <?php
 define ("ROOT_PATH",'');
-
 include_once('./includes/common.inc.php');
 include_once('./includes/template.inc.php');
+include_once('./classes/error.inc.php');
 include_once('./classes/album_content.inc.php');
 include_once('./classes/meta.inc.php');
 include_once('./modules/pic_managment/interface.inc.php');
@@ -13,6 +13,7 @@ include_once('classes/user_feedback.inc.php');
 
 
 session_start();
+
 
 
 stop_view($HTTP_SESSION_VARS['view_start'],$HTTP_SESSION_VARS['view_content_id']);
@@ -27,7 +28,9 @@ include ('includes/proceed_comment.inc.php');
 $content = get_content_object_from_id($HTTP_GET_VARS['content_id']);
 if (!is_object($content))
 {
-	error_report(INFORMATION, 'content_not_existing' , __LINE__, __FILE__);
+	$error = new phreak_error(E_ERROR,INFORMATION,__LINE__,__FILE__,'content_not_existing',$this->id,0,0,$sql);
+	$error->commit();
+// 	error_report(INFORMATION, 'content_not_existing' , __LINE__, __FILE__);
 
 }
 
@@ -105,7 +108,9 @@ if (is_object($surrounding_content['next']))
 $sql = "SELECT * from " . $config_vars['table_prefix'] . "content_meta_fields";
 if (!$result = $db->sql_query($sql))
 {
-	error_report(AUTH_ERROR, 'get_groups' , __LINE__, __FILE__,$sql);
+	$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'get_meta_fields',$this->id,0,0,$sql);
+	$error->commit();
+// 	error_report(AUTH_ERROR, 'get_groups' , __LINE__, __FILE__,$sql);
 }
 while ($row = $db->sql_fetchrow($result))
 {
@@ -125,7 +130,7 @@ if ($content->check_perm('edit_meta_data'))
 	$smarty->assign('allow_meta_edit',true);
 
 	//submits
-	
+
 	
 	if ((isset($HTTP_POST_VARS['edit_meta_add']) or (isset($HTTP_POST_VARS['edit_meta']))))
 	{
@@ -153,7 +158,7 @@ if ($content->check_perm('edit_meta_data'))
 	// edit meta
 	if ($HTTP_GET_VARS['mode']=='edit_meta')
 	{
-		$smarty->assign('mode','edit_meta');	
+		$smarty->assign('mode','edit_meta');
 	}
 }
 
@@ -196,14 +201,14 @@ if ($mode=="edit")
 		$smarty->assign('add_to_cats',$add_to_cats);
 	}
 
-	// Check if the user has remove_from_group right for this content	
+	// Check if the user has remove_from_group right for this content
 	if ($content->check_perm('remove_from_group'))
 	{
 		// get the groups where the user has add_to_group rights
 		$add_to_contentgroups = get_contentgroups_data_where_perm('id,name','add_to_group');
 		if (is_array($add_to_contentgroups))
 		{
-			
+
 			$smarty->assign('add_to_contentgroups',$add_to_contentgroups);
 			$smarty->assign('contentgroup',$content->get_contentgroup_id());
 		}
@@ -221,7 +226,7 @@ if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'c
 
 if ($redirect_to_cat)
 {
-	$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/", 
+	$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/",
 	getenv("SERVER_SOFTWARE")) ) ? "Refresh: 0; URL=" : "Location: ";
 	header($header_location . append_sid("view_cat.php?cat_id={$HTTP_GET_VARS['cat_id']}", true));
 }
@@ -292,5 +297,4 @@ echo("gesamt execution_time: $execution_time seconds<br>");
 
 $HTTP_SESSION_VARS['view_start'] = $content->start_view();
 $HTTP_SESSION_VARS['view_content_id'] = $HTTP_GET_VARS['content_id'];
-
 ?>

@@ -16,6 +16,8 @@ validate_config();
 // bigbrother stop the view of the last viewed content
 session_start();
 
+
+
 stop_view($HTTP_SESSION_VARS['view_start'],$HTTP_SESSION_VARS['view_content_id']);
 $HTTP_SESSION_VARS['view_start'] = 0;
 $HTTP_SESSION_VARS['view_content_id'] = 0;
@@ -74,13 +76,18 @@ $child_cats_viewable_amount = sizeof($child_cats);
 
 $smarty->assign('viewable_total_cats',sprintf($lang['viewable_total_cats'],$child_cats_viewable_amount,$child_cats_total_amount));
 
+
+
 if (isset($HTTP_POST_VARS['edit_cat']))
 {
 	for ($i = 0; $i < sizeof($child_cats); $i++)
 	{
+
 		$child_cats[$i]->set_name($HTTP_POST_VARS['cat_name'][$i]);
 		$child_cats[$i]->set_description($HTTP_POST_VARS['cat_description'][$i]);
+
 		$child_cats[$i]->set_catgroup_id($HTTP_POST_VARS['cat_catgroup'][$i],$HTTP_POST_VARS['cat_apply_recursive'][$i]);
+
 		$child_cats[$i]->set_parent_id($HTTP_POST_VARS['cat_parent_cat'][$i]);
 
 		if ($HTTP_POST_VARS['cat_delete'][$i] == 'on')
@@ -138,7 +145,7 @@ if (isset($child_cats))
 		$add_to_cats_unparsed = get_cats_data_where_perm('id,name','cat_add');
 		$add_to_cats = get_cats_string($add_to_cats_unparsed);
 		$smarty->assign('add_to_cats',$add_to_cats);
-		
+
 	}
 
 	$smarty->assign('child_cat_infos',$child_cat_infos);
@@ -203,7 +210,7 @@ if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'
 			makedir($folder);
 			$zip->extract(PCLZIP_OPT_PATH,$folder);
 			add_dir_parsed($folder,$HTTP_POST_VARS['new_content_group'],$HTTP_GET_VARS['cat_id']);
-			
+
 			// remove directory;
 			unlink($folder."/index.html");
 			rmdir($folder);
