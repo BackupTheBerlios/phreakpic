@@ -1,8 +1,8 @@
 <?php
-require_once('modules/authorisation/interface.inc.php');
-require_once('classes/categorie.inc.php');
-require_once('includes/functions.inc.php');
-require_once('modules/statistics.inc.php');
+require_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
+require_once(ROOT_PATH . 'classes/categorie.inc.php');
+require_once(ROOT_PATH . 'includes/functions.inc.php');
+require_once(ROOT_PATH . 'modules/statistics.inc.php');
 
 
 // Holds information about which object to user with which file ending:

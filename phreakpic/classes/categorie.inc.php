@@ -1,5 +1,5 @@
 <?php
-require_once('modules/authorisation/interface.inc.php');
+require_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 
 class categorie
 {

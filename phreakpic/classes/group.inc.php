@@ -1,5 +1,5 @@
 <?php
-require_once('classes/auth.inc.php');
+require_once(ROOT_PATH . 'classes/auth.inc.php');
 
 // Group, User, Auth editing functions
 class group

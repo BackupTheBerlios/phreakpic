@@ -1,6 +1,6 @@
 <?php
-require_once('modules/authorisation/interface.inc.php');
-require_once('includes/functions.inc.php');
+require_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
+require_once(ROOT_PATH . 'includes/functions.inc.php');
 
 class user_feedback
 {
