@@ -51,21 +51,21 @@ if (!isset($usergroup))
 $class=$type."_auth";
 $groupclass = $type . 'group';
 
-if (isset($del_group))
-{
-	$delgroup = new $groupclass();
-	$delgroup->generate_from_id($del_group);
-	$delgroup->delete();
-}
-
-if (isset($HTTP_POST_VARS['new_group']))
-{
-	$groupclass = $type . 'group';
-	$newgroup = new $groupclass;
-	$newgroup->set_name($HTTP_POST_VARS['name']);
-	$newgroup->set_description($HTTP_POST_VARS['description']);
-	$newgroup->commit();
-}
+// if (isset($del_group))
+// {
+// 	$delgroup = new $groupclass();
+// 	$delgroup->generate_from_id($del_group);
+// 	$delgroup->delete();
+// }
+// 
+// if (isset($HTTP_POST_VARS['new_group']))
+// {
+// 	$groupclass = $type . 'group';
+// 	$newgroup = new $groupclass;
+// 	$newgroup->set_name($HTTP_POST_VARS['name']);
+// 	$newgroup->set_description($HTTP_POST_VARS['description']);
+// 	$newgroup->commit();
+// }
 
 
 if (isset($HTTP_POST_VARS['new_auth']))

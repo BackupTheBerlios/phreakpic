@@ -9,7 +9,7 @@ include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 //check if User is allowed to view this file
 if ($userdata['user_level'] != 1)
 {
-	message_die(GENERAL_ERROR, "You are not Administrator", '', __LINE__, __FILE__, $sql);
+	error_report(AUTH_ERROR, 'no_admin' , __LINE__, __FILE__,$sql);
 }
 
 if (!isset($usergroup))
@@ -21,27 +21,27 @@ $sel_group = new usergroup();
 $sel_group->generate_from_id($usergroup);
 
 
-if (isset($del_usergroup))
-{
-
-	$del_group = new usergroup();
-	$del_group->generate_from_id($del_usergroup);
-	$del_group->delete();
-
-}
-
-
-
-
-if (isset($HTTP_POST_VARS['new_usergroup']))
-{
-
-	$new_group = new usergroup();
-	$new_group->set_name($HTTP_POST_VARS['name']);
-	$new_group->set_description($HTTP_POST_VARS['describtion']);
-	$new_group->commit();
-
-}
+// if (isset($del_usergroup))
+// {
+// 
+// 	$del_group = new usergroup();
+// 	$del_group->generate_from_id($del_usergroup);
+// 	$del_group->delete();
+// 
+// }
+// 
+// 
+// 
+// 
+// if (isset($HTTP_POST_VARS['new_usergroup']))
+// {
+// 
+// 	$new_group = new usergroup();
+// 	$new_group->set_name($HTTP_POST_VARS['name']);
+// 	$new_group->set_description($HTTP_POST_VARS['describtion']);
+// 	$new_group->commit();
+// 
+// }
 
 
 if (isset($HTTP_POST_VARS['add']))
@@ -71,11 +71,11 @@ if (!$result = $db->sql_query($sql))
 	message_die(GENERAL_ERROR, "Could not get groups of user", '', __LINE__, __FILE__, $sql);
 }
 
- while ($row = $db->sql_fetchrow($result))
- {
+while ($row = $db->sql_fetchrow($result))
+{
 	$usergroups[] = $row;
  	
- }
+}
 $smarty->assign('usergroups',$usergroups);
 
 // get all users

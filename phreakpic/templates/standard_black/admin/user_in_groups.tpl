@@ -1,13 +1,5 @@
 <!--{include file="$template_name/admin/header.tpl"}-->
 <br>
-<!--{$lang.new_usergroup}-->
-<form action="user_in_groups.php?usergroup=<!--{$sel_usergroup}--><!--{$sid}-->" method="POST">
-  
-
-<!--{$lang.name}-->: <input type="text" name="name"><br>
-<!--{$lang.description}-->: <textarea name="describtion" cols="30" rows="4"></textarea>
-<input name="new_usergroup" type="submit" value="<!--{$lang.create}-->"><br>
-<br>
 <!--{$lang.add_user_to_group}--><br><br>
 <table border=1>
 <tr>
@@ -32,24 +24,24 @@
 </tr>
 <tr>
 <td>
-<table>
+
 
 <!--{section name=id loop=$usergroups}-->
-<tr>
-	<td>
-	<a href="user_in_groups.php?del_usergroup=<!--{$usergroups[id].id}--><!--{$sid}-->"><!--{$lang.delete}--></a>
-	</td>
-	<td>
+
+
+	
+
+
 	<!--{ if $usergroups[id].id != $sel_usergroup}-->
-		<a href="user_in_groups.php?usergroup=<!--{$usergroups[id].id}--><!--{$sid}-->"><!--{$usergroups[id].name}--></a><br>
+		<a href="user_in_groups.php?usergroup=<!--{$usergroups[id].id}--><!--{$sid}-->"><!--{$usergroups[id].name}--></a>
 	<!--{else}-->	
-		<b><!--{$usergroups[id].name}--></b><br>
+		<b><!--{$usergroups[id].name}--></b>
 	<!--{/if}-->	
-	</td>
-</tr>
+
+	<br>
 <!--{/section}-->
 
-</table>
+
 </td>
 <td>
 

@@ -47,28 +47,21 @@
 	
 </td>
 <td>
-<table>
+
 <!--{section name=id loop=$groups}-->
-	<tr><td>
+	
 	<!--{ if $groups[id].id != $sel_group}-->
 		<a href="auths.php?usergroup=<!--{$sel_usergroup}-->&group=<!--{$groups[id].id}--><!--{$sid}-->"><!--{$groups[id].name}--></a>
 	<!--{else}-->	
 		<b><!--{$groups[id].name}--></b>
 	<!--{/if}-->	
-	</td>
-	<td>
-	<a href="auths.php?del_group=<!--{$groups[id].id}--><!--{$sid}-->"><!--{$lang.delete}--></a><br>
-	</td></tr>
+	<br>
 <!--{/section}-->
-</table>
+
 </td>
 </tr>
 </table>
 <input name="change_auth" type="submit" value="<!--{$lang.commit}-->"><br><br>
-<!--{$new_group}-->:<br><br>
-<!--{$lang.name}-->: <input type="text" name="name"><br>
-<!--{$lang.description}-->: <textarea name="description" cols="30" rows="4"></textarea>
-<input name="new_group" type="submit" value="<!--{$lang.create}-->"><br>
 
 </form>
 
