@@ -6,6 +6,22 @@ include_once('./modules/pic_managment/interface.inc.php');
 include_once('./classes/categorie.inc.php');
 include_once('./languages/'.$userdata['user_lang'].'/lang_main.php');
 include_once('./includes/functions.inc.php');
+include_once ('classes/user_feedback.inc.php');
+
+if ($mode == "add")
+{
+	// add a new comment
+	$comment = new content_comment();
+	$comment->set_feedback($comment_text);
+	$comment->set_topic($topic);
+	$comment->set_user_id($userdata['user_id']);
+	$comment->set_owner_id($content_id);
+	$comment->set_parent_id($parent_id);
+	$comment->commit();
+	
+	
+	
+}
 
 $content = get_content_object_from_id($content_id);
 if (!is_object($content))
@@ -47,5 +63,13 @@ $smarty->assign('current_rating', $content->get_current_rating());
 $smarty->assign('cat_id', $cat_id);
 //$smarty->assign('content_size',$content->get_content_size()); //thats the height and width of the object...
 //$smarty->assign('id',$id);
+$end_time = getmicrotime();
+$execution_time = $end_time - $start_time;
 $smarty->display($userdata['photo_user_template'].'/view_content.tpl');
+$template_end_time = getmicrotime();
+$template_execution_time = $template_end_time - $end_time;
+echo("execution_time: $execution_time seconds<br>");
+echo("template_execution_time: $template_execution_time seconds<br>");
+$execution_time = $end_time - $start_time + $template_execution_time;
+echo("gesamt execution_time: $execution_time seconds<br>");
 ?>
