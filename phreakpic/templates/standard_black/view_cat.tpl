@@ -50,12 +50,17 @@
 			<tr bgcolor="<!--{#table_bg_color#}-->">
 				
 				
-				<!--{if $mode == 'edit'}-->
-					<td id="td_cat" name="td_cat"><input name="cat_name[]" type="text" value="<!--{$child_cat_infos[id].name}-->"></td>
-					<td><input name="cat_description[]" type="text" value="<!--{$child_cat_infos[id].description}-->"></td>
+				<!--{if ($mode == 'edit') and ($child_cat_infos[id].edit == true)}-->
+					<td id="td_cat" name="td_cat">
+						<input name="cat_name[]" type="text" value="<!--{$child_cat_infos[id].name}-->">
+					</td>
+					<td>
+						<input name="cat_description[]" type="text" value="<!--{$child_cat_infos[id].description}-->">
+					</td>
 					<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
 					<td><!--{$child_cat_infos[id].current_rating}--></td>
 					<td>
+					
 					<!--{if ($child_cat_infos[id].remove_from_group == 'true')}-->	
 					
 						<select name="cat_catgroup[]">
