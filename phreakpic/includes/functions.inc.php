@@ -14,7 +14,10 @@ function error_report($type, $ident , $line, $file,$sql='')
 	
 	switch ($type)
 	{
-		case SQL_ERROR: $error_info['type'] = 'SQL_ERROR'; break;
+		case SQL_ERROR: 
+			$error_info['type'] = 'SQL_ERROR'; 
+			$error_info['sql_error'] = $db->sql_error();
+			break;
 		case AUTH_ERROR: $error_info['type'] = 'AUTH_ERROR'; break;
 		case FILE_ERROR: $error_info['type'] = 'FILE_ERROR'; break;
 		case GENERAL_ERROR: $error_info['type'] = 'GENERAL_ERROR'; break;
@@ -34,7 +37,7 @@ function error_report($type, $ident , $line, $file,$sql='')
 		// submit error to db
 		$sql = "INSERT INTO " . $config_vars['table_prefix'] . "error_reports
 					(type,file,line,sql,ident,user_id,query_string,error_time)
-					VALUES ('{$type}','{$error_info['file']}','{$error_info['line']}','{$error_info['sql']}','{$error_info['ident']}','{$userdata['user_id']}','$QUERY_STRING','" . date("Y-m-d H:i:s") . "')";
+					VALUES ('{$type}','{$error_info['file']}','{$error_info['line']}','" . addslashes($error_info['sql']) . "','{$error_info['ident']}','{$userdata['user_id']}','$QUERY_STRING','" . date("Y-m-d H:i:s") . "')";
 		if (!$result = $db->sql_query($sql))
 		{
 			message_die(GENERAL_ERROR, "Error report failed", '', __LINE__, __FILE__, $sql);

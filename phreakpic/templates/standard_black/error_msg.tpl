@@ -12,6 +12,10 @@
 				<td align="center"><!--{$error_info.text}--><br /><br />
 				<!--{if $error_info.debug}-->
 					<b><u>DEBUG MODE</u></b><br /><br />
+					<!--{if $error_info.type == 'SQL_ERROR'}-->
+						<br /><br />SQL Error : <!--{$error_info.sql_error.code}--> <!--{$error_info.sql_error.message}--> <br>
+					<!--{/if}-->
+					
 					<!--{$error_info.sql}--></br /><br />
 					Line : <!--{$error_info.line}--><br />File : <!--{$error_info.file}-->
 					<!--{/if}-->
