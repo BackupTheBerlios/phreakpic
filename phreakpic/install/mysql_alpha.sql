@@ -11,10 +11,10 @@
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_cat_auth`
+# Table structure for table `phreakpic_cat_auth`
 #
 
-CREATE TABLE `photo_cat_auth` (
+CREATE TABLE `phreakpic_cat_auth` (
   `usergroup_id` int(11) NOT NULL default '0',
   `catgroup_id` int(11) NOT NULL default '0',
   `view` enum('0','1') NOT NULL default '0',
@@ -31,10 +31,10 @@ CREATE TABLE `photo_cat_auth` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_cat_comments`
+# Table structure for table `phreakpic_cat_comments`
 #
 
-CREATE TABLE `photo_cat_comments` (
+CREATE TABLE `phreakpic_cat_comments` (
   `id` int(11) NOT NULL auto_increment,
   `owner_id` int(11) default NULL,
   `feedback` text NOT NULL,
@@ -51,10 +51,10 @@ CREATE TABLE `photo_cat_comments` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_cats`
+# Table structure for table `phreakpic_cats`
 #
 
-CREATE TABLE `photo_cats` (
+CREATE TABLE `phreakpic_cats` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(200) NOT NULL default '',
   `current_rating` smallint(6) NOT NULL default '0',
@@ -72,10 +72,10 @@ CREATE TABLE `photo_cats` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_content`
+# Table structure for table `phreakpic_content`
 #
 
-CREATE TABLE `photo_content` (
+CREATE TABLE `phreakpic_content` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
   `file` text NOT NULL,
@@ -93,10 +93,10 @@ CREATE TABLE `photo_content` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_content_auth`
+# Table structure for table `phreakpic_content_auth`
 #
 
-CREATE TABLE `photo_content_auth` (
+CREATE TABLE `phreakpic_content_auth` (
   `usergroup_id` int(11) NOT NULL default '0',
   `contentgroup_id` int(11) NOT NULL default '0',
   `view` enum('0','1') NOT NULL default '1',
@@ -109,10 +109,10 @@ CREATE TABLE `photo_content_auth` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_content_comments`
+# Table structure for table `phreakpic_content_comments`
 #
 
-CREATE TABLE `photo_content_comments` (
+CREATE TABLE `phreakpic_content_comments` (
   `id` int(11) NOT NULL auto_increment,
   `owner_id` int(11) default NULL,
   `feedback` text NOT NULL,
@@ -129,10 +129,10 @@ CREATE TABLE `photo_content_comments` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_content_in_cat`
+# Table structure for table `phreakpic_content_in_cat`
 #
 
-CREATE TABLE `photo_content_in_cat` (
+CREATE TABLE `phreakpic_content_in_cat` (
   `cat_id` int(11) NOT NULL default '0',
   `content_id` int(11) NOT NULL default '0',
   `place_in_cat` mediumint(9) NOT NULL default '65536'
@@ -140,10 +140,10 @@ CREATE TABLE `photo_content_in_cat` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_content_ratings`
+# Table structure for table `phreakpic_content_ratings`
 #
 
-CREATE TABLE `photo_content_ratings` (
+CREATE TABLE `phreakpic_content_ratings` (
   `id` int(11) NOT NULL auto_increment,
   `owner_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -156,10 +156,10 @@ CREATE TABLE `photo_content_ratings` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_custom_searches`
+# Table structure for table `phreakpic_custom_searches`
 #
 
-CREATE TABLE `photo_custom_searches` (
+CREATE TABLE `phreakpic_custom_searches` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) NOT NULL default '',
   `xml` text NOT NULL,
@@ -171,10 +171,10 @@ CREATE TABLE `photo_custom_searches` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_error_reports`
+# Table structure for table `phreakpic_error_reports`
 #
 
-CREATE TABLE `photo_error_reports` (
+CREATE TABLE `phreakpic_error_reports` (
   `id` int(11) NOT NULL auto_increment,
   `file` varchar(40) NOT NULL default '',
   `line` int(11) NOT NULL default '0',
@@ -192,10 +192,10 @@ CREATE TABLE `photo_error_reports` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_groups`
+# Table structure for table `phreakpic_groups`
 #
 
-CREATE TABLE `photo_groups` (
+CREATE TABLE `phreakpic_groups` (
   `id` int(11) NOT NULL auto_increment,
   `name` text NOT NULL,
   `description` text NOT NULL,
@@ -206,20 +206,20 @@ CREATE TABLE `photo_groups` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_user_in_group`
+# Table structure for table `phreakpic_user_in_group`
 #
 
-CREATE TABLE `photo_user_in_group` (
+CREATE TABLE `phreakpic_user_in_group` (
   `user_id` int(11) NOT NULL default '0',
   `group_id` int(11) NOT NULL default '0'
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_usergroups`
+# Table structure for table `phreakpic_usergroups`
 #
 
-CREATE TABLE `photo_usergroups` (
+CREATE TABLE `phreakpic_usergroups` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) NOT NULL default '',
   `description` text,
@@ -228,10 +228,10 @@ CREATE TABLE `photo_usergroups` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_views`
+# Table structure for table `phreakpic_views`
 #
 
-CREATE TABLE `photo_views` (
+CREATE TABLE `phreakpic_views` (
   `user_id` int(11) default '0',
   `content_id` int(11) default '0',
   `start` datetime NOT NULL default '0000-00-00 00:00:00',
