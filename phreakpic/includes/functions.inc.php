@@ -72,5 +72,48 @@ function makedir($dir)
 	mkdir($dir,$config_vars['dir_mask']);
 	touch ($dir . '/index.html');
 }
+//makes the string of cats and content where the user is at the moment
+function build_nav_string($cat_id)
+{
+	global $config_vars, $lang;
+	//get the navigation string
+	$cat = new categorie();
+	$result = $cat->generate_from_id($cat_id);
+	if ($result)
+	{
 
+	}
+	$parent_cats = $cat->get_parent_cat_array();
+	
+	//build the navigation string
+	for ($i = 0; $i < sizeof($parent_cats); $i++)
+	{
+		$nav_string[$i]['id'] = $parent_cats[$i]['id'];
+		$nav_string[$i]['name'] = $parent_cats[$i]['name'];
+	}
+	return $nav_string;
+}
+
+//get all comments and save it as an useable array
+function make_comments($comment, $level)
+{
+	global $comments;
+	$comment_infos['level'] = $level;
+	$comment_infos['id'] = $comment->$id;    //get_id();
+	$comment_infos['text'] = $comment->get_feedback();
+	$user_data = get_userdata(intval($comment->get_user_id()));
+	$comment_infos['username'] = $user_data['username'];
+	
+	$comments[] = $comment_infos;
+	
+	//echo ($comment->get_feedback()."<br>");
+	$comment_childs = $comment->get_childs();
+	if (is_array($comment_childs))
+	{
+		for ($i = 0; $i < sizeof($comment_childs); $i++)
+		{
+			make_comments($comment_childs[$i],$level+1);
+		}
+	}
+}
 ?>
