@@ -445,7 +445,7 @@ function make_comments($comment, $level,$editable)
 			$poster_avatar = ( $board_config['allow_avatar_upload'] ) ? '<img src="'.PHPBB_PATH . $board_config['avatar_path'] . '/' . $comment_userdata['user_avatar'] . '" alt="" border="0" />' : '';
 			break;
 		case USER_AVATAR_REMOTE:
-			$poster_avatar = ( $board_config['allow_avatar_remote'] ) ? '<img src="'.PHPBB_PATH . $comment_userdata['user_avatar'] . '" alt="" border="0" />' : '';
+			$poster_avatar = ( $board_config['allow_avatar_remote'] ) ? '<img src="'. $comment_userdata['user_avatar'] . '" alt="" border="0" />' : '';
 			break;
 		case USER_AVATAR_GALLERY:
 		
