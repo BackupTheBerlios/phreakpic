@@ -31,6 +31,12 @@ if (!isset($userdata['phreakpic_content_per_page']))
 	$userdata['content_per_page'] = $config_vars['default_content_per_page'];
 }
 
+if (!isset($userdata['basket_enable']))
+{
+	$userdata['basket_enable'] = $config_vars['default_basket_enable'];
+}
+
+
 // If youre a registrered user add registered user usergroups to default usergoups
 
 $config_vars['auto_usergroup_ids'] = $config_vars['default_usergroup_ids'];

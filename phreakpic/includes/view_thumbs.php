@@ -14,17 +14,18 @@ if ($mode == 'download')
 		
 	}
 	
+	$filename = $config_vars['content_path_prefix']."/content_{$userdata['username']}.zip";
 	// create zip
-	$zip= new PclZip("content.zip");
+	$zip= new PclZip($filename);
 	$zip->create($files);
 	
 	// send zip to browser
 	$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/", 
 	getenv("SERVER_SOFTWARE")) ) ? "Refresh: 0; URL=" : "Location: ";
-	header($header_location . append_sid("test.zip", true));
+	header($header_location . append_sid($filename, true));
 	
 	//delete zip
-	unlink('content.zip');
+//	unlink('content.zip');
 	
 	
 }
@@ -120,6 +121,7 @@ if (is_array($contents))
 	$smarty->assign('thumbs',$thumbs);
 	$smarty->assign('is_content', true);
 }
+	$smarty->assign('basket_enable',$userdata['basket_enable']);
 
 
 ?>

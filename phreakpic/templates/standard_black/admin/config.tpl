@@ -118,6 +118,16 @@
 
 </tr>
 
+<tr>
+
+	<td>
+	Default Basket Enable
+	</td>
+	<td>
+	<input type="checkbox" name="default_basket_enable" <!--{$basket_enable}-->>
+	</td>
+
+</tr>
 
 </table>
 <input type="submit" name="submit">

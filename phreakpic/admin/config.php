@@ -6,6 +6,16 @@ include_once(ROOT_PATH . 'includes/template.inc.php');
 
 session_start();
 
+if ($HTTP_POST_VARS['default_basket_enable'] == 'on')
+{
+	$HTTP_SESSION_VARS['default_basket_enable'] = true;
+}
+else
+{
+	$HTTP_SESSION_VARS['default_basket_enable'] = false;
+}
+
+
 
 if (isset($HTTP_POST_VARS['submit']))
 {
@@ -17,6 +27,7 @@ if (isset($HTTP_POST_VARS['submit']))
  $config_vars['registered_users_usergroup_ids'] = $HTTP_SESSION_VARS['registered_users_usergroup_ids'];
  sort($HTTP_SESSION_VARS['selectable_content_per_page'], SORT_NUMERIC);
  $config_vars['selectable_content_per_page'] = $HTTP_SESSION_VARS['selectable_content_per_page'];
+ $config_vars['default_basket_enable'] = $HTTP_SESSION_VARS['default_basket_enable'];
  
  write_config(SMARTY_DIR,PHPBB_PATH,PHREAKPIC_PATH,SERVER_NAME);
  
@@ -43,9 +54,10 @@ if (isset($HTTP_POST_VARS['submit']))
 	$smarty->assign('lang',$lang);
 }
 
+
+$changed=false;
 if (isset($HTTP_POST_VARS['add_default_usergroup']))
 {
-
 	if (isset($HTTP_POST_VARS['selected_not_default_usergroups']))
 	{
 		foreach ($HTTP_POST_VARS['selected_not_default_usergroups'] as $value)
@@ -53,6 +65,7 @@ if (isset($HTTP_POST_VARS['add_default_usergroup']))
 			$HTTP_SESSION_VARS['default_usergroup_ids'][] = $value;
 		}
 	}
+	$changed=true;
 }
 elseif (isset($HTTP_POST_VARS['remove_default_usergroup']))
 {
@@ -61,20 +74,15 @@ elseif (isset($HTTP_POST_VARS['remove_default_usergroup']))
 		$key=array_keys($HTTP_SESSION_VARS['default_usergroup_ids'],$value);
 		unset($HTTP_SESSION_VARS['default_usergroup_ids'][$key[0]]);
 	}
-
+	$changed=true;
 }
-else
-{
-	$HTTP_SESSION_VARS['default_usergroup_ids'] = $config_vars['default_usergroup_ids'];
-}
-
-
-if (isset($HTTP_POST_VARS['add_registered_users_usergroup']))
+elseif (isset($HTTP_POST_VARS['add_registered_users_usergroup']))
 {
 	foreach ($HTTP_POST_VARS['selected_not_registered_users_usergroups'] as $value)
 	{	
 		$HTTP_SESSION_VARS['registered_users_usergroup_ids'][] = $value;
 	}
+	$changed=true;
 }
 elseif (isset($HTTP_POST_VARS['remove_registered_users_usergroup']))
 {
@@ -84,15 +92,9 @@ elseif (isset($HTTP_POST_VARS['remove_registered_users_usergroup']))
 		$key=array_keys($HTTP_SESSION_VARS['registered_users_usergroup_ids'],$value);
 		unset($HTTP_SESSION_VARS['registered_users_usergroup_ids'][$key[0]]);
 	}
-
+	$changed=true;
 }
-else
-{
-	$HTTP_SESSION_VARS['registered_users_usergroup_ids'] = $config_vars['registered_users_usergroup_ids'];
-}
-
-
-if (isset($HTTP_POST_VARS['add_selectable']))
+elseif (isset($HTTP_POST_VARS['add_selectable']))
 {
 	if (intval($HTTP_POST_VARS['selectable_add_value'] != 0))
 	{
@@ -100,6 +102,7 @@ if (isset($HTTP_POST_VARS['add_selectable']))
 		$HTTP_SESSION_VARS['selectable_content_per_page'] = array_unique($HTTP_SESSION_VARS['selectable_content_per_page']);
 		sort($HTTP_SESSION_VARS['selectable_content_per_page'], SORT_NUMERIC);
 	}
+	$changed=true;
 }
 elseif (isset($HTTP_POST_VARS['remove_selectable']))
 {
@@ -109,11 +112,19 @@ elseif (isset($HTTP_POST_VARS['remove_selectable']))
 		unset($HTTP_SESSION_VARS['selectable_content_per_page'][$value]);
 	}
 	sort($HTTP_SESSION_VARS['selectable_content_per_page'], SORT_NUMERIC);
+	$changed=true;
 }
 else
 {
 	$HTTP_SESSION_VARS['selectable_content_per_page'] = $config_vars['selectable_content_per_page'];
+	$HTTP_SESSION_VARS['registered_users_usergroup_ids'] = $config_vars['registered_users_usergroup_ids'];
+	$HTTP_SESSION_VARS['default_usergroup_ids'] = $config_vars['default_usergroup_ids'];
+	$HTTP_SESSION_VARS['default_basket_enable'] = $config_vars['default_basket_enable'];
 }
+
+
+
+
 
 //print_r($HTTP_SESSION_VARS['selectable_content_per_page']);
 $smarty->assign('selectable_content_per_page',$HTTP_SESSION_VARS['selectable_content_per_page']);
@@ -169,7 +180,7 @@ foreach($HTTP_SESSION_VARS['registered_users_usergroup_ids'] as $key => $group_i
 }
 
  
- $smarty->assign('default_usergroup_ids',$default_usergroups);
+$smarty->assign('default_usergroup_ids',$default_usergroups);
 $smarty->assign('registered_users_usergroup_ids',$registered_users_usergroups);
 
 @$smarty->assign('not_default_usergroup_ids',array_minus_array($usergroups,$default_usergroups));
@@ -182,6 +193,11 @@ $smarty->assign('installed_templates',get_installed_templates());
 $smarty->assign('installed_language',get_installed_languages());
 
 $smarty->assign('config_vars',$config_vars);
+
+if ($HTTP_SESSION_VARS['default_basket_enable'])
+{
+	$smarty->assign('basket_enable','checked');
+}
 
 $smarty->display($userdata['photo_user_template'].'/admin/config.tpl');
 ?>
