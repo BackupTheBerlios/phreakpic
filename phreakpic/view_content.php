@@ -8,6 +8,8 @@ include_once('./languages/'.$userdata['user_lang'].'/lang_main.php');
 include_once('./includes/functions.inc.php');
 include_once ('classes/user_feedback.inc.php');
 
+
+// Comments
 if ($mode == "add")
 {
 	// add a new comment
@@ -23,11 +25,18 @@ if ($mode == "add")
 	
 }
 
+
+
+
 $content = get_content_object_from_id($content_id);
 if (!is_object($content))
 {
 	message_die(GENERAL_ERROR, "Could not generate content from id", '', __LINE__, __FILE__, $sql);
 }
+
+
+
+
 
 //get previous and next content and display the thumbnail if aviable
 $surrounding_content = $content->get_surrounding_content($cat_id);
@@ -41,6 +50,52 @@ if (is_object($surrounding_content['next']))
 {
 	$smarty->assign('is_next_content', true);
 	$smarty->assign('next_thumb',$surrounding_content['next']->get_thumb());
+}
+
+// Check if user has edit rights to this content
+if ($content->check_perm('edit'))
+{
+	$smarty->assign('allow_edit',1);
+	if ($mode == "edit")
+	{
+		// edit this picture
+		$smarty->assign('mode','edit');
+		$place_in_cat_array = $content->get_place_in_cat();
+		$smarty->assign('place_in_cat',$place_in_cat_array[$cat_id]);
+		
+		// check if user has unlink rights
+		$cat_obj = new categorie();
+		$cat_obj->generate_from_id($cat_id);
+		if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'content_remove'))
+		{
+			$smarty->assign('allow_content_remove',1);
+		}
+		
+	}
+	
+	if ($mode == "commit")
+	{
+		// change values of the picture
+		if ($HTTP_POST_VARS['lock'] == "on")
+		{
+			$content->lock();
+		}
+		else
+		{
+			$content->unlock();
+		}
+		
+		$content->set_place_in_cat($cat_id,$HTTP_POST_VARS['place_in_cat']);
+		
+		if ($content->$HTTP_POST_VARS['delete'] == "on")
+		{
+			$content->remove_from_cat($cat_id);
+		}
+		
+		$content->set_name($HTTP_POST_VARS['name']);
+		
+		$content->commit();
+	}
 }
 
 
