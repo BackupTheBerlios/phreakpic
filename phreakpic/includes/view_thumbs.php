@@ -2,8 +2,6 @@
 
 if (is_array($contents))
 {
-
-	$HTTP_SESSION_VARS['contents']=$contents;
 	//editing the contents
 	if ((isset($submit)) and ($HTTP_POST_VARS['mode'] == 'edited'))
 	{
