@@ -5,6 +5,9 @@ Beta Release:
 - Date at comments now follow the dateformat of phpBB (Tesla)
 - Added current picture and thread to the write comment page (Tesla)
 - Added Thumbs per page selector
+- Added content basket
+- Added download for content basket
+- Added user profile configuration
 
 Changed Tables:
 Added:
