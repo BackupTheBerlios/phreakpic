@@ -1,4 +1,5 @@
 <?php
+include_once('./classes/album_content.inc.php');
 function generate_array_from_row($row)
 {
 	global $db;
@@ -210,77 +211,38 @@ function get_installed_languages()
 	
 }
 
-function generate_values($values)
+function add_content($POST_FILES,$name,$cat_id,$place_in_cat,$content_group)
 {
-	//Either key word or list seperated with ,
-	
-	
-	if ($values == 'OPERATOR')
+	global $filetypes;
+	$objtyp = $filetypes[getext($POST_FILES['new_content_file']['name'])];
+	$new_content = new $objtyp;
+
+	// endgültigen dateinamen generieren und das tmp file verschieben. Weil das object nicht des dateiendung bekommen würde, wenn nur file=tmp_file und name=irgenwas gesätzt wäare
+	$new_content->file = $POST_FILES['new_content_file']['name'];
+	$new_content->add_to_cat($cat_id);
+	if ($name != "")
 	{
-		return Array('=','<','>');
+		$new_content->set_name($name);
 	}
-	if (strpos($values,','))
+	else
 	{
-		return explode(',',$values);
+		$new_content->set_name(getfile($POST_FILES['new_content_file']['name']));
 	}
-	return $values;
-	
-	
+
+	$new_file_name = $new_content->generate_filename();
+	rename ($POST_FILES['new_content_file']['tmp_name'], $new_file_name); 
+	$new_content->file = $new_file_name;
+
+	$new_content->set_place_in_cat($cat_id,$place_in_cat);
+	$new_content->set_contentgroup_id($content_group);
+
+
+	$new_content->commit();
+	return $new_content;
 
 }
 
 
-function generate_params($params)
-{
-	global $lang;
-	// gets the parameter infos for the query out of $params
-	/*
-	Types:
-	INPUT = input field
-	DROPDOWN = DropDownField
-	*/
-
-	$rest=$params;
-
-	// get param fields
-	//$start = strpos($rest,'[');
-	$in_loop=false;
-	while (((strpos($rest,'['))!==false) or ((strpos($rest,'{'))!==false))
-	{
-		if ((strpos($rest,'{')!==false) and (strpos($rest,'[')>(strpos($rest,'{'))))
-		{
-			$start=strpos($rest,'{');
-			$end = strpos($rest,'}');
-			$loop_string=substr($rest,$start+1,$end-$start-1);
-			echo $loop_string;
-			$a=generate_params($loop_string);
-			foreach ($a as $key => $value)
-			{
-				$b[]=$a[$key][0];
-				
-			}
-			$param[]=$b;
-			
-			$rest=substr($rest,$end+1);
-			continue;
-		}
-		else
-		{
-			$start = strpos($rest,'[');
-			$end = strpos($rest,']');
-			$entry=explode('|',substr($rest,$start+1,$end-$start-1));
-			$assoc_entry['type']=$entry[0];
-			$assoc_entry['value']=generate_values($entry[1]);
-			$assoc_entry['name']=$entry[2];
-			$assoc_entry['text']=$lang[$entry[2]];
-			$param[0][]=$assoc_entry;
-			$rest=substr($rest,$end+1);
-		}
-		
-	}
-	return $param;
-
-}
 
 
 
