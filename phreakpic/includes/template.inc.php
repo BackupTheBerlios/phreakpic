@@ -29,7 +29,6 @@
 	$smarty->assign('sid','&sid='.$userdata['session_id']);
 	$smarty->assign('username', $userdata['username']);
 	$smarty->assign('user_id', $userdata['user_id']);
-	echo ("bla: " . $userdata['user_id'])
 	
 	
 	//set if the actual user is admin or not
