@@ -253,7 +253,7 @@ $smarty->assign('content_id', $content->get_id());
 $smarty->assign('views', $content->get_views());
 $smarty->assign('current_rating', $content->get_current_rating());
 $smarty->assign('cat_id', $cat_id);
-$smarty->assign('php_self', $PHP_SELF);
+$smarty->assign('redirect', PHREAKPIC_PATH . 'view_content.php');
 
 
 

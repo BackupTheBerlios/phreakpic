@@ -397,13 +397,13 @@ if (!isset($template_file))
 
 
 $smarty->assign('nav_string', build_nav_string($cat_id));
-$smarty->assign('php_self', $PHP_SELF);
+$smarty->assign('redirect', PHREAKPIC_PATH . "$template_file.php");
 
 
 $end_time = getmicrotime();
 $execution_time = $end_time - $start_time;
 
-$smarty->display($userdata['photo_user_template'].'/'.$template_file.'.tpl');
+$smarty->display($userdata['photo_user_template']."/$template_file.tpl");
 $template_end_time = getmicrotime();
 $template_execution_time = $template_end_time - $end_time;
 echo("execution_time: $execution_time seconds<br>");
