@@ -8,6 +8,9 @@ include_once('./includes/functions.inc.php');
 include_once('./languages/' . $userdata['user_lang'] . '/lang_main.php');
 include_once('./includes/template.inc.php');
 
+// move this to index.php
+validate_config();
+
 // bigbrother stop the view of the last viewed content
 session_start();
 

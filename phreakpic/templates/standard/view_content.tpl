@@ -65,10 +65,10 @@
 					<form 
 action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->" method="POST">
 					
-					<!--{if $allow_edit eq 1}-->
+					<!--{if $edit_info.allow_edit == true}-->
 						<!--{$lang.name}-->: <input type="text" name="name" value="<!--{$name}-->"><br>
-						<!--{$lang.place_in_cat}-->: <input type="text" name="place_in_cat" value="<!--{$place_in_cat}-->"><br> 
-						<!--{$lang.lock}-->: <input type="checkbox" name="lock" <!--{$locked}-->><br>
+						<!--{$lang.place_in_cat}-->: <input type="text" name="place_in_cat" value="<!--{$edit_info.place_in_cat}-->"><br> 
+						<!--{$lang.lock}-->: <input type="checkbox" name="lock" <!--{$edit_info.locked}-->><br>
 						<!--{$lang.rotate}-->: 
 						<!--{$lang.rotate_free}-->: <input type="radio" name="rotate_mode" value="free" checked><input type="text" name="rotate"><br> 
 						<!--{$lang.rotate_left}--> <input type="radio" name="rotate_mode" value="-90">
@@ -77,18 +77,18 @@ action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--
 					
 					<!--{/if}-->
 					
-					<!--{if $allow_content_remove eq 1}-->
+					<!--{if $allow_content_remove == true}-->
 						<!--{$lang.unlink}-->: <input type="checkbox" name="unlink"><br>
 						
 						
 							
 					<!--{/if}-->
-					<!--{if $allow_delete eq 1}-->
+					<!--{if $edit_info.allow_delete == true}-->
 						<!--{$lang.delete}-->: <input type="checkbox" name="delete" ><br>
 					<!--{/if}-->
-					<!--{if $allow_link eq 1}-->
+					<!--{if $allow_link == true}-->
 						<!--{$lang.link}-->: <input type="checkbox" name="link" ><br>
-						<!--{if $allow_content_remove eq 1}-->
+						<!--{if $allow_content_remove == true}-->
 							<!--{$lang.move}-->: <input type="checkbox" name="move" ><br>
 						<!--{/if}-->
 					<!--{/if}-->
@@ -98,9 +98,9 @@ action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--
 						<option value="<!--{$add_to_cats[id].id}-->"><!--{$add_to_cats[id].name}--></option>
 					<!--{/section}-->
 					</select><br>
-					<!--{if $allow_change_group eq 1}-->
+					<!--{if $edit_info.allow_remove_from_group == true}-->
 					<!--{$lang.change_group}--><input type="checkbox" name="change_group" > to 
-					<select name="to_group">
+					<select name="to_contentgroup">
 					<!--{section name=id loop=$add_to_contentgroups}-->
 						<!--{if $contentgroup == $add_to_contentgroups[id].id}-->
 						<option selected value="<!--{$add_to_contentgroups[id].id}-->"><!--{$add_to_contentgroups[id].name}--></option>
@@ -121,7 +121,7 @@ action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--
 					<!--{$lang.rating}-->: <!--{$current_rating}--><br>
 					<!--{$lang.views}-->: <!--{$views}--><br>
 					<a href="comment.php?mode=add&type=content&parent_id=0&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->"><!--{$lang.add_comment}--></a><br>
-					<!--{if ($allow_edit eq 1) or ($allow_content_remove eq 1)}-->
+					<!--{if ($edit_info.allow_edit == true) or (allow_content_remove == true)}-->
 						<a href="view_content.php?mode=edit&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->"><!--{$lang.edit_content}--></a><br>
 					<!--{/if}-->	
 				<!--{/if}-->	

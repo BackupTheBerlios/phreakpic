@@ -1,12 +1,53 @@
+<script type="text/javascript" language="javascript">
+var selected=new Array();
+function setCheckboxes(the_form, do_check, boxes)
+{
+
+		
+    var elts      = document.forms[the_form].elements[boxes];
+    var elts_cnt  = elts.length;
+    for (var i = 0; i < elts_cnt; i++) {
+        elts[i].checked = do_check;
+    } // end for
+
+    return true;
+}
+
+function markTd(x,y)
+{
+	document.getElementsByName('td_thumb')[(x*4)+y].bgColor='#ff0000';
+}
+function unmarkTd(x,y)
+{
+	document.getElementsByName('td_thumb')[(x*4)+y].bgColor='#FFFFFF';
+}
+
+function switchTd(x,y)
+{
+	if (selected[x][y])
+	{
+		document.getElementsByName('td_thumb')[(x*4)+y].bgColor='#FFFFFF';
+		selected[x][y]=false;
+	}
+	else
+	{
+		selected[x][y]=true;
+		document.getElementsByName('td_thumb')[(x*4)+y].bgColor='#FFFF00';
+	}
+	
+	
+}
+</script>
+
 <!--{if $is_content == true}-->
 	<!--{if $mode == edit}-->
-		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content">
+		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content" name="content" onKeyDown="switchTd('1','1')">
 	<!--{/if}-->
 	<table border=1 align=center>
 		<!--{section name=thumb_cols loop=$thumbs}-->
 		<tr>
 			<!--{section name=thumb_cell loop=$thumbs[thumb_cols]}-->
-			<td>
+			<td name="td_thumb" onclick="switchTd(<!--{$smarty.section.thumb_cols.index}-->,<!--{$smarty.section.thumb_cell.index}-->)">
 				<!--{*Possible fields of this table are: 
 					html			the html tag to display the content
 					name			the name of it
@@ -25,7 +66,7 @@
 				<!--{if $mode == edit}-->
 					<input name="place_in_array[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
 					<input name="content_id[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
-					
+
 					<!--{if $thumbs[thumb_cols][thumb_cell].allow_edit == true}-->
 						<!--{$lang.rotate}-->: 
 						<!--{$lang.rotate_free}-->: <input type="radio" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="free" checked><input type="text" name="rotate"><br> 
@@ -34,24 +75,24 @@
 						<!--{$lang.rotate_right}--> <input type="radio" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="90"><br>
 						<!--{$lang.name}-->: <input name="name[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].name}-->" size="20"><br>
 						<!--{$lang.place_in_cat}-->: <input name="place_in_cat[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_cat}-->" size="10"><br>
-						<!--{$lang.lock}-->:<input name="lock[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox" <!--{$thumbs[thumb_cols][thumb_cell].locked}-->>
-						
+						<a onDblClick="setCheckboxes('edit_content', !document.edit_content.elements['lock'][<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->].checked,'lock'); return false;"><!--{$lang.lock}--></a>:<input id="lock"  name="lock[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox" <!--{$thumbs[thumb_cols][thumb_cell].locked}-->>
+
 					<!--{/if}-->
 					<!--{if  $thumbs[thumb_cols][thumb_cell].allow_delete == true}-->
-						<!--{$lang.delete}-->:<input name="delete[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
+						<a onDblClick="setCheckboxes('edit_content', !document.edit_content.elements['delete'][<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->].checked,'delete'); return false;"><!--{$lang.delete}--></a>:<input id="delete" name="delete[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
 					<!--{/if}-->
 					<!--{if  $allow_content_remove == true}-->
-						<!--{$lang.unlink}-->:<input name="unlink[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
+						<a onDblClick="setCheckboxes('edit_content', !document.edit_content.elements['unlink'][<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->].checked,'unlink'); return false;"><!--{$lang.unlink}--></a>:<input id="unlink" name="unlink[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
 					<!--{/if}-->
 					<!--{if  $allow_link == true}-->
-							<!--{$lang.link}-->:<input name="link[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
+							<a onDblClick="setCheckboxes('edit_content', !document.edit_content.elements['link'][<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->].checked,'link'); return false;"><!--{$lang.link}--></a>:<input id="link" name="link[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
 							<!--{if  $allow_content_remove == true}-->
-								<!--{$lang.move}-->:<input name="move[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
+								<a onDblClick="setCheckboxes('edit_content', !document.edit_content.elements['move'][<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->].checked,'move'); return false;"><!--{$lang.move}--></a>:<input id="move" name="move[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
 							<!--{/if}-->
 					<!--{/if}-->
 					<!--{if  $$thumbs[thumb_cols][thumb_cell].allow_remove_from_group == true}-->
-				
-						<!--{$lang.change_group}--> (<!--{$thumbs[thumb_cols][thumb_cell].contentgroup_name}-->) :<input name="change_group[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
+
+						<a onDblClick="setCheckboxes('edit_content', !document.edit_content.elements['change_group'][<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->].checked,'change_group'); return false;"><!--{$lang.change_group}--> (<!--{$thumbs[thumb_cols][thumb_cell].contentgroup_name}-->)</a> :<input id="change_group" name="change_group[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
 					<!--{/if}-->
 					
 					
