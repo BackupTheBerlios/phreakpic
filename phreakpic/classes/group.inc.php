@@ -19,6 +19,8 @@ class base_group
 			{
 				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 			}
+			
+			
 			unset($this->id);
 		}
 		return OP_NP_MISSING_DELETE;
@@ -127,11 +129,31 @@ class base_group
 
 class usergroup extends base_group
 {
+	function delete()
+	{
+		global $config_vars,$db;
+		//delete all cat_auths related to this usergroup
+		$sql = "DELETE FROM " . $config_vars['table_prefix'] . "cat_auth WHERE (usergroup_id = $this->id)";
+		if (!$result = $db->sql_query($sql))
+		{
+			error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+		}
+		
+		//delete all content_auths related to this usergroup
+		$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content_auth WHERE (usergroup_id = $this->id)";
+		if (!$result = $db->sql_query($sql))
+		{
+			error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+		}
+		//delete the group
+		base_group::delete();
+	}
+
 	function add_user($user_id)
 	{
-		global $db,$config_vars;
+		global $db,$config_vars,$userdata;
 		
-		if (check_group_action_allowed())
+		if (check_usergroup_action_allowed($this->id,$userdata['user_id'],'add_user'))
 		{
 			if (!$this->user_in_group($user_id))
 			{
@@ -157,9 +179,9 @@ class usergroup extends base_group
 
 	function remove_user($user_id)
 	{
-		global $db,$config_vars;
+		global $db,$config_vars,$userdata;
 		
-		if (check_group_action_allowed())
+		if (check_usergroup_action_allowed($this->id,$userdata['user_id'],'add_user'))
 		{
 		
 			if ($this->user_in_group($user_id))
@@ -210,6 +232,31 @@ class usergroup extends base_group
 
 class group extends base_group
 {
+	function delete()
+	{
+		global $config_vars,$db;
+		//delete all cat_auths related to this group
+		$sql = "DELETE FROM " . $config_vars['table_prefix'] . "cat_auth WHERE (catgroup_id = $this->id)";
+		if (!$result = $db->sql_query($sql))
+		{
+			error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+		}
+		
+		//delete all content_auths related to this group
+		$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content_auth WHERE (contentgroup_id = $this->id)";
+		if (!$result = $db->sql_query($sql))
+		{
+			error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+		}
+		
+		
+		
+		//delete the group
+		base_group::delete();
+	}
+
+
+
 	function get_auth($usergroup_id)	
 	{
 		// returns an auth object with the auth of $usergroup_id to this catgroup
