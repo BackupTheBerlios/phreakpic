@@ -34,7 +34,7 @@
 					<!--{$lang.wrote_at}--> <!--{$comments[index].creation_date}-->
 					&nbsp&nbsp&nbsp&nbsp <!--{$lang.topic}-->: <b><!--{$comments[index].topic}--></b> 
 					<!--{if $comments[index].changed_count > 0}-->
-						<br>Beitrag wurde <!--{$comments[index].changed_count}--> mal geändert, zuletzt am <!--{$comments[index].last_changed_date}-->
+						<br><!--{$comments[index].comment_has_been_changed}-->
 					<!--{/if}-->
 					<!--{if $comments[index].editable == true and $hide_controlles == false}-->
 						<a href="comment.php?mode=edit_comment&type=<!--{$type}-->&id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">edit</a>
