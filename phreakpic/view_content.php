@@ -20,7 +20,7 @@ $comment_type='content';
 
 include ('includes/proceed_comment.inc.php');
 
-$content = get_content_object_from_id($content_id);
+$content = get_content_object_from_id($HTTP_GET_VARS['content_id']);
 if (!is_object($content))
 {
 	error_report(INFORMATION, 'content_not_existing' , __LINE__, __FILE__);
@@ -30,16 +30,16 @@ if (!is_object($content))
 
 // if there is no cat_id assigned take the first cat of the content
 
-if ((!isset($cat_id)) or ($cat_id==''))
+if ((!isset($HTTP_GET_VARS['cat_id'])) or ($HTTP_GET_VARS['cat_id']==''))
 {
 	$ids=$content->get_cat_ids();
-	$cat_id=$ids[0];
+	$HTTP_GET_VARS['cat_id']=$ids[0];
 }
 
 
 
 //get previous and next content and display the thumbnail if aviable 
-// $surrounding_content = $content->get_surrounding_content($cat_id);
+// $surrounding_content = $content->get_surrounding_content($HTTP_GET_VARS['cat_id']);
 if (isset($HTTP_SESSION_VARS['contents']))
 {
 	$smarty->assign('content_amount',sizeof($HTTP_SESSION_VARS['contents']));
@@ -57,7 +57,7 @@ if (isset($HTTP_SESSION_VARS['contents']))
 	{
 		for ($i=0;$i<sizeof($HTTP_SESSION_VARS['contents']);$i++)
 		{
-			if ($HTTP_SESSION_VARS['contents'][$i]->get_id() == $content_id)
+			if ($HTTP_SESSION_VARS['contents'][$i]->get_id() == $HTTP_GET_VARS['content_id'])
 			{
 				$smarty->assign('content_nr',$i+1);
 				$smarty->assign('next_place_in_content_array',$i+1);
@@ -71,7 +71,7 @@ if (isset($HTTP_SESSION_VARS['contents']))
 }
 else
 {
-	$surrounding_content = $content->get_surrounding_content($cat_id);
+	$surrounding_content = $content->get_surrounding_content($HTTP_GET_VARS['cat_id']);
 	$smarty->assign('content_nr',$surrounding_content['place']);
 	$smarty->assign('content_amount',$surrounding_content['amount']);
 
@@ -90,7 +90,7 @@ if (is_object($surrounding_content['next']))
 	$smarty->assign('next_thumb',$surrounding_content['next']->get_thumb());
 	if (isset($HTTP_GET_VARS['slideshow']))
 	{
-		$smarty->assign('meta',"<meta http-equiv=\"refresh\" content=\"{$HTTP_GET_VARS['slideshow']}; URL=view_content.php?cat_id=$cat_id&content_id={$surrounding_content['next']->id}&slideshow={$HTTP_GET_VARS['slideshow']}&$sid#pic\">");
+		$smarty->assign('meta',"<meta http-equiv=\"refresh\" content=\"{$HTTP_GET_VARS['slideshow']}; URL=view_content.php?cat_id={$HTTP_GET_VARS['cat_id']}&content_id={$surrounding_content['next']->id}&slideshow={$HTTP_GET_VARS['slideshow']}&$sid#pic\">");
 	}
 
 }
@@ -111,7 +111,7 @@ if ($mode=='commit')
 	$vals['change_group']=$HTTP_POST_VARS['change_group'];
 	$vals['to_contentgroup']=$HTTP_POST_VARS['to_contentgroup'];
 	$vals['delete']=$HTTP_POST_VARS['delete'];
-	$redirect_to_cat=$content->edit_content($vals,$cat_id);
+	$redirect_to_cat=$content->edit_content($vals,$HTTP_GET_VARS['cat_id']);
 }
 //check if in edit mode
 $edit_info['allow_edit'] = $content->check_perm('edit');
@@ -119,7 +119,7 @@ if ($mode=="edit")
 {
 	$smarty->assign('mode','edit');
 	// get edit values from content obj
-	$edit_info = $content->get_editable_values($cat_id);
+	$edit_info = $content->get_editable_values($HTTP_GET_VARS['cat_id']);
 	
 	// add to cats
 	$add_to_cats_unparsed = get_cats_data_where_perm('id,name','content_add');
@@ -147,7 +147,7 @@ $smarty->assign('edit_info',$edit_info);
 
 // Check if user has content_remove rights on this categorie
 $cat_obj = new categorie();
-$cat_obj->generate_from_id($cat_id);
+$cat_obj->generate_from_id($HTTP_GET_VARS['cat_id']);
 if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'content_remove'))
 {
 	$smarty->assign('allow_content_remove',1);	
@@ -157,11 +157,11 @@ if ($redirect_to_cat)
 {
 	$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/", 
 	getenv("SERVER_SOFTWARE")) ) ? "Refresh: 0; URL=" : "Location: ";
-	header($header_location . append_sid("view_cat.php?cat_id=$cat_id", true));
+	header($header_location . append_sid("view_cat.php?cat_id={$HTTP_GET_VARS['cat_id']}", true));
 }
 
 //Show comments
-$root_comments = get_comments_of_content($content_id);
+$root_comments = get_comments_of_content($HTTP_GET_VARS['content_id']);
 for ($i = 0; $i < sizeof($root_comments); $i++)
 {
 	make_comments($root_comments[$i],0,$content->check_perm('comment_edit'));
@@ -181,7 +181,7 @@ if (check_content_action_allowed($content->get_contentgroup_id(),$userdata['user
 
 
 // show content
-$nav_string = build_nav_string($cat_id);
+$nav_string = build_nav_string($HTTP_GET_VARS['cat_id']);
 $nav_content['name']=$content->get_name();
 $nav_string[]=$nav_content;
 $smarty->assign('nav_string',$nav_string);
@@ -191,7 +191,7 @@ $smarty->assign('name', $content->get_name());
 $smarty->assign('content_id', $content->get_id());
 $smarty->assign('views', $content->get_views());
 $smarty->assign('current_rating', $content->get_current_rating());
-$smarty->assign('cat_id', $cat_id);
+$smarty->assign('cat_id', $HTTP_GET_VARS['cat_id']);
 $smarty->assign('redirect', PHREAKPIC_PATH . 'view_content.php');
 
 //calculate first_content
@@ -210,7 +210,7 @@ $smarty->assign('title_site',$board_config['sitename']);
 $smarty->assign('title_page',$lang['view_content']);
 $smarty->assign('title_name',$content->get_name());
 
-$smarty->assign('current_page',"view_content.php?cat_id=$cat_id&content_id=$content_id");
+$smarty->assign('current_page',"view_content.php?cat_id={$HTTP_GET_VARS['cat_id']}&content_id={$HTTP_GET_VARS['content_id']}");
 
 //$smarty->assign('id',$id);
 $end_time = getmicrotime();
@@ -224,6 +224,6 @@ $execution_time = $end_time - $start_time + $template_execution_time;
 echo("gesamt execution_time: $execution_time seconds<br>");
 
 $HTTP_SESSION_VARS['view_start'] = $content->start_view();
-$HTTP_SESSION_VARS['view_content_id'] = $content_id;
+$HTTP_SESSION_VARS['view_content_id'] = $HTTP_GET_VARS['content_id'];
 
 ?>

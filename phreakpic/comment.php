@@ -13,7 +13,7 @@ $HTTP_SESSION_VARS['view_content_id'] = 0;
 
 	
 
-$smarty->assign('mode', $mode);
+$smarty->assign('mode', $HTTP_GET_VARS['mode']);
 $smarty->assign('type', $HTTP_GET_VARS['type']);
 
 if ($content_id!='')
@@ -27,7 +27,7 @@ if ($content_id!='')
 // get parent comments 
 $class=$HTTP_GET_VARS['type']."_comment";
 // get root comment
-$root_parent_id=$parent_id;
+$root_parent_id=$HTTP_GET_VARS['parent_id'];
 while ($root_parent_id != 0)
 {
  $parent_comment= new $class;
@@ -49,7 +49,7 @@ if ($root_id != 0)
 			unset($comments[$i]);
 		}
 		
-		if ($comments[$i]['id'] == $parent_id)
+		if ($comments[$i]['id'] == $HTTP_GET_VARS['parent_id'])
 		{
 			$crop_rest=true;
 		}
@@ -61,18 +61,18 @@ if ($root_id != 0)
 
 
 
-$smarty->assign('cat_id', $cat_id);
+$smarty->assign('cat_id', $HTTP_GET_VARS['cat_id']);
 
 //there is no usefull title_name...
 //$smarty->assign('title_name','');
 	
-	if ($mode == "add")
+	if ($HTTP_GET_VARS['mode'] == "add")
 	{
-		$smarty->assign('parent_id', $parent_id);
+		$smarty->assign('parent_id', $HTTP_GET_VARS['parent_id']);
 		$smarty->assign('title_page',$lang['add_comment']);
 	}
 	
-	if ($mode == 'edit_comment')
+	if ($HTTP_GET_VARS['mode'] == 'edit_comment')
 	{
 		if ($HTTP_GET_VARS['type'] == 'content')
 		{
