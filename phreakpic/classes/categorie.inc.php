@@ -7,9 +7,9 @@ class categorie
 	var $name;
 	var $catgroup_id;
 	var $parent_id;
-	var $current_rating;
-	var $is_serie;
-	var $content_amount;
+	var $current_rating=0;
+	var $is_serie=false;
+	var $content_amount=0;
 	var $description;
 	
 	function categorie()
@@ -248,7 +248,6 @@ class categorie
 					{
 						message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
 					}
-					echo $sql."<br>";	
 					unset($this->id);
 					return OP_SUCCESSFUL;
 				}
@@ -273,9 +272,18 @@ class categorie
 		global $db,$config_vars;
 		if (!isset($this->id))
 		{
+			if ($this->is_serie===false)
+			{
+				$is_serie=0;
+			}
+			else
+			{
+				$is_serie=1;
+			}
+			
 			// this is object is not yet in the datebase, make a new entry
 			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id,is_serie,content_amount,description)
-				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$this->is_serie', '$this->content_amount', '$this->description')";
+				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$is_serie', '$this->content_amount', '$this->description')";
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
@@ -399,7 +407,7 @@ class categorie
 				}
 				$this->parent_id=$new_parent_id;
 				return OP_SUCCESSFUL;
-			}
+				}
 			else
 			{
 				return OP_NP_MISSING_CAT_ADD;	

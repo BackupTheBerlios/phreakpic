@@ -172,14 +172,14 @@ function make_comments($comment, $level,$editable)
 
 function stop_view($start_view,$content_id)
 {
-	if ((!isset($start_view)) or ((!isset($content_id))))
+	if (($start_view==0) or (!isset($start_view)) or ((!isset($content_id))))
 	{
 		return OP_FAILED;
 	}
 	global $db,$config_vars,$userdata;
 	$now = date("Y-m-d H:i:s");
 	$sql = 'UPDATE  '. $config_vars['table_prefix'] ."views 
-		SET	end = '$now'
+		SET	\"end\" = '$now'
 		WHERE (user_id = " . $userdata['user_id'] . ") and (start = '$start_view') and (content_id = $content_id)";
 	if (!$result = $db->sql_query($sql))
 	{
@@ -244,27 +244,40 @@ function generate_params($params)
 
 	// get param fields
 	//$start = strpos($rest,'[');
-	while (($start = strpos($rest,'['))!==false)
+	$in_loop=false;
+	while (((strpos($rest,'['))!==false) or ((strpos($rest,'{'))!==false))
 	{
-
-		$end = strpos($rest,']');
-	
-		$entry=explode('|',substr($rest,$start+1,$end-$start-1));
-		$assoc_entry['type']=$entry[0];
+		if ((strpos($rest,'{')!==false) and (strpos($rest,'[')>(strpos($rest,'{'))))
+		{
+			$start=strpos($rest,'{');
+			$end = strpos($rest,'}');
+			$loop_string=substr($rest,$start+1,$end-$start-1);
+			echo $loop_string;
+			$a=generate_params($loop_string);
+			foreach ($a as $key => $value)
+			{
+				$b[]=$a[$key][0];
+				
+			}
+			$param[]=$b;
 			
-		$assoc_entry['value']=generate_values($entry[1]);
+			$rest=substr($rest,$end+1);
+			continue;
+		}
+		else
+		{
+			$start = strpos($rest,'[');
+			$end = strpos($rest,']');
+			$entry=explode('|',substr($rest,$start+1,$end-$start-1));
+			$assoc_entry['type']=$entry[0];
+			$assoc_entry['value']=generate_values($entry[1]);
+			$assoc_entry['name']=$entry[2];
+			$assoc_entry['text']=$lang[$entry[2]];
+			$param[0][]=$assoc_entry;
+			$rest=substr($rest,$end+1);
+		}
 		
-		
-		$assoc_entry['name']=$entry[2];
-		$assoc_entry['text']=$lang[$entry[2]];
-		$param[]=$assoc_entry;
-		$rest=substr($rest,$end+1);
-	
 	}
-	
-	
-	
-	
 	return $param;
 
 }

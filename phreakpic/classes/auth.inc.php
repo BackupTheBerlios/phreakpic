@@ -5,12 +5,12 @@ class phreak_auth
 {
 	var $in_db=false;
 	var $usergroup_id;
-	var $view;
-	var $delete;
-	var $edit;
-	var $comment_edit;
-	var $add_to_group;
-	var $remove_from_group;
+	var $view=false;
+	var $delete=false;
+	var $edit=false;
+	var $comment_edit=false;
+	var $add_to_group=false;
+	var $remove_from_group=false;
 	
 	// need to save those becuase object is identified by them
 	var $old_usergroup_id;
@@ -42,7 +42,7 @@ class phreak_auth
 				// get the set vars from db_vars
 				foreach ($this->db_vars as $value)
 				{			
-					$sql = $sql . "`$value`, ";
+					$sql = $sql . "$value, ";
 				}
 				// unset the last ','
 				$sql{strlen($sql)-2}=' ';
@@ -51,12 +51,19 @@ class phreak_auth
 
 				foreach ($this->db_vars as $value)
 				{			
-					$sql = $sql . "'{$this->$value}', ";
+					// if false enter '0' postresql needs this.
+					if ($this->$value===false)
+					{
+						$sql = $sql . "'0', ";	
+					}
+					else
+					{
+						$sql = $sql . "'{$this->$value}', ";	
+					}
 				}
 				$sql{strlen($sql)-2}=' ';
 
 				$sql = $sql . ')';
-
 				if (!$result = $db->sql_query($sql))
 				{
 					message_die(GENERAL_ERROR, "Error while submitting a new auth object to the db", '', __LINE__, __FILE__, $sql);
@@ -73,7 +80,7 @@ class phreak_auth
 				// get the set vars from db_vars
 				foreach ($this->db_vars as $value)
 				{			
-					$sql = $sql . "`$value` = '{$this->$value}', ";
+					$sql = $sql . "$value = '{$this->$value}', ";
 				}
 				// unset the last ','
 				$sql{strlen($sql)-2}=' ';
@@ -262,10 +269,10 @@ class cat_auth extends phreak_auth
 {
 	var $catgroup_id;
 	var $old_catgroup_id;
-	var $cat_add;
-	var $cat_remove;
-	var $content_add;
-	var $content_remove;
+	var $cat_add=false;
+	var $cat_remove=false;
+	var $content_add=false;
+	var $content_remove=false;
 	
 	function cat_auth()
 	{

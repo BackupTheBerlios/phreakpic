@@ -326,6 +326,7 @@ class album_content
 		
 		
 		//echo "rename thumb" .$this->thumbfile." -> ".$this->get_thumbfile()."<br>";
+		
 		if (rename($this->thumbfile,$this->get_thumbfile()));
 		{
 			$this->thumbfile = $this->get_thumbfile();
@@ -349,7 +350,6 @@ class album_content
 					current_rating = '$this->current_rating', 
 					creation_date = '$this->creation_date', 
 					contentgroup_id = '$this->contentgroup_id',
-					views = '$this->views',
 					locked = '$this->locked',
 					width = '$this->width',
 					height = '$this->height'
@@ -371,9 +371,12 @@ class album_content
 			//not in db
 			$this->creation_date=date("Y-m-d H:i:s");
 			// add content to the content table
+			
+			//using a shorter version of boolean transmission for locked
 			$sql = "INSERT INTO " . $config_vars['table_prefix'] . "content
 				(file,name,views,current_rating,creation_date,contentgroup_id,locked,width,height)
-				VALUES ('$this->file', '$this->name', '$this->views', '$this->current_rating', '$this->creation_date', '$this->contentgroup_id', '$this->locked','$this->width','$this->height')";
+				VALUES ('$this->file', '$this->name', '$this->views', '$this->current_rating', '$this->creation_date', '$this->contentgroup_id', '" . (($this->locked) ? (
+				'1') : ('0')) . "','$this->width','$this->height')";
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Konnte Objekt nicht commiten", '', __LINE__, __FILE__, $sql);

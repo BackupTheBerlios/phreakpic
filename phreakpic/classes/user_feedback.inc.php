@@ -7,7 +7,7 @@ class user_feedback
 	var $id;
 	var $feedback;
 	var $user_id;
-	var $owner_id;
+	var $owner_id=-1;
 	
 	function commit()
 	{
@@ -76,13 +76,13 @@ class comment extends user_feedback
 {
 	var $last_changed_date;
 	var $creation_date;
-	var $change_count;
+	var $change_count=0;
 	var $parent_id;
 	var $topic;
 	
 	function comment()
 	{
-		
+		$this->last_changed_date=date("Y-m-d H:i:s");
 	}
 	
 	function set_parent_id($new_parent_id)
@@ -278,6 +278,10 @@ class content_comment extends comment
 
 class cat_comment extends comment
 {
+	function cat_comment()
+	{
+		comment::comment();
+	}
 	function delete()
 	{
 		global $db,$config_vars,$userdata;

@@ -161,6 +161,7 @@ class usergroup extends group
 		
 		if (check_group_action_allowed())
 		{
+		
 			if ($this->user_in_group($user_id))
 			{
 				$sql = 'DELETE FROM ' . $config_vars['table_prefix'] . "user_in_group 
@@ -194,7 +195,9 @@ class usergroup extends group
 		}
 		
 		// if there is a row returned the user is in that group
-		if ($db->sql_affectedrows()>0)
+		$row = $db->sql_fetchrow($result);
+		
+		if ($row['user_id'] == $user_id)
 		{
 			return true;
 		}
