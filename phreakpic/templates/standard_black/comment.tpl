@@ -2,7 +2,7 @@
 <form action="view_<!--{$type}-->.php?cat_id=<!--{$cat_id}--><!--{$oontent_id_string}--><!--{$sid}-->" method="POST">
 	<table border="0" align="center">
 	
-	<!--{if ($user_id == -1) or ($mode == 'edit_comment')}-->
+	<!--{if ($user_id == -1) or (($mode == 'edit_comment') and ($user_level=='admin'))}-->
 		<tr>
 			<td>
 				<!--{$lang.name}-->
@@ -14,7 +14,7 @@
 	<!--{/if}-->
 	
 	
-	<!--{if $mode == 'edit_comment'}-->
+	<!--{if ($mode == 'edit_comment') and ($user_level=='admin')}-->
 		<tr>
 			<td>
 				<!--{$lang.user_id}-->
