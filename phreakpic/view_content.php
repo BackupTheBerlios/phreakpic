@@ -21,7 +21,8 @@ include ('includes/proceed_comment.inc.php');
 $content = get_content_object_from_id($content_id);
 if (!is_object($content))
 {
-	message_die(GENERAL_ERROR, "Could not generate content from id", '', __LINE__, __FILE__, $sql);
+	error_report(INFORMATION, 'content_not_existing' , __LINE__, __FILE__);
+	
 }
 
 // if there is no cat_id assigned take the first cat of the content
