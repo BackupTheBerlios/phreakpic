@@ -67,10 +67,8 @@ href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$next_thumb.conte
 action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->" method="POST">
 					
 					<!--{if $allow_edit eq 1}-->
-						<!--{$lang.name}-->: <input type="text" name="name" 
-value="<!--{$name}-->"><br>
-						<!--{$lang.place_in_cat}-->: <input type="text" name="place_in_cat" 
-value="<!--{$place_in_cat}-->"><br> 
+						<!--{$lang.name}-->: <input type="text" name="name" value="<!--{$name}-->"><br>
+						<!--{$lang.place_in_cat}-->: <input type="text" name="place_in_cat" value="<!--{$place_in_cat}-->"><br> 
 						<!--{$lang.lock}-->: <input type="checkbox" name="lock" 
 <!--{$locked}-->><br>
 					
@@ -94,8 +92,7 @@ value="<!--{$place_in_cat}-->"><br>
 					<!--{$lang.to_cat}-->: 
 					<select name="to_cat">
 					<!--{section name=id loop=$add_to_cats}-->
-						<option 
-value="<!--{$add_to_cats[id].id}-->"><!--{$add_to_cats[id].name}--></option>
+						<option value="<!--{$add_to_cats[id].id}-->"><!--{$add_to_cats[id].name}--></option>
 					<!--{/section}-->
 					</select><br>
 					

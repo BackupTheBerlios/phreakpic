@@ -13,9 +13,9 @@
 	<table width="60%" border="1" cellpadding="5" align="center">
 		<tr>
 			<td><!--{$lang.name}--></td>
-			<td>Description</td>
-			<td>Anzahl</td>
-			<td>Bewertung</td>
+			<td><!--{$lang.description}--></td>
+			<td><!--{$lang.amount}--></td>
+			<td><!--{$lang.rating}--></td>
 		</tr>
 		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="delete_cat">
 		<!--{section name=id loop=$number_of_child_cats}-->
@@ -33,7 +33,7 @@
 		</form>
 	</table>
 <!--{else}-->
-	<p>keine unterkategorien vorhanden</p>
+	<p><!--{$lang.no_subcategories}--></p>
 <!--{/if}-->
 
 
@@ -41,12 +41,12 @@
 
 <!--{if  ($allow_cat_add == true) and ($mode == edit)}-->
 	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content">
-	Add New Cat:
-	Name: <input name="cat_name" type="text" size="20">
-	catgroup: <input name="cat_group" type="text" size="5">
-	Is Serie: <input name="cat_is_serie" type="checkbox"><br>
-	Describtion: <textarea name="cat_describtion" cols="70" rows="5"></textarea>
-	<input name="newcat" type="submit" id="submit" value="Create">
+	<!--{$lang.add_new_cat}-->
+	<!--{$lang.name}-->: <input name="cat_name" type="text" size="20">
+	<!--{$lang.catgroup}-->: <input name="cat_group" type="text" size="5">
+	<!--{$lang.is_serie}-->: <input name="cat_is_serie" type="checkbox"><br>
+	<!--{$lang.description}-->: <textarea name="cat_describtion" cols="70" rows="5"></textarea>
+	<input name="newcat" type="submit" id="submit" value="<!--{$lang.create}-->"><br>
 	</from>
 <!--{/if}-->
 
@@ -74,28 +74,28 @@
 					allow_edit		this is for the edit fields. Don't use this...
 				*}-->
 				<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}--><!--{$sid}-->"><!--{$thumbs[thumb_cols][thumb_cell].html}--></a><br>
-				name: <!--{$thumbs[thumb_cols][thumb_cell].name}--><br>
-				Bewertung: <!--{$thumbs[thumb_cols][thumb_cell].current_rating}--><br>
-				Views: <!--{$thumbs[thumb_cols][thumb_cell].views}--><br>
+				<!--{$lang.name}-->: <!--{$thumbs[thumb_cols][thumb_cell].name}--><br>
+				<!--{$lang.rating}-->: <!--{$thumbs[thumb_cols][thumb_cell].current_rating}--><br>
+				<!--{$lang.views}-->: <!--{$thumbs[thumb_cols][thumb_cell].views}--><br>
 				<!--{if $mode == edit}-->
 					<input name="place_in_array[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
 					<input name="content_id[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
 					<!--{if $thumbs[thumb_cols][thumb_cell].allow_edit == true}-->
-						Name: <input name="name[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].name}-->" size="20"><br>
-						Place in Cat: <input name="place_in_cat[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_cat}-->" size="10"><br>
-						lock:<input name="lock[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox" <!--{$thumbs[thumb_cols][thumb_cell].locked}-->>
+						<!--{$lang.name}-->: <input name="name[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].name}-->" size="20"><br>
+						<!--{$lang.place_in_cat}-->: <input name="place_in_cat[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_cat}-->" size="10"><br>
+						<!--{$lang.lock}-->:<input name="lock[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox" <!--{$thumbs[thumb_cols][thumb_cell].locked}-->>
 						
 					<!--{/if}-->
 					<!--{if  $thumbs[thumb_cols][thumb_cell].allow_delete == true}-->
-						real delete:<input name="delete[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
+						<!--{$lang.delete}-->:<input name="delete[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
 					<!--{/if}-->
 					<!--{if  $allow_content_remove == true}-->
-						remove from cat:<input name="unlink[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
+						<!--{$lang.unlink}-->:<input name="unlink[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
 					<!--{/if}-->
 					<!--{if  $allow_link == true}-->
-							link:<input name="link[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
+							<!--{$lang.link}-->:<input name="link[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
 							<!--{if  $allow_content_remove == true}-->
-								move:<input name="move[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
+								<!--{$lang.move}-->:<input name="move[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
 							<!--{/if}-->
 					<!--{/if}-->
 					
@@ -107,7 +107,7 @@
 	</table>
 	
 <!--{else}-->
-	In dieser Kategorie gibts noch keine Bilder...
+	<!--{$lang.no_content}-->
 <!--{/if}-->
 
 
@@ -115,7 +115,7 @@
 
 <div align="center">
 <!--{if $mode != edit}-->
-	<a href="view_cat.php?mode=edit&cat_id=<!--{$cat_id}--><!--{$sid}-->">editieren</a>
+	<a href="view_cat.php?mode=edit&cat_id=<!--{$cat_id}--><!--{$sid}-->"><!--{$lang.edit}--></a>
 	<!--{if $edited == true}-->
 		<!--{$lang.cat_edited}-->
 	<!--{/if}-->
@@ -123,24 +123,24 @@
 	<input name="mode" type="hidden" value="edited">
 
 	<!--{if  $allow_link == true}-->		
-		to Cat 
+		<!--{$lang.to_cat}-->
 		<select name="to_cat">
 		<!--{section name=id loop=$add_to_cats}-->
 			<option value="<!--{$add_to_cats[id].id}-->"><!--{$add_to_cats[id].name}--></option>
 		<!--{/section}-->
 		</select><br>
 	<!--{/if}-->
-	<input name="submit" type="submit" id="submit" value="Abschicken">
+	<input name="submit" type="submit" id="submit" value="<!--{$lang.commit}-->">
 	</form>
 <!--{/if}-->
 <!--{if  ($allow_content_add == true) and ($mode == edit)}-->
 	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="add_content" id="add_content" enctype="multipart/form-data">
-	Add Content:
-	File: <INPUT  name="new_content_file" TYPE="file" SIZE="30">
-	contentgroup: <input name="new_content_group" type="text" size="5">
-	Name: <input name="new_content_name" type="text" size="20">
-	Place In cat: <input name="new_content_place_in_cat" type="text" size="5">
-	<input name="newcontent" type="submit" id="submit" value="Add Content">
+	<!--{$lang.add_content}-->:<br>
+	<!--{$lang.file}-->: <INPUT  name="new_content_file" TYPE="file" SIZE="30">
+	<!--{$lang.contentgroup}-->: <input name="new_content_group" type="text" size="5">
+	<!--{$lang.name}-->: <input name="new_content_name" type="text" size="20">
+	<!--{$lang.place_in_cat}-->: <input name="new_content_place_in_cat" type="text" size="5"><br>
+	<input name="newcontent" type="submit" id="submit" value="<!--{$lang.add_content}-->">
 	</from>
 <!--{/if}-->
 
