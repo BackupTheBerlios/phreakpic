@@ -76,6 +76,7 @@ $lang['file'] = 'File';
 $lang['comments_amount'] = 'Comments';
 $lang['for_all_selected']='For all selected' ;
 $lang['for_all']='For all' ;
+$lang['parent_cat'] = 'Parent Cat';
 
 //add_content
 $lang['add_selected'] = 'Add Selected';

@@ -72,6 +72,7 @@ $lang['to_group'] = 'zu gruppe';
 $lang['comments_amount'] = 'Kommentare';
 $lang['for_all_selected']='Für alle selektierten';
 $lang['for_all']='Für alle';
+$lang['parent_cat'] = 'in Kategorie';
 
 
 //add_content
