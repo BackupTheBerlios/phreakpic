@@ -119,7 +119,6 @@ class album_content
 		}
 		else
 		{
-			
 			$this->rotate($vals['rotate_mode']);
 		}
 		
@@ -1063,11 +1062,9 @@ class picture extends album_content
 	
 	function rotate($degrees)
 	{
-		
 		if ($this->check_perm('edit')) //Authorisation is okay
 		{
-		
-			exec("convert -rotate $degrees $this->file $this->file");
+			exec("convert -rotate $degrees \"$this->file\" \"$this->file\"");
 			unlink ($this->thumbfile);
 			$this->generate_thumb();
 			return OP_SUCCESSFUL;
