@@ -3,9 +3,9 @@ require_once('includes/common.inc.php');
 
 // Get Functions
 
-function get_cats($parent_id, $requested_fields)
+function get_cats_of_cat($parent_id, $requested_fields)
 {
-	// Returns an Array of cat_ids and their names. Of all categories which are under the categorie with ihe id $parent_id
+	// Returns an Array of the requested fields of all categories which are under the categorie with ihe id $parent_id
    global $db;
    global $config_vars;
 
@@ -13,7 +13,7 @@ function get_cats($parent_id, $requested_fields)
 
    if (!$result = $db->query($sql))
    {
-   	message_die("", "Beim auswählen der Kategorien ", "Datenbankabfrage schlug fehl<br>", $result->getMessage(), "", __LINE__, __FILE__);
+      message_die(GENERAL_ERROR, "Konnte Kategorie nicht auswählen", '', __LINE__, __FILE__, $sql);
    }
 
    while ($row = $db->sql_fetchrow($result))
@@ -28,7 +28,7 @@ function get_cats($parent_id, $requested_fields)
 
 function get_pics_of_cat($cat_id, $requested_fields)
 {
-	// Returns an Array of pic_ids of all Pictures which are in the categorie with id $cat_id
+	// Returns an Array of requested fields of all Pictures which are in the categorie with id $cat_id
    global $db;
 	global $config_vars;
 
@@ -36,7 +36,7 @@ function get_pics_of_cat($cat_id, $requested_fields)
 
    if (!$result = $db->query($sql))
    {
-   	message_die("", "Beim auswählen der Bilder ", "Datenbankabfrage schlug fehl<br>", $result->getMessage(), "", __LINE__, __FILE__);
+      message_die(GENERAL_ERROR, "Konnte Bilder nicht auswählen", '', __LINE__, __FILE__, $sql);
    }
 
    while ($row = $db->sql_fetchrow($result))
@@ -51,15 +51,16 @@ function get_pics_of_cat($cat_id, $requested_fields)
 
 function get_pics_from_sql($sql_where_clause, $requested_fields)
 {
-// Returns an Array of pic_ids of the pictures that are returned by the sql querry $sql
+   // Returns an Array of the requested fields of the pictures that are returned by the sql where clause $sql_where_clause
    global $db;
 	global $config_vars;
 
-   $sql = "SELECT $requested_fields FROM " . $config_vars['table_prefix'] . "pics WHERE $sql_where_clause";
+   $sql = "SELECT $requested_fields FROM " . $config_vars['table_prefix'] . "pics
+      WHERE $sql_where_clause";
 
    if (!$result = $db->query($sql))
    {
-   	message_die("", "Beim auswählen der Bilder mit eigener WHERE Clause ", "Datenbankabfrage schlug fehl<br>", $result->getMessage(), "", __LINE__, __FILE__);
+      message_die(GENERAL_ERROR, "Konnte Bilder nicht auswählen bei eigener WHERE clause", '', __LINE__, __FILE__, $sql);
    }
 
    while ($row = $db->sql_fetchrow($result))
@@ -74,15 +75,16 @@ function get_pics_from_sql($sql_where_clause, $requested_fields)
 
 function get_series_of_cat($cat_id, $requested_fields)
 {
-// Return an Array of serie_ids of the series that are in the categorie $cat_id
+	// Return an Array of the requested fields of the series that are in the categorie $cat_id
    global $db;
 	global $config_vars;
 
-   $sql = "SELECT $requested_fields FROM " . $config_vars['table_prefix'] . "series WHERE cat_id = '$cat_id'";
+   $sql = "SELECT $requested_fields FROM " . $config_vars['table_prefix'] . "series
+      WHERE cat_id = '$cat_id'";
 
    if (!$result = $db->query($sql))
    {
-   	message_die("", "Beim auswählen der Serien ", "Datenbankabfrage schlug fehl<br>", $result->getMessage(), "", __LINE__, __FILE__);
+   	message_die(GENERAL_ERROR, "Konnte Serien nicht auswählen", '', __LINE__, __FILE__, $sql);
    }
 
    while ($row = $db->sql_fetchrow($result))
@@ -96,15 +98,17 @@ function get_series_of_cat($cat_id, $requested_fields)
 
 function get_pics_of_serie($serie_id)
 {
-// Returns an Array of pic_ids of the pictures that are in the serie with the id $serie_id
+	// Returns an Array of the pictures that are in the serie with the id $serie_id ready ordered
    global $db;
 	global $config_vars;
 
-   $sql = "SELECT pic_id FROM " . $config_vars['table_prefix'] . "pic_in_serie WHERE serie_id = '$serie_id' ORDER BY place_in_serie";
+   $sql = "SELECT pic_id FROM " . $config_vars['table_prefix'] . "pic_in_serie
+      WHERE serie_id = '$serie_id'
+      ORDER BY place_in_serie";
 
    if (!$result = $db->query($sql))
    {
-   	message_die("", "Beim auswählen der Bilder ", "Datenbankabfrage schlug fehl<br>", $result->getMessage(), "", __LINE__, __FILE__);
+   	message_die(GENERAL_ERROR, "Konnte Bilder der Serie nicht auswählen", '', __LINE__, __FILE__, $sql);
    }
 
    while ($row = $db->sql_fetchrow($result))
@@ -119,15 +123,43 @@ function get_pics_of_serie($serie_id)
 
 function get_pic_data($pic_id, $requested_fields)
 {
-// Returns the path to the pic with id $pic_id
+   // Returns the requested fields of the pic with id $pic_id
+   global $db;
+   global $config_vars;
+
+   $sql = "SELECT $requested_fields FROM " . $config_vars['table_prefix'] . "pics
+      WHERE pic_id = '$pic_id'";
+
+   if (!$result = $db->query($sql))
+   {
+      message_die(GENERAL_ERROR, "Konnte das Bild nicht auswählen", '', __LINE__, __FILE__, $sql);
+   }
+
+   while ($row = $db->sql_fetchrow($result))
+   {
+      $pic_data[] = $row;
+   }
+
+
+   return $pic_data;
 }
 
 
 // Add Functions
 
-function add_dir_to_cat($dir,$cat_id)
+function add_dir_to_cat($dir,$cat_id, $name_mode = GENERATE_NAMES)
 {
-// Adds all pictures in the Directory $dir into the Categorie with the id $cat_id
+   // Adds all pictures in the Directory $dir into the Categorie with the id $cat_id
+   global $db;
+   global $config_vars;
+
+   if ($name_mode == GENERATE_NAMES)
+   {
+
+   }
+
+   $sql = "INSERT INTO " . $config_vars['table_prefix'] . "pics (name, file, cat_id, creation_date) VALUES ()"
+
 }
 
 function add_dir_parsed($dir)
