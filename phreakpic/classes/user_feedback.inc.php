@@ -154,8 +154,8 @@ class comment extends user_feedback
 	{
 		global $db,$config_vars;	
 		// returns all comments that have $this->id as parent_id
-		$sql = 'SELECT * FROM ' . $config_vars['table_prefix'] . get_class($this) . "s 
-			WHERE parent_id like $this->id";
+		$sql = 'SELECT * FROM ' . $config_vars['table_prefix'] . get_class($this) . 's 
+			WHERE parent_id like '.$this->id;
 		
 		if (!$result = $db->sql_query($sql))
 		{
@@ -202,7 +202,7 @@ class comment extends user_feedback
 			// object is already in the database just du an update
 			$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . "s  
 				SET	owner_id = '$this->owner_id',
-					comment_text = '$this->feedback',
+					feedback = '$this->feedback',
 					user_id = '$this->user_id',
 					creation_date = '$this->creation_date',
 					changed_count = '$this->changed_count', 
