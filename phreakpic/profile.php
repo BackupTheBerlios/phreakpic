@@ -46,4 +46,3 @@ $smarty->assign('nav_string',$nav_string);
 
 $smarty->display($userdata['photo_user_template'].'/profile.tpl');
 ?>
-
