@@ -3,10 +3,11 @@
 
 // Some Config vars
 
+
 //$version = "alpha";
 
 //$dbdump = "mysql_$version.sql";
-$dbdump = "mysql.sql";
+$dbdump = "db/mysql.sql";
 
 
 $available_dbms = array(
@@ -248,12 +249,12 @@ if ($mode == "check_user_info")
 
 	
 	
-	$fd = fopen ("install/" . $dbdump, "rb");
+	$fd = fopen ($dbdump, "rb");
 	if (!$fd)
 	{
 		die ("Can't open the dbdump!");
 	}
-	$filecontent = fread ($fd, filesize ("install/" . $dbdump));
+	$filecontent = fread ($fd, filesize ($dbdump));
 	fclose ($fd);
 	
 	$usable_dump = str_replace ("phreakpic_", $phreakpic_table_prefix, $filecontent);
