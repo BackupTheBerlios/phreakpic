@@ -52,7 +52,7 @@
 			<td>fehlt: Poll</td>
 			<td> 
 				<div align="center">
-					<a href="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->">
+					<a href="<!--{$thumb_link}--><!--{$sid}-->">
 						<!--{$html}-->
 					</a>
 				</div>
