@@ -84,7 +84,7 @@ if ($mode == "check_user_info")
 	{
 		die('Couldn\'t go into the Template dir. Is the Template ' . $default_template . ' installed in phreakpic/templates??');
 	}
-	chdir("../");
+	chdir("../../");
 	echo ('Default Template: <font color=#00ff00>OK</font><br>');
 	
 	
@@ -101,6 +101,7 @@ if ($mode == "check_user_info")
 	echo ('DB Type: <font color=#00ff00>OK</font><br>');
 	
 	
+	echo ("Connecting to DB $dbname on host $dbhost with user $dbuser<br>");
 	$connect = mysql_connect($dbhost,$dbuser,$dbpasswd);
 	if (!$connect)
 	{
@@ -108,9 +109,6 @@ if ($mode == "check_user_info")
 	}
 	
 	include ("mysql_db_alpha.sql.php");
-	
-	//REMOVE THIS LINE!!!
-	$dbname = "bla";
 	
 	
 	//every Table need it own sql query...
@@ -131,8 +129,9 @@ if ($mode == "check_user_info")
 	//write the config file
 	echo ('<p> Writing the Config ');
 	
-	$config_content = "
-<?php
+	
+	//don't change the following line!
+	$config_content = "<?php
 
 //Template System
 //absolute path to smarty
@@ -175,10 +174,10 @@ define(\"SERVER_NAME\",\"" . $Server_name . "\");
 	),
 
 	// ID of the cat where to put pictures that are no longer linked in any cat
-	'deleted_content_cat' => " . $deleted_content_cat . ",
+	'deleted_content_cat' => 2,
 
 	// ID of the root categorie
-	'root_categorie' => " . $root_categorie . ",
+	'root_categorie' => 1,
 
 	// Umask of new created directories
 	'dir_mask' => 0775,
@@ -192,9 +191,7 @@ define(\"SERVER_NAME\",\"" . $Server_name . "\");
 	// language used if not setted by user
 	'default_lang' => '" . $default_lang . "'
 );
-?>
-	
-	";
+?>";
 	
 	$file = fopen("config.inc.php", "w+b");
 	if ($file == false)
@@ -284,21 +281,7 @@ else
         </td>
         <td width="54%">The prefix for the tables in the database.</td>
       </tr>
-      <tr bgcolor="#CCCC99"> 
-        <td width="21%">Root Category</td>
-        <td width="25%"> 
-          <input type="text" name="root_categorie" size="30" value="0">
-        </td>
-        <td width="54%">The ID of the Root Category</td>
-      </tr>
-      <tr bgcolor="#CCCC99"> 
-        <td width="21%">Deleted Content Cat</td>
-        <td width="25%"> 
-          <input type="text" name="deleted_content_cat" size="30" value="1">
-        </td>
-        <td width="54%">The ID of the table where the deleted content will be 
-          stored </td>
-      </tr>
+      
       <tr> 
         <td colspan="3"> 
           <h3>User Interface</h3>
