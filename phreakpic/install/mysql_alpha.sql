@@ -50,19 +50,6 @@ CREATE TABLE `photo_cat_comments` (
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
-#
-# Table structure for table `photo_catgroups`
-#
-
-CREATE TABLE `photo_catgroups` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` text NOT NULL,
-  `description` text NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `id` (`id`),
-  KEY `id_2` (`id`)
-) TYPE=MyISAM;
-# --------------------------------------------------------
 
 #
 # Table structure for table `photo_cats`
@@ -167,10 +154,10 @@ CREATE TABLE `photo_content_ratings` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_contentgroups`
+# Table structure for table `photo_groups`
 #
 
-CREATE TABLE `photo_contentgroups` (
+CREATE TABLE `photo_groups` (
   `id` int(11) NOT NULL auto_increment,
   `name` text NOT NULL,
   `description` text NOT NULL,
