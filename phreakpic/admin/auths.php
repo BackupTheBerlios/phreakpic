@@ -18,7 +18,14 @@ if (($HTTP_GET_VARS['type']=='content') or $HTTP_GET_VARS['type']=='cat')
 }
 else
 {
-	$type=$HTTP_SESSION_VARS['type'];
+	if (isset($HTTP_SESSION_VARS['type']))
+	{
+		$type=$HTTP_SESSION_VARS['type'];
+	}
+	else
+	{
+		$type='cat';
+	}
 }
 
 
@@ -52,7 +59,6 @@ if (isset($HTTP_POST_VARS['new_group']))
 {
 	$groupclass = $type . 'group';
 	$newgroup = new $groupclass;
-	echo $HTTP_POST_VARS['name'];
 	$newgroup->set_name($HTTP_POST_VARS['name']);
 	$newgroup->set_description($HTTP_POST_VARS['description']);
 	$newgroup->commit();
@@ -64,11 +70,13 @@ if (isset($HTTP_POST_VARS['new_auth']))
 	$auth = new $class();
 	$auth->set_usergroup_id($usergroup);	
 	$auth->set_group_id($group);
+	
 	$auth->commit();
 }
 
 if (isset($HTTP_POST_VARS['delete_auth']))
 {
+
 	$auth = new $class;
 	$auth->set_usergroup_id($usergroup);	
 	$auth->set_group_id($group);
@@ -76,86 +84,28 @@ if (isset($HTTP_POST_VARS['delete_auth']))
 }
 
 
+
 if (isset($HTTP_POST_VARS['change_auth']))
 {
 	$auth = new $class();
 	$auth->generate($usergroup,$group);
+	
+	// automaticly set all vars of the class set
+	
+	foreach ($auth->processing_vars as $value)
+	{		
+		$set_func = "set_$value";
+		if ($HTTP_POST_VARS[$value] == 'on')
+		{
+			$auth->$set_func(1);
+		}
+		else
+		{
+			$auth->$set_func(0);
+		}
+	}
 
-	if ($HTTP_POST_VARS['view'] == 'on')
-	{
-		$auth->set_view(1);
-	}
-	else
-	{
-		$auth->set_view(0);
-	}
-	
-	if ($HTTP_POST_VARS['edit'] == 'on')
-	{
-		$auth->set_edit(1);
-	}
-	else
-	{
-		$auth->set_edit(0);
-	}
-	
-	if ($HTTP_POST_VARS['delete'] == 'on')
-	{
-		$auth->set_delete(1);
-	}
-	else
-	{
-		$auth->set_delete(0);
-	}
-	
-	if ($HTTP_POST_VARS['comment_edit'] == 'on')
-	{
-		$auth->set_comment_edit(1);
-	}
-	else
-	{
-		$auth->set_comment_edit(0);
-	}
-	
-	if ($type=='cat')
-	{
-	// additional cat fields
-		if ($HTTP_POST_VARS['cat_add'] == 'on')
-		{
-			$auth->set_cat_add(1);
-		}
-		else
-		{
-			$auth->set_cat_add(0);
-		}
-		
-		if ($HTTP_POST_VARS['cat_remove'] == 'on')
-		{
-			$auth->set_cat_remove(1);
-		}
-		else
-		{
-			$auth->set_cat_remove(0);
-		}
-		
-		if ($HTTP_POST_VARS['content_add'] == 'on')
-		{
-			$auth->set_content_add(1);
-		}
-		else
-		{
-			$auth->set_content_add(0);
-		}
-		
-		if ($HTTP_POST_VARS['content_remove'] == 'on')
-		{
-			$auth->set_content_remove(1);
-		}
-		else
-		{
-			$auth->set_content_remove(0);
-		}
-	}
+
 	$auth->commit();
 	
 }
@@ -184,13 +134,13 @@ if (!$result = $db->sql_query($sql))
 }
 
 while ($row = $db->sql_fetchrow($result))
-{
+{                      
 	$groups[]=$row;
 }
 
 // get values
 $sql = 'SELECT usergroup_id,' . $type . 'group_id FROM ' . $config_vars['table_prefix'] . $type . "_auth where (usergroup_id = $usergroup) and (" . $type . "group_id = $group)";
-
+                          
 if (!$result = $db->sql_query($sql))
 {
 	message_die(GENERAL_ERROR, "Could not get groups of user", '', __LINE__, __FILE__, $sql);
@@ -203,41 +153,17 @@ if ($row = $db->sql_fetchrow($result))
 	$smarty->assign('auth_exists',true);	
 	$auth = new $class();
 	$auth->generate($row['usergroup_id'],$row[$type . 'group_id']);
-	if ($auth->get_view())
-	{
-		$smarty->assign('view_checked','checked');	
-	}
-	if ($auth->get_delete())
-	{
-		$smarty->assign('delete_checked','checked');	
-	}
-	if ($auth->get_edit())
-	{
-		$smarty->assign('edit_checked','checked');	
-	}
-	if ($auth->get_comment_edit())
-	{
-		$smarty->assign('comment_edit_checked','checked');	
-	}
+	// automaticly get all vars of the class and fill the the checkboxes if set
 	
-	if ($type=='cat')
-	{
-		if ($auth->get_cat_add())
+	
+	foreach ($auth->processing_vars as $value)
+	{		
+		$get_func = "get_$value";
+		
+		if ($auth->$get_func())
 		{
-			$smarty->assign('cat_add_checked','checked');	
+			$smarty->assign("{$value}_checked",'checked');	
 		}
-		if ($auth->get_cat_remove())
-		{
-			$smarty->assign('cat_remove_checked','checked');	
-		}
-		if ($auth->get_content_add())
-		{
-			$smarty->assign('content_add_checked','checked');	
-		}
-		if ($auth->get_content_remove())
-		{
-			$smarty->assign('content_remove_checked','checked');	
-		}	
 	}
 }
 
