@@ -84,6 +84,8 @@ $smarty->assign('cat_id', $cat_id);
 		}
 		$comment->generate_from_id($id);
 		$smarty->assign('text',$comment->get_feedback());
+		$smarty->assign('user_id',$comment->get_user_id());
+		$smarty->assign('poster_name',$comment->get_poster_name());
 		$smarty->assign('topic',$comment->get_topic());
 		$smarty->assign('title_page',$lang['edit_comment']);
 		$smarty->assign('title_name',$comment->get_topic());

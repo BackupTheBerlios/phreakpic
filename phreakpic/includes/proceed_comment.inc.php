@@ -37,6 +37,8 @@ if ($mode == 'edit_comment')
 	{
 		$comment->set_feedback($HTTP_POST_VARS['comment_text']);
 		$comment->set_topic($HTTP_POST_VARS['topic']);
+		$comment->set_poster_name($HTTP_POST_VARS['poster_name']);
+		$comment->set_user_id($HTTP_POST_VARS['user_id']);
 		$comment->set_changed_count($comment->get_changed_count()+1);
 		$comment->set_last_changed_date(date("Y-m-d H:i:s"));
 		$comment->commit();	
@@ -60,7 +62,7 @@ if (isset($HTTP_POST_VARS['edit_comments']))
 	{
 		if ($comment_id != $HTTP_POST_VARS['comment_to'])
 		{
-			$comment = new cat_comment;
+			$comment = new $class;
 			$comment->generate_from_id($comment_id);
 			$comment->set_parent_id($HTTP_POST_VARS['comment_to']);
 			$comment->commit();
@@ -68,6 +70,7 @@ if (isset($HTTP_POST_VARS['edit_comments']))
 	}
 	
 }
+
 
 	
 ?>

@@ -1,15 +1,29 @@
 <!--{include file="$template_name/header.tpl"}-->
 <form action="view_<!--{$type}-->.php?cat_id=<!--{$cat_id}--><!--{$oontent_id_string}--><!--{$sid}-->" method="POST">
 	<table border="0" align="center">
-	<!--{if $user_id == -1}-->
+	
+	<!--{if ($user_id == -1) or ($mode == 'edit_comment')}-->
 		<tr>
 			<td>
 				<!--{$lang.name}-->
 			</td>
 			<td>
-				<input type="text" name="poster_name" value="">
+				<input type="text" name="poster_name" value="<!--{$poster_name}-->">
 			</td>
 		</tr>
+	<!--{/if}-->
+	
+	
+	<!--{if $mode == 'edit_comment'}-->
+		<tr>
+			<td>
+				<!--{$lang.user_id}-->
+			</td>
+			<td>
+				<input type="text" name="user_id" value="<!--{$user_id}-->">
+			</td>
+		</tr>
+	
 	<!--{/if}-->
 
 		<tr>
