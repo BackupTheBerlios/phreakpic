@@ -47,7 +47,7 @@ function check_content_action_allowed($contentgroup_id,$user_id,$action)
 	$user_groups=get_groups_of_user($user_id);	
 	// check if there is at least one entry where in one of the $user_groups is $action allowed in $contentgroup_id
 	$where = generate_where('usergroup_id',$user_groups);
-	$sql = 'select usergroup_id from '.$config_vars['table_prefix']."content_auth where ($action like 1) and (contentgroup_id like $contentgroup_id) and ($where) limit 1";
+	$sql = 'select usergroup_id from '.$config_vars['table_prefix']."content_auth where (`$action` like 1) and (contentgroup_id like $contentgroup_id) and ($where) limit 1";
 	
 	if (!$result = $db->sql_query($sql))
 	{
