@@ -48,7 +48,7 @@
 <!--{$edit}-->
 
 <!--{if  ($allow_cat_add == true) and ($mode == edit)}-->
-	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content">
+	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post">
 	<!--{$lang.add_new_cat}-->
 	<!--{$lang.name}-->: <input name="cat_name" type="text" onfocus="keyoff()" onblur="keyon()" size="20">
 	<!--{$lang.catgroup}-->: 
@@ -60,7 +60,7 @@
 	<!--{$lang.is_serie}-->: <input name="cat_is_serie" type="checkbox"><br>
 	<!--{$lang.description}-->: <textarea name="cat_describtion" onfocus="keyoff()" onblur="keyon()" cols="70" rows="5"></textarea>
 	<input name="newcat" type="submit" id="submit" value="<!--{$lang.create}-->"><br>
-	</from>
+	</form>
 <!--{/if}-->
 
 
@@ -103,7 +103,7 @@
 	<!--{$lang.name}-->: <input name="new_content_name" type="text" size="20">
 	<!--{$lang.place_in_cat}-->: <input name="new_content_place_in_cat" type="text" size="5"><br>
 	<input name="newcontent" type="submit" id="submit" value="<!--{$lang.add_content}-->">
-	</from>
+	</form>
 <!--{/if}-->
 
 </div>
