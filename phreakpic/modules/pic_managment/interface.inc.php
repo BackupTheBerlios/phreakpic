@@ -51,7 +51,7 @@ function get_content_of_cat($cat_id)
 	}
 		
 
-	$auth_where = get_allowed_contentgroups_where('content.contentgroup_id',$userdata['user_id'], "view");
+	$auth_where = get_allowed_contentgroups_where($userdata['user_id'], "view",'content.contentgroup_id');
 	
 
 	
@@ -194,21 +194,52 @@ function get_cats_data_where_perm($data,$perm)
 	}
 
 	// generate categorie objects for each categorie that is returned by the query
-	while ($row = $db->sql_fetchrow($result))
+	return generate_array_from_row($row);	
+}
+
+function get_catgroups_data_where_perm($data,$perm)
+{
+	// returns an indexed array containing all fields speicfied in $data in an assoc array where user has permission $perm
+	
+	global $db,$config_vars,$userdata;	
+
+	$where = get_allowed_catgroups_where($userdata['user_id'],$perm,'id');
+	
+	$sql = "select $data from {$config_vars['table_prefix']}catgroups where $where";
+	
+	if (!$result = $db->sql_query($sql))
 	{
-		foreach ($row as $key => $value)
-		{
-			// filter out all keys which are not strings, because the array containt both assoziativ and numbers
-			if (is_string($key))
-			{
-				$cat[$key] = $value;
-			}
-		}
-		$cat_array[]=$cat;
+		message_die(GENERAL_ERROR, "Could not check whether the contentgroups where this user is allowed to this action", '', __LINE__, __FILE__, $sql);
 	}
-	return $cat_array;
+	
+	// generate catgroup array for each catgroup that is returned by the query
+	return generate_array_from_row($row);
 	
 }
+
+function get_contentgroups_data_where_perm($data,$perm)
+{
+	// returns an indexed array containing all fields speicfied in $data in an assoc array where user has permission $perm
+	
+	global $db,$config_vars,$userdata;	
+
+	$where = get_allowed_contentgroups_where($userdata['user_id'],$perm,'id');
+	
+	$sql = "select $data from {$config_vars['table_prefix']}contentgroups where $where";
+	
+	if (!$result = $db->sql_query($sql))
+	{
+		message_die(GENERAL_ERROR, "Could not check whether the contentgroups where this user is allowed to this action", '', __LINE__, __FILE__, $sql);
+	}
+	
+	// generate catgroup array for each catgroup that is returned by the query
+	return generate_array_from_row($row);
+	
+}
+
+
+
+
 
 
 // Comment Functions
