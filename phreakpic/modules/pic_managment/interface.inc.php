@@ -211,7 +211,7 @@ function get_comments_of_content($content_id)
 
 // Add Functions
 
-function add_dir_to_cat($dir,$cat_id, $name_mode = GENERATE_NAMES)
+function add_dir_to_cat($dir,$cat_id, $contentgroup_id, $name_mode = GENERATE_NAMES)
 {
 	// Adds all pictures in the Directory $dir into the Categorie with the id $cat_id. If wanted it makes the names of the pics from the filenames
 	global $db,$config_vars,$filetypes;
@@ -256,6 +256,7 @@ function add_dir_to_cat($dir,$cat_id, $name_mode = GENERATE_NAMES)
 		
 		$content->add_to_cat($cat_id);
 		$content->set_file($dir_and_file);
+		$content->set_contentgroup_id($contentgroup_id);
 		
 		$content->commit();
 		
@@ -270,6 +271,7 @@ function add_dir_parsed($dir)
    global $config_vars;
 
    $dir_handle = opendir($dir);
+   
 }
 
 
