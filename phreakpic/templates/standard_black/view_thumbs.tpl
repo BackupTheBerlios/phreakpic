@@ -40,7 +40,7 @@
 	<!--{if $mode == edit}-->
 		<form action="view_cat.php?cat_id=<!--{$cat_id}-->&content_per_page=<!--{$content_per_page}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content" name="edit_content" >
 	<!--{/if}-->
-	<table border="1" align="center" cellspacing="10" cellpadding="10">
+	<table border="0" align="center" cellspacing="10" cellpadding="10">
 		<!--{section name=thumb_cols loop=$thumbs}-->
 		<tr bgcolor="<!--{#table_bg_color#}-->" valign="bottom">
 			<!--{section name=thumb_cell loop=$thumbs[thumb_cols]}-->
@@ -61,7 +61,7 @@
 						<a name="<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->">
 						
 						<!--<td width="<!--{$thumb_size}-->" bgcolor="333333">-->
-						<table border=1>
+						<table border="0" width="100%">
 							<tr>
 								<td align="right">
 								<!--{if $basket_enable}-->
