@@ -99,6 +99,7 @@ if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'c
 		if ($HTTP_POST_VARS['delete'] == "on")
 		{
 			$content->remove_from_cat($cat_id);
+			$redirect_to_cat=true;
 		}
 		
 		// check move
@@ -110,6 +111,7 @@ if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'c
 			{
 				$content->remove_from_cat($cat_id);
 				$content->add_to_cat($HTTP_POST_VARS['to_cat']);
+				$redirect_to_cat=true;
 			}
 		}
 	}
@@ -156,6 +158,12 @@ if ($mode == "commit")
 {
 	// commit all changes
 	$content->commit();	
+	if ($redirect_to_cat)
+	{
+		// redirect to cat view
+		$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/", getenv("SERVER_SOFTWARE")) ) ? "Refresh: 0; URL=" : "Location: ";
+		header($header_location . append_sid("view_cat.php?cat_id=$cat_id", true));
+	}
 }
 
 
