@@ -25,7 +25,6 @@ if (is_array($contents))
 				$vals['to_cat']=$HTTP_POST_VARS['to_cat'];
 				$vals['move']=$HTTP_POST_VARS['move'][$i];
 				$vals['change_group']=$HTTP_POST_VARS['change_group'][$i];
-				echo $HTTP_POST_VARS['to_contentgroup'];
 				$vals['to_contentgroup']=$HTTP_POST_VARS['to_contentgroup'];
 				$vals['delete']=$HTTP_POST_VARS['delete'][$i];
 				$contents[$i]->edit_content($vals,$cat_id);

@@ -111,7 +111,6 @@ function get_content_ordered_by($by,$filter=true,$order='DESC',$limit_start=0,$l
 		GROUP BY view_table.content_id 
 		ORDER BY '.$by . " $order 
 		LIMIT $limit_start,$limit_end";
-	echo $sql;
 		
 	if (!$result = $db->sql_query($sql))
 	{
