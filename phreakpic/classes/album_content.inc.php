@@ -33,6 +33,7 @@ class album_content
 	var $edit;
 	var $view;
 	var $delete;
+	var $thumbfile;
 	
 	
 	function check_perm($perm)
@@ -75,7 +76,6 @@ class album_content
 	
 	function get_place_in_cat()
 	{
-
 		if (!isset($this->place_in_cat))
 		{
 			$this->generate_content_in_cat_data();
@@ -90,6 +90,7 @@ class album_content
 			$this->generate_content_in_cat_data();
 		}
 		$this->place_in_cat[$cat] = $place;
+		return OP_SUCCESSFUL;
 	}
 	
 	function get_surrounding_content($cat_id)
@@ -269,11 +270,35 @@ class album_content
 		
 		
 		// move to the new calculated localtaion (may be the same)		
-		
 		$new_file=$this->generate_filename();
-		rename($this->file,$new_file);
-		$this->set_file($new_file); 
-
+		
+		if (!is_dir(dirname($new_file)))
+		{
+			makedir(dirname($new_file))
+		}
+		
+		if (rename($this->file,$new_file));
+		{
+			$this->set_file($new_file); 
+		}
+		//echo "rename pic" .$this->file." -> ".$new_file."<br>";
+		
+		// move thumb
+		if (!is_dir(dirname($this->get_thumbfile())))
+		{
+			makedir(dirname($this->get_thumbfile()))
+		}
+		
+		
+		//echo "rename thumb" .$this->thumbfile." -> ".$this->get_thumbfile()."<br>";
+		if (rename($this->thumbfile,$this->get_thumbfile()));
+		{
+			$this->thumbfile = $this->get_thumbfile();
+		}
+		
+		
+		
+		
 		
 		
 		// check if already in db)
@@ -348,7 +373,9 @@ class album_content
 				{
 					$this->$key = $value;
 				}
-
+				
+				
+				$this->thumbfile=$this->get_thumbfile();
 			}
 			return OP_SUCCESSFUL;
 		}
@@ -479,10 +506,15 @@ class album_content
 	}
 	
 	
-	function get_cat_id()
+	function get_cat_ids()
 	{
+		if (!is_array($this->cat_ids))
+		{
+			$this->generate_content_in_cat_data();
+		}
+
 		//get the cat_id of the actual object. Checks if actual user is allowed to.
-		return $this->cat_id;
+		return $this->cat_ids;
 	}
 
 	function set_name($name)
