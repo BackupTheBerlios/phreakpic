@@ -10,8 +10,6 @@ require_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 
 session_start();
 
-$HTTP_GET_VARS['type'];
-
 if (($HTTP_GET_VARS['type']=='content') or $HTTP_GET_VARS['type']=='cat')
 {
 	$HTTP_SESSION_VARS['type']=$HTTP_GET_VARS['type'];
