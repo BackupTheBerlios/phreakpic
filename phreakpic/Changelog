@@ -1,0 +1,6 @@
+Beta Release:
+- Added recursive change of groups (Tesla)
+- Merged cat- and contentgroups (Tesla)
+- Cleaned up ACP (Tesla)
+- Date at comments now follow the dateformat of phpBB (Tesla)
+- Addded current picture and thread to the write comment page (Tesla)
