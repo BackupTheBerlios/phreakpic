@@ -1,6 +1,11 @@
 <?php
-require_once('includes/phpbb.inc.php');
-require_once('config.inc.php');
+function getmicrotime(){ 
+    list($usec, $sec) = explode(" ",microtime()); 
+    return ((float)$usec + (float)$sec); 
+    } 
+$start_time = getmicrotime();
+include_once('includes/phpbb.inc.php');
+include_once('config.inc.php');
 
 define("GENERATE_NAMES", 1); //for functions add_dir
 define("BLANK_NAMES", 0);
@@ -12,12 +17,14 @@ define("OP_PARENT_ID_INVALID",3);
 define("OP_NOT_IN_DB",4);
 define("OP_NOT_A_FILE",8);
 define("OP_CONTENT_NOT_IN_CAT",9);
+define("OP_NO_CONTENT", 13);
 // Not Permitted (NP) constants
 define("OP_NP_MISSING_CAT_MOVE", 0); //return value for class functions who checks if the user is allowed to do something. If he is not, the functions returns this constant.
 define("OP_NP_MISSING_CAT_ADD", 5);
 define("OP_NP_MISSING_EDIT", 6);
 define("OP_NP_MISSING_DELETE", 7);
 define("OP_NP_MISSING_VIEW", 12);
+
 
 // Groups and Users
 define("OP_USER_ALREADY_IN_GROUP",10);
