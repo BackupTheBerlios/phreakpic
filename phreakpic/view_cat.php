@@ -304,13 +304,33 @@ if ($mode == "add")
 	$comment->commit();
 }
 
+if ($mode == 'edit_comment')
+{
+	$comment = new cat_comment();
+	$comment->generate_from_id($HTTP_POST_VARS['parent_id']);
+	$comment->set_feedback($HTTP_POST_VARS['comment_text']);
+	$comment->set_topic($HTTP_POST_VARS['topic']);
+	$comment->set_changed_count($comment->get_changed_count()+1);
+	$comment->set_last_changed_date(date("Y-m-d H:i:s"));
+	$comment->commit();	
+}
+
+if ($mode == 'del_comment')
+{
+// TODO: hier fehlt noch was passiert wenn unterkommentare enthalten sind.
+	$comment = new cat_comment();
+	$comment->generate_from_id($comment_id);
+	$comment->delete();
+}
+
+
 //Show comments
 $root_comments = get_comments_of_cat($cat_id);
 if (sizeof($root_comments) > 0)
 {
 	for ($i = 0; $i < sizeof($root_comments); $i++)
 	{
-		make_comments($root_comments[$i],0);
+		make_comments($root_comments[$i],0,check_cat_action_allowed($cat_id,$userdata['user_id'],'content_edit'));
 	}
 	$smarty->assign('comments',$comments);
 }
