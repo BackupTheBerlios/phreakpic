@@ -64,7 +64,7 @@ $available_dbms = array(
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <style type="text/css">
 <!--
-	h1, h2, h3, h4, h5, h6, p, font, td {  font-family: "Trebuchet MS", Verdana}
+	h1, h2, h3, h4, h5, h6, p, font, td {	font-family: "Trebuchet MS", Verdana}
 -->
 </style>
 </head>
@@ -197,10 +197,12 @@ if ($mode == "check_user_info")
 	$usable_dump = explode($available_dbms[$dbms]["DELIM"], $usable_dump);
 	
 	echo ("Filling the Database with tables <br>");
-	for ($i = 1; $i < (sizeof($usable_dump) -1); $i++)
+	for ($i = 0; $i < (sizeof($usable_dump) -1); $i++)
 	{
-		echo ("Table $i: ");
-		$check = mysql_db_query ($dbname, $usable_dump[$i], $connect);
+		$j++;
+		echo ("Table $j: ");
+		//$check = mysql_db_query ($dbname, $usable_dump[$i], $connect);
+		$check = true;
 		if ($check == false)
 		{
 			die (mysql_errno().": ".mysql_error()."<BR>");
@@ -215,7 +217,7 @@ if ($mode == "check_user_info")
 	$admin_group = new catgroup;
 	$admin_group->name = ('Admin Group');
 	$admin_group->description = ('This is the Administrator Category Group, where the deleted content cat can be found');
-	$admin_group->commit();
+	echo("bla: " . $admin_group->commit() . "<br>");
 	
 	//root cat
 	$root_cat = new categorie;
@@ -224,7 +226,8 @@ if ($mode == "check_user_info")
 	$root_cat->catgroup_id = $admin_group->get_id();
 	$root_cat->name = ("root_cat");
 	$root_cat->description = ("This is your Root Category. You can change the name and description, but never delete it!");
-	$root_cat->commit();
+	echo("bla: " . $root_cat->commit() . "<br>");
+	
 	
 	//deleted content cat
 	$deleted_content_cat = new categorie;
@@ -233,7 +236,7 @@ if ($mode == "check_user_info")
 	$deleted_content_cat->catgroup_id = $admin_group->get_id();
 	$deleted_content_cat->name = ("root_cat");
 	$deleted_content_cat->description = ("This is your Deleted Content Category. Here will be your deleted content stored. You can change the name and description, but never delete it!");
-	$deleted_content_cat->commit();
+	echo("bla: " . $deleted_content_cat->commit() . "<br>");
 	
 	
 	echo ('<font color=#00ff00>OK</font><br>');
@@ -296,7 +299,7 @@ define(\"SERVER_NAME\",\"" . $Server_name . "\");
 
 	// Umask of new created directories
 	'dir_mask' => 0775,
-  
+	
 	//view_cat.php the Colums of the table, where we can see the thumbnails
 	'thumb_table_cols' => 4,
 
@@ -336,100 +339,101 @@ else
 	<form method="post" action="<?php $PHP_SELF ?>">
 		<input type="hidden" name="mode" value="check_user_info">
 		
-    <table width="95%" border="0" cellspacing="0" cellpadding="5">
-      <tr bgcolor="#3399CC"> 
-        <td colspan="4" height="10"></td>
-      </tr>
-      <tr> 
-        <td rowspan="19" bgcolor="#3399CC" width="10"></td>
-        <td colspan="3"> 
-          <h3>Files and Pathes</h3>
-        </td>
-      </tr>
-      <tr bgcolor="#FFCC99"> 
-        <td width="21%">phpBB2 Path</td>
-        <td width="25%"> 
-          <input type="text" name="phpBB_Path" size="30">
-        </td>
-        <td width="54%">Relative path from phreakpic to phpBB2 (if the URL is 
-          "http://www.blabla.com/com/phpBB2/" and phreakpic is at "http://www.blabla.com/com/phreakpic/" 
-          then it will be "../phpBB2/").</td>
-      </tr>
-      <tr bgcolor="#FFCC99"> 
-        <td width="21%">PhreakPic Path</td>
-        <td width="25%"> 
-          <input type="text" name="phreakpic_path" size="30">
-        </td>
-        <td width="54%">Relative Path from phpBB2 to PhreakPic. See above.</td>
-      </tr>
-      <tr bgcolor="#FFCC99"> 
-        <td width="21%">Smarty Dir</td>
-        <td width="25%"> 
-          <input type="text" name="Smarty_dir" size="30">
-        </td>
-        <td width="54%">Absolute Path to Smarty. E.g. &quot;/usr/local/httpd/htdocs/smarty/&quot;</td>
-      </tr>
-      <tr bgcolor="#FFCC99"> 
-        <td width="21%">Content Path</td>
-        <td width="25%"> 
-          <input type="text" name="content_path_prefix" size="30" value="content">
-        </td>
-        <td width="54%">In this Folder the Content (mostly Pictures) will be stored.</td>
-      </tr>
-      <tr bgcolor="#FFCC99"> 
-        <td width="21%">Servername</td>
-        <td width="25%"> 
-          <input type="text" name="Server_name" size="30">
-        </td>
-        <td width="54%">Thats the Domain as you type it in your Webbrowser. E.g. 
-          &quot;http://www.localhorst.com&quot; </td>
-      </tr>
-      <tr> 
-        <td colspan="3" height="26"> 
-          <h3>Database</h3>
-        </td>
-      </tr>
-      <tr bgcolor="#CCCC99"> 
-        <td width="21%">Table Prefix</td>
-        <td width="25%"> 
-          <input type="text" name="phreakpic_table_prefix" size="30" value="photo_">
-        </td>
-        <td width="54%">The prefix for the tables in the database.</td>
-      </tr>
-      
-      <tr> 
-        <td colspan="3"> 
-          <h3>User Interface</h3>
-        </td>
-      </tr>
-      <tr bgcolor="#99CCCC"> 
-        <td width="21%">Default Language</td>
-        <td width="25%"> 
-          <input type="text" name="default_lang" size="30" value="english">
-        </td>
-        <td width="54%">&nbsp;</td>
-      </tr>
-      <tr bgcolor="#99CCCC"> 
-        <td width="21%" height="38">Default Template</td>
-        <td width="25%" height="38"> 
-          <input type="text" name="default_template" size="30" value="standard">
-        </td>
-        <td width="54%" height="38">&nbsp;</td>
-      </tr>
-      <tr bgcolor="#99CCCC">
-        <td width="21%" height="38">&nbsp;</td>
-        <td width="25%" height="38">
-          <div align="center">
-            <input type="submit" name="install" value="Install">
-          </div>
-        </td>
-        <td width="54%" height="38"> 
-          <div align="right">
-            <input type="reset" name="cancel" value="Delete Form">
-          </div>
-        </td>
-      </tr>
-    </table>
+		<table width="95%" border="0" cellspacing="0" cellpadding="5">
+			<tr bgcolor="#3399CC"> 
+				<td colspan="4" height="10"></td>
+			</tr>
+			<tr> 
+				<td rowspan="19" bgcolor="#3399CC" width="10"></td>
+				<td colspan="3"> 
+					<h3>Files and Pathes</h3>
+				</td>
+			</tr>
+			<tr bgcolor="#FFCC99"> 
+				<td width="21%">phpBB2 Path</td>
+				<td width="25%"> 
+					<input type="text" name="phpBB_Path" size="30">
+				</td>
+				<td width="54%">Relative path from phreakpic to phpBB2 (if the URL is 
+					"http://www.blabla.com/com/phpBB2/" and phreakpic is at "http://www.blabla.com/com/phreakpic/" 
+					then it will be "../phpBB2/").</td>
+			</tr>
+			<tr bgcolor="#FFCC99"> 
+				<td width="21%">PhreakPic Path</td>
+				<td width="25%"> 
+					<input type="text" name="phreakpic_path" size="30">
+				</td>
+				<td width="54%">Relative Path from phpBB2 to PhreakPic. See above.</td>
+			</tr>
+			<tr bgcolor="#FFCC99"> 
+				<td width="21%">Smarty Dir</td>
+				<td width="25%"> 
+					<input type="text" name="Smarty_dir" size="30">
+				</td>
+				<td width="54%">Absolute Path to Smarty. E.g. &quot;/usr/local/httpd/htdocs/smarty/&quot;</td>
+			</tr>
+			<tr bgcolor="#FFCC99"> 
+				<td width="21%">Content Path</td>
+				<td width="25%"> 
+					<input type="text" name="content_path_prefix" size="30" value="content">
+				</td>
+				<td width="54%">In this Folder the Content (mostly Pictures) will be stored.</td>
+			</tr>
+			<tr bgcolor="#FFCC99"> 
+				<td width="21%">Servername</td>
+				<td width="25%"> 
+					<input type="text" name="Server_name" size="30">
+				</td>
+				<td width="54%">Thats the Domain as you type it in your Webbrowser. E.g. 
+					&quot;http://www.localhorst.com&quot; </td>
+			</tr>
+			<tr> 
+				<td colspan="3" height="26"> 
+					<h3>Database</h3>
+				</td>
+			</tr>
+			<tr bgcolor="#CCCC99"> 
+				<td width="21%">Table Prefix</td>
+				<td width="25%"> 
+					<input type="text" name="phreakpic_table_prefix" size="30" value="photo_">
+				</td>
+				<td width="54%">The prefix for the tables in the database.</td>
+			</tr>
+			
+			<tr> 
+				<td colspan="3"> 
+					<h3>User Interface</h3>
+				</td>
+			</tr>
+			<tr bgcolor="#99CCCC"> 
+				<td width="21%">Default Language</td>
+				<td width="25%"> 
+					<input type="text" name="default_lang" size="30" value="english">
+				</td>
+				<td width="54%">&nbsp;</td>
+			</tr>
+			<tr bgcolor="#99CCCC"> 
+				<td width="21%" height="38">Default Template</td>
+				<td width="25%" height="38"> 
+					<input type="text" name="default_template" size="30" value="standard">
+				</td>
+				<td width="54%" height="38">&nbsp;</td>
+			</tr>
+			<tr bgcolor="#99CCCC">
+				<td width="21%" height="38">&nbsp;</td>
+				<td width="25%" height="38">
+					<div align="center">
+						<input type="hidden" name="sid" value="<?php echo($sid); ?>">
+						<input type="submit" name="install" value="Install">
+					</div>
+				</td>
+				<td width="54%" height="38"> 
+					<div align="right">
+						<input type="reset" name="cancel" value="Delete Form">
+					</div>
+				</td>
+			</tr>
+		</table>
 	</form>
 </div>
 <?php
