@@ -1,5 +1,5 @@
 <!--{include file="$template_name/header.tpl"}-->
-
+<!--{include file="$template_name/nav_bar.tpl"}-->
 <b>Custom Searches</b> <br>
 
 <!--{section name=id loop=$searches}-->

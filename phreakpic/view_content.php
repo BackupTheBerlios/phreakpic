@@ -160,7 +160,10 @@ $smarty->assign('comments',$comments);
 
 
 // show content
-$smarty->assign('nav_string', build_nav_string($cat_id));
+$nav_string = build_nav_string($cat_id);
+$nav_content['name']=$content->get_name();
+$nav_string[]=$nav_content;
+$smarty->assign('nav_string',$nav_string);
 $content->inc_views();
 $smarty->assign('html', $content->get_html());
 $smarty->assign('name', $content->get_name());

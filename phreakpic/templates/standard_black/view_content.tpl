@@ -48,12 +48,7 @@
 		</tr>
 		<tr> 
 			<td colspan="2">
-				<a href="index.php?<!--{$sid}-->"><!--{$lang.home}--></a><!--{#navbar_seperator#}-->
-				<!--{section name=id loop=$nav_string}-->
-					<a href="view_cat.php?cat_id=<!--{$nav_string[id].id}--><!--{$sid}-->">
-						<!--{$nav_string[id].name}--></a><!--{#navbar_seperator#}-->
-				<!--{/section}-->
-				<!--{$name}-->
+			<!--{include file="$template_name/nav_bar.tpl"}-->
 			</td>
 			<td>&nbsp;</td>
 		</tr>
