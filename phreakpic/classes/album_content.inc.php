@@ -160,6 +160,7 @@ class album_content
 		// check change group
 		if ($vals['change_group'] == 'on')
 		{
+			
 			if ($this->set_contentgroup_id($vals['to_contentgroup']) != OP_SUCCESSFUL)
 			{
 				die ("konnte die Contentgruppe von {$vals['name']} nicht ändern");
@@ -1036,7 +1037,7 @@ class picture extends album_content
 	function get_html()
 	{
 		album_content::get_html();
-		return "<img src=".linkencode($this->get_file());
+		return "<img src=".linkencode($this->get_file())." width=\"{$this->width}\" height=\"{$this->height}\"";
 	}
 
 	function get_thumb()
