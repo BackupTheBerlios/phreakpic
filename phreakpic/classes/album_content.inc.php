@@ -257,6 +257,8 @@ class album_content
 		//commits all changes of the actual object to the database and/or filesystem 
 		//or create a new db entry if object is not yet in db
 		global $db,$config_vars;
+				
+		
 		
 		// fill palce_in_cat and cat_ids array if they are not yet filled;
 		
@@ -264,7 +266,6 @@ class album_content
 		{
 			if ((!isset($this->cat_ids)) or (!isset($this->place_in_cat)))
 			{
-				
 				$this->generate_content_in_cat_data();
 			}
 		}
@@ -353,7 +354,6 @@ class album_content
 			$sql = "INSERT INTO " . $config_vars['table_prefix'] . "content
 				(file,name,views,current_rating,creation_date,contentgroup_id,locked,width,height)
 				VALUES ('$this->file', '$this->name', '$this->views', '$this->current_rating', '$this->creation_date', '$this->contentgroup_id', '$this->locked','$this->width','$this->height')";
-					
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Konnte Objekt nicht commiten", '', __LINE__, __FILE__, $sql);
@@ -492,11 +492,12 @@ class album_content
 	{
 		global $userdata;
 		
+				
 		if (!is_array($this->cat_ids))
 		{
 			$this->generate_content_in_cat_data();
 		}
-		
+				
 		$old_cat = new categorie();
 		$old_cat->generate_from_id($old_cat_id);
 
@@ -686,8 +687,7 @@ class album_content
 				makedir($config_vars['content_path_prefix'] . '/' . $path);
 			}
 	
-			
-			$path = $path . '/' . basename($this->file);
+			$path = $path . '/' . basename($this->name) . '.' . getext($this->file)	;
 			return $config_vars['content_path_prefix'] .'/' . $path;
 		}
 		else
