@@ -171,15 +171,12 @@ if (!isset($HTTP_SESSION_VARS['first_content']))
 {
 	$HTTP_SESSION_VARS['first_content'] = 0;
 }
-
 if ((!isset($content_per_page)) or ($content_per_page == 0))
 {
 	$content_per_page = $userdata['content_per_page'];
 }
-
-
+$smarty->assign('content_per_page',$content_per_page);
 $contents = get_content_of_cat($cat_id,$HTTP_SESSION_VARS['first_content'],$content_per_page);
-
 include "includes/view_thumbs.php";
 
 
