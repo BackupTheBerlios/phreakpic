@@ -10,6 +10,7 @@ $lang['logout'] = 'logout';
 $lang['forum'] = 'Zum Forum';
 $lang['website_home'] = 'Home';
 $lang['profile'] = 'Profil';
+$lang['ucp'] = 'User Admin';
 //in more than one file
 $lang['home'] = 'Start';
 
@@ -120,6 +121,7 @@ $lang['content_auth'] = 'Content Rechte';
 $lang['groups'] = 'Gruppen';
 $lang['add_user'] = 'User hinzufügen';
 $lang['remove_user'] = 'User entfernen';
+$lang['usergroup_auth'] = 'Benutzergruppen Rechte';
 
 
 //admin/user_in_group
