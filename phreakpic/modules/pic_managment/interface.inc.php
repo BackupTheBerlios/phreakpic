@@ -145,32 +145,39 @@ function get_content_object_from_id($id)
 	// get  content
 
 	$uncontent = new album_content();
-	$uncontent->generate_from_id($id);
-
-	// check if user has view perms to that content
-
-	if (check_content_action_allowed($uncontent->get_contentgroup_id(),$userdata['user_id'],'view'))
+	if ($uncontent->generate_from_id($id) == OP_SUCCESSFUL )
 	{
-		$objtyp = $filetypes[getext($uncontent->file)];
-		if (isset($objtyp))
+
+		// check if user has view perms to that content
+
+		if (check_content_action_allowed($uncontent->get_contentgroup_id(),$userdata['user_id'],'view'))
 		{
-			$incontent = new $objtyp;
+			$objtyp = $filetypes[getext($uncontent->file)];
+			if (isset($objtyp))
+			{
+				$incontent = new $objtyp;
 
 
-			//this sucks (additional sql query) but its ok for now
+				//this sucks (additional sql query) but its ok for now
 
-			$incontent->generate_from_id($id);
+				$incontent->generate_from_id($id);
+			}
+			else
+			{
+				// unsupported filetype
+			}
+			return $incontent;
 		}
 		else
 		{
-			// unsupported filetype
+			return OP_MISSING_VIEW;
 		}
-		return $incontent;
 	}
 	else
 	{
-		return OP_MISSING_VIEW;
+		return OP_FAILED;
 	}
+
 
 }
 
