@@ -1,7 +1,7 @@
-<!--{include file="header.tpl"}-->
+<!--{include file="$template_name/header.tpl"}-->
 <br>
 <!--{$lang.new_usergroup}-->
-<form action="user_in_groups.php?usergroup=<!--{$sel_usergroup}-->" method="POST">
+<form action="user_in_groups.php?usergroup=<!--{$sel_usergroup}--><!--{$sid}-->" method="POST">
   
 
 <!--{$lang.name}-->: <input type="text" name="name"><br>
@@ -37,11 +37,11 @@
 <!--{section name=id loop=$usergroups}-->
 <tr>
 	<td>
-	<a href="user_in_groups.php?del_usergroup=<!--{$usergroups[id].id}-->"><!--{$lang.delete}--></a>
+	<a href="user_in_groups.php?del_usergroup=<!--{$usergroups[id].id}--><!--{$sid}-->"><!--{$lang.delete}--></a>
 	</td>
 	<td>
 	<!--{ if $usergroups[id].id != $sel_usergroup}-->
-		<a href="user_in_groups.php?usergroup=<!--{$usergroups[id].id}-->"><!--{$usergroups[id].name}--></a><br>
+		<a href="user_in_groups.php?usergroup=<!--{$usergroups[id].id}--><!--{$sid}-->"><!--{$usergroups[id].name}--></a><br>
 	<!--{else}-->	
 		<b><!--{$usergroups[id].name}--></b><br>
 	<!--{/if}-->	
@@ -81,4 +81,4 @@
 </tr>
 </table>
 </form>
-<!--{include file="footer.tpl"}-->
+<!--{include file="$template_name/footer.tpl"}-->

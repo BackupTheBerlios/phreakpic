@@ -1,5 +1,5 @@
 <!--{include file="$template_name/header.tpl"}-->
-<form action="auths.php?usergroup=<!--{$sel_usergroup}-->&group=<!--{$sel_group}-->" method="POST">
+<form action="auths.php?usergroup=<!--{$sel_usergroup}-->&group=<!--{$sel_group}--><!--{$sid}-->" method="POST">
 <table border=1>
 <tr>
 <td>
@@ -17,7 +17,7 @@
 
 <!--{section name=id loop=$usergroups}-->
 	<!--{ if $usergroups[id].id != $sel_usergroup}-->
-		<a href="auths.php?usergroup=<!--{$usergroups[id].id}-->&group=<!--{$sel_group}-->"><!--{$usergroups[id].name}--></a><br>
+		<a href="auths.php?usergroup=<!--{$usergroups[id].id}-->&group=<!--{$sel_group}--><!--{$sid}-->"><!--{$usergroups[id].name}--></a><br>
 	<!--{else}-->	
 		<b><!--{$usergroups[id].name}--></b><br>
 	<!--{/if}-->	
@@ -51,13 +51,13 @@
 <!--{section name=id loop=$groups}-->
 	<tr><td>
 	<!--{ if $groups[id].id != $sel_group}-->
-		<a href="auths.php?usergroup=<!--{$sel_usergroup}-->&group=<!--{$groups[id].id}-->"><!--{$groups[id].name}--></a>
+		<a href="auths.php?usergroup=<!--{$sel_usergroup}-->&group=<!--{$groups[id].id}--><!--{$sid}-->"><!--{$groups[id].name}--></a>
 	<!--{else}-->	
 		<b><!--{$groups[id].name}--></b>
 	<!--{/if}-->	
 	</td>
 	<td>
-	<a href="auths.php?del_group=<!--{$groups[id].id}-->"><!--{$lang.delete}--></a><br>
+	<a href="auths.php?del_group=<!--{$groups[id].id}--><!--{$sid}-->"><!--{$lang.delete}--></a><br>
 	</td></tr>
 <!--{/section}-->
 </table>
