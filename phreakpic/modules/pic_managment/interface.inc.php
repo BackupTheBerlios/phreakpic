@@ -98,6 +98,7 @@ function get_content_of_cat($cat_id = 0)
 		
 		$objarray[]=$contentobj;*/
 		
+		
 		$objarray[]=get_content_from_row($row);
 		
 	}
@@ -181,6 +182,42 @@ function get_content_from_row($row)
 	return OP_FAILED;
 }
 
+function get_cats_data_where_perm($data,$perm)
+{
+	// returns an indexed array containing all fields speicfied in $data in an assoc array where user has permission $perm
+	global $db,$config_vars,$userdata;
+
+	// get the sql where to limit the query to categories which the user is allowed to view
+	$auth_where=get_allowed_catgroups_where($userdata['user_id'],$perm);
+	if (!isset($auth_where))
+	{
+		return;
+	}
+
+	$sql = "SELECT $data FROM " . $config_vars['table_prefix'] . "cats WHERE ($auth_where)";
+
+	if (!$result = $db->sql_query($sql))
+	{
+		message_die(GENERAL_ERROR, "Konnte Kategorie nicht auswählen", '', __LINE__, __FILE__, $sql);
+	}
+
+	// generate categorie objects for each categorie that is returned by the query
+	while ($row = $db->sql_fetchrow($result))
+	{
+		foreach ($row as $key => $value)
+		{
+			// filter out all keys which are not strings, because the array containt both assoziativ and numbers
+			if (is_string($key))
+			{
+				$cat[$key] = $value;
+			}
+		}
+		$cat_array[]=$cat;
+	}
+	return $cat_array;
+	
+}
+
 
 // Comment Functions
 
@@ -206,6 +243,30 @@ function get_comments_of_content($content_id)
 	
 	return $com_array;
 }
+
+function get_comments_of_cat($cat_id)
+{
+	global $config_vars,$db;
+	// makes this to the first comment of content $content_id
+	$sql = 'SELECT * FROM ' . $config_vars['table_prefix'] . 'cat_comments
+		WHERE (owner_id = ' .$cat_id . ') and (parent_id = 0)';
+		
+	if (!$result = $db->sql_query($sql))
+	{
+		message_die(GENERAL_ERROR, "Error generating initial comments for cat", '', __LINE__, __FILE__, $sql);
+	}
+	
+	
+	while ($row = $db->sql_fetchrow($result))
+	{
+		$com = new content_comment();
+		$com->generate_from_row($row);	
+		$com_array[] = $com;
+	}
+	
+	return $com_array;
+}
+
 
 
 
