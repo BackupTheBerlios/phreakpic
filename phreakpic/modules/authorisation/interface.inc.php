@@ -1,12 +1,19 @@
 <?php
+
 require_once (ROOT_PATH . 'includes/functions.inc.php');
+
 require_once (ROOT_PATH . 'classes/auth.inc.php');
+
+require_once (ROOT_PATH . 'classes/error.inc.php');
+
 
 
 function generate_perm_array()
 {
 	global $userdata,$db,$config_vars;
+
 	$auth = new content_auth;
+
 	$usergroup_ids=get_groups_of_user($userdata['user_id']);
 	// add the default usergroups
 	$usergroup_ids=array_merge($usergroup_ids,$config_vars['auto_usergroup_ids']);
@@ -35,7 +42,9 @@ function generate_perm_array()
 	return $perm_array;
 }
 
+
 $perm_array = generate_perm_array();
+
 
 
 function check_auth_action_allowed()
@@ -186,7 +195,7 @@ function get_allowed_contentgroups_where($user_id,$action,$field='contentgroup_i
 
 // EXPERIMENTAL SQL which doesnt needs get_groups_of_user
 	$default_usergroups_where = generate_where('auth.usergroup_id',$config_vars['auto_usergroup_ids']);
-	
+
                                            
 	$sql ='SELECT auth.contentgroup_id, uig.group_id FROM '.$config_vars['table_prefix'].'content_auth as auth, '.$config_vars['table_prefix']."user_in_group AS uig 
 	WHERE (auth.$action like 1) and (((uig.user_id = $user_id) and (auth.usergroup_id=uig.group_id)) or ($default_usergroups_where) ) group by auth.contentgroup_id";
@@ -239,8 +248,8 @@ function get_allowed_catgroups_where($user_id,$action,$field='catgroup_id')
 		// user is in now usergroups return 
 		return "'0'";
 	}
-	
-	
+
+
 	// get contentgroup_ids from the contents groups where at least one usergroup out of §users_groups is allowed to do $action
 	$where = generate_where('usergroup_id',$usergroup_ids);
 	$sql = 'select catgroup_id from '.$config_vars['table_prefix']."cat_auth where ($action like 1) and ($where)";
@@ -252,10 +261,10 @@ function get_allowed_catgroups_where($user_id,$action,$field='catgroup_id')
 	while ($row = $db->sql_fetchrow($result))
 	{
 		$allowed_catgroups[]=$row['catgroup_id'];
-		
+
 	}
 
-	return generate_where($field,$allowed_catgroups);	
+	return generate_where($field,$allowed_catgroups);
 }
 
 
@@ -268,20 +277,22 @@ function get_groups_of_user($user_id)
 	global $db,$config_vars;
 	// Returns array of group_ids in which the user with id $user_id is
 	$sql = "
-		SELECT group_id from " . $config_vars['table_prefix'] . "user_in_group 
+		SELECT group_id from " . $config_vars['table_prefix'] . "user_in_group
 		WHERE user_id = $user_id";
-	
+
+
 	if (!$result = $db->sql_query($sql))
 	{
 		error_report(SQL_ERROR, 'get_groups_of_user' , __LINE__, __FILE__,$sql);
 	}
 
+
 	while ($row = $db->sql_fetchrow($result))
 	{
 		$group_ids[] = $row['group_id'];
-		
+
 	}
-	
+
 	return $group_ids;
 
 }
