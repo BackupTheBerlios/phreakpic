@@ -16,30 +16,39 @@
 		<td <!--{if $comments[index].level == 0}--> bgcolor="<!--{#table_head_bg_color#}-->" width="100%">
 		<!--{else}-->
 			>
-			<hr class="comment_hr">
+			<!--<hr class="comment_hr">-->
 		<!--{/if}-->
-			<!--{if $comments[index].new == true}-->
-				new
-			<!--{/if}-->
-			
-			<b><!--{$comments[index].topic}--></b>
-			<!--{$comments[index].username}--> <!--{$comments[index].poster_name}--> <!--{$lang.wrote_at}--> <!--{$comments[index].creation_date}-->&nbsp;
-			<!--{if $comments[index].changed_count > 0}-->
-				Beitrag wurde <!--{$comments[index].changed_count}--> mal geändert, zuletzt am <!--{$comments[index].last_changed_date}-->
-			<!--{/if}-->
-			<!--{if $comments[index].editable == true and $hide_controlles == false}-->
-				<a href="comment.php?mode=edit_comment&type=<!--{$type}-->&id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">edit</a>
-				<a href="view_<!--{$type}-->.php?mode=del_comment&comment_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">delete</a>
-			<!--{/if}-->
-			
-		</td>
-	</tr>
-		<td>&nbsp;</td>
-		<td><div class="comment_text"><!--{$comments[index].text}--></div> <br> 
-		<!--{if $hide_controlles == false}-->
-		<a href="comment.php?mode=add&type=<!--{$type}-->&parent_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">Antworten</a>
-		<!--{/if}-->
-		</td>
+		
+		<table border="0">
+			<tr>
+				<td>
+					<b><!--{$comments[index].username}--></b>
+					<!--{if $comments[index].new == true}-->
+						<font size="-2">new posting</font>
+					<!--{/if}-->	
+					<br>
+					<!--{$comments[index].avatar}-->
+				</td>
+				<td>
+					<span class="gensmall">
+					<!--{$comments[index].poster_name}--> <!--{$lang.wrote_at}--> <!--{$comments[index].creation_date}-->
+					&nbsp&nbsp&nbsp&nbsp <!--{$lang.topic}-->: <b><!--{$comments[index].topic}--></b> 
+					<!--{if $comments[index].changed_count > 0}-->
+						<br>Beitrag wurde <!--{$comments[index].changed_count}--> mal geändert, zuletzt am <!--{$comments[index].last_changed_date}-->
+					<!--{/if}-->
+					<!--{if $comments[index].editable == true and $hide_controlles == false}-->
+						<a href="comment.php?mode=edit_comment&type=<!--{$type}-->&id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">edit</a>
+						<a href="view_<!--{$type}-->.php?mode=del_comment&comment_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">delete</a>
+					<!--{/if}-->
+					</span>
+					<hr />
+					<div class="comment_text"><!--{$comments[index].text}--></div> <br>
+					<!--{if $hide_controlles == false}-->
+						<a href="comment.php?mode=add&type=<!--{$type}-->&parent_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">Antworten</a>
+					<!--{/if}-->
+				</td>
+			</tr>
+		</table>	
 </table>
 <!--{if $comments[index.index_next].level == 0}-->
 		</td>
