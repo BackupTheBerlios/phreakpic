@@ -108,6 +108,7 @@ if (isset($child_cats))
 		$child_cat_infos[$i]['content_child_amount'] = $child_cats[$i]->get_child_content_amount() - $child_cat_infos[$i]['content_amount'];
 		$child_cat_infos[$i]['current_rating'] = $child_cats[$i]->get_current_rating();
 		$child_cat_infos[$i]['remove_from_group'] = $child_cats[$i]->check_perm('remove_from_group');
+		$child_cat_infos[$i]['edit'] = $child_cats[$i]->check_perm('edit');
 		$child_cat_infos[$i]['catgroup_id'] = $child_cats[$i]->get_catgroup_id();
 		
 	}
