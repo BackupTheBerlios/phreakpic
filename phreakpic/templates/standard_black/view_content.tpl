@@ -12,7 +12,7 @@
 		<tr> 
 			<td height="45">
 				<!--{if $is_prev_content eq "true"}-->
-					<a name="next_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$prev_thumb.content_id}--><!--{$sid}-->">
+					<a name="next_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$prev_thumb.content_id}--><!--{$sid}-->#pic">
 						<!--{$prev_thumb.html}-->
 					</a><br>
 					<!--{$lang.nav_back}-->
@@ -25,7 +25,7 @@
 			<td height="45"> 
 				<div align="right">
 					<!--{if $is_next_content eq "true"}-->
-						<a name="prev_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$next_thumb.content_id}--><!--{$sid}-->">
+						<a name="prev_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$next_thumb.content_id}--><!--{$sid}-->#pic">
 							<!--{$next_thumb.html}-->
 						</a><br>
 						<!--{$lang.nav_next}-->
@@ -58,10 +58,11 @@
 		</tr>
 		<tr>
 			<td>fehlt: Poll</td>
-			<td> 
+			<td>
 				<div align="center">
+			<!--{$lang.full_size}--> <input type="radio" name="size" onclick="imageSize(0)"> <!--{$lang.fit_size}--> <input type="radio" name="size" onclick="imageSize(1)">
 				<a name="#pic"></a>
-						<table width="1" border="0" cellpadding="0" cellspacing="0">
+						<table width="1" border="1" cellpadding="0" cellspacing="0">
 							<tr>
 								<td width="1"><img src="templates/<!--{$template_name}-->/img/elo.gif" width="14" height="14" /></td>
 								<td width="1"><img src="templates/<!--{$template_name}-->/img/lor.gif" width="10" height="14" /></td>
@@ -71,7 +72,7 @@
 							</tr>
 							<tr>
 								<td>
-									<table width="9" height="<!--{$content_height}-->" border="0" cellpadding="0" cellspacing="0">
+									<table width="9" name="height_table" height="<!--{$content_height}-->" border="1" cellpadding="0" cellspacing="0">
 										<tr>
 											<td height="1"><img src="templates/<!--{$template_name}-->/img/lou.gif" width="14" height="10" /></td>
 										</tr>
@@ -83,9 +84,9 @@
 										</tr>
 									</table>
 								</td>
-								<td colspan="3"><a name="thumbs_link" href="<!--{$thumb_link}--><!--{$sid}-->#<!--{$content_id}-->" class="content"><!--{$html}--> border="0"></a></td>
+							<td colspan="3" valign="top"><a name="thumbs_link" href="<!--{$thumb_link}--><!--{$sid}-->#<!--{$content_id}-->" class="content"><!--{$html}--> align="top" border="0" name="image" onload="saveImage()"></a></td>
 								<td>
-									<table width="9" height="<!--{$content_height}-->" border="0" cellpadding="0" cellspacing="0">
+									<table width="9" name="height_table" height="<!--{$content_height}-->" border="1" cellpadding="0" cellspacing="0">
 										<tr>
 											<td height="1"><img src="templates/<!--{$template_name}-->/img/rou.gif" width="14" height="10" /></td>
 										</tr>
@@ -172,7 +173,7 @@ action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--
 					<!--{$lang.rating}-->: <!--{$current_rating}--><br>
 					<!--{$lang.views}-->: <!--{$views}--><br>
 					<a href="comment.php?mode=add&type=content&parent_id=0&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->"><!--{$lang.add_comment}--></a><br>
-					<!--{if ($edit_info.allow_edit == true) or (allow_content_remove == true)}-->
+					<!--{if ($edit_info.allow_edit == true) or ($allow_content_remove == true)}-->
 						<a href="view_content.php?mode=edit&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->"><!--{$lang.edit_content}--></a><br>
 					<!--{/if}-->	
 				<!--{/if}-->	
