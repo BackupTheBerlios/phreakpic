@@ -1,5 +1,114 @@
 <?php
-include_once('./classes/album_content.inc.php');
+include_once(ROOT_PATH . './classes/album_content.inc.php');
+
+function validate_config()
+{
+	global $config_vars;
+	//check table prefix
+
+	//check content path
+	if (!is_dir($config_vars['content_path_prefix']))
+	{
+		$error['conntent_path_prefix']=true;
+	}
+	// check thumb size
+	if (!isset($config_vars['thumb_size']))
+	{
+		$error['thumb_size']=1;
+	}
+	elseif (isset($config_vars['thumb_size']['percent']) and isset($config_vars['thumb_size']['maxsize']))
+	{
+		$error['thumb_size']=2;
+	}
+	elseif (($config_vars['thumb_size']['percent'] or isset($config_vars['thumb_size']['maxsize'])) 
+		and ($config_vars['thumb_size']['width'] or isset($config_vars['thumb_size']['height'])))
+	{
+		$error['thumb_size']=3;
+	}
+	
+	// deleted content cat
+	if (!isset($config_vars['deleted_content_cat']))
+	{
+		$error['deleted_content_cat']=1;
+	}
+	else
+	{
+		$cat=new categorie;
+		if ($cat->generate_from_id($config_vars['deleted_content_cat'])==OP_FAILED)
+		{
+			$error['deleted_content_cat']=2;
+		}
+	}
+	
+	// root cat
+	if (!isset($config_vars['root_categorie']))
+	{
+		$error['root_categorie']=1;
+	}
+	else
+	{
+		$cat=new categorie;
+		if ($cat->generate_from_id($config_vars['root_categorie'])==OP_FAILED)
+		{
+			$error['root_categorie']=2;
+		}
+		if ($cat->id!=$cat->parent_id)
+		{
+			$error['root_categorie']=3;
+		}
+	}
+	
+	
+	// show errors
+	
+	if (isset($error))
+	{
+		echo "The following Vars in the config file make no sense <br><br>";
+		if ($error['conntent_path_prefix'])
+		{
+			echo "content_path_prefix: Is not a directory";
+		}
+		
+		if ($error['thumb_size'] == 1)
+		{
+			echo "thumb_size: Not set<br>";
+		}
+		elseif ($error['thumb_size'] == 2)
+		{
+			echo "thumb_size: Percent and Maxsize set<br>";
+		}
+		elseif ($error['thumb_size'] == 3)
+		{
+			echo "thumb_size: Percent or Maxsize and width or height set<br>";
+		}
+		
+		if ($error['deleted_content_cat'] == 1)
+		{
+			echo "deleted_content_cat: Not set";
+		}
+		elseif ($error['deleted_content_cat'] == 2)
+		{
+			echo "deleted_content_cat: Cateogire does not exists";
+		}
+		
+		if ($error['root_categorie'] == 1)
+		{
+			echo "root_categorie: Not set";
+		}
+		elseif ($error['root_categorie'] == 2)
+		{
+			echo "root_categorie: Cateogire does not exists";
+		}
+		elseif ($error['root_categorie'] == 3)
+		{
+			echo "root_categorie: id and parent_id of root cat are not the same";
+		}
+	
+	
+		die;
+	}
+
+}
 function generate_array_from_row($row)
 {
 	global $db;
