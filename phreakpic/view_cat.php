@@ -231,9 +231,7 @@ else
 
 
 $smarty->assign('content_per_page',$content_per_page);
-$returns = get_content_of_cat($HTTP_GET_VARS['cat_id'],$HTTP_SESSION_VARS['first_content'],$content_per_page);
-$contents = $returns['content_obj_array'];
-$viewable_amount = $returns['viewable_amount'];
+$contents = get_content_of_cat($HTTP_GET_VARS['cat_id'],$HTTP_SESSION_VARS['first_content'],$content_per_page,&$viewable_amount);
 
 $smarty->assign('viewable_total_content',sprintf($lang['viewable_total_content'],$viewable_amount,$category->get_content_amount()));
 

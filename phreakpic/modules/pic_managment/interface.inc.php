@@ -41,7 +41,7 @@ function get_cats_of_cat($parent_id)
 
 }
 
-function get_content_of_cat($cat_id,$start=-1,$anzahl=-1)
+function get_content_of_cat($cat_id,$start=-1,$anzahl=-1,$viewable_amount=0)
 {
 	// Returns an Array of album_content objects of all content which is in the categorie with id $cat_id
 	global $db,$config_vars,$userdata,$filetypes;
@@ -105,9 +105,10 @@ function get_content_of_cat($cat_id,$start=-1,$anzahl=-1)
 		}
 		
 	}
-	$returns['viewable_amount'] = $viewable_amount;
-	$returns['content_obj_array'] = $objarray;
-	return $returns;
+	 
+	 
+	
+	return $objarray;
 
 }
 
