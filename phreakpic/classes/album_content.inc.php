@@ -703,9 +703,14 @@ class album_content
 	
 	function start_view()
 	{
-		global $config_vars,$userdata;
+		global $db,$config_vars,$userdata;
 		$now = date("Y-m-d H:i:s");
-		$sql = 'INSERT INTO '. $config_vars['table_prefix'] .'views (user_id,content_id,start) VALUES ('.$userdata['user_id']. ',' . $this->id . ",$now)";
+		$sql = 'INSERT INTO '. $config_vars['table_prefix'] .'views (user_id,content_id,start) VALUES ('.$userdata['user_id']. ',' . $this->id . ",'$now')";
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Couldn't start view", '', __LINE__, __FILE__, $sql);
+		}
+		return $now;
 		
 	}
 
