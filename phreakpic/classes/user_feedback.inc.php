@@ -79,6 +79,7 @@ class comment extends user_feedback
 	var $change_count=0;
 	var $parent_id;
 	var $topic;
+	var $poster_name;
 	
 	function comment()
 	{
@@ -93,6 +94,16 @@ class comment extends user_feedback
 	function get_parent_id()
 	{
 		return $this->parent_id;
+	}
+	
+	function set_poster_name($new_poster_name)
+	{
+		$this->poster_name = $new_poster_name;
+	}
+	
+	function get_poster_name()
+	{
+		return $this->poster_name;
 	}
 	
 	function set_topic($new_topic)
@@ -172,8 +183,8 @@ class comment extends user_feedback
 			$this->creation_date=date("Y-m-d H:i:s");
 			// this is object is not yet in the datebase, make a new entry
 			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . "s 
-				(owner_id, feedback, user_id, creation_date, changed_count, parent_id, topic, last_changed_date)
-				VALUES ('$this->owner_id', '$this->feedback', '$this->user_id', '$this->creation_date', '$this->changed_count', '$this->parent_id', '$this->topic', '$this->last_changed_date')";
+				(owner_id, feedback, user_id, creation_date, changed_count, parent_id, topic, last_changed_date, poster_name)
+				VALUES ('$this->owner_id', '$this->feedback', '$this->user_id', '$this->creation_date', '$this->changed_count', '$this->parent_id', '$this->topic', '$this->last_changed_date', '$this->poster_name')";
 				
 			if (!$result = $db->sql_query($sql))
 			{
@@ -196,7 +207,8 @@ class comment extends user_feedback
 					changed_count = '$this->changed_count', 
 					parent_id = '$this->parent_id', 
 					topic = '$this->topic',
-					last_changed_date = '$this->last_changed_date'
+					last_changed_date = '$this->last_changed_date',
+					poster_name = '$this->poster_name',
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
