@@ -52,19 +52,43 @@ if (isset($HTTP_POST_VARS['newcat']))
 	
 }
 
-// delete cat
-if (isset($HTTP_POST_VARS['cat_delete']))
-{
-	$del_cat = new categorie();
-	$del_cat->generate_from_id($HTTP_POST_VARS['cat_delete']);
-	$del_cat->delete('CDM_REMOVE_CONTENT');
-	
-}
+
 
 
 
 //get the cats in the actual cat and information about them
 $child_cats = get_cats_of_cat($cat_id);
+
+if (isset($HTTP_POST_VARS['edit_cat']))
+{
+	for ($i = 0; $i < sizeof($child_cats); $i++)
+	{
+		$child_cats[$i]->set_name($HTTP_POST_VARS['cat_name'][$i]);
+		$child_cats[$i]->set_description($HTTP_POST_VARS['cat_description'][$i]);
+		$child_cats[$i]->set_catgroup_id($HTTP_POST_VARS['cat_catgroup'][$i]);
+		
+		if ($HTTP_POST_VARS['cat_delete'][$i] == 'on')
+		{	
+			$error=$child_cats[$i]->delete('CDM_REMOVE_CONTENT');
+			if ($error != OP_SUCCESSFUL)
+			{
+				message_die(GENERAL_ERROR, "Couldnt del cat Error nr. $error", '', __LINE__, __FILE__);
+			}
+			
+		}
+		else
+		{
+			$error=$child_cats[$i]->commit();
+			if ($error != OP_SUCCESSFUL)
+			{
+				message_die(GENERAL_ERROR, "Couldnt commit cat Error nr. $error", '', __LINE__, __FILE__);
+			}
+		}
+		
+	}
+	$child_cats = get_cats_of_cat($cat_id);
+}
+
 
 
 //Get the contents of the actual cat and their thumbnails plus information like
@@ -83,6 +107,8 @@ if (isset($child_cats))
 		$child_cat_infos[$i]['content_amount'] = $child_cats[$i]->get_content_amount();
 		$child_cat_infos[$i]['content_child_amount'] = $child_cats[$i]->get_child_content_amount() - $child_cat_infos[$i]['content_amount'];
 		$child_cat_infos[$i]['current_rating'] = $child_cats[$i]->get_current_rating();
+		$child_cat_infos[$i]['remove_from_group'] = $child_cats[$i]->check_perm('remove_from_group');
+		$child_cat_infos[$i]['catgroup_id'] = $child_cats[$i]->get_catgroup_id();
 		
 	}
 	// in edit mode check on which cats user has rights to remove cat

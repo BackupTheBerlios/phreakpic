@@ -24,28 +24,66 @@
 			<td><!--{$lang.description}--></td>
 			<td><!--{$lang.amount}--></td>
 			<td><!--{$lang.rating}--></td>
+			<!--{if $mode == 'edit'}-->
+				<td><!--{$lang.catgroup}--></td>
+				<td><!--{$lang.delete}--></td>
+				
+			<!--{/if}-->
+			
+			
 		</tr>
-		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="delete_cat">
+		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_cat">
 		<!--{section name=id loop=$number_of_child_cats}-->
 			<tr>
-				<td name="td_cat"><a name="cat_link" href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->&first_content=0<!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
-				<td><!--{$child_cat_infos[id].description}--></td>
-				<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
-				<td><!--{$child_cat_infos[id].current_rating}--></td>
-				<!--{if ($allow_cat_remove == 'true') and ($mode == 'edit')}-->	
-					<td><input name="cat_delete" type="submit" id="<!--{$child_cat_infos[id].id}-->" value="<!--{$child_cat_infos[id].id}-->"></td>
+				
+				
+				<!--{if $mode == 'edit'}-->
+					<td name="td_cat"><input name="cat_name[]" type="text" value="<!--{$child_cat_infos[id].name}-->"></td>
+					<td><input name="cat_description[]" type="text" value="<!--{$child_cat_infos[id].description}-->"></td>
+					<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
+					<td><!--{$child_cat_infos[id].current_rating}--></td>
+					<td>
+					<!--{if ($child_cat_infos[id].remove_from_group == 'true')}-->	
+					
+						<select name="cat_catgroup[]">
+							<!--{section name=cat_id loop=$add_to_catgroups}-->
+							<!--{if $child_cat_infos[id].catgroup_id == $add_to_catgroups[cat_id].id}-->
+								<option selected value="<!--{$add_to_catgroups[cat_id].id}-->"><!--{$add_to_catgroups[cat_id].name}--></option>
+							<!--{else}-->
+								<option value="<!--{$add_to_catgroups[cat_id].id}-->"><!--{$add_to_catgroups[cat_id].name}--></option>
+							<!--{/if}-->
+							<!--{/section}-->
+						</select>
+					
+					<!--{/if}-->
+					</td>
+					
+					<!--{if ($allow_cat_remove == 'true')}-->	
+						<td><input name="cat_delete[<!--{$smarty.section.id.index}-->]" type="checkbox"></td>
+					<!--{/if}-->
+				<!--{else}-->
+					<td name="td_cat"><a name="cat_link" href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->&first_content=0<!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
+					<td><!--{$child_cat_infos[id].description}--></td>
+					<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
+					<td><!--{$child_cat_infos[id].current_rating}--></td>
 				<!--{/if}-->
+				
 				
 			</tr>
 		<!--{/section}-->
-		</form>
+		
+		
 	</table>
+	<!--{if $mode == 'edit'}-->
+	<input type="submit" name="edit_cat" >
+	<!--{/if}-->
+	</form>
 <!--{else}-->
 	<p><!--{$lang.no_subcategories}--></p>
 <!--{/if}-->
 
+<hr>
 
-<!--{$edit}-->
 
 <!--{if  ($allow_cat_add == true) and ($mode == edit)}-->
 	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post">
