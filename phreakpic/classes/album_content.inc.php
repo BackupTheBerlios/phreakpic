@@ -300,8 +300,13 @@ class album_content
 	//returns the needed HTML Code to show the actual object.
 	
 	// incrase views
-	$this->views++;
-	$this->commit();
+	
+	}
+	
+	function inc_views()
+	{
+		$this->views++;
+		$this->commit();
 	
 	}
 	
@@ -1060,7 +1065,6 @@ class picture extends album_content
 
 	function get_html()
 	{
-		album_content::get_html();
 		return "<img src=".linkencode($this->get_file())." width=\"{$this->width}\" height=\"{$this->height}\"";
 	}
 
