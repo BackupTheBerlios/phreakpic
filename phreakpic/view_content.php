@@ -25,7 +25,8 @@ if (!is_object($content))
 }
 
 // if there is no cat_id assigned take the first cat of the content
-if (!is_integer($cat_id))
+
+if (!isset($cat_id))
 {
 	$ids=$content->get_cat_ids();
 	$cat_id=$ids[0];
