@@ -114,9 +114,10 @@
 
 <!--{section name=nav_page loop=$cat_nav_links}-->
 	<!--{if $cat_nav_links[nav_page] == $first_content}-->
-		<b><!--{$smarty.section.nav_page.index}--></b>
+		<b><!--{$smarty.section.nav_page.iteration}--></b>
 	<!--{else}-->
-		<a href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$cat_nav_links[nav_page]}--><!--{$sid}-->"><!--{$smarty.section.nav_page.index}--></a>
+		
+		<a href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$cat_nav_links[nav_page]}--><!--{$sid}-->"><!--{$smarty.section.nav_page.iteration}--></a>
 	<!--{/if}-->
 <!--{/section}-->
 
