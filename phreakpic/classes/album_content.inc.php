@@ -677,14 +677,14 @@ class album_content
 
 		// get objekt for the new_cat
 
-		$add_to_cat = new categorie();
-		$add_to_cat->generate_from_id($new_cat_id);
+		$this->add_to_cat = new categorie();
+		$this->add_to_cat->generate_from_id($new_cat_id);
 		
 		// user needs content_add rights in the cat where he wants to add that content
-		if (check_cat_action_allowed($add_to_cat->catgroup_id, $userdata['user_id'], "content_add"))
+		if (check_cat_action_allowed($this->add_to_cat->catgroup_id, $userdata['user_id'], "content_add"))
 		{
 			$this->cat_ids[] = $new_cat_id;
-			$add_to_cat->set_content_amount($add_to_cat->get_content_amount()+1);
+			$this->add_to_cat->set_content_amount($this->add_to_cat->get_content_amount()+1);
 			$this->new_filename=$this->generate_filename();
 			return OP_SUCCESSFUL;
 		}
