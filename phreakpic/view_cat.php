@@ -187,13 +187,14 @@ if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'
 	if (isset($HTTP_POST_VARS['newcontent']))
 	{
 		$objtyp = $filetypes[getext($HTTP_POST_FILES['new_content_file']['name'])];
-		
+
 		if (isset($objtyp))
 		{
 			add_content($HTTP_POST_FILES['new_content_file']['name'],$HTTP_POST_FILES['new_content_file']['tmp_name'],$HTTP_POST_VARS['new_content_name'],$HTTP_GET_VARS['cat_id'],$HTTP_POST_VARS['new_content_place_in_cat'],$HTTP_POST_VARS['new_content_group']);
 		}
-		elseif ($HTTP_POST_FILES['new_content_file']['type'] == 'application/x-zip')
+		elseif (eregi("zip$",$HTTP_POST_FILES['new_content_file']['name']))
 		{
+
 			// its a zip file
 			$zip= new PclZip($HTTP_POST_FILES['new_content_file']['tmp_name']);
 			
