@@ -298,7 +298,6 @@ if (!isset($template_file))
 $smarty->assign('nav_string', build_nav_string($cat_id));
 $smarty->assign('redirect', PHREAKPIC_PATH . "$template_file.php");
 $smarty->assign('thumb_size', $config_vars['thumb_size']['maxsize']);
-$smarty->assign('title_site',$board_config['sitename']);
 $smarty->assign('title_page',$lang['view_cat']);
 $smarty->assign('title_name',$category->get_name());
 
