@@ -1,6 +1,6 @@
 <?php
 define('IN_PHPBB', true);
-$phpbb_root_path = ROOT_PATH . '../phpBB2/';
+$phpbb_root_path = ROOT_PATH . PHPBB_PATH;
 include($phpbb_root_path . 'extension.inc');
 include($phpbb_root_path . 'common.'.$phpEx);
 
