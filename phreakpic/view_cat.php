@@ -302,39 +302,39 @@ if (is_array($contents))
 
 $smarty->assign('cat_id',$cat_id);
 
-// Comments
-if ($mode == "add")
-{
-	// add a new comment
-	$comment = new cat_comment();
-	$comment->set_feedback($comment_text);
-	$comment->set_topic($topic);
-	$comment->set_user_id($userdata['user_id']);
-	$comment->set_owner_id($cat_id);
-	$comment->set_parent_id($parent_id);
-	$comment->commit();
-}
-
-if ($mode == 'edit_comment')
-{
-	$comment = new cat_comment();
-	$comment->generate_from_id($HTTP_POST_VARS['parent_id']);
-	$comment->set_feedback($HTTP_POST_VARS['comment_text']);
-	$comment->set_topic($HTTP_POST_VARS['topic']);
-	$comment->set_changed_count($comment->get_changed_count()+1);
-	$comment->set_last_changed_date(date("Y-m-d H:i:s"));
-	$comment->commit();	
-}
-
-if ($mode == 'del_comment')
-{
-// TODO: hier fehlt noch was passiert wenn unterkommentare enthalten sind.
-	$comment = new cat_comment();
-	$comment->generate_from_id($comment_id);
-	$comment->delete();
-}
-
-
+// // Comments
+// if ($mode == "add")
+// {
+// 	// add a new comment
+// 	$comment = new cat_comment();
+// 	$comment->set_feedback($comment_text);
+// 	$comment->set_topic($topic);
+// 	$comment->set_user_id($userdata['user_id']);
+// 	$comment->set_owner_id($cat_id);
+// 	$comment->set_parent_id($parent_id);
+// 	$comment->commit();
+// }
+// 
+// if ($mode == 'edit_comment')
+// {
+// 	$comment = new cat_comment();
+// 	$comment->generate_from_id($HTTP_POST_VARS['parent_id']);
+// 	$comment->set_feedback($HTTP_POST_VARS['comment_text']);
+// 	$comment->set_topic($HTTP_POST_VARS['topic']);
+// 	$comment->set_changed_count($comment->get_changed_count()+1);
+// 	$comment->set_last_changed_date(date("Y-m-d H:i:s"));
+// 	$comment->commit();	
+// }
+// 
+// if ($mode == 'del_comment')
+// {
+// // TODO: hier fehlt noch was passiert wenn unterkommentare enthalten sind.
+// 	$comment = new cat_comment();
+// 	$comment->generate_from_id($comment_id);
+// 	$comment->delete();
+// }
+// 
+// 
 //Show comments
 $root_comments = get_comments_of_cat($cat_id);
 if (sizeof($root_comments) > 0)
@@ -350,7 +350,9 @@ else
 	$smarty->assign('comments','false');
 }
 
+$comment_type='cat';
 
+include ('includes/proceed_comment.inc.php');
 
 
 //thats for the index.php who needs another template file. index.php just set the $template_file to another value and includes this file
