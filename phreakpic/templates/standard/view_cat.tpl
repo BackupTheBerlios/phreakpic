@@ -43,6 +43,7 @@
 
 
 <!--{$edit}-->
+
 <!--{if  ($allow_cat_add == true) and ($mode == edit)}-->
 	<form action="view_cat.php?cat_id=<!--{$cat_id}-->" method="post" name="edit_content" id="edit_content">
 	Add New Cat:
@@ -113,6 +114,10 @@
 <!--{else}-->
 	In dieser Kategorie gibts noch keine Bilder...
 <!--{/if}-->
+
+
+
+
 <div align="center">
 <!--{if $mode != edit}-->
 	<a href="view_cat.php?mode=edit&cat_id=<!--{$cat_id}-->">editieren</a>
@@ -133,6 +138,17 @@
 	<input name="submit" type="submit" id="submit" value="Abschicken">
 	</form>
 <!--{/if}-->
+<!--{if  ($allow_content_add == true) and ($mode == edit)}-->
+	<form action="view_cat.php?cat_id=<!--{$cat_id}-->" method="post" name="add_content" id="add_content" enctype="multipart/form-data">
+	Add Content:
+	File: <INPUT  name="new_content_file" TYPE="file" SIZE="30">
+	contentgroup: <input name="new_content_group" type="text" size="5">
+	Name: <input name="new_content_name" type="text" size="20">
+	Place In cat: <input name="new_content_place_in_cat" type="text" size="5">
+	<input name="newcontent" type="submit" id="submit" value="Add Content">
+	</from>
+<!--{/if}-->
+
 </div>
 
 <table width="95%" align="center" border="1">

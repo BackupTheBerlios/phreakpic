@@ -38,8 +38,7 @@ if (isset($HTTP_POST_VARS['cat_delete']))
 	$del_cat = new categorie();
 	$del_cat->generate_from_id($HTTP_POST_VARS['cat_delete']);
 	$del_cat->delete('CDM_REMOVE_CONTENT');
-	echo "aa ".$del_cat->content_removed."<br>";
-	echo "bb ".$del_cat->cats_removed."<br";
+	
 }
 
 
@@ -86,6 +85,48 @@ if ($mode == 'edit')
 {
 	$smarty->assign('mode','edit');
 }
+
+// check if user is allowed to add content
+if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'content_add'))
+{
+	$smarty->assign('allow_content_add',true);
+	if (isset($HTTP_POST_VARS['newcontent']))
+	{
+		$objtyp = $filetypes[getext($HTTP_POST_FILES['new_content_file']['name'])];
+		if (isset($objtyp))
+		{
+			
+			
+			$new_content = new $objtyp;
+						
+			// endgültigen dateinamen generieren und das tmp file verschieben. Weil das object nicht des dateiendung bekommen würde, wenn nur file=tmp_file und name=irgenwas gesätzt wäare
+			$new_content->file = $HTTP_POST_FILES['new_content_file']['name'];
+			$new_content->add_to_cat($cat_id);
+			if ($HTTP_POST_VARS['new_content_name'] != "")
+			{
+				$new_content->set_name($HTTP_POST_VARS['new_content_name']);
+			}
+			else
+			{
+				$new_content->set_name(getfile($HTTP_POST_FILES['new_content_file']['name']));
+			}
+			
+			$new_file_name = $new_content->generate_filename();
+			//echo "source: ".$HTTP_POST_FILES['new_content_file']['tmp_name'];
+			rename ($HTTP_POST_FILES['new_content_file']['tmp_name'], $new_file_name); 
+			$new_content->file = $new_file_name;
+						
+			$new_content->set_place_in_cat($cat_id,$HTTP_POST_VARS['new_content_place_in_cat']);
+			$new_content->set_contentgroup_id($HTTP_POST_VARS['new_content_group']);
+			
+			
+			$new_content->commit();
+		}
+	}
+}
+
+
+
 
 
 $contents = get_content_of_cat($cat_id);
@@ -202,7 +243,6 @@ if (is_array($contents))
 	//show thumbnails and get some infos about the content
 	for ($i = 1; $i <= sizeof($contents); $i++)
 	{
-	
 		$thumb_infos = $contents[$i-1]->get_thumb();
 		if ($mode == 'edit')
 		{
