@@ -33,6 +33,55 @@ class album_content
 	{
 
 	}
+	
+	function get_surrounding_content($cat_id)
+	{
+		// Returns an Array of album_content objects of all content which is in the categorie with id $cat_id
+		global $db,$config_vars,$userdata,$filetypes;
+
+		// all content in cat $cat_id	
+
+		$sql = "SELECT content_id FROM " . $config_vars['table_prefix'] . "content_in_cat WHERE cat_id = '$cat_id' ORDER BY place_in_cat";
+
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Couldnt get content in cat", '', __LINE__, __FILE__, $sql);
+		}
+
+
+		while ($row = $db->sql_fetchrow($result))
+		{
+			// put all ids in one array
+			$content_ids[]=$row['content_id'];	
+
+		}
+
+		$content_where = generate_where('id',$content_ids);
+		$auth_where = get_allowed_contentgroups_where($userdata['user_id'], "view");
+
+		// get all content
+
+		$sql = 	'SELECT * FROM ' .  $config_vars['table_prefix'] . "content 
+			WHERE ($content_where) and ($auth_where)";
+
+
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Couldnt get data of the of the content in the cat", '', __LINE__, __FILE__, $sql);
+		}
+
+		while ($row = $db->sql_fetchrow($result))
+		{
+			
+			if ($row['id'] == $this->id)
+			{
+				$objarray['prev']=get_content_from_row($lastrow);
+				$objarray['next'] = get_content_from_row($db->sql_fetchrow($result));
+			}
+			$lastrow = $row;
+		}
+		return $objarray;
+	}
 
 	function generate_thumb($thumb_size = '0')
 	{
@@ -476,6 +525,11 @@ class album_content
 			return OP_CONTENT_NOT_IN_CAT;	
 		}
 	}
+	
+	function get_thumbfile()
+	{
+		return dirname($this->file) . '/thumbs/' . basename($this->file);
+	}
 
 }
 
@@ -496,7 +550,77 @@ class picture extends album_content
 
 	function generate_thumb($thumb_size = '0')
 	{
+		global $config_vars;
+		// if $thumb_size is not set == 0 then set it from the config vars
+		if ($thumb_size == '0')
+		{
+			$thumb_size = $config_vars['thumb_size'];
+		}
+		
+		
+		$thumbfile=$this->get_thumbfile();
+		
+		$size= getimagesize($this->file);
 
+		
+		if ($size[2]==1) $src_img = imagecreatefromgif($this->file);
+		if ($size[2]==2) $src_img = imagecreatefromjpeg($this->file);
+		if ($size[2]==3) $src_img = imagecreatefrompng($this->file);
+
+		if (isset($thumb_size['percent']))
+		{
+			// resize everthing per percent
+			$new_w = $size[0] * $thumb_size['percent'] / 100;
+			$new_h = $size[1] * $thumb_size['percent'] / 100;
+		}
+		elseif (isset($thumb_size['maxsize']))
+		{
+			// resize the larger value to maxsize
+			if ($size[0] > $size[1])
+			{
+				// set width to maxsize
+				$thumb_size['width'] = $thumb_size['maxsize'];
+			}
+			else
+			{
+				// set height to maxsize;
+				$thumb_size['height'] = $thumb_size['maxsize'];
+			}
+		}
+		if (isset($thumb_size['width'])) 
+		{
+			if (isset($thumb_size['height']))
+			{
+				// to a fixed resize 
+				$new_w = $thumb_size['width'];
+				$new_h = $thumb_size['height'];
+				
+			}
+			else
+			{
+				// to a relative resize to width
+				$new_w = $thumb_size['width'];
+				$new_h = $size[1]*($new_w/$size[0]);
+				
+			}
+		}
+		else 
+		{
+			// do a relative resize to height	
+			$new_h = $thumb_size['height'];
+			$new_w = $size[0]*($new_h/$size[1]);
+			
+		}
+		
+		
+		
+		$dst_img = imagecreate($new_w,$new_h);
+		imagecopyresized($dst_img,$src_img,0,0,0,0,$new_w,$new_h,imagesx($src_img),imagesy($src_img));
+		if (!is_dir(dirname($thumbfile))) {mkdir(dirname($thumbfile),$config_vars['dir_mask']);}
+
+		imagejpeg($dst_img,$thumbfile);
+		ImageDestroy($src_img);
+		ImageDestroy($dst_img);
 	}
 
 	function get_html()
@@ -506,8 +630,14 @@ class picture extends album_content
 
 	function get_thumb()
 	{
+		if (!is_file($this->get_thumbfile()))
+		{
+			$this->generate_thumb();
+		}
+		
 		$array['content_id'] = $this->id;
-		$array['html'] = "<img src=".linkencode($this->get_file())." width=100 height=100>";
+		$size=getimagesize($this->get_thumbfile());
+		$array['html'] = "<img src=".linkencode($this->get_thumbfile())." $size[3]>";
 		$array['width'] = $this->width;
 		$array['height'] = $this->height;
 		$array['name'] = $this->get_name();
@@ -519,3 +649,4 @@ class picture extends album_content
 
 
 ?>
+	
