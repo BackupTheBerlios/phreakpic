@@ -203,6 +203,8 @@ $smarty->assign('views', $content->get_views());
 $smarty->assign('current_rating', $content->get_current_rating());
 $smarty->assign('cat_id', $cat_id);
 $smarty->assign('template_name', $userdata['photo_user_template']);
+$smarty->assign('sid','&sid='.$userdata['session_id']);
+
 //$smarty->assign('content_size',$content->get_content_size()); //thats the height and width of the object...
 //$smarty->assign('id',$id);
 $end_time = getmicrotime();
