@@ -8,6 +8,8 @@ include_once(ROOT_PATH . 'includes/functions.inc.php');
 include_once(ROOT_PATH . 'modules/statistics.inc.php');
 
 
+
+
 // Holds information about which object to user with which file ending:
 $filetypes = Array (
 	'jpeg' => 'picture',
@@ -15,9 +17,9 @@ $filetypes = Array (
 	'png' => 'picture',
 	'gif' => 'picture',
 	'jpe' => 'picture',
-	'bmp' => 'picture',
-	'tiff' => 'picture',
-	'tif' => 'picture',
+	'bmp' => '',
+	'tiff' => '',
+	'tif' => '',
 	'avi' => 'movie',
 	'mov' => 'movie',
 	'mpeg' => 'movie',
@@ -283,7 +285,7 @@ class album_content extends phreakpic_base
 			}
 		}
 	}
-	
+
 	function get_place_in_cat()
 	{
 		if (!isset($this->place_in_cat))
@@ -315,7 +317,7 @@ class album_content extends phreakpic_base
 
 		$sql = 	'SELECT content.id,content.file,content_in_cat.place_in_cat FROM ' .  $config_vars['table_prefix'] . "content as content,"  . $config_vars['table_prefix'] . "content_in_cat as content_in_cat
 			WHERE ($auth_where) and 
-				(content.id = content_in_cat.content_id) and (content_in_cat.cat_id = $cat_id) 
+				(content.id = content_in_cat.content_id) and (content_in_cat.cat_id = $cat_id)
 			ORDER BY content_in_cat.place_in_cat";
 
  		if (!$result = $db->sql_query($sql))
@@ -332,7 +334,7 @@ class album_content extends phreakpic_base
 			{
 				$objarray['prev'] = get_content_from_row($lastrow);
 				$objarray['next'] = get_content_from_row($db->sql_fetchrow($result));
-				
+
 				return $objarray;
 			}
 			$objarray['place']++;
@@ -340,7 +342,7 @@ class album_content extends phreakpic_base
 			$lastrow = $row;
 		}
 	}
-	
+
 
 	function generate_thumb($thumb_size = '0')
 	{
@@ -349,7 +351,71 @@ class album_content extends phreakpic_base
 		return NOT_SUPPORTED;
 	}
 
-	
+	function calc_new_size($new_size)
+	{
+		global $config_vars;
+
+
+
+
+		$old_size = getimagesize($this->file);
+
+		$resize['type']=$old_size[2];
+		if ($old_size[2]==1) $src_img = imagecreatefromgif($this->file);
+		if ($old_size[2]==2) $src_img = imagecreatefromjpeg($this->file);
+		if ($old_size[2]==3) $src_img = imagecreatefrompng($this->file);
+
+		if ($new_size['percent']!='')
+		{
+			// resize everthing per percent
+			$new_w = $old_size[0] * $new_size['percent'] / 100;
+			$new_h = $old_size[1] * $new_size['percent'] / 100;
+		}
+		elseif ($new_size['maxsize']!='')
+		{
+			// resize the larger value to maxsize
+			if ($old_size[0] > $old_size[1])
+			{
+				// set width to maxsize
+				$new_size['width'] = $new_size['maxsize'];
+			}
+			else
+			{
+				// set height to maxsize;
+				$new_size['height'] = $new_size['maxsize'];
+			}
+		}
+		if ($new_size['width']!='')
+		{
+			if ($new_size['height']!='')
+			{
+				// to a fixed resize
+				$new_w = $new_size['width'];
+				$new_h = $new_size['height'];
+
+			}
+			else
+			{
+				// to a relative resize to width
+				$new_w = $new_size['width'];
+				$new_h = $old_size[1]*($new_w/$old_size[0]);
+
+			}
+		}
+		else
+		{
+			// do a relative resize to height
+			$new_h = $new_size['height'];
+			$new_w = $old_size[0]*($new_h/$old_size[1]);
+
+		}
+
+		$resize['width']=$new_w;
+		$resize['height']=$new_h;
+		return $resize;
+	}
+
+
 
 	function change_compression($compression)
 	{
@@ -370,7 +436,7 @@ class album_content extends phreakpic_base
 	//returns the needed HTML Code to show the actual object.
 
 	// incrase views
-	
+
 	}
 	
 	function inc_views()
@@ -710,7 +776,7 @@ class album_content extends phreakpic_base
 	
 	
 	
-	
+
 	
 	function generate_from_id($id)
 	{
@@ -1149,7 +1215,7 @@ class picture extends album_content
 			$this->width = $size[0];
 			$this->height = $size[1];
 	}
-	
+
 
 	function generate_thumb($thumb_size = '0')
 	{
@@ -1165,74 +1231,30 @@ class picture extends album_content
 			$thumb_size = $config_vars['thumb_size'];
 		}
 
+		$new_size = $this->calc_new_size($thumb_size);
+
 
 
 		$thumbfile=$this->get_thumbfile();
-		$size = getimagesize($this->file);
+
+		if ($new_size['type']==1) $src_img = imagecreatefromgif($this->file);
+		if ($new_size['type']==2) $src_img = imagecreatefromjpeg($this->file);
+		if ($new_size['type']==3) $src_img = imagecreatefrompng($this->file);
 
 
-		if ($size[2]==1) $src_img = imagecreatefromgif($this->file);
-		if ($size[2]==2) $src_img = imagecreatefromjpeg($this->file);
-		if ($size[2]==3) $src_img = imagecreatefrompng($this->file);
 
-		if ($thumb_size['percent']!='')
-		{
-			// resize everthing per percent
-			$new_w = $size[0] * $thumb_size['percent'] / 100;
-			$new_h = $size[1] * $thumb_size['percent'] / 100;
-		}
-		elseif ($thumb_size['maxsize']!='')
-		{
-			// resize the larger value to maxsize
-			if ($size[0] > $size[1])
-			{
-				// set width to maxsize
-				$thumb_size['width'] = $thumb_size['maxsize'];
-			}
-			else
-			{
-				// set height to maxsize;
-				$thumb_size['height'] = $thumb_size['maxsize'];
-			}
-		}
-		if ($thumb_size['width']!='') 
-		{
-			if ($thumb_size['height']!='')
-			{
-				// to a fixed resize 
-				$new_w = $thumb_size['width'];
-				$new_h = $thumb_size['height'];
-				
-			}
-			else
-			{
-				// to a relative resize to width
-				$new_w = $thumb_size['width'];
-				$new_h = $size[1]*($new_w/$size[0]);
-
-			}
-		}
-		else 
-		{
-			// do a relative resize to height	
-			$new_h = $thumb_size['height'];
-			$new_w = $size[0]*($new_h/$size[1]);
-			
-		}
-		
-		
-		$dst_img = imagecreate($new_w,$new_h);
+		$dst_img = imagecreate($new_size['width'],$new_size['height']);
 		imagejpeg($dst_img,$thumbfile,75);
 		$dst_img = imagecreatefromjpeg($thumbfile);
-		
-		imagecopyresampled($dst_img,$src_img,0,0,0,0,$new_w,$new_h,imagesx($src_img),imagesy($src_img));
+
+		imagecopyresized($dst_img,$src_img,0,0,0,0,$new_size['width'],$new_size['height'],imagesx($src_img),imagesy($src_img));
 		if (!is_dir(dirname($thumbfile))) {makedir(dirname($thumbfile));}
 
 		imagejpeg($dst_img,$thumbfile,75);  // 75 == quality
 		ImageDestroy($src_img);
 		ImageDestroy($dst_img);
 	}
-	
+
  function get_additinal_infos()
 	{
 		$exif_fields = Array('DateTimeOriginal','Flash');
