@@ -78,6 +78,7 @@ table_cols = <!--{$table_cols|default:0}-->
 								<!--{$lang.name}-->: <!--{$thumbs[thumb_cols][thumb_cell].name|truncate:15:"...":true}--><br>
 								<!--{$lang.rating}-->: <!--{$thumbs[thumb_cols][thumb_cell].current_rating}--><br>
 								<!--{$lang.views}-->: <!--{$thumbs[thumb_cols][thumb_cell].views}--><br>
+								<!--{$lang.comments_amount}-->: <!--{$thumbs[thumb_cols][thumb_cell].comments_amount}--><br>
 								<!--{if $mode == edit}-->
 									<input name="place_in_array[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
 									<input name="content_id[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
