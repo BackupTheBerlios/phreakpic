@@ -54,18 +54,21 @@ class album_content
 	
 	function generate_content_in_cat_data()
 	{
-		global $db,$config_vars;	
-		$sql = 'SELECT cat_id,place_in_cat FROM '. $config_vars['table_prefix'] . 'content_in_cat where content_id = ' . $this->id;
-		
- 		if (!$result = $db->sql_query($sql))
- 		{
- 			message_die(GENERAL_ERROR, "Couldnt get place_in_cat", '', __LINE__, __FILE__, $sql);
- 		}
-
-		while ($row = $db->sql_fetchrow($result))
+		if (isset($this->id))
 		{
-			$this->place_in_cat[$row['cat_id']] = $row['place_in_cat'];
-			$this->cat_ids[] = $row['cat_id'];
+			global $db,$config_vars;	
+			$sql = 'SELECT cat_id,place_in_cat FROM '. $config_vars['table_prefix'] . 'content_in_cat where content_id = ' . $this->id;
+
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Couldnt get place_in_cat", '', __LINE__, __FILE__, $sql);
+			}
+
+			while ($row = $db->sql_fetchrow($result))
+			{
+				$this->place_in_cat[$row['cat_id']] = $row['place_in_cat'];
+				$this->cat_ids[] = $row['cat_id'];
+			}
 		}
 
 	}
@@ -103,9 +106,11 @@ class album_content
 			WHERE ($auth_where) and 
 				(content.id = content_in_cat.content_id) and (content_in_cat.cat_id = $cat_id) 
 			ORDER BY content_in_cat.place_in_cat";
-
-
-
+		
+		
+  
+  
+  
  		if (!$result = $db->sql_query($sql))
  		{
  			message_die(GENERAL_ERROR, "Couldnt get data of the of the content in the cat", '', __LINE__, __FILE__, $sql);
@@ -117,10 +122,11 @@ class album_content
 			{
 				$objarray['prev'] = get_content_from_row($lastrow);
 				$objarray['next'] = get_content_from_row($db->sql_fetchrow($result));
+				return $objarray;
 			}
 			$lastrow = $row;
 		}
-		return $objarray;
+		
 	}
 
 	function generate_thumb($thumb_size = '0')
@@ -237,11 +243,15 @@ class album_content
 		//or create a new db entry if object is not yet in db
 		global $db,$config_vars;
 		
-				// fill palce_in_cat and cat_ids array if they are not yet filled;
-		if ((!isset($this->cat_ids)) or (!isset($this->place_in_cat)))
+		// fill palce_in_cat and cat_ids array if they are not yet filled;
+		
+		if (isset($this->id))
 		{
-			
-			$this->generate_content_in_cat_data();
+			if ((!isset($this->cat_ids)) or (!isset($this->place_in_cat)))
+			{
+				
+				$this->generate_content_in_cat_data();
+			}
 		}
 		
 		
@@ -299,6 +309,7 @@ class album_content
 		else
 		{
 			//not in db
+			$this->creation_date=date("Y-m-d H:i:s");
 			// add content to the content table
 			$sql = "INSERT INTO " . $config_vars['table_prefix'] . "content
 				(file,name,views,current_rating,creation_date,contentgroup_id,locked,width,height)
@@ -444,10 +455,11 @@ class album_content
 		{
 			$this->generate_content_in_cat_data();
 		}
-
 		
 		$old_cat = new categorie();
 		$old_cat->generate_from_id($old_cat_id);
+
+		
 
 		// check perms (needs content_remove)
 		if (check_cat_action_allowed($old_cat->catgroup_id, $userdata['user_id'], "content_remove"))
