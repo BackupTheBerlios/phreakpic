@@ -47,27 +47,8 @@ function get_content_of_cat($cat_id = 0)
 
 	// all content in cat $cat_id	
 	
-/*	$sql = "SELECT content_id FROM " . $config_vars['table_prefix'] . "content_in_cat WHERE cat_id = '$cat_id' ORDER BY place_in_cat";
+	
 
-	if (!$result = $db->sql_query($sql))
-	{
-		message_die(GENERAL_ERROR, "Couldnt get content in cat", '', __LINE__, __FILE__, $sql);
-	}
-
-	
-	while ($row = $db->sql_fetchrow($result))
-	{
-		// put all ids in one array
-		$content_ids[]=$row['content_id'];	
-		
-	}
-	
-	if (!isset($content_ids))
-	{
-		return OP_NO_CONTENT;
-	}
-	
-	$content_where = generate_where('content.id',$content_ids);*/
 	$auth_where = get_allowed_contentgroups_where('content.contentgroup_id',$userdata['user_id'], "view");
 	
 	// get all content
@@ -259,7 +240,7 @@ function get_comments_of_cat($cat_id)
 	
 	while ($row = $db->sql_fetchrow($result))
 	{
-		$com = new content_comment();
+		$com = new cat_comment();
 		$com->generate_from_row($row);	
 		$com_array[] = $com;
 	}
