@@ -46,17 +46,45 @@ class categorie
 		
 	}
 	
-	function delete($mode,$mode_params)
+	function delete($mode,$mode_params=0)
 	{
+		// deletes the categorie assigned with this object from the database
+		global $db,$config_vars;
+		if (isset($this->id))
+		{
+			if ($mode == CDM_MOVE_CONTENT)
+			{
+				// move content in this categorie to the cat with id $mode_params
+				
+				// wie genau soll man hier mit den perms umgehen ?? 
+			}
+			else
+			{
+				// delete content of the cat
+				
+			}
+			$sql = 'DELETE FROM '. $config_vars['table_prefix'] . "where id like $this->id";
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
+			}
+			return OP_SUCCESSFULL;
+		}
+		else
+		{
+			return OP_NOT_IN_DB;
+		}
+		
 	}
-	
+	 
 	function commit()
 	{
+		//if the object is already in the db it is updated by the changes made to this object, otherwise a new db entry is made
 		global $db,$config_vars;
 		if (!isset($this->id))
 		{
 			// this is object is not yet in the datebase, make a new entry
-			$sql = "INSERT INTO " . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id)
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id)
 				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id')";
 			if (!$result = $db->sql_query($sql))
 			{
@@ -69,8 +97,19 @@ class categorie
 		else
 		{
 			// object is already in the database just du an update
-			$sql = "INSERT INTO " . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id)
-				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id')";
+			$sql = 'UPDATE ' . $config_vars['table_prefix'] . "cats 
+				SET 	name = '$this->name', 
+					current_rating = '$this->current_rating', 
+					parent_id = '$this->parent_id', 
+					catgroup_id = '$this->catgroup_id'
+				WHERE id like $this->id";
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Error while updating an existing cat object to the db", '', __LINE__, __FILE__, $sql);
+			}
+			return OP_SUCCESSFULL;
+
+			
 			
 		}
 		
@@ -89,7 +128,7 @@ class categorie
 	function set_name($new_name)
 	{	
 		global $userdata;
-		if (($this->id == 0) or check_cat_action_allowed($this->catgroup_id,$userdate['user_id'],'edit'))
+		if (($this->id == 0) or check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'edit'))
 		{
 			$this->name=$new_name;
 			return OP_SUCCESSFUL;
@@ -108,7 +147,7 @@ class categorie
 	function set_catgroup_id($new_catgroup_id)
 	{
 		global $userdata;
-		if (($this->id == 0) or check_cat_action_allowed($this->catgroup_id,$userdate['user_id'],'edit'))
+		if (($this->id == 0) or check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'edit'))
 		{
 			$this->catgroup_id=$new_catgroup_id;
 			return OP_SUCCESSFUL;
