@@ -46,6 +46,7 @@ function error_report($type, $ident , $line, $file,$sql='')
 	}
 
 	$smarty->assign('error_info',$error_info);
+	$smarty->assign('ROOT_PATH',ROOT_PATH);
 	$smarty->display($userdata['photo_user_template']."/error_msg.tpl");
 	die();
 }
