@@ -20,7 +20,7 @@ function getext($in_file)
 	// return the file extension of $in_file (without a leading dot)
 	if (end(explode('.',$in_file)) != $in_file)
 	{
-		return(end(explode('.',$in_file)));
+		return(strtolower(end(explode('.',$in_file))));
 	}
 	return "";
 	
