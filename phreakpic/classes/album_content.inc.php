@@ -207,7 +207,7 @@ class album_content
 
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Couldnt get place_in_cat", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'get_place_in_cat' , __LINE__, __FILE__,$sql);
 			}
 
 			while ($row = $db->sql_fetchrow($result))
@@ -254,7 +254,7 @@ class album_content
 
  		if (!$result = $db->sql_query($sql))
  		{
- 			message_die(GENERAL_ERROR, "Couldnt get data of the of the content in the cat", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'get_surrounding_content' , __LINE__, __FILE__,$sql);
  		}
 		$objarray['place']=0;
 		while ($row = $db->sql_fetchrow($result))
@@ -362,7 +362,7 @@ class album_content
 				$sql = 'DELETE FROM ' . $config_vars['table_prefix'] . "views WHERE content_id = " . $this->id;
 				if (!$result = $db->sql_query($sql))
 				{
-					message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+					error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 				}
 				
 				
@@ -372,15 +372,16 @@ class album_content
 				$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content WHERE id = " . $this->id;
 				if (!$result = $db->sql_query($sql))
 				{
-					message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+					error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 				}
+				
 				$this->clear_content_in_cat();
 				
 				if (is_file($this->file))
 				{
 					if (!unlink($this->file))
 					{
-						message_die(GENERAL_ERROR, "Konnte Datei nicht löschen", '', __LINE__, __FILE__, '');
+						error_report(FILE_ERROR, 'delete' , __LINE__, __FILE__);
 					}
 					
 				}
@@ -389,7 +390,7 @@ class album_content
 				{
 					if (!unlink($this->get_thumbfile()))
 					{
-						message_die(GENERAL_ERROR, "Konnte Thumb nicht löschen", '', __LINE__, __FILE__, '');
+						error_report(FILE_ERROR, 'delete' , __LINE__, __FILE__);
 					}
 				}
 
@@ -539,7 +540,7 @@ class album_content
 			
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Konnte Objekt nicht commiten", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 			}
 			
 			// update content_in_cat table
@@ -561,7 +562,7 @@ class album_content
 				'1') : ('0')) . "','$this->width','$this->height')";
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Konnte Objekt nicht commiten", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 			}
 			// set id of object to the id of the insert
 			$this->id = $db->sql_nextid();
@@ -625,8 +626,7 @@ class album_content
 		
 		if (!$result = $db->sql_query($sql))
 		{
-		//	error_report(SQL_ERROR, 0 , __LINE__, __FILE__,$sql);
-			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'generate_from_id' , __LINE__, __FILE__,$sql);
 		}
 		
 		$row = $db->sql_fetchrow($result);
@@ -731,7 +731,7 @@ class album_content
 		$this->remove_from_cat = new categorie();
 		if ($this->remove_from_cat->generate_from_id($old_cat_id) != OP_SUCCESSFUL)
 		{
-			message_die(GENERAL_ERROR, "Error generate_form_id in remove_from_cat", '', __LINE__, __FILE__);
+			error_report(GENERAL_ERROR, 'generate_from_id' , __LINE__, __FILE__);
 		}
 
 		
@@ -870,7 +870,7 @@ class album_content
 				VALUES ('" . $this->cat_ids[$key]. "', '$this->id', '" . $this->place_in_cat[$this->cat_ids[$key]]. "')";
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Error during inserting into content_in_cat", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'fill_content_in_cat' , __LINE__, __FILE__,$sql);
 			}
 		}
 
@@ -885,7 +885,7 @@ class album_content
 
 		if (!$result = $db->sql_query($sql))
 		{
-			message_die(GENERAL_ERROR, "Couldn't DELETE content_in_cat entrys", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'clear_content_in_cat' , __LINE__, __FILE__,$sql);
 		}
 	}
 	
@@ -960,10 +960,9 @@ class album_content
 		$sql = 'INSERT INTO '. $config_vars['table_prefix'] .'views (user_id,content_id,start) VALUES ('.$userdata['user_id']. ',' . $this->id . ",'$now')";
 		if (!$result = $db->sql_query($sql))
 		{
-			message_die(GENERAL_ERROR, "Couldn't start view", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'start_view' , __LINE__, __FILE__,$sql);
 		}
 		return $now;
-		
 	}
 
 }
