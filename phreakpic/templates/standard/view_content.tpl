@@ -77,10 +77,13 @@ value="<!--{$place_in_cat}-->"><br>
 					<!--{/if}-->
 					
 					<!--{if $allow_content_remove eq 1}-->
-						<!--{$lang.delete}-->: <input type="checkbox" name="delete"><br>
+						<!--{$lang.unlink}-->: <input type="checkbox" name="unlink"><br>
 						
 						
 							
+					<!--{/if}-->
+					<!--{if $allow_delete eq 1}-->
+						<!--{$lang.delete}-->: <input type="checkbox" name="delete" ><br>
 					<!--{/if}-->
 					<!--{if $allow_link eq 1}-->
 						<!--{$lang.link}-->: <input type="checkbox" name="link" ><br>
