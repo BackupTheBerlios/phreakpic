@@ -23,8 +23,77 @@
 	<!--{else}-->
 		<option><!--{$installed_language[language]}--></option>
 	<!--{/if}-->
+	
+
 <!--{/section}-->
 </select></td></tr>
+
+
+<tr><td>default usergroups</td>
+
+<td>
+	<table>
+	<tr><td>
+	<select name="selected_not_default_usergroups[]" size="5" multiple>
+	<!--{section name=group_id loop=$not_default_usergroup_ids}-->
+		<option value="<!--{$not_default_usergroup_ids[group_id].id}-->">
+			<!--{$not_default_usergroup_ids[group_id].name}-->
+		</option>
+	<!--{/section}-->
+	</select>
+	</td>
+	<td>
+	<input type="submit" name="add_default_usergroup" value="-->"><br>
+	<input type="submit" name="remove_default_usergroup" value="<--">
+	</td>
+	<td>
+	<select name="selected_default_usergroups[]" size="5" multiple>
+	
+	<!--{section name=group_id loop=$default_usergroup_ids}-->
+		<option value="<!--{$default_usergroup_ids[group_id].id}-->">
+			<!--{$default_usergroup_ids[group_id].name}-->
+		</option>
+	<!--{/section}-->
+	
+	</select>
+	
+	</td></tr>
+	</table>
+</tr>
+
+<tr><td>registered users usergroups</td>
+
+<td>
+	<table>
+	<tr><td>
+	<select name="selected_not_registered_users_usergroups[]" size="5" multiple>
+	<!--{section name=group_id loop=$not_registered_users_usergroup_ids}-->
+		<option value="<!--{$not_registered_users_usergroup_ids[group_id].id}-->">
+			<!--{$not_registered_users_usergroup_ids[group_id].name}-->
+		</option>
+	<!--{/section}-->
+	</select>
+	</td>
+	<td>
+	<input type="submit" name="add_registered_users_usergroup" value="-->"><br>
+	<input type="submit" name="remove_registered_users_usergroup" value="<--">
+	</td>
+	<td>
+	<select name="selected_registered_users_usergroups[]" size="5" multiple>
+	
+	<!--{section name=group_id loop=$registered_users_usergroup_ids}-->
+		<option value="<!--{$registered_users_usergroup_ids[group_id].id}-->">
+			<!--{$registered_users_usergroup_ids[group_id].name}-->
+		</option>
+	<!--{/section}-->
+	
+	</select>
+	
+	</td></tr>
+	</table>
+</tr>
+
+
 
 </table>
 <input type="submit" name="submit">
