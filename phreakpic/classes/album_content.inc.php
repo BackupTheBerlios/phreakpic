@@ -26,8 +26,8 @@ class album_content
 	var $creation_date;
 	var $contentgroup_id;
 	var $locked;
-	
-	var $size;
+	var $width;
+	var $height;
 
 	function album_content() //Constructor
 	{
@@ -110,6 +110,12 @@ class album_content
 		//or create a new db entry if object is not yet in db
 		global $db,$config_vars;
 		
+		
+		
+		$this->calc_size();
+		
+		
+		
 		// move to the new calculated localtaion (may be the same)		
 		$new_file=$this->generate_filename();
 		rename($this->file,$new_file);
@@ -132,6 +138,8 @@ class album_content
 					contentgroup_id = '$this->contentgroup_id',
 					views = '$this->views',
 					locked = '$this->locked'
+					width = '$this->width'
+					height = '$this->height'
 				WHERE id like $this->id";
 					
 			if (!$result = $db->sql_query($sql))
@@ -156,8 +164,8 @@ class album_content
 			//not in db
 			// add content to the content table
 			$sql = "INSERT INTO " . $config_vars['table_prefix'] . "content
-				(file,name,views,current_rating,creation_date,contentgroup_id,locked)
-				VALUES ('$this->file', '$this->name', '$this->views', '$this->current_rating', '$this->creation_date', '$this->contentgroup_id', '$this->locked')";
+				(file,name,views,current_rating,creation_date,contentgroup_id,locked,width,height)
+				VALUES ('$this->file', '$this->name', '$this->views', '$this->current_rating', '$this->creation_date', '$this->contentgroup_id', '$this->locked','$this->width','$this->height')";
 					
 			if (!$result = $db->sql_query($sql))
 			{
@@ -474,15 +482,39 @@ class album_content
 
 class picture extends album_content
 {
-   function generate_thumb($thumb_size = '0')
-   {
 
-   }
-   
-   function get_html()
-   {
-   	return "<img src=".linkencode($this->get_file())." width=100 height=100>";
-   }
+
+	function calc_size()
+	{
+			// get width and height of pic
+			$size = getimagesize($this->file);
+			$this->width = $size[0];
+			$this->height = $size[1];
+	}
+	
+
+
+	function generate_thumb($thumb_size = '0')
+	{
+
+	}
+
+	function get_html()
+	{
+		return "<img src=".linkencode($this->get_file()).">";
+	}
+
+	function get_thumb()
+	{
+		$array['content_id'] = $this->id;
+		$array['html'] = "<img src=".linkencode($this->get_file())." width=100 height=100>";
+		$array['width'] = $this->width;
+		$array['height'] = $this->height;
+		$array['name'] = $this->get_name();
+		$array['current_rating'] = $this->get_name();
+		$array['views'] = $this->get_views();
+		return $array;
+	}
 }
 
 
