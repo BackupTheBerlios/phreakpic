@@ -1,8 +1,12 @@
 <html>
-<head>
-</head>
 <body>
-	<a href="auths.php?<!--{$sid}-->">Auths.php</a><br>
-	<a href="user_in_groups.php?<!--{$sid}-->">user_in_groups.php</a><br>
+<frameset cols="200,*">
+  <frame src="menu.php?<!--{$sid}-->" name="menu">
+  <frame src="admin.php?<!--{$sid}-->" name="site">
+  <noframes>
+    Your browser must support frame
+  </noframes>
+</frameset>
+
 </body>
 </html>
