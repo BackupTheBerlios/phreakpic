@@ -1,17 +1,41 @@
 <!--{include file="$template_name/header.tpl"}-->
 <form action="view_<!--{$type}-->.php?cat_id=<!--{$cat_id}--><!--{$oontent_id_string}--><!--{$sid}-->" method="POST">
- 
-<!--{if $user_id == -1}-->
-	<!--{$lang.name}--> <input type="text" name="poster_name" value=""><br>
-<!--{/if}-->
-<!--{$lang.topic}--> <input type="text" name="topic" value="<!--{$topic}-->">
-<br><!--{$lang.text}--><br>
-<textarea name="comment_text" cols="70" rows="10"><!--{$text}--></textarea>
+<table border=1 align="center">
+	
+		<!--{if $user_id == -1}-->
+			<tr><td>
+			<!--{$lang.name}--> <input type="text" name="poster_name" value="">
+			</td></tr>
+		<!--{/if}-->
+	
+	<tr><td>
+		<!--{$lang.topic}--> <input type="text" name="topic" value="<!--{$topic}-->">
+	</td></tr>
+	<tr><td>
+		<!--{$lang.text}-->
+	</td></tr>
+	<tr><td>
+		<textarea name="comment_text" cols="70" rows="10"><!--{$text}--></textarea>
+	
+	<tr><td>
 
+
+<input type="submit" value="<!--{$lang.send}-->">   
+</td></tr>
+<tr><td>
+<!--{include file="$template_name/show_comments.tpl" type="content"}-->
+</td></tr>
+<!--{if $type == 'content'}-->
+<tr><td>
+	<!--{$oontent_html}-->>
+	</td></tr>
+<!--{/if}-->
+
+
+</table>
 <input type="hidden" name="mode" value="<!--{$mode}-->">
 <input type="hidden" name="parent_id" value="<!--{$parent_id}-->">
 
-<input type="submit" value="<!--{$lang.send}-->">   
 
 </form>
 <!--{include file="$template_name/footer.tpl"}-->

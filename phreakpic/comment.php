@@ -3,6 +3,7 @@ define ("ROOT_PATH",'');
 include_once ("includes/common.inc.php");
 include_once('./includes/template.inc.php');
 include_once('./classes/user_feedback.inc.php');
+include_once('./modules/pic_managment/interface.inc.php');
 	
 
 session_start();
@@ -16,9 +17,34 @@ $smarty->assign('mode', $mode);
 $smarty->assign('type', $HTTP_GET_VARS['type']);
 if (isset($content_id))
 {
+	$content_obj = get_content_object_from_id($content_id);
+	$smarty->assign('oontent_html', $content_obj->get_html());
 	$smarty->assign('oontent_id', $content_id);
 	$smarty->assign('oontent_id_string', "&content_id=$content_id");
 }
+
+// get parent comments 
+$class=$HTTP_GET_VARS['type']."_comment";
+// get root comment
+$root_parent_id=$parent_id;
+while ($root_parent_id != 0)
+{
+ $parent_comment= new $class;
+ $parent_comment->generate_from_id($root_parent_id);
+ $root_parent_id = $parent_comment->get_parent_id();
+ $root_id = $parent_comment->id;
+}
+if ($root_id != 0)
+{
+	$root_comment = new $class;
+	$root_comment->generate_from_id($root_id);
+	make_comments($root_comment,0,false);
+	$smarty->assign('comments',$comments);
+}
+
+
+
+
 $smarty->assign('cat_id', $cat_id);
 	
 	if ($mode == "add")
