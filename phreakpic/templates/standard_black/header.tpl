@@ -1,5 +1,4 @@
 <!--{config_load file="$template_name/config.cfg"}-->
-<!--{popup_init src="templates/javascript/overlib.js"}-->
 
 <script src="templates/<!--{$template_name}-->/functions.js" type="text/javascript" language="javascript">
 </script>
