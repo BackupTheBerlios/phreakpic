@@ -15,7 +15,8 @@ $HTTP_SESSION_VARS['view_content_id'] = 0;
 
 $smarty->assign('mode', $mode);
 $smarty->assign('type', $HTTP_GET_VARS['type']);
-if (isset($content_id))
+
+if ($content_id!='')
 {
 	$content_obj = get_content_object_from_id($content_id);
 	$smarty->assign('oontent_html', $content_obj->get_html());
@@ -39,6 +40,21 @@ if ($root_id != 0)
 	$root_comment = new $class;
 	$root_comment->generate_from_id($root_id);
 	make_comments($root_comment,0,false);
+	$crop_rest=false;
+	
+	for($i=0;$i<sizeof($comments);$i++)
+	{
+		if ($crop_rest)
+		{
+			unset($comments[$i]);
+		}
+		
+		if ($comments[$i]['id'] == $parent_id)
+		{
+			$crop_rest=true;
+		}
+		
+	}
 	$smarty->assign('comments',$comments);
 }
 
