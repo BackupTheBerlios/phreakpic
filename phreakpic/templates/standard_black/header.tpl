@@ -14,6 +14,7 @@
 							::
 							<a href="<!--{$phpbb_path}-->index.php?<!--{$sid}-->"><!--{$lang.forum}--></a> ::
 							<a href="<!--{$server_name}-->?<!--{$sid}-->"><!--{$lang.website_home}--></a> ::
+							<a href="profile.php?<!--{$sid}-->"><!--{$lang.profile}--></a> :: ::
 							<!--{if $user_id != -1}-->
 								<a href="<!--{$phpbb_path}-->login.php?logout=true<!--{$sid}-->"><!--{$lang.logout}--> [<!--{$username}-->]</a>
 							<!--{else}-->
