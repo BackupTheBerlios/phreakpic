@@ -114,13 +114,21 @@ if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'c
 	
 	if ($mode == "commit")
 	{
-		// check unlink
 		
-		if (intval($HTTP_POST_VARS['rotate'])!=0) 
+		//rotate
+		if ($HTTP_POST_VARS['rotate_mode'] == 'free')
 		{
-			$content->rotate($HTTP_POST_VARS['rotate']);
-			
+			if (intval($HTTP_POST_VARS['rotate'])!=0) 
+			{
+				$content->rotate($HTTP_POST_VARS['rotate']);
+			}
 		}
+		else
+		{
+			$content->rotate($HTTP_POST_VARS['rotate_mode']);
+		}
+		
+		// check unlink
 		if ($HTTP_POST_VARS['unlink'] == "on")
 		{
 			$content->remove_from_cat($cat_id);

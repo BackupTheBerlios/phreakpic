@@ -184,6 +184,21 @@ if (is_array($contents))
 				{
 					$contents[$i]->unlock();
 				}
+				
+				//rotate
+				
+				if ($HTTP_POST_VARS['rotate_mode'][$i] == 'free')
+				{
+					if (intval($HTTP_POST_VARS['rotate'][$i])!=0) 
+					{
+						$contents[$i]->rotate($HTTP_POST_VARS['rotate'][$i]);
+					}
+				}
+				else
+				{
+					$contents[$i]->rotate($HTTP_POST_VARS['rotate_mode'][$i]);
+				}
+		
 			}
 			
 			

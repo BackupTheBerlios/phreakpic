@@ -42,6 +42,11 @@ $lang['rating'] = 'Bewertung';
 $lang['views'] = 'Views';
 $lang['edit_content'] = 'Editier dieses Bild';
 $lang['rotate'] = 'Drehen';
+$lang['rotate_free'] = 'Frei / Nicht';
+$lang['rotate_left'] = 'Links';
+$lang['rotate_right'] = 'Rechts';
+$lang['rotate_180'] = '180';
+
 
 //view_cat.tpl
 $lang['description'] = 'Beschreibung';
