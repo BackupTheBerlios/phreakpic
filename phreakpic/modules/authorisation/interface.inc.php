@@ -46,7 +46,9 @@ function check_content_action_allowed($contentgroup_id,$user_id,$action)
 	// check in which groups the user is
 	$user_groups=get_groups_of_user($user_id);	
 	// check if there is at least one entry where in one of the $user_groups is $action allowed in $contentgroup_id
+	
 	$where = generate_where('usergroup_id',$user_groups);
+
 	$sql = 'select usergroup_id from '.$config_vars['table_prefix']."content_auth where (`$action` like 1) and (contentgroup_id like $contentgroup_id) and ($where) limit 1";
 	
 	if (!$result = $db->sql_query($sql))
@@ -103,7 +105,13 @@ function get_allowed_contentgroups_where($field,$user_id,$action)
 		
 	}
 
-	return generate_where($field,$allowed_contentgroups);	
+	$r = generate_where($field,$allowed_contentgroups);
+//TODO: check this
+	if (!isset($r))
+	{
+		$r='0';
+	}
+	return $r;
 }
 
 function get_allowed_catgroups_where($user_id,$action)
@@ -165,4 +173,29 @@ function get_groups_of_user($user_id)
 	return $group_ids;
 
 }
+
+function get_user_group_objects()
+{
+	global $db,$config_vars;
+	// Returns array of group_ids in which the user with id $user_id is
+	$sql = "SELECT id from " . $config_vars['table_prefix'] . "usergroups";
+	
+	if (!$result = $db->sql_query($sql))
+	{
+		message_die(GENERAL_ERROR, "Could not get groups of user", '', __LINE__, __FILE__, $sql);
+	}
+
+	while ($row = $db->sql_fetchrow($result))
+	{
+		$obj = new usergroup;
+		$obj->genereate_from_id($row['group_id']);
+		$groups[]=$obj;	
+		
+	}
+	return $groups;
+
+
+		
+}
+
 ?>
