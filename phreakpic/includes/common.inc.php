@@ -4,8 +4,8 @@ function getmicrotime(){
     return ((float)$usec + (float)$sec); 
     } 
 $start_time = getmicrotime();
+include_once(ROOT_PATH . 'config.inc.php'); //have to be before phpbb.inc.php because some vars are needed
 include_once(ROOT_PATH . 'includes/phpbb.inc.php');
-include_once(ROOT_PATH . 'config.inc.php');
 
 
 if (!is_file('./languages/'.$userdata['user_lang'].'/lang_main.php'))
