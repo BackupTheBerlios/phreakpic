@@ -96,9 +96,33 @@ if (is_array($contents))
 	$smarty->assign('is_content', true);
 }
 
-$smarty->assign('nav_string', build_nav_string($cat_id));
-$smarty->assign('lang',$lang);
-$smarty->assign('title', 'Testtitel');
+// Comments
+if ($mode == "add")
+{
+	// add a new comment
+	$comment = new cat_comment();
+	$comment->set_feedback($comment_text);
+	$comment->set_topic($topic);
+	$comment->set_user_id($userdata['user_id']);
+	$comment->set_owner_id($cat_id);
+	$comment->set_parent_id($parent_id);
+	$comment->commit();
+}
+
+//Show comments
+$root_comments = get_comments_of_cat($cat_id);
+if (sizeof($root_comments) > 0)
+{
+	for ($i = 0; $i < sizeof($root_comments); $i++)
+	{
+		make_comments($root_comments[$i],0);
+	}
+	$smarty->assign('comments',$comments);
+}
+else
+{
+	$smarty->assign('comments','false');
+}
 
 
 
@@ -108,6 +132,11 @@ if (!isset($template_file))
 {
 	$template_file = 'view_cat';
 }
+
+
+$smarty->assign('nav_string', build_nav_string($cat_id));
+$smarty->assign('lang',$lang);
+$smarty->assign('template_name', $userdata['photo_user_template']);
 
 
 $end_time = getmicrotime();
