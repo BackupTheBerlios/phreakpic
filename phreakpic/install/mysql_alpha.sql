@@ -75,7 +75,7 @@ CREATE TABLE `photo_cats` (
   `parent_id` int(11) NOT NULL default '0',
   `catgroup_id` int(11) NOT NULL default '0',
   `is_serie` enum('0','1') NOT NULL default '0',
-  `content_amount` tinyint(4) NOT NULL default '0',
+  `content_amount` smallint(4) NOT NULL default '0',
   `description` text NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `id` (`id`),
@@ -226,5 +226,24 @@ CREATE TABLE `photo_views` (
   `content_id` int(11) default '0',
   `start` datetime NOT NULL default '0000-00-00 00:00:00',
   `end` datetime NOT NULL default '0000-00-00 00:00:00'
+) TYPE=MyISAM;
+
+#
+# Table structure for table `photo_error_reports`
+#
+
+CREATE TABLE photo_error_reports (
+  id int(11) NOT NULL auto_increment,
+  file varchar(40) NOT NULL default '',
+  line int(11) NOT NULL default '0',
+  sql text NOT NULL,
+  ident varchar(50) NOT NULL default '',
+  comment text NOT NULL,
+  type tinyint(30) NOT NULL default '0',
+  user_id int(11) NOT NULL default '0',
+  query_string text NOT NULL,
+  PRIMARY KEY  (id),
+  UNIQUE KEY id (id),
+  KEY id_2 (id)
 ) TYPE=MyISAM;
 
