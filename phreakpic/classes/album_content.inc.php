@@ -73,7 +73,11 @@ class album_content extends phreakpic_base
 			}
 		}
 	}
-	
+
+	function get_additinal_infos()
+	{
+	}
+
 	function dec_comments_amount()
 	{
 		$this->comments_amount--;
@@ -107,7 +111,7 @@ class album_content extends phreakpic_base
 		return OP_SUCCESSFUL;
 	}
 
-	
+
 
 	function calc_comments_amount()
 	{
@@ -493,7 +497,7 @@ class album_content extends phreakpic_base
 				
 				
 				// remove from content_in_cat table
-				
+
 				
 				unset($this->file);
 				unset($this->cat_ids);
@@ -1019,7 +1023,7 @@ class album_content extends phreakpic_base
 		
 		if (!isset($this->cat_ids))
 		{
-		
+
 			$this->generate_content_in_cat_data();
 		}
 		if (sizeof($this->cat_ids)>0)
@@ -1105,7 +1109,7 @@ class picture extends album_content
 	function generate_thumb($thumb_size = '0')
 	{
 		global $config_vars;
-		
+
 		if (!is_file($this->file))
 		{
 			return;
@@ -1115,13 +1119,13 @@ class picture extends album_content
 		{
 			$thumb_size = $config_vars['thumb_size'];
 		}
-		
-		
-		
+
+
+
 		$thumbfile=$this->get_thumbfile();
 		$size = getimagesize($this->file);
 
-		
+
 		if ($size[2]==1) $src_img = imagecreatefromgif($this->file);
 		if ($size[2]==2) $src_img = imagecreatefromjpeg($this->file);
 		if ($size[2]==3) $src_img = imagecreatefrompng($this->file);
@@ -1160,7 +1164,7 @@ class picture extends album_content
 				// to a relative resize to width
 				$new_w = $thumb_size['width'];
 				$new_h = $size[1]*($new_w/$size[0]);
-				
+
 			}
 		}
 		else 
@@ -1184,13 +1188,13 @@ class picture extends album_content
 		ImageDestroy($dst_img);
 	}
 	
-	function get_additinal_infos()
+ function get_additinal_infos()
 	{
 		$exif_fields = Array('DateTimeOriginal','Flash');
 		$ifd0_fields = Array('Model');
-		
+
 		@$exif= exif_read_data($this->get_file(),'',true);
-				
+
 		foreach ($exif_fields as $value)
 		{
 			if (isset($exif['EXIF'][$value]))
@@ -1198,21 +1202,20 @@ class picture extends album_content
 				$returns[$value] = $exif['EXIF'][$value];
 			}
 		}
-		
+
 		foreach ($ifd0_fields as $value)
 		{
 			if (isset($exif['IFD0'][$value]))
 			{
 				$returns[$value] = $exif['IFD0'][$value];
 			}
-		}	
-		
+		}
+
 		return $returns;
 	}
 
 	function get_html()
 	{
-		
 		return "<img src=".linkencode($this->get_file())." width=\"{$this->width}\" height=\"{$this->height}\"";
 	}
 
@@ -1250,7 +1253,7 @@ class picture extends album_content
 		}
 		return OP_NP_MISSING_EDIT;
 	}
-	
+
 }
 
 class movie extends album_content
@@ -1261,64 +1264,10 @@ class movie extends album_content
 	{
 			// get width and height of pic
 	}
-	
 
 
-	function generate_thumb($thumb_size = '0')
-	{
-		global $config_vars;
-		// if $thumb_size is not set == 0 then set it from the config vars
-		if ($thumb_size == '0')
-		{
-			$thumb_size = $config_vars['thumb_size'];
-		}
-		
-		
-		if (isset($thumb_size['percent']))
-		{
-			// resize everthing per percent
-			$new_w = $size[0] * $thumb_size['percent'] / 100;
-			$new_h = $size[1] * $thumb_size['percent'] / 100;
-		}
-		elseif (isset($thumb_size['maxsize']))
-		{
-			// resize the larger value to maxsize
-			if ($size[0] > $size[1])
-			{
-				// set width to maxsize
-				$thumb_size['width'] = $thumb_size['maxsize'];
-			}
-			else
-			{
-				// set height to maxsize;
-				$thumb_size['height'] = $thumb_size['maxsize'];
-			}
-		}
-		if (isset($thumb_size['width'])) 
-		{
-			if (isset($thumb_size['height']))
-			{
-				// to a fixed resize 
-				$new_w = $thumb_size['width'];
-				$new_h = $thumb_size['height'];
-				
-			}
-			else
-			{
-				// to a relative resize to width
-				$new_w = $thumb_size['width'];
-				$new_h = $size[1]*($new_w/$size[0]);
-				
-			}
-		}
-		else 
-		{
-			// do a relative resize to height	
-			$new_h = $thumb_size['height'];
-			$new_w = $size[0]*($new_h/$size[1]);
-			
-		}	
-	}
+
+
 
 	function get_html()
 	{
@@ -1332,10 +1281,10 @@ class movie extends album_content
 		{
 			$this->generate_thumb();
 		}
-		
+
 		$array['content_id'] = $this->id;
-		$size=getimagesize($this->get_thumbfile());
-		// $array['html'] = "<img src=".linkencode($this->get_thumbfile())." $size[3]>";
+		//$size=getimagesize($this->get_thumbfile());
+		$array['html'] = "VIDEO"; //"<img src=".linkencode($this->get_thumbfile())." $size[3]>";
 			$array['width'] = $this->width;
 		$array['height'] = $this->height;
 		$array['name'] = $this->get_name();
@@ -1343,13 +1292,13 @@ class movie extends album_content
 		$array['views'] = $this->get_views();
 		return $array;
 	}
-	
+
 	function rotate($degrees)
 	{
-		
+
 		if ($this->check_perm('edit')) //Authorisation is okay
 		{
-		
+
 		//	exec("convert -rotate $degrees $this->file $this->file");
 			unlink ($this->thumbfile);
 			$this->generate_thumb();
@@ -1357,7 +1306,7 @@ class movie extends album_content
 		}
 		return OP_NP_MISSING_EDIT;
 	}
-	
+
 }
 
 
