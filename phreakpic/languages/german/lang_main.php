@@ -49,8 +49,10 @@ $lang['rotate_free'] = 'Frei / Nicht';
 $lang['rotate_left'] = 'Links';
 $lang['rotate_right'] = 'Rechts';
 $lang['rotate_180'] = '180';
+$lang['view_content']="Sachen anzeigen";
 
 //view_cat.tpl
+$lang['view_cat']="Kategorie anzeigen";
 $lang['description'] = 'Beschreibung';
 $lang['amount'] = 'Anzahl';
 $lang['no_subcategories'] = 'Keine Unterkategorien vorhanden';

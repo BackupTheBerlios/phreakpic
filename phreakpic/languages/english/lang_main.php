@@ -50,9 +50,10 @@ $lang['rotate_left'] = 'left';
 $lang['rotate_right'] = 'right';
 $lang['rotate_180'] = '180';
 $lang['to_group'] = 'to group';
-
+$lang['view_content']="View Content";
 
 //view_cat.tpl
+$lang['view_cat']="View Categories";
 $lang['description'] = 'Description';
 $lang['amount'] = 'amount';
 $lang['no_subcategories'] = 'No subcategories';
