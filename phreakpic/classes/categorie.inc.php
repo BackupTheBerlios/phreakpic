@@ -287,8 +287,10 @@ class categorie
 	{
 		//if the object is already in the db it is updated by the changes made to this object, otherwise a new db entry is made
 		global $db,$config_vars;
+		
 		if (!isset($this->id))
 		{
+		
 			if ($this->is_serie===false)
 			{
 				$is_serie=0;
@@ -297,6 +299,7 @@ class categorie
 			{
 				$is_serie=1;
 			}
+			
 			
 			// this is object is not yet in the datebase, make a new entry
 			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id,is_serie,content_amount,description,child_content_amount,child_comments_amount)
@@ -308,7 +311,6 @@ class categorie
 			
 			$this->id = $db->sql_nextid();
 			return OP_SUCCESSFUL;
-			
 
 			
 		}
@@ -446,7 +448,6 @@ class categorie
 	{
 		global $userdata;
 		
-		
 		// get objekt for the parent cat
 		$parent = new categorie();
 		if ($parent->generate_from_id($new_parent_id) == OP_SUCCESSFUL)
@@ -455,7 +456,7 @@ class categorie
 			if (check_cat_action_allowed($parent->catgroup_id,$userdata['user_id'],'cat_add'))
 			{
 				// if this categoris is already in the db you also need move rights
-				if (isset($this->id) and (!check_car_action_allowed($this->catgroup_id,$userdata['user_id'],'move')))
+				if (isset($this->id) and (!check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'move')))
 				{
 					return OP_NP_MISSING_CAT_MOVE;
 				}
