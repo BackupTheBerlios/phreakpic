@@ -14,36 +14,11 @@ session_start();
 stop_view($HTTP_SESSION_VARS['view_start'],$HTTP_SESSION_VARS['view_content_id']);
 $HTTP_SESSION_VARS['view_start'] = 0;
 $HTTP_SESSION_VARS['view_content_id'] = 0;
-/*
-// Comments
-if ($mode == "add")
-{
-	// add a new comment
-	$comment = new content_comment();
-	$comment->set_feedback($comment_text);
-	$comment->set_topic($topic);
-	$comment->set_user_id($userdata['user_id']);
-	$comment->set_owner_id($content_id);
-	$comment->set_parent_id($parent_id);
-	$comment->commit();
-	
-	
-	
-}
 
-if ($mode == 'edit_comment')
-{
-	$comment = new content_comment();
-	$comment->generate_from_id($HTTP_POST_VARS['parent_id']);
-	$comment->set_feedback($HTTP_POST_VARS['comment_text']);
-	$comment->set_topic($HTTP_POST_VARS['topic']);
-	$comment->set_changed_count($comment->get_changed_count()+1);
-	$comment->set_last_changed_date(date("Y-m-d H:i:s"));
-	$comment->commit();	
-}*/
 
+
+// proceed comments
 $comment_type='content';
-
 include ('includes/proceed_comment.inc.php');
 
 
@@ -57,10 +32,28 @@ if (!is_object($content))
 
 
 
+// if there is no cat_id assigned take the first cat of the content
+if (!is_integer($cat_id))
+{
+	$ids=$content->get_cat_ids();
+	$cat_id=$ids[0];
+}
 
 
-//get previous and next content and display the thumbnail if aviable
-$surrounding_content = $content->get_surrounding_content($cat_id);
+
+//get previous and next content and display the thumbnail if aviable 
+
+// $surrounding_content = $content->get_surrounding_content($cat_id);
+for ($i=0;$i<sizeof($HTTP_SESSION_VARS['contents']);$i++)
+{
+	if ($HTTP_SESSION_VARS['contents'][$i]->get_id() == $content_id)
+	{
+		$surrounding_content['next']=$HTTP_SESSION_VARS['contents'][$i+1];
+		$surrounding_content['prev']=$HTTP_SESSION_VARS['contents'][$i-1];
+	}
+}
+
+
 if (is_object($surrounding_content['prev']))
 {
 	$smarty->assign('is_prev_content', true);
@@ -266,6 +259,8 @@ $smarty->assign('current_rating', $content->get_current_rating());
 $smarty->assign('cat_id', $cat_id);
 $smarty->assign('redirect', PHREAKPIC_PATH . 'view_content.php');
 
+//assign link back to thumbs;
+$smarty->assign('thumb_link',$HTTP_SESSION_VARS['thumb_link']);
 
 
 //$smarty->assign('content_size',$content->get_content_size()); //thats the height and width of the object...
