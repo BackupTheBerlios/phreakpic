@@ -105,7 +105,7 @@ function get_content_of_cat($cat_id,$start=-1,$anzahl=-1,$viewable_amount=0)
 		}
 		
 	}
-	 
+
 	 
 	
 	return $objarray;
@@ -141,33 +141,37 @@ function get_content_object_from_id($id)
 {
 	// returns an object for the content with id == $id
 	global $db,$config_vars,$userdata,$filetypes;
-	
+
 	// get  content
-	
+
 	$uncontent = new album_content();
 	$uncontent->generate_from_id($id);
-	
+
 	// check if user has view perms to that content
-	
+
 	if (check_content_action_allowed($uncontent->get_contentgroup_id(),$userdata['user_id'],'view'))
 	{
 		$objtyp = $filetypes[getext($uncontent->file)];
 		if (isset($objtyp))
 		{
 			$incontent = new $objtyp;
-			
-			
+
+
 			//this sucks (additional sql query) but its ok for now
+
 			$incontent->generate_from_id($id);
 		}
-		
+		else
+		{
+			// unsupported filetype
+		}
 		return $incontent;
 	}
 	else
 	{
 		return OP_MISSING_VIEW;
 	}
-	
+
 }
 
 function get_content_from_row($row)
@@ -180,8 +184,8 @@ function get_content_from_row($row)
 		if ($contentobj->generate_from_row($row) != OP_SUCCESSFUL)
 		{
 			return OP_FAILED;
+
 		}
-	
 		return $contentobj;
 	}
 	return OP_FAILED;
@@ -234,7 +238,7 @@ function get_contentgroups_data_where_perm($data,$perm)
 {
 	// returns an indexed array containing all fields speicfied in $data in an assoc array where user has permission $perm
 	
-	global $db,$config_vars,$userdata;	
+	global $db,$config_vars,$userdata;
 
 	$where = get_allowed_contentgroups_where($userdata['user_id'],$perm,'id');
 	$sql = "select $data from {$config_vars['table_prefix']}groups where $where";
@@ -252,7 +256,7 @@ function get_contentgroups_data_where_perm($data,$perm)
 function get_users_data($data)
 {
 	// returns an indexed array containing all fields speicfied in $data in an assoc array 
-	
+
 	global $db,$config_vars,$userdata;	
 
 	
@@ -356,10 +360,10 @@ function add_dir_to_cat($dir,$cat_id, $contentgroup_id, $name_mode = GENERATE_NA
 	{
 		$dir_and_file = $dir . '/' . $unsorted_files[$i];
 		
-		
+
 		
 		// generate a new album_content obj
-		
+
 		$content = new $filetypes[getext($unsorted_files[$i])];
 		//if the name of the picture should be the filename, get it and cutoff the dateiendung	
 		if ($name_mode == GENERATE_NAMES)
@@ -375,7 +379,7 @@ function add_dir_to_cat($dir,$cat_id, $contentgroup_id, $name_mode = GENERATE_NA
 		$content->add_to_cat($cat_id);
 		$content->set_file($dir_and_file);
 		$content->set_contentgroup_id($contentgroup_id);
-		
+
 		$content->commit();
 		
 	}
@@ -386,7 +390,7 @@ function add_dir_parsed($dir,$group_id,$parent_id=-1)
 {
 	// Add all pictures under the Directory $dir to categories and series depending on the relativ path to $dir
 	global $db,$config_vars,$filetypes;
-	
+
 	if ($parent_id == -1)
 	{
 		$parent_id = $config_vars['root_categorie'];
@@ -394,62 +398,42 @@ function add_dir_parsed($dir,$group_id,$parent_id=-1)
 
 	$dir_handle = opendir($dir);
 	while ($file = readdir ($dir_handle))
-	{	
-		
+	{
+
 		if (($file != ".") && ($file != ".."))
 		{
 			$dir_and_file = $dir . '/' . $file;
 			if (isset($filetypes[getext($file)]))
-			{	
-			
+			{
+
 				// $file is content
 				// generate a new album_content obj
-				
-				
+
+
 				add_content($file,$dir_and_file,getfile($file),$parent_id,0,$group_id);
 
 			}
 			elseif (is_dir($dir_and_file))
 			{
-				
+
 				//file is a sub dir
-				if (strpos($file,"cat_") === 0) // 3 = for zusätzliche typen gleicheit
+				$cat = new categorie();
+				$cat->set_name($file);
+				$cat->set_parent_id($parent_id);
+				$cat->fill_up();
+				$cat->set_catgroup_id($group_id);
+				if (!isset($cat->id))
 				{
-				// subdir cat
-					$cat = new categorie();
-					$cat->set_name(substr($file,4));
-					$cat->set_parent_id($parent_id);
-					$cat->fill_up();
-					$cat->set_catgroup_id($group_id);
-					if (!isset($cat->id))
-					{
-					
-						$cat->commit();
-					}
-					add_dir_parsed($dir.'/'.$file,$group_id,$cat->get_id());
+					$cat->commit();
 				}
-				elseif (strpos($file,"serie_") === 0)
-				{
-					$cat = new categorie();
-					$cat->set_name(substr($file,6));
-					$cat->set_parent_id($parent_id);
-					$cat->set_is_serie(1);
-					$cat->fill_up();
-					
-					if (!isset($cat->id))
-					{
-					
-						$cat->commit();
-					}
-					add_dir_parsed($dir.'/'.$file,$group_id,$cat->get_id());
-				// subdir serie
-				}
+				add_dir_parsed($dir.'/'.$file,$group_id,$cat->get_id());
+
 			}
-		
-			
+
+
 		}
 	}
-	
+
 	closedir($dir_handle);
 
 }
