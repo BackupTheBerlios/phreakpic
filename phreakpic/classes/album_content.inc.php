@@ -251,28 +251,26 @@ class album_content
 			WHERE ($auth_where) and 
 				(content.id = content_in_cat.content_id) and (content_in_cat.cat_id = $cat_id) 
 			ORDER BY content_in_cat.place_in_cat";
-		
-		
-  
-  
-  
+
  		if (!$result = $db->sql_query($sql))
  		{
  			message_die(GENERAL_ERROR, "Couldnt get data of the of the content in the cat", '', __LINE__, __FILE__, $sql);
  		}
-
+		$objarray['place']=0;
 		while ($row = $db->sql_fetchrow($result))
 		{
 			if ($row['id'] == $this->id)
 			{
 				$objarray['prev'] = get_content_from_row($lastrow);
 				$objarray['next'] = get_content_from_row($db->sql_fetchrow($result));
+
 				return $objarray;
 			}
+			$objarray['place']++;
 			$lastrow = $row;
 		}
-		
 	}
+	
 
 	function generate_thumb($thumb_size = '0')
 	{
