@@ -11,11 +11,11 @@ function get_cats_of_cat($parent_id)
 	global $db,$config_vars,$userdata;
 
 	// get the sql where to limit the query to categories which the user is allowed to view
-	$auth_where=get_allowed_catgroups_where($userdata['user_id'],"view");
+	$auth_where=get_allowed_catgroups_where($userdata['user_id'],'view');
 
-	$sql = "SELECT * FROM " . $config_vars['table_prefix'] . "cats WHERE (parent_id = '$parent_id') and $auth_where";
+	$sql = "SELECT * FROM " . $config_vars['table_prefix'] . "cats WHERE (parent_id = '$parent_id') and ($auth_where)";
 
-	if (!$result = $db->query($sql))
+	if (!$result = $db->sql_query($sql))
 	{
 	message_die(GENERAL_ERROR, "Konnte Kategorie nicht auswählen", '', __LINE__, __FILE__, $sql);
 	}
@@ -123,26 +123,27 @@ function get_content_from_sql($sql_where_clause)
 function get_content_object_from_id($id)
 {
 	// returns an object for the content with id == $id
-	global $db,$config_vars;
+	global $db,$config_vars,$userdata,$filetypes;
 	
 	// get  content
 	
-	$uncontent = new content();
+	$uncontent = new album_content();
 	$uncontent->generate_from_id($id);
 	
 	// check if user has view perms to that content
 	
-	if (check_content_action_allowed($uncontent,$this->get_contentgroup_id(),'view'))
+	if (check_content_action_allowed($uncontent->get_contentgroup_id(),$userdata['user_id'],'view'))
 	{
 	
 	
-		$objtyp = $filetypes[$getext($uncontent->file)];
+		$objtyp = $filetypes[getext($uncontent->file)];
 		if (isset($objtyp))
 		{
 			$incontent = new $objtyp;
 			//this sucks (additional sql query) but its ok for now
-			$inconten->generate_fom_id($id);
+			$incontent->generate_from_id($id);
 		}
+		
 		return $incontent;
 	}
 	else
