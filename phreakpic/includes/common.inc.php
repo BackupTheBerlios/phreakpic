@@ -4,8 +4,19 @@ function getmicrotime(){
     return ((float)$usec + (float)$sec); 
     } 
 $start_time = getmicrotime();
+
+
+set_magic_quotes_runtime(0);
+
 include_once(ROOT_PATH . 'config.inc.php'); //have to be before phpbb.inc.php because some vars are needed
+
+// save http_get and post vars because phpbb addslashes them and we dont want that
+$GET=$HTTP_GET_VARS;
+$POST=$HTTP_POST_VARS;
 include_once(ROOT_PATH . 'includes/phpbb.inc.php');
+$HTTP_GET_VARS=$GET;
+$HTTP_POST_VARS=$POST;
+
 
 if (SQL_LAYER=="mysql")
 {

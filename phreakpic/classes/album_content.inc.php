@@ -159,6 +159,8 @@ class album_content
 	function edit_content($vals,$cat_id)
 	{
 		// name
+		
+		
 		if ($this->set_name($vals['name']) != OP_SUCCESSFUL)
 		{
 			die('Konnte Name '.$vals['name'].' von '.$this->id.' nicht setzen ('.$i);
@@ -591,9 +593,6 @@ class album_content
 		}
 		
 		
-		
-		
-		
 		// check if already in db)
 		if (isset($this->id))
 		{
@@ -603,7 +602,7 @@ class album_content
 			$sql = "UPDATE " . $config_vars['table_prefix'] . "content
 				SET	
 					file = '$this->file',
-					name = '$this->name',
+					name = '" . database_encode($this->name) . "',
 					views = '$this->views',
 					current_rating = '$this->current_rating', 
 					creation_date = '$this->creation_date', 
@@ -636,7 +635,7 @@ class album_content
 			//using a shorter version of boolean transmission for locked
 			$sql = "INSERT INTO " . $config_vars['table_prefix'] . "content
 				(file,name,views,current_rating,creation_date,contentgroup_id,locked,width,height,comments_amount)
-				VALUES ('$this->file', '$this->name', '$this->views', '$this->current_rating', '$this->creation_date', '$this->contentgroup_id', '" . (($this->locked) ? (
+				VALUES ('$this->file', '" . database_encode($this->name) . "', '$this->views', '$this->current_rating', '$this->creation_date', '$this->contentgroup_id', '" . (($this->locked) ? (
 				'1') : ('0')) . "','$this->width','$this->height','$this->comments_amount')";
 			if (!$result = $db->sql_query($sql))
 			{

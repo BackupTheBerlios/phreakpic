@@ -7,6 +7,12 @@ DEFINE('AUTH_ERROR','2');
 DEFINE('FILE_ERROR','3');
 DEFINE('GENERAL_ERROR','3');
 
+function database_encode($string)
+{
+	// encodes a string for storing in the db
+	return str_replace("\'", "''", (addslashes($string)));
+}
+
 
 function error_report($type, $ident , $line, $file,$sql='')
 {
@@ -515,7 +521,7 @@ function make_comments($comment, $level,$editable)
 	$comment_infos['creation_date'] = date($userdata['user_dateformat'],strtotime($comment->get_creation_date()));
 	$comment_infos['changed_count'] = $comment->get_changed_count();
 	$comment_infos['last_changed_date'] = date($userdata['user_dateformat'],strtotime($comment->get_last_changed_date()));
-	$comment_infos['poster_name'] = $comment->get_poster_name();
+	$comment_infos['poster_name'] = htmlspecialchars($comment->get_poster_name());
 	$comment_infos['comment_has_been_changed'] = sprintf($lang['comment_has_been_changed'],$comment_infos['changed_count'],$comment_infos['last_changed_date']);
 	if (($comment_userdata['user_id'] == $userdata['user_id']) or ($editable))
 	{

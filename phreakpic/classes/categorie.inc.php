@@ -196,13 +196,13 @@ class categorie
 				{
 					// check if there is content to be removed
 					$content = get_content_of_cat($this->id);
-					
 					if (is_array($content))
 					{
 					
 						// check is user is allowed to do that
 						if (check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'content_remove'))
 						{	
+						
 							// there is content to be removed
 							for ($i=0; $i<sizeof($content); $i++)
 							{
@@ -303,7 +303,7 @@ class categorie
 			
 			// this is object is not yet in the datebase, make a new entry
 			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id,is_serie,content_amount,description,child_content_amount,child_comments_amount)
-				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$is_serie', '$this->content_amount', '$this->description', '$this->child_content_amount', '$this->child_comments_amount')";
+				VALUES ('" . database_encode($this->name) . "', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$is_serie', '$this->content_amount', '" . database_encode($this->description) . "', '$this->child_content_amount', '$this->child_comments_amount')";
 			if (!$result = $db->sql_query($sql))
 			{
 				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
@@ -318,13 +318,13 @@ class categorie
 		{
 			// object is already in the database just du an update
 			$sql = 'UPDATE ' . $config_vars['table_prefix'] . "cats 
-				SET 	name = '$this->name', 
+				SET 	name = '". database_encode($this->name) . "', 
 					current_rating = '$this->current_rating', 
 					parent_id = '$this->parent_id', 
 					catgroup_id = '$this->catgroup_id',
 					is_serie = '$this->is_serie',
 					content_amount = '$this->content_amount',
-					description = '$this->description',
+					description = '" . database_encode($this->description) . "',
 					child_content_amount = '$this->child_content_amount',
 					child_comments_amount = '$this->child_comments_amount'
 				WHERE id like $this->id";

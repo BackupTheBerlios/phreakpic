@@ -192,7 +192,7 @@ class comment extends user_feedback
 			// this is object is not yet in the datebase, make a new entry
 			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . "s 
 				(owner_id, feedback, user_id, creation_date, changed_count, parent_id, topic, last_changed_date, poster_name)
-				VALUES ('$this->owner_id', '$this->feedback', '$this->user_id', '$this->creation_date', '$this->changed_count', '$this->parent_id', '$this->topic', '$this->last_changed_date', '$this->poster_name')";
+				VALUES ('$this->owner_id', '" . database_encode($this->feedback) . "', '$this->user_id', '$this->creation_date', '$this->changed_count', '$this->parent_id', '" . database_encode($this->topic) . "', '$this->last_changed_date', '" . database_encode($this->poster_name) . "')";
 				
 			if (!$result = $db->sql_query($sql))
 			{
@@ -212,14 +212,14 @@ class comment extends user_feedback
 			// object is already in the database just du an update
 			$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . "s  
 				SET	owner_id = '$this->owner_id',
-					feedback = '" . addslashes($this->feedback) . "',
+					feedback = '" . database_encode($this->feedback) . "',
 					user_id = '$this->user_id',
 					creation_date = '$this->creation_date',
 					changed_count = '$this->changed_count', 
 					parent_id = '$this->parent_id', 
-					topic = '$this->topic',
+					topic = '" . database_encode($this->topic) . "',
 					last_changed_date = '$this->last_changed_date',
-					poster_name = '$this->poster_name'
+					poster_name = '" . database_encode($this->poster_name) . "'
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
