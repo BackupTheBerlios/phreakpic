@@ -37,6 +37,7 @@ X custom fields
   - additional parameters (allow arrays, get selectable data from an sql,...)
 	- deaktivierung einzelner felder
 	- Wiki ability ?
+	- different types dropdown, usw
 - Fix database out of sync bugs (content and comment)
 - Rename dir when rename cat
 - finish new error handling
@@ -60,5 +61,7 @@ soon future:
 
 
 future:
+- maybe make template files for every content type, which contain the code to view their thumbs
+- maybe make categories a sub-class of album-content, maybe also merge all content and cat tables..
 - clean up file names and locations
 - movie support
