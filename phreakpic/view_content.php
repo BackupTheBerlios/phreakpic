@@ -128,9 +128,12 @@ if ($content->check_perm('edit_meta_data'))
 	
 	if ((isset($HTTP_POST_VARS['edit_meta_add']) or (isset($HTTP_POST_VARS['edit_meta']))))
 	{
-		foreach($HTTP_POST_VARS['set_meta_data'] as $id=>$value)
-		{
-			$meta->set_meta_value($id,$value);
+		if (is_array($HTTP_POST_VARS['set_meta_data']))
+		{	
+			foreach($HTTP_POST_VARS['set_meta_data'] as $id=>$value)
+			{
+				$meta->set_meta_value($id,$value);
+			}
 		}
 		
 		foreach($HTTP_POST_VARS['new_meta_data'] as $field_id=>$value)

@@ -85,7 +85,6 @@ class content_meta_data extends phreakpic_base
 			{
 				$sql = "INSERT INTO " . $config_vars['table_prefix'] . "content_meta_data
 				(meta_field_id,content_id,data) VALUES ('{$meta['meta_field_id']}','{$meta['content_id']}','{$meta['data']}')";
-				echo $sql;
 				if (!$result = $db->sql_query($sql))
 				{
 					error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
@@ -136,11 +135,14 @@ class content_meta_data extends phreakpic_base
 	
 	function get_meta_data()
 	{
-		foreach($this->meta_data as $row)
+		if (is_array($this->meta_data))
 		{
-			$meta_data[$row['meta_field_id']][$row['id']]=$row['data'];
+			foreach($this->meta_data as $row)
+			{
+				$meta_data[$row['meta_field_id']][$row['id']]=$row['data'];
+			}
+			return $meta_data;
 		}
-		return $meta_data;
 	}
 	
 }
