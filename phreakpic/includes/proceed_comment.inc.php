@@ -4,7 +4,7 @@ $class=$comment_type."_comment";
 $id=$comment_type."_id";
 
 
-if ($HTTP_POST_VARS['mode'] == 'edit_comments')
+if ($HTTP_GET_VARS['mode'] == 'edit_comments')
 {
 	$comment_edit=true;
 	$smarty->assign('mode','edit_comments');
