@@ -69,11 +69,12 @@ function get_content_of_cat($cat_id)
 	while ($row = $db->sql_fetchrow($result))
 	{
 		// creating objects for every content
-		if (isset($objtyp = $filetypes[$getext($row['file'])])
+		$objtyp = $filetypes[$getext($row['file'])];
+		if (isset($objtyp))
 		{
 			$contentobj = new $objtyp;
 		}
-		$objarray[]=contentobj
+		$objarray[]=contentobj;
 	}
 	
 	return $objarray;
@@ -104,6 +105,37 @@ function get_content_from_sql($sql_where_clause, $requested_fields)
 
 }
 
+function get_content_object_from_id($id)
+{
+	// returns an object for the content with id == $id
+	global $db,$config_vars;
+	
+	// get  content
+	
+	$uncontent = new content();
+	$uncontent->generate_from_id($id);
+	
+	// check if user has view perms to that content
+	
+	if (check_content_action_allowed($uncontent,$this->get_contentgroup_id(),'view'))
+	{
+	
+	
+		$objtyp = $filetypes[$getext($uncontent->file)];
+		if (isset($objtyp))
+		{
+			$incontent = new $objtyp;
+			//this sucks (additional sql query) but its ok for no 
+			$inconten->generate_fom_id($id);
+		}
+		return $incontent;
+	}
+	else
+	{
+		return OP_MISSING_VIEW;
+	}
+	
+}
 
 
 
@@ -112,48 +144,47 @@ function get_content_from_sql($sql_where_clause, $requested_fields)
 
 function add_dir_to_cat($dir,$cat_id, $name_mode = GENERATE_NAMES)
 {
-   // Adds all pictures in the Directory $dir into the Categorie with the id $cat_id. If wanted it makes the names of the pics from the filenames
-   global $db;
-   global $config_vars;
+	// Adds all pictures in the Directory $dir into the Categorie with the id $cat_id. If wanted it makes the names of the pics from the filenames
+	global $db;
+	global $config_vars;
 
-   $dir_handle=opendir($dir);
+	$dir_handle=opendir($dir);
 
-   //HIER NOCH CHECKEN WAS PASSIERT wenn $dir kein gültiges Verzeiczhnis ist
+	//HIER NOCH CHECKEN WAS PASSIERT wenn $dir kein gültiges Verzeiczhnis ist
 
 
 	while ($file = readdir ($dir_handle))
-   {
-   	if (($file != "." && $file != "..") and ($file == "*.jpg" or $file == "*.jpeg" or $file == "*.jpe")) // WELCHE DATEIENDUNGEN werden benutzt? Soll es einstellbar sein? Wenn ja, wo?
-      {
-      	$unsorted_files[] = $file;
-         $array_length++;
-      }
-   }
+	{
+		if (($file != "." && $file != "..") and ($file == "*.jpg" or $file == "*.jpeg" or $file == "*.jpe")) // WELCHE DATEIENDUNGEN werden benutzt? Soll es einstellbar sein? Wenn ja, wo?
+		{
+			$unsorted_files[] = $file;
+			$array_length++;
+		}
+	}
 
-   sort
-   for ($j = 0; $j < $i; $j++)
-   {
-      	$dir_and_file = $dir . $file;
 
-         //if the name of the picture should be the filename, get it and cutoff the dateiendung
-         if ($name_mode == GENERATE_NAMES)
-         {
-         	$exploded_file = explode('.', $file);
-            $name = end($exploded_file);
-         }
-         else
-         {
-         	$name = '';
-         }
+	for ($j = 0; $j < $i; $j++)
+	{
+		$dir_and_file = $dir . $file;
 
-         $sql = "INSERT INTO " . $config_vars['table_prefix'] . "pics (name, file, cat_id, creation_date)
-         	VALUES ('$name', '$dir_and_file', '$cat_id', '$creation_date')";
+		//if the name of the picture should be the filename, get it and cutoff the dateiendung
+		if ($name_mode == GENERATE_NAMES)
+		{
+			$exploded_file = explode('.', $file);
+			$name = end($exploded_file);
+		}
+		else
+		{
+			$name = '';
+		}
 
-         if (!$result = $db->query($sql))
-   		{
-			   message_die(GENERAL_ERROR, "Konnte das Bild nicht hinzufügen", '', __LINE__, __FILE__, $sql);
-		   }
-    	}
+		$sql = "INSERT INTO " . $config_vars['table_prefix'] . "pics (name, file, cat_id, creation_date)
+			VALUES ('$name', '$dir_and_file', '$cat_id', '$creation_date')";
+
+		if (!$result = $db->query($sql))
+		{
+			message_die(GENERAL_ERROR, "Konnte das Bild nicht hinzufügen", '', __LINE__, __FILE__, $sql);
+		}
 	}
 	closedir($dir_handle);
 }
