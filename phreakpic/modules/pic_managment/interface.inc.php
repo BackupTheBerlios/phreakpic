@@ -93,7 +93,11 @@ function get_content_of_cat($cat_id)
 		
 		// delete place_in_cat from $row
 		unset($row['place_in_cat']);
-		$objarray[]=get_content_from_row($row);
+		$content=get_content_from_row($row);
+		if (is_object($content))
+		{
+			$objarray[]=$content;
+		}
 		
 	}
 	
