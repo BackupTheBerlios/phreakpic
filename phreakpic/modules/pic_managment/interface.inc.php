@@ -75,6 +75,17 @@ function get_content_of_cat($cat_id)
 	while ($row = $db->sql_fetchrow($result))
 	{
 		// creating objects for every content
+/*		$objtyp = $filetypes[getext($row['file'])];
+		if (isset($objtyp))
+		{
+			$contentobj = new $objtyp;
+			if ($contentobj->generate_from_row($row) != OP_SUCCESSFUL)
+			{
+				return OP_FAILED;
+			}
+		}
+		
+		$objarray[]=$contentobj;*/
 		
 		$objarray[]=get_content_from_row($row);
 		
