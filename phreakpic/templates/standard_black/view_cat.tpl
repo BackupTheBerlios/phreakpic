@@ -61,6 +61,27 @@
 <!--{include file="$template_name/view_thumbs.tpl"}-->
 
 
+<br>
+
+<!--{if $first_content  != 0}-->
+	<a href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$first_content_prev}--><!--{$sid}-->">Prev</a>
+<!--{/if}-->
+
+<!--{section name=nav_page loop=$cat_nav_links}-->
+	<!--{if $cat_nav_links[nav_page] == $first_content}-->
+		<b><!--{$smarty.section.nav_page.index}--></b>
+	<!--{else}-->
+		<a href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$cat_nav_links[nav_page]}--><!--{$sid}-->"><!--{$smarty.section.nav_page.index}--></a>
+	<!--{/if}-->
+<!--{/section}-->
+
+<!--{if $first_content_next != $cat_nav_links[0]}-->
+	<a href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$first_content_next}--><!--{$sid}-->">Next</a>
+<!--{/if}-->
+
+
+
+
 
 <!--{if  ($allow_content_add == true) and ($mode == edit)}-->
 	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="add_content" id="add_content" enctype="multipart/form-data">
