@@ -1,5 +1,6 @@
 <?php
 require_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
+require_once(ROOT_PATH . 'modules/pic_managment/interface.inc.php');
 
 class categorie
 {
@@ -10,6 +11,7 @@ class categorie
 	var $current_rating=0;
 	var $is_serie=false;
 	var $content_amount=0;
+	var $child_content_amount=0;
 	var $description;
 	
 	function categorie()
@@ -293,8 +295,8 @@ class categorie
 			}
 			
 			// this is object is not yet in the datebase, make a new entry
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id,is_serie,content_amount,description)
-				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$is_serie', '$this->content_amount', '$this->description')";
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id,is_serie,content_amount,description,child_content_amount)
+				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$is_serie', '$this->content_amount', '$this->description', '$this->child_content_amount')";
 			if (!$result = $db->sql_query($sql))
 			{
 				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
@@ -316,12 +318,25 @@ class categorie
 					catgroup_id = '$this->catgroup_id',
 					is_serie = '$this->is_serie',
 					content_amount = '$this->content_amount',
-					description = '$this->description'
+					description = '$this->description',
+					child_content_amount = '$this->child_content_amount'
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
 				error_report(SQL_ERROR, 'commmit' , __LINE__, __FILE__,$sql);
 			}
+			
+			
+			// recalc child content_amount
+			
+			if ($this->get_id() != $config_vars['root_categorie'])
+			{	
+				$cat = new categorie();
+				$cat->generate_from_id($this->get_parent_id());
+				$cat->set_child_content_amount($cat->calc_child_content_amount());
+				$cat->commit();
+			}
+			
 			return OP_SUCCESSFUL;
 
 			
@@ -478,7 +493,29 @@ class categorie
 		return $this->content_amount;
 	}
 	
+	function set_content_amount($new_content_amount)
+	{
+		$this->content_amount = $new_content_amount;
+		$this->set_child_content_amount($this->calc_child_content_amount());
+		return OP_SUCCESSFUL;
+	}
+	
 	function get_child_content_amount()
+	{
+		return $this->child_content_amount;
+	}
+	
+	function set_child_content_amount($val)
+	{
+		global $config_vars;
+		$this->child_content_amount = $val;
+		
+		return OP_SUCCSESSFUL;
+	}
+	
+	
+	
+	function calc_child_content_amount()
 	{
 		global $config_vars;
 		$amount=$this->content_amount;
@@ -490,7 +527,7 @@ class categorie
 				if ($value->get_id() != $config_vars['root_categorie'])
 				{
 					
-					$amount+=$value->get_child_content_amount();
+					$amount+=$value->calc_child_content_amount();
 				}
 			}
 		}
@@ -500,11 +537,7 @@ class categorie
 		
 	}
 	
-	function set_content_amount($new_content_amount)
-	{
-		$this->content_amount = $new_content_amount;
-		return OP_SUCCESSFUL;
-	}
+	
 
 	
 	function get_comments_amount()
