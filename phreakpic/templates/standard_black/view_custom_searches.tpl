@@ -25,7 +25,7 @@
 	<td>
 		<!--{$fields[x][y].descr}-->	
 		<!--{if ($fields[x][y].type == 'INPUT')}-->
-			<input name="returns[<!--{$fields[x][y].name}-->][]" value="<!--{$fields[x][y].value}-->" type="text" size="20">	
+			<input name="returns[<!--{$fields[x][y].name}-->][]" value="<!--{$fields[x][y].value}-->" type="text" size="20" onfocus="keyoff()" onblur="keyon()">	
 		<!--{/if}-->
 		
 		<!--{if (($fields[x][y].type == 'DROPDOWN') or ($fields[x][y].type == 'OPERATOR'))}-->
