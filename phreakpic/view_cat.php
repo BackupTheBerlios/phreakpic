@@ -34,20 +34,61 @@ else
 }
 
 
-
 //Get the contents of the actual cat and their thumbnails plus information like
+$category = new categorie;
+$category->generate_from_id($cat_id);
 $contents = get_content_of_cat($cat_id);
 if (is_array($contents))
 {
+	//editing the contents
+	if ((isset($submit)) and ($HTTP_POST_VARS['mode'] == 'edited'))
+	{
+		for ($i = 0; $i < sizeof($HTTP_POST_VARS['name']); $i++)
+		{
+			if ($contents[$HTTP_POST_VARS['place_in_array'][$i]]->set_name($HTTP_POST_VARS['name'][$i]) != OP_SUCCESSFUL)
+			{
+				die('Konnte Name '.$HTTP_POST_VARS['name'][$i].' von '.$HTTP_POST_VARS['content_id'][$i].' nicht setzen ('.$i);
+			}
+			if ($HTTP_POST_VARS['lock'][$HTTP_POST_VARS['content_id'][$i]] == 'true')
+			{
+				if ($contents[$HTTP_POST_VARS['place_in_array'][$i]]->lock() != OP_SUCCESSFUL)
+				{
+					die('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht locken');
+				}	
+			}
+			if ($HTTP_POST_VARS['delete'][$HTTP_POST_VARS['content_id'][$i]] == 'true')
+			{
+				if ($contents[$HTTP_POST_VARS['place_in_array'][$i]]->remove_from_cat($cat_id) != OP_SUCCESSFUL)
+				{
+					die ('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht löschen');
+				}
+			}
+			$contents[$HTTP_POST_VARS['place_in_array'][$i]]->commit();
+		}
+		$smarty->assign('mode','view');
+		$smarty->assign('edited',true);
+		$contents = get_content_of_cat($cat_id);
+	}
+	
+	
+	//show thumbnails and get some infos about the content
 	for ($i = 1; $i <= sizeof($contents); $i++)
 	{
 		$thumb_infos = $contents[$i-1]->get_thumb();
+		if ($mode == 'edit')
+		{
+			$smarty->assign('mode','edit');
+			$thumb_infos['allow_edit'] = $contents[$i-1]->check_perm('edit');
+			$thumb_infos['allow_unlink'] = check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'content_remove');
+			$thumb_infos['place_in_array'] = $i-1;
+		}
 		$array_row[] = $thumb_infos;
 		if ($i % $config_vars['thumb_table_cols'] == 0)
 		{
 			$thumbs[]=$array_row;
 			unset($array_row);
 		}
+		
 	}
 	$thumbs[]=$array_row;
 	$smarty->assign('thumbs',$thumbs);
@@ -59,10 +100,24 @@ $smarty->assign('nav_string', build_nav_string($cat_id));
 $smarty->assign('lang',$lang);
 $smarty->assign('title', 'Testtitel');
 
+
+
+
 //thats for the index.php who needs another template file. index.php just set the $template_file to another value and includes this file
 if (!isset($template_file))
 {
 	$template_file = 'view_cat';
 }
+
+
+$end_time = getmicrotime();
+$execution_time = $end_time - $start_time;
+
 $smarty->display($userdata['photo_user_template'].'/'.$template_file.'.tpl');
+$template_end_time = getmicrotime();
+$template_execution_time = $template_end_time - $end_time;
+echo("execution_time: $execution_time seconds<br>");
+echo("template_execution_time: $template_execution_time seconds<br>");
+$execution_time = $end_time - $start_time + $template_execution_time;
+echo("gesamt execution_time: $execution_time seconds<br>");	
 ?>
