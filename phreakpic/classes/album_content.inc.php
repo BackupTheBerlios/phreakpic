@@ -26,6 +26,8 @@ class album_content
 	var $creation_date;
 	var $contentgroup_id;
 	var $locked;
+	
+	var $size;
 
 	function album_content() //Constructor
 	{
@@ -141,10 +143,6 @@ class album_content
 				// move content in the deleted pics cat.
 				$cat_ids[] = $config_vars['deleted_content_cat'];
 			}
-			// now add them all again
-			$this->fill_content_in_cat();
-			
-			
 		}
 		else
 		{
@@ -158,11 +156,14 @@ class album_content
 			{
 				message_die(GENERAL_ERROR, "Konnte Objekt nicht commiten", '', __LINE__, __FILE__, $sql);
 			}
-
-				// add content to the cats	
-				$this->fill_content_in_cat();	
-
 		}
+		// add content to the cats	
+		$this->fill_content_in_cat();	
+		// move to the new calculated localtaion (may be the same)
+		$new_file=$this->generate_filename();
+		rename($this->file,$new_file);
+		$this->set_file($new_file); 
+		return OP_SUCESSFUL;
 	}
 	
 	
@@ -411,6 +412,32 @@ class album_content
 		if (!$result = $db->sql_query($sql))
 		{
 			message_die(GENERAL_ERROR, "Couldn't DELETE content_in_cat entrys", '', __LINE__, __FILE__, $sql);
+		}
+	}
+	
+	
+	function generate_filename()
+	{
+		global $congig_vars;
+		//check if content is already in a cat 
+		if (sizeof($this->cat_ids)>0)
+		{
+			$cat_obj = new categorie();
+			$cat_obj->generate_from_id($cat_ids[0]);
+			$path = $cat_obj->get_name();
+			while ($cat_obj->get_parent() != $config_vars['root_categorie'])
+			{
+				$old_cat_id=$cat_obj->get_id();
+				$cat_obj = new categorie();
+				$cat_obj->generate_from_id($old_cat_id);
+				$path = $cat_obj->get_name() . '/' . $path;
+			}
+			$path = $path . basename($this->file);
+			return $path;
+		}
+		else
+		{
+			return OP_CONTENT_NOT_IN_CAT;	
 		}
 	}
 
