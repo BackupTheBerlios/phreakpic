@@ -1,15 +1,16 @@
 Installation and Configuration
 
-Install & Configure PHPBB 2 (I will assume in this docu that you use /phpbb2)
+Install & Configure PHPBB 2 (I will assume in this docu that you install it to /phpbb2)
 
-Install Smarty (I will assume in this docu that you use /smarty)
+Install Smarty (I will assume in this docu that you install it to /smarty)
 
 Extract all files under your webbrowsers document root (I will assume in this docu that you use /phreakpic)
 
-DB Setup
-Create the tables in your db like described in /phreakpic/docs/db.dql
+Database Setup
+Create the tables in your db like described in /phreakpic/docs/db.sql
 This is an PhpMyAdmin dump of the db structure. So you can just execute the whole file in your db.
 All tables will have the prefix photo_ if you want to change this you have to edit the file.
+
 
 Configure PhreakPic
 Open /phreakpic/config.inc.php and edit the following options.
@@ -21,11 +22,11 @@ Only one setting is very important: The 'root_categorie'. We will come to this l
 
 Now create a content/cat and usergroups (you must be logged into phpBB2 with an user that has admin rights)
 Goto /phreakpic/admin/user_in_groups.php
-On top of the page you can create usergroups. Enter a name and describtion and press the submit button.
+On top of the page you can create usergroups. Enter a name and description and press the submit button.
 Now add your user the group.
 The table has 4 columns. In the first you select the usergroup where you want to change something. 
 Here you can also delete groups.
-The seccond show the users that are not in that group.
+The second show the users that are not in that group.
 In the third there are buttons to add or remove the selected user from the group
 And in the last are the users which are in this group
 
@@ -45,9 +46,9 @@ Goto /phreakpic/admin/auths.php?type=content
 This works exactly as the catgroups.
 
 Now the bit tricky part: Create the root categorie.
-Execute the following line in your db (change table_prefix if you have changed it before)
+Execute the following line in your db. Change table_prefix if you have changed it before (in uor case it is photo_).
 INSERT INTO photo_cats (id, name, current_rating, parent_id, catgroup_id, is_serie, content_amount, description) 
-		VALUES (0, 'Root Cat', 0,            0,          0,          '0',       0,         Description');
+		VALUES (0, 'Root Cat', 0,            0,          0,          '0',       0,         'Description');
 
 This creates the root categorie important is, that id and parent_id are the same. 
 For catgroup_id you should enter the id of you previously created catgroup. (Look in the db to find out)
