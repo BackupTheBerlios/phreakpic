@@ -12,7 +12,9 @@ X session id bei jedem link weitergeben
 X Add file to cat edit hinzufügen
 
 for beta relase:
-
+- rename cats
+- rename class auth in phreak_auth and maybe the others also
+- clean up requires and includes
 - handle comments when cat or content is deleted
 - handle auth when groups are deleted
 - use language files everywhere
