@@ -116,15 +116,21 @@ class categorie
 		
 	}
 	
-	function delete($mode,$mode_params=0)
+	function delete($mode,$mode_params=0,$content_removed = 0, $cats_removed = 0)
 	{
 		// deletes the categorie assigned with this object from the database
-		global $db,$config_vars;
+		global $db,$config_vars,$userdata;
+				
 		
 		if (isset($this->id))
 		{
+			$keep=false;
 			// check if user has permission to do that
-			if (check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'delete'))
+			$parent_cat = new categorie();
+			$parent_cat->generate_from_id($this->parent_id);
+			
+			
+			if (check_cat_action_allowed($parent_cat->get_catgroup_id(),$userdata['user_id'],'cat_remove'))
 			{			
 				if ($mode == CDM_MOVE_CONTENT)
 				{
@@ -138,17 +144,82 @@ class categorie
 				}
 				else
 				{
-					// check if user has delete right for all pictures in this categorie
+					// check if there is content to be removed
+					$content = get_content_of_cat($this->id);
+					
+					if (is_array($content))
+					{
+						// check is user is allowed to do that
+						if (check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'content_remove'))
+						{	
+							// there is content to be removed
+							for ($i=0; $i<sizeof($content); $i++)
+							{
+								if ($content[$i]->remove_from_cat($this->id) == OP_SUCCESSFUL)
+								{
+									$content_removed++;
+								}
+								else 
+								{
+									// not all content was removed do not delete this cat
+									$keep=true;
+								}
+								
+							}
+						}
+						else
+						{
+							$keep=true;
+						}
+					}
+					
+					// check if user is allowed th remove cats from this cat
+					$cats = get_cats_of_cat($this->id);
+					
+					
+					if (is_array($cats))
+					{
+						// there are cats to be removed
+						if (check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'cat_remove'))
+						{
+							
+							for ($i=0; $i<sizeof($cats); $i++)
+							{
+								if ($cats[$i]->delete($mode,$mode_params,$content_removed,$cats_removed) == OP_SUCCESSFUL)
+								{
+									$cats_removed++;
+								}
+								else 
+								{
+									// not all cats were removed do not delete this cat
+									
+								}
+								
+							}
+						}
+						else
+						{
+							$keep=true;
+						}
+					}
+					
 					
 					// delete content of the cat
 				}
-				$sql = 'DELETE FROM '. $config_vars['table_prefix'] . "where id like $this->id";
-				if (!$result = $db->sql_query($sql))
+				
+				if (!$keep)
 				{
-					message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
+					$sql = 'DELETE FROM '. $config_vars['table_prefix'] . "cats where id like $this->id";
+					if (!$result = $db->sql_query($sql))
+					{
+						message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
+					}
+					echo $sql."<br>";	
+					unset($this->id);
+					return OP_SUCCESSFUL;
 				}
-				unset($this->id);
-				return OP_SUCCESSFULL;
+				return OP_PARTLY_SUCCESSFULL;
+				
 			}
 			else
 			{
