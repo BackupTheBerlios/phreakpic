@@ -440,6 +440,20 @@ class categorie
 		$this->current_rating = $new_current_rating;
 		return OP_SUCCESSFUL;
 	}
+	
+	
+	function calc_content_amount()
+	{
+		global $db,$config_vars;
+		// calculates the content amount from content_in_cat
+		$sql = "SELECT count(cat_id) FROM {$config_vars['table_prefix']}content_in_cat where cat_id={$this->id}";
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Coudnt get content amount", '', __LINE__, __FILE__, $sql);
+		}
+		$row = $db->sql_fetchrow($result);
+		return $row[0];
+	}
 
 	function get_content_amount()
 	{
