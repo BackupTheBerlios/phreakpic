@@ -8,11 +8,31 @@ include_once('./includes/functions.inc.php');
 
 
 
+
 if (!isset($cat_id))
 {
 	$cat_id = $config_vars['root_categorie'];
 	$template_file = 'index';
 }
+
+
+// create new categorie 
+if (isset($HTTP_POST_VARS['newcat']))
+{
+	$new_cat = new categorie();
+	$new_cat->set_parent_id($cat_id);
+	$new_cat->set_name($HTTP_POST_VARS['cat_name']);
+	$new_cat->set_description($HTTP_POST_VARS['cat_describtion']);
+	if ($HTTP_POST_VARS['cat_is_serie'] == 'on')
+	{
+		$new_cat->set_is_serie(1);
+	}
+	$new_cat->set_catgroup_id($HTTP_POST_VARS['cat_group']);
+	$new_cat->commit();
+	
+}
+
+
 
 //get the cats in the actual cat and information about them
 $child_cats = get_cats_of_cat($cat_id);
@@ -26,9 +46,15 @@ if (isset($child_cats))
 		$child_cat_infos[$i]['description'] = $child_cats[$i]->get_description();
 		$child_cat_infos[$i]['content_amount'] = $child_cats[$i]->get_content_amount();
 		$child_cat_infos[$i]['current_rating'] = $child_cats[$i]->get_current_rating();
+		
+		// in edit mode check on which cats user has rights to remove cat
+		if ($mode='edit')
+		{
+		}
 	}
 	$smarty->assign('child_cat_infos',$child_cat_infos);
 	$smarty->assign('number_of_child_cats',$i);
+	
 }
 else
 {
@@ -36,16 +62,22 @@ else
 	$smarty->assign('number_of_child_cats',0);
 }
 
-
 //Get the contents of the actual cat and their thumbnails plus information like
 $category = new categorie;
 $category->generate_from_id($cat_id);
+
+// check is user is allowed to add a child cat
+$smarty->assign('allow_cat_add',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'cat_add'));
+if ($mode == 'edit')
+{
+	$smarty->assign('mode','edit');
+}
+
 
 $contents = get_content_of_cat($cat_id);
 
 if (is_array($contents))
 {
-
 	//editing the contents
 	if ((isset($submit)) and ($HTTP_POST_VARS['mode'] == 'edited'))
 	{
@@ -151,17 +183,22 @@ if (is_array($contents))
 	}
 	
 	
+
 	
 	//show thumbnails and get some infos about the content
 	for ($i = 1; $i <= sizeof($contents); $i++)
 	{
+	
 		$thumb_infos = $contents[$i-1]->get_thumb();
 		if ($mode == 'edit')
 		{
+		
+
+			
 			// check if user is allowed to unlink from thie cat
 			$smarty->assign('allow_content_remove',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'content_remove'));
 
-
+			
 
 			// Check if user has rights to add content to a cat
 			$add_to_cats = get_cats_data_where_perm('id,name','content_add');
@@ -172,7 +209,7 @@ if (is_array($contents))
 			}
 
 		
-			$smarty->assign('mode','edit');
+			
 			// check if user has edit perm to that content
 			$thumb_infos['allow_edit'] = $contents[$i-1]->check_perm('edit');
 			// check if user has delete perm to that content
@@ -195,9 +232,10 @@ if (is_array($contents))
 	}
 	$thumbs[]=$array_row;
 	$smarty->assign('thumbs',$thumbs);
-	$smarty->assign('cat_id',$cat_id);
 	$smarty->assign('is_content', true);
 }
+
+$smarty->assign('cat_id',$cat_id);
 
 // Comments
 if ($mode == "add")

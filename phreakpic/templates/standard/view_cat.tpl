@@ -36,10 +36,25 @@
 <!--{/if}-->
 
 
-<!--{if $is_content == true}-->
-<!--{if $mode == edit}-->
+<!--{$edit}-->
+<!--{if  ($allow_cat_add == true) and ($mode == edit)}-->
 	<form action="view_cat.php?cat_id=<!--{$cat_id}-->" method="post" name="edit_content" id="edit_content">
+	Add New Cat:
+	Name: <input name="cat_name" type="text" size="20">
+	catgroup: <input name="cat_group" type="text" size="5">
+	Is Serie: <input name="cat_is_serie" type="checkbox"><br>
+	Describtion: <textarea name="cat_describtion" cols="70" rows="5"></textarea>
+	<input name="newcat" type="submit" id="submit" value="Create">
+	</from>
 <!--{/if}-->
+
+
+
+
+<!--{if $is_content == true}-->
+	<!--{if $mode == edit}-->
+		<form action="view_cat.php?cat_id=<!--{$cat_id}-->" method="post" name="edit_content" id="edit_content">
+	<!--{/if}-->
 	<table border=1 align=center>
 		<!--{section name=thumb_cols loop=$thumbs}-->
 		<tr>
@@ -89,30 +104,31 @@
 		<!--{/section}-->
 	</table>
 	
-	<div align="center">
-	<!--{if $mode != edit}-->
-		<a href="view_cat.php?mode=edit&cat_id=<!--{$cat_id}-->">editieren</a>
-		<!--{if $edited == true}-->
-			<!--{$lang.cat_edited}-->
-		<!--{/if}-->
-	<!--{else}-->
-		<input name="mode" type="hidden" value="edited">
-		
-		<!--{if  $allow_link == true}-->		
-			to Cat 
-			<select name="to_cat">
-			<!--{section name=id loop=$add_to_cats}-->
-				<option value="<!--{$add_to_cats[id].id}-->"><!--{$add_to_cats[id].name}--></option>
-			<!--{/section}-->
-			</select><br>
-		<!--{/if}-->
-		<input name="submit" type="submit" id="submit" value="Abschicken">
-		</form>
-	<!--{/if}-->
-	</div>
 <!--{else}-->
 	In dieser Kategorie gibts noch keine Bilder...
 <!--{/if}-->
+<div align="center">
+<!--{if $mode != edit}-->
+	<a href="view_cat.php?mode=edit&cat_id=<!--{$cat_id}-->">editieren</a>
+	<!--{if $edited == true}-->
+		<!--{$lang.cat_edited}-->
+	<!--{/if}-->
+<!--{else}-->
+	<input name="mode" type="hidden" value="edited">
+
+	<!--{if  $allow_link == true}-->		
+		to Cat 
+		<select name="to_cat">
+		<!--{section name=id loop=$add_to_cats}-->
+			<option value="<!--{$add_to_cats[id].id}-->"><!--{$add_to_cats[id].name}--></option>
+		<!--{/section}-->
+		</select><br>
+	<!--{/if}-->
+	<input name="submit" type="submit" id="submit" value="Abschicken">
+	</form>
+<!--{/if}-->
+</div>
+
 <table width="95%" align="center" border="1">
 	<tr>
 		<td width="20%">
