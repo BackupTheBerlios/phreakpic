@@ -115,6 +115,7 @@ function get_allowed_contentgroups_where($user_id,$action,$field='contentgroup_i
 	global $db,$config_vars,$userdata;	
 	
 	
+	
 	// if the current user is admin allow everything
 	if ($userdata['user_level'] == ADMIN)
 	{
@@ -137,11 +138,11 @@ function get_allowed_contentgroups_where($user_id,$action,$field='contentgroup_i
 //	$sql = 'select contentgroup_id from '.$config_vars['table_prefix']."content_auth where ($action like 1) and $where";
 
 // EXPERIMENTAL SQL which doesnt needs get_groups_of_user
-	$default_usergroups_where = generate_where('uig.group_id',$config_vars['default_usergroup_ids']);
+	$default_usergroups_where = generate_where('auth.usergroup_id',$config_vars['default_usergroup_ids']);
 	
                                            
 	$sql ='SELECT auth.contentgroup_id, uig.group_id FROM '.$config_vars['table_prefix'].'content_auth as auth, '.$config_vars['table_prefix']."user_in_group AS uig 
-	WHERE ($action like 1) and ((uig.user_id = $user_id) or ($default_usergroups_where)) and (auth.usergroup_id=uig.group_id) group by auth.contentgroup_id";
+	WHERE (auth.$action like 1) and (((uig.user_id = $user_id) and (auth.usergroup_id=uig.group_id)) or ($default_usergroups_where) ) group by auth.contentgroup_id";
 
 	
 	if (!$result = $db->sql_query($sql))
@@ -185,9 +186,7 @@ function get_allowed_catgroups_where($user_id,$action,$field='catgroup_id')
 	$usergroup_ids=array_merge($usergroup_ids,$config_vars['default_usergroup_ids']);
 
 	
-	
-	
-	
+		
 	if (!isset($usergroup_ids))
 	{
 		// user is in now usergroups return 
@@ -198,7 +197,6 @@ function get_allowed_catgroups_where($user_id,$action,$field='catgroup_id')
 	// get contentgroup_ids from the contents groups where at least one usergroup out of §users_groups is allowed to do $action
 	$where = generate_where('usergroup_id',$usergroup_ids);
 	$sql = 'select catgroup_id from '.$config_vars['table_prefix']."cat_auth where ($action like 1) and ($where)";
-	
 	if (!$result = $db->sql_query($sql))
 	{
 		message_die(GENERAL_ERROR, "Could not check whether the contentgroups where this user is allowed to this action", '', __LINE__, __FILE__, $sql);
