@@ -8,7 +8,7 @@ require_once('errorhandling.inc.php');
 
 if (!isset($db))
 {
-	$dsn = "$db_type://$db_user:$db_passwd@$db_host/$db_name";
+	$dsn = "$config_vars['db_type']://$config_vars['db_user']:$config_vars['db_passwd']@$config_vars['db_host']/$config_vars['db_name']";
 	
 	// connect to database presisent
 	$db = DB::connect($dsn, true);
