@@ -27,6 +27,8 @@
 <td>
 
 <!--{if $auth_exists == true}-->
+
+<!--
 <!--{$lang.view}-->: <input type="checkbox" name="view" <!--{$view_checked}-->><br>
 <!--{$lang.delete}-->: <input type="checkbox" name="delete" <!--{$delete_checked}-->><br>
 <!--{$lang.edit}-->: <input type="checkbox" name="edit" <!--{$edit_checked}-->><br>
@@ -39,6 +41,12 @@
 	<!--{$lang.content_add}--> <input type="checkbox" name="content_add" <!--{$content_add_checked}-->><br>
 	<!--{$lang.content_remove}--> <input type="checkbox" name="content_remove" <!--{$content_remove_checked}-->><br>
 <!--{/if}-->
+
+-->
+
+<!--{foreach from=$editable_vars key=name item=checked}-->
+	<!--{$lang.$name}--> <input type="checkbox" name="<!--{$name}-->" <!--{$checked}-->><br>
+<!--{/foreach}-->
 <input name="delete_auth" type="submit" value="<!--{$lang.delete_auth}-->"><br>
 <!--{else}-->	
 <input name="new_auth" type="submit" value="<!--{$lang.create_auth}-->"><br>

@@ -7,10 +7,10 @@ include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 
 
 //check if User is allowed to view this file
-if ($userdata['user_level'] != 1)
-{
-	error_report(AUTH_ERROR, 'no_admin' , __LINE__, __FILE__,$sql);
-}
+// if ($userdata['user_level'] != 1)
+// {
+// 	error_report(AUTH_ERROR, 'no_admin' , __LINE__, __FILE__,$sql);
+// }
 
 if (!isset($usergroup))
 {

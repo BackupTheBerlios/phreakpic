@@ -10,30 +10,26 @@ include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 
 session_start();
 
-//check if User is allowed to view this file
-if ($userdata['user_level'] != 1)
-{
-	error_report(AUTH_ERROR, 'no_admin' , __LINE__, __FILE__,$sql);
-}
+// //check if User is allowed to view this file
+// if ($userdata['user_level'] != 1)
+// {
+// 	error_report(AUTH_ERROR, 'no_admin' , __LINE__, __FILE__,$sql);
+// }
 
 
-if (($HTTP_GET_VARS['type']=='content') or $HTTP_GET_VARS['type']=='cat')
+if (($HTTP_GET_VARS['type']=='content') or $HTTP_GET_VARS['type']=='cat' or $HTTP_GET_VARS['type']=='usergroup')
 {
 	$HTTP_SESSION_VARS['type']=$HTTP_GET_VARS['type'];
 }
 else
 {
-	if (isset($HTTP_SESSION_VARS['type']))
+	if (!isset($HTTP_SESSION_VARS['type']))
 	{
-		$type=$HTTP_SESSION_VARS['type'];
-	}
-	else
-	{
-		$type='cat';
+		$HTTP_SESSION_VARS['type'] = 'cat';
 	}
 }
 
-
+$type = $HTTP_SESSION_VARS['type'];
 
 
 
@@ -49,7 +45,15 @@ if (!isset($usergroup))
 
 // check submits
 $class=$type."_auth";
-$groupclass = $type . 'group';
+
+if ($type == 'usergroup')
+{
+	$groupclass = $type;
+}
+else
+{
+	$groupclass = $type . 'group';
+}
 
 // if (isset($del_group))
 // {
@@ -131,7 +135,14 @@ while ($row = $db->sql_fetchrow($result))
 
 
 // get all groups
-$sql = 'SELECT id,name FROM ' . $config_vars['table_prefix'] . 'groups';
+if ($type=='usergroup')
+{
+	$sql = 'SELECT id,name FROM ' . $config_vars['table_prefix'] . 'usergroups';
+}
+else
+{
+	$sql = 'SELECT id,name FROM ' . $config_vars['table_prefix'] . 'groups';
+}
 
 if (!$result = $db->sql_query($sql))
 {
@@ -144,8 +155,10 @@ while ($row = $db->sql_fetchrow($result))
 }
 
 // get values
-$sql = 'SELECT usergroup_id,' . $type . 'group_id FROM ' . $config_vars['table_prefix'] . $type . "_auth where (usergroup_id = $usergroup) and (" . $type . "group_id = $group)";
-                          
+{
+	$sql = 'SELECT usergroup_id,' . $type . 'group_id FROM ' . $config_vars['table_prefix'] . $type . "_auth where (usergroup_id = $usergroup) and (" . $type . "group_id = $group)";
+}
+
 if (!$result = $db->sql_query($sql))
 {
 	message_die(GENERAL_ERROR, "Could not get groups of user", '', __LINE__, __FILE__, $sql);
@@ -157,7 +170,9 @@ if ($row = $db->sql_fetchrow($result))
 {
 	$smarty->assign('auth_exists',true);	
 	$auth = new $class();
+	
 	$auth->generate($row['usergroup_id'],$row[$type . 'group_id']);
+	
 	// automaticly get all vars of the class and fill the the checkboxes if set
 	
 	
@@ -165,13 +180,16 @@ if ($row = $db->sql_fetchrow($result))
 	{		
 		$get_func = "get_$value";
 		
+		$editable_vars[$value]='';
+		
 		if ($auth->$get_func())
 		{
-			$smarty->assign("{$value}_checked",'checked');	
+			$editable_vars[$value]='checked';
 		}
 	}
 }
-
+$smarty->assign("editable_vars",$editable_vars);	
+//$smarty->assign("{$value}_checked",'checked');	
 
 
 

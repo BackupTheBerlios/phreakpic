@@ -16,11 +16,11 @@ class phreak_auth
 	var $old_usergroup_id;
 	
 	// this array indicated which vars should be processed by external automatic processing
-	var $processing_vars = Array('view','delete','edit','comment_edit','add_to_group','remove_from_group');
+	var $processing_vars = Array();
 	
 
 	// this vars will be stored in the db
-	var $db_vars = Array('view','delete','edit','comment_edit','add_to_group','usergroup_id','remove_from_group');
+	var $db_vars = Array();
 
 	
 
@@ -38,10 +38,11 @@ class phreak_auth
 			{
 				// this is object is not yet in the datebase, make a new entry
 				$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this). ' (';
+				
 
 				// get the set vars from db_vars
 				foreach ($this->db_vars as $value)
-				{			
+				{
 					$sql = $sql . KEY_QUOTE. $value.KEY_QUOTE.", ";
 				}
 				// unset the last ','
@@ -62,7 +63,7 @@ class phreak_auth
 					}
 				}
 				$sql{strlen($sql)-2}=' ';
-
+				
 				$sql = $sql . ')';
 				if (!$result = $db->sql_query($sql))
 				{
@@ -85,6 +86,7 @@ class phreak_auth
 				// unset the last ','
 				$sql{strlen($sql)-2}=' ';
 				$sql = $sql . "WHERE $where";
+				
 				if (!$result = $db->sql_query($sql))
 				{
 					error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
@@ -107,6 +109,7 @@ class phreak_auth
 		// generating the table from the class name plus a traling s
 		$sql = 'SELECT * FROM ' . $config_vars['table_prefix'] . get_class($this) . " 
 			WHERE (usergroup_id = $usergroup_id) and (" . ereg_replace("_auth$","",get_class($this)) . "group_id = $group_id)";
+			
 		if (!$result = $db->sql_query($sql))
 		{
 			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
@@ -276,11 +279,17 @@ class cat_auth extends phreak_auth
 	
 	function cat_auth()
 	{
+	// this array indicated which vars should be processed by external automatic processing
+
+	  $this->processing_vars = Array('view','delete','edit','comment_edit','add_to_group','remove_from_group');
+	  
 		$this->processing_vars[] = 'cat_add';
 		$this->processing_vars[] = 'cat_remove';
 		$this->processing_vars[] = 'content_add';
 		$this->processing_vars[] = 'content_remove';
-	
+		
+	// this vars will be stored in the db	
+		$this->db_vars = Array('view','delete','edit','comment_edit','add_to_group','usergroup_id','remove_from_group');
 		$this->db_vars[] = 'cat_add';
 		$this->db_vars[] = 'content_add';
 		$this->db_vars[] = 'cat_remove';
@@ -410,6 +419,12 @@ class content_auth extends phreak_auth
 	
 	function content_auth()
 	{
+		// this array indicated which vars should be processed by external automatic processing
+		$this->processing_vars = Array('view','delete','edit','comment_edit','add_to_group','remove_from_group');
+	
+
+		// this vars will be stored in the db
+		$this->db_vars = Array('view','delete','edit','comment_edit','add_to_group','usergroup_id','remove_from_group');
 		$this->db_vars[] = 'contentgroup_id';
 	}
 	
@@ -465,6 +480,96 @@ class content_auth extends phreak_auth
 	function commit()
 	{
 		$where = "(usergroup_id = $this->old_usergroup_id) and (contentgroup_id = $this->old_contentgroup_id)";
+		phreak_auth::commit($where);
+	}
+}
+
+
+class usergroup_auth extends phreak_auth
+{
+	var $usergroupgroup_id;
+	
+	var $old_usergroupgroup_id;
+	
+	var $add_user=false;
+	var $remove_user=false;
+	
+	function usergroup_auth()
+	{
+		// this array indicated which vars should be processed by external automatic processing
+		$this->processing_vars = Array('add_user','remove_user');
+	
+
+		// this vars will be stored in the db
+		$this->db_vars = Array('usergroup_id','add_user','remove_user');
+		$this->db_vars[] = 'usergroupgroup_id';
+		
+	}
+	
+	function generate($usergroup_id,$group_id)
+	{
+		phreak_auth::generate($usergroup_id,$group_id);
+		$this->old_usergroupgroup_id = $this->usergroupgroup_id;
+	}
+	
+	function delete()
+	{
+		global $db,$config_vars;
+		if (check_auth_action_allowed())
+		{
+			// remove from content table
+			$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE (usergroup_id = $this->usergroup_id) and (usergroupgroup_id = $this->usergroupgroup_id)";
+			if (!$result = $db->sql_query($sql))
+			{
+				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+			}
+			unset($this->id);
+		}
+		else
+		{
+			return OP_NP_MISSING_DELETE;
+		}
+			
+	}
+	
+	function set_group_id($id)
+	{
+		$this->usergroupgroup_id = $id;
+		return OP_SUCCSESSFUL;
+	}
+	
+	function get_group_id()
+	{
+		return $this->usergroupgroup_id;
+	}
+	
+	function get_add_user()
+	{
+		return $this->add_user;
+	}
+	
+	function set_add_user($value)
+	{
+		$this->add_user=$value;
+		return OP_SUCCESSFUL;
+	}
+	
+	function get_remove_user()
+	{
+		return $this->remove_user;
+	}
+	
+	function set_remove_user($value)
+	{
+		$this->remove_user=$value;
+		return OP_SUCCESSFUL;
+	}
+	
+		
+	function commit()
+	{
+	
+		$where = "(usergroup_id = $this->old_usergroup_id) and (usergroupgroup_id = $this->old_usergroupgroup_id)";
 		phreak_auth::commit($where);
 	}
 }
