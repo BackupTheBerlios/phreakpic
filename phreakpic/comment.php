@@ -3,6 +3,13 @@ include_once ("includes/common.inc.php");
 include_once('./includes/template.inc.php');
 include_once('./classes/user_feedback.inc.php');
 	
+
+session_start();
+
+stop_view($HTTP_SESSION_VARS['view_start'],$HTTP_SESSION_VARS['view_content_id']);
+$HTTP_SESSION_VARS['view_start'] = 0;
+$HTTP_SESSION_VARS['view_content_id'] = 0;
+
 	
 	
 $smarty->assign('mode', $mode);

@@ -7,6 +7,17 @@ include_once('./languages/'.$userdata['user_lang'].'/lang_main.php');
 include_once('./includes/functions.inc.php');
 
 
+// bigbrother stop the view of the last viewed content
+session_start();
+
+stop_view($HTTP_SESSION_VARS['view_start'],$HTTP_SESSION_VARS['view_content_id']);
+$HTTP_SESSION_VARS['view_start'] = 0;
+$HTTP_SESSION_VARS['view_content_id'] = 0;
+
+
+
+
+
 
 
 if (!isset($cat_id))

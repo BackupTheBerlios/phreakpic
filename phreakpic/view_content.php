@@ -8,6 +8,12 @@ include_once('./languages/'.$userdata['user_lang'].'/lang_main.php');
 include_once('./includes/functions.inc.php');
 include_once ('classes/user_feedback.inc.php');
 
+session_start();
+
+
+stop_view($HTTP_SESSION_VARS['view_start'],$HTTP_SESSION_VARS['view_content_id']);
+$HTTP_SESSION_VARS['view_start'] = 0;
+$HTTP_SESSION_VARS['view_content_id'] = 0;
 
 // Comments
 if ($mode == "add")
@@ -216,4 +222,8 @@ echo("execution_time: $execution_time seconds<br>");
 echo("template_execution_time: $template_execution_time seconds<br>");
 $execution_time = $end_time - $start_time + $template_execution_time;
 echo("gesamt execution_time: $execution_time seconds<br>");
+
+$HTTP_SESSION_VARS['view_start'] = $content->start_view();
+$HTTP_SESSION_VARS['view_content_id'] = $content_id;
+
 ?>
