@@ -6,6 +6,12 @@ include_once(ROOT_PATH . 'classes/group.inc.php');
 include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 
 
+//check if User is allowed to view this file
+if ($userdata['user_level'] != 1)
+{
+	message_die(GENERAL_ERROR, "You are not Administrator", '', __LINE__, __FILE__, $sql);
+}
+
 if (!isset($usergroup))
 {
 	$usergroup=1;

@@ -10,6 +10,13 @@ include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 
 session_start();
 
+//check if User is allowed to view this file
+if ($userdata['user_level'] != 1)
+{
+	message_die(GENERAL_ERROR, "You are not Administrator", '', __LINE__, __FILE__, $sql);
+}
+
+
 if (($HTTP_GET_VARS['type']=='content') or $HTTP_GET_VARS['type']=='cat')
 {
 	$HTTP_SESSION_VARS['type']=$HTTP_GET_VARS['type'];

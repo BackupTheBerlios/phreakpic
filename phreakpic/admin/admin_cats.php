@@ -1,7 +1,14 @@
 <?php
-require_once('includes/common.inc.php');
-require_once('./classes/album_content.inc.php');
-require_once('./includes/template.inc.php');
+include_once('includes/common.inc.php');
+include_once('./classes/album_content.inc.php');
+include_once('./includes/template.inc.php');
+
+//check if User is allowed to view this file
+if ($userdata['user_level'] != 1)
+{
+	message_die(GENERAL_ERROR, "You are not Administrator", '', __LINE__, __FILE__, $sql);
+}
+
 /*	admin_cats:
 * 	$mode can have following content:
 * 		view
