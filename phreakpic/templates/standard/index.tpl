@@ -14,7 +14,7 @@
 		</tr>
 		<!--{section name=id loop=$number_of_child_cats}-->
 			<tr>
-				<td><a href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->"><!--{$child_cat_infos[id].name}--></a></td>
+				<td><a href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}--><!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
 				<td><!--{$child_cat_infos[id].description}--></td>
 				<td><!--{$child_cat_infos[id].content_amount}--></td>
 				<td><!--{$child_cat_infos[id].current_rating}--></td>
@@ -41,7 +41,7 @@
 					height			height of the content
 					id				the id of the content
 				*}-->
-				<a href=view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->><!--{$thumbs[thumb_cols][thumb_cell].html}--></a><br>
+				<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}--><!--{$sid}-->"><!--{$thumbs[thumb_cols][thumb_cell].html}--></a><br>
 				name: <!--{$thumbs[thumb_cols][thumb_cell].name}--><br>
 				Bewertung: <!--{$thumbs[thumb_cols][thumb_cell].current_rating}--><br>
 				Views: <!--{$thumbs[thumb_cols][thumb_cell].views}--><br>

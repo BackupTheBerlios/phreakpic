@@ -4,12 +4,12 @@
 <title><!--{$title|default:"Titel und so"}--></title>
 </head>
 <body bgcolor="<!--{#body_bg_color#}-->" text="<!--{#text_color#}-->">
-<a href="index.php"><!--{$lang.home}--></a> --
+<a href="index.php"<!--{$sid}-->><!--{$lang.home}--></a> --
 <!--{section name=id loop=$nav_string}-->
 	<!--{if $smarty.section.id.last}-->
 		<!--{$nav_string[id].name}-->
 	<!--{else}-->
-		<a href="view_cat.php?cat_id=<!--{$nav_string[id].id}-->">
+		<a href="view_cat.php?cat_id=<!--{$nav_string[id].id}--><!--{$sid}-->">
 		<!--{$nav_string[id].name}--></a> --
 	<!--{/if}-->
 <!--{/section}-->
@@ -22,10 +22,10 @@
 			<td>Anzahl</td>
 			<td>Bewertung</td>
 		</tr>
-		<form action="view_cat.php?cat_id=<!--{$cat_id}-->" method="post" name="delete_cat">
+		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="delete_cat">
 		<!--{section name=id loop=$number_of_child_cats}-->
 			<tr>
-				<td><a href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->"><!--{$child_cat_infos[id].name}--></a></td>
+				<td><a href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}--><!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
 				<td><!--{$child_cat_infos[id].description}--></td>
 				<td><!--{$child_cat_infos[id].content_amount}--></td>
 				<td><!--{$child_cat_infos[id].current_rating}--></td>
@@ -45,7 +45,7 @@
 <!--{$edit}-->
 
 <!--{if  ($allow_cat_add == true) and ($mode == edit)}-->
-	<form action="view_cat.php?cat_id=<!--{$cat_id}-->" method="post" name="edit_content" id="edit_content">
+	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content">
 	Add New Cat:
 	Name: <input name="cat_name" type="text" size="20">
 	catgroup: <input name="cat_group" type="text" size="5">
@@ -60,7 +60,7 @@
 
 <!--{if $is_content == true}-->
 	<!--{if $mode == edit}-->
-		<form action="view_cat.php?cat_id=<!--{$cat_id}-->" method="post" name="edit_content" id="edit_content">
+		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content">
 	<!--{/if}-->
 	<table border=1 align=center>
 		<!--{section name=thumb_cols loop=$thumbs}-->
@@ -78,7 +78,7 @@
 					
 					allow_edit		this is for the edit fields. Don't use this...
 				*}-->
-				<a href=view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->><!--{$thumbs[thumb_cols][thumb_cell].html}--></a><br>
+				<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}--><!--{$sid}-->"><!--{$thumbs[thumb_cols][thumb_cell].html}--></a><br>
 				name: <!--{$thumbs[thumb_cols][thumb_cell].name}--><br>
 				Bewertung: <!--{$thumbs[thumb_cols][thumb_cell].current_rating}--><br>
 				Views: <!--{$thumbs[thumb_cols][thumb_cell].views}--><br>
@@ -120,7 +120,7 @@
 
 <div align="center">
 <!--{if $mode != edit}-->
-	<a href="view_cat.php?mode=edit&cat_id=<!--{$cat_id}-->">editieren</a>
+	<a href="view_cat.php?mode=edit&cat_id=<!--{$cat_id}--><!--{$sid}-->">editieren</a>
 	<!--{if $edited == true}-->
 		<!--{$lang.cat_edited}-->
 	<!--{/if}-->
@@ -139,7 +139,7 @@
 	</form>
 <!--{/if}-->
 <!--{if  ($allow_content_add == true) and ($mode == edit)}-->
-	<form action="view_cat.php?cat_id=<!--{$cat_id}-->" method="post" name="add_content" id="add_content" enctype="multipart/form-data">
+	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="add_content" id="add_content" enctype="multipart/form-data">
 	Add Content:
 	File: <INPUT  name="new_content_file" TYPE="file" SIZE="30">
 	contentgroup: <input name="new_content_group" type="text" size="5">
@@ -160,7 +160,7 @@
 			<!--{*if $comments != false*}-->
 				<!--{include file="$template_name/show_comments.tpl" type="cat"}-->
 			<!--{*else*}-->
-				<a href="comment.php?mode=add&type=cat&parent_id=0&cat_id=<!--{$cat_id}-->"><!--{$lang.add_comment}--></a>
+				<a href="comment.php?mode=add&type=cat&parent_id=0&cat_id=<!--{$cat_id}--><!--{$sid}-->"><!--{$lang.add_comment}--></a>
 			<!--{*/if*}-->
 		</td>
 	</tr>

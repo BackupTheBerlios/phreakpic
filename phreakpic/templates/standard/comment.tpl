@@ -7,7 +7,7 @@
 
 
 
-<form action="view_<!--{$type}-->.php?cat_id=<!--{$cat_id}--><!--{$oontent_id_string}-->" method="POST">
+<form action="view_<!--{$type}-->.php?cat_id=<!--{$cat_id}--><!--{$oontent_id_string}--><!--{$sid}-->" method="POST">
  
 
 Topic: <input type="text" name="topic" value="<!--{$topic}-->">
