@@ -6,7 +6,7 @@ function confirmLink(theLink, text)
 {
     var is_confirmed = confirm(text);
     if (is_confirmed) {
-        location.href += theLink;
+        location.href = theLink;
     }
 
     return is_confirmed;
