@@ -1,4 +1,6 @@
 <!--{config_load file="$template_name/config.cfg"}-->
+<html>
+<head>
 
 <script src="templates/<!--{$template_name}-->/functions.js" type="text/javascript" language="javascript">
 </script>
@@ -7,11 +9,9 @@ document.onkeypress = getkey_default;
 var keyactive = true;
 </script>
 
-<html>
-<head>
-	<!--{$meta}-->
+<!--{$meta}-->
 	
-	
+
 	<title><!--{$title_site}--> :: <!--{$title_page}--> - <!--{$title_name"}--></title>
 	<link rel="stylesheet" href="templates/<!--{$template_name}-->/design.css" type="text/css" />
 </head>
