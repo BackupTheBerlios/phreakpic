@@ -1,5 +1,5 @@
 <script type="text/javascript" language="javascript">
-table_cols = <!--{$table_cols}-->
+table_cols = <!--{$table_cols|default:0}-->
 </script>
 <script src="templates/<!--{$template_name}-->/functions.js" type="text/javascript" language="javascript">
 </script>
@@ -20,8 +20,11 @@ table_cols = <!--{$table_cols}-->
 	var sx=0;
 	var sy=0;
 </script>
+
+
 <!--{if $is_content == true}-->
 	<!--{if $mode == edit}-->
+	<div align="center"><span onclick="tog('adv_edit');" >Toggle Options</span></div><br>
 		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content" name="content" onKeyDown="switchTd('1','1')">
 	<!--{/if}-->
 	<table border="1" align="center" cellspacing="10">
@@ -47,21 +50,23 @@ table_cols = <!--{$table_cols}-->
 						<td>
 				<a name="link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}--><!--{$sid}-->"><!--{$thumbs[thumb_cols][thumb_cell].html}--></a><br>
 				<font size="-1">
+				<!--{if $mode != edit}-->
 				<!--{$lang.name}-->: <!--{$thumbs[thumb_cols][thumb_cell].name}--><br>
 				<!--{$lang.rating}-->: <!--{$thumbs[thumb_cols][thumb_cell].current_rating}--><br>
 				<!--{$lang.views}-->: <!--{$thumbs[thumb_cols][thumb_cell].views}--><br>
-				<!--{if $mode == edit}-->
+				<!--{else}-->
 					<input name="place_in_array[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
 					<input name="content_id[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
 
 					<!--{if $thumbs[thumb_cols][thumb_cell].allow_edit == true}-->
+					<span name="adv_edit" style="display: inline;">
 						<!--{$lang.rotate}-->: 
-						<!--{$lang.rotate_free}-->: <input type="radio" id="rotate_free" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="free" checked><input type="text" onfocus="keyoff()" onblur="keyon()" id="rotate" name="rotate[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]"><br> 
+						<!--{$lang.rotate_free}-->: <input type="radio" id="rotate_free" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="free" checked><input type="text" onfocus="keyoff()" onblur="keyon()" id="rotate" name="rotate[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" size="4"><br> 
 						<!--{$lang.rotate_left}--> <input type="radio" id="rotate_left" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="-90">
 						<!--{$lang.rotate_180}--> <input type="radio" id="rotate_180" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="180">
 						<!--{$lang.rotate_right}--> <input type="radio" id="rotate_right" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="90"><br>
-						<!--{$lang.name}-->: <input name="name[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" onfocus="keyoff()" onblur="keyon()" value="<!--{$thumbs[thumb_cols][thumb_cell].name}-->" size="20"><br>
-						<!--{$lang.place_in_cat}-->: <input id="place_in_cat" name="place_in_cat[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" onfocus="keyoff()" onblur="keyon()" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_cat}-->" size="10"><br>
+						<!--{$lang.name}-->: <input name="name[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" onfocus="keyoff()" onblur="keyon()" value="<!--{$thumbs[thumb_cols][thumb_cell].name}-->" size="11"><br>
+						<!--{$lang.place_in_cat}-->: <input id="place_in_cat" name="place_in_cat[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" onfocus="keyoff()" onblur="keyon()" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_cat}-->" size="4"><br>
 						<!--{$lang.lock}-->:<input id="lock"  name="lock[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox" <!--{$thumbs[thumb_cols][thumb_cell].locked}-->>
 
 					<!--{/if}-->
@@ -81,6 +86,7 @@ table_cols = <!--{$table_cols}-->
 
 						<!--{$lang.change_group}--> (<!--{$thumbs[thumb_cols][thumb_cell].contentgroup_name}-->):<input id="change_group" name="change_group[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
 					<!--{/if}-->
+					</span>
 					
 					
 				<!--{/if}-->
