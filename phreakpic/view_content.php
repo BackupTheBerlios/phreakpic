@@ -14,7 +14,7 @@ session_start();
 stop_view($HTTP_SESSION_VARS['view_start'],$HTTP_SESSION_VARS['view_content_id']);
 $HTTP_SESSION_VARS['view_start'] = 0;
 $HTTP_SESSION_VARS['view_content_id'] = 0;
-
+/*
 // Comments
 if ($mode == "add")
 {
@@ -40,7 +40,12 @@ if ($mode == 'edit_comment')
 	$comment->set_changed_count($comment->get_changed_count()+1);
 	$comment->set_last_changed_date(date("Y-m-d H:i:s"));
 	$comment->commit();	
-}
+}*/
+
+$comment_type='content';
+
+include ('includes/proceed_comment.inc.php');
+
 
 
 
@@ -72,9 +77,6 @@ if (is_object($surrounding_content['next']))
 
 // Check if user has rights to add content to a cat
 
-
-
-
 $add_to_cats = get_cats_data_where_perm('id,name','content_add');
 if (is_array($add_to_cats))
 {
@@ -102,8 +104,7 @@ if (is_array($add_to_cats))
 // Check if user has content_remove rights on this categorie
 $cat_obj = new categorie();
 $cat_obj->generate_from_id($cat_id);
-if 
-(check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'content_remove'))
+if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'content_remove'))
 {
 	$smarty->assign('allow_content_remove',1);
 	if ($mode == "edit")
@@ -113,8 +114,8 @@ if
 	
 	if ($mode == "commit")
 	{
-		// check delete
-		if ($HTTP_POST_VARS['delete'] == "on")
+		// check unlink
+		if ($HTTP_POST_VARS['unlink'] == "on")
 		{
 			$content->remove_from_cat($cat_id);
 			$redirect_to_cat=true;
@@ -134,6 +135,9 @@ if
 		}
 	}
 }
+
+
+
 
 // Check if user has edit rights to this content
 if ($content->check_perm('edit'))
@@ -176,15 +180,34 @@ if ($mode == "commit")
 {
 	// commit all changes
 	$content->commit();	
-	if ($redirect_to_cat)
+}
+// check delete
+if ($content->check_perm('delete'))
+{
+
+	$smarty->assign('allow_delete',1);	
+	if ($mode == "commit")
 	{
-		// redirect to cat view
-		$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/", 
-getenv("SERVER_SOFTWARE")) ) ? "Refresh: 0; URL=" : "Location: ";
-		header($header_location . append_sid("view_cat.php?cat_id=$cat_id", true));
+		// check unlink
+		if ($HTTP_POST_VARS['delete'] == "on")
+		{
+			
+			$content->delete();
+			$redirect_to_cat=true;
+		}
 	}
+
+
 }
 
+if ($redirect_to_cat)
+{
+	// redirect to cat view
+
+	$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/", 
+	getenv("SERVER_SOFTWARE")) ) ? "Refresh: 0; URL=" : "Location: ";
+	header($header_location . append_sid("view_cat.php?cat_id=$cat_id", true));
+}
 
 
 
