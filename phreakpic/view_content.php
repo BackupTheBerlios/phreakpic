@@ -1,13 +1,12 @@
 <?php
 define ("ROOT_PATH",'');
 include_once('./includes/common.inc.php');
-include_once('./classes/album_content.inc.php');
 include_once('./includes/template.inc.php');
+include_once('./classes/album_content.inc.php');
 include_once('./modules/pic_managment/interface.inc.php');
 include_once('./classes/categorie.inc.php');
-include_once('./languages/'.$userdata['user_lang'].'/lang_main.php');
 include_once('./includes/functions.inc.php');
-include_once ('classes/user_feedback.inc.php');
+include_once('classes/user_feedback.inc.php');
 
 session_start();
 
