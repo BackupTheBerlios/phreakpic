@@ -41,6 +41,7 @@ $lang['to_cat'] = 'Zu Kategorie';
 $lang['rating'] = 'Bewertung';
 $lang['views'] = 'Views';
 $lang['edit_content'] = 'Editier dieses Bild';
+$lang['rotate'] = 'Drehen';
 
 //view_cat.tpl
 $lang['description'] = 'Beschreibung';
