@@ -16,6 +16,11 @@
 			<input type="checkbox" name="correct[<!--{$smarty.section.missmatch.index}-->]">
 			Child Comment amount error in <!--{$missmatch_array[missmatch].name}--> is <!--{$missmatch_array[missmatch].value}--> shoud be <!--{$missmatch_array[missmatch].should_be}--><br>
 		<!--{/if}-->
+		<!--{if $missmatch_array[missmatch].type == 4}-->	
+			<input type="checkbox" name="correct[<!--{$smarty.section.missmatch.index}-->]">
+			Content Comment amount error in <!--{$missmatch_array[missmatch].name}--> is <!--{$missmatch_array[missmatch].value}--> shoud be <!--{$missmatch_array[missmatch].should_be}--><br>
+		<!--{/if}-->
+
 
 	<!--{/section}-->
 	<input type="submit" name="do_correct">

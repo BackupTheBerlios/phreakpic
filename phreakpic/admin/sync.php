@@ -11,7 +11,7 @@ include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 define('CONTENT_IN_CAT_AMOUNT',1);
 define('CHILD_CONTENT_IN_CAT_AMOUNT',2);
 define('CHILD_COMMENTS_IN_CAT_AMOUNT',3);
-
+define('CONTENT_COMMENTS_AMOUNT',4);
 
 
 
@@ -42,6 +42,12 @@ if (isset($HTTP_POST_VARS['do_correct']))
 				$cat->generate_from_id($HTTP_POST_VARS['id'][$key]);
 				$cat->set_child_comments_amount($cat->calc_child_comments_amount());
 				$cat->commit();
+			}
+			elseif ($HTTP_POST_VARS['type'][$key] == CONTENT_COMMENTS_AMOUNT)
+			{
+				$content=get_content_object_from_id($HTTP_POST_VARS['id'][$key]);
+				$content->set_comments_amount($content->calc_comments_amount());
+				$content->commit();
 			}
 		
 		}
@@ -107,6 +113,35 @@ foreach ($catarray as $cat)
 	}
 	
 }
+
+
+// get all content
+$sql = "SELECT id FROM " . $config_vars['table_prefix'] . "content";
+if (!$result = $db->sql_query($sql))
+{
+	message_die(GENERAL_ERROR, "Coudnt get content", '', __LINE__, __FILE__, $sql);
+}
+
+while ($row = $db->sql_fetchrow($result))
+{
+	$content = get_content_object_from_id($row['id']);
+	$contentarray[]=$content;
+}
+
+foreach ($contentarray as $content)
+{
+	$calc_comments_amount = $content->calc_comments_amount();
+	if ($calc_comments_amount != $content->get_comments_amount())
+	{
+		$missmatch['type']=CONTENT_COMMENTS_AMOUNT;
+		$missmatch['id'] = $content->id;
+		$missmatch['name'] = $content->get_name();
+		$missmatch['value'] = $content->get_comments_amount();
+		$missmatch['should_be'] = $calc_comments_amount;
+		$missmatch_array[]=$missmatch;
+	}
+}
+
 
 
 
