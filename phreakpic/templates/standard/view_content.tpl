@@ -13,7 +13,7 @@
 				<!--{/if}-->
 			</td>
 			
-      <td height="45">&nbsp;</td>
+			<td height="45">&nbsp;</td>
 			<td height="45"> 
 				<div align="right">
 					<!--{if $is_next_content eq "true"}-->
@@ -52,9 +52,51 @@
 			<td>fehlt: Poll</td>
 			<td> 
 				<div align="center">
-					<a href="<!--{$thumb_link}--><!--{$sid}-->">
-						<!--{$html}-->
-					</a>
+						<table width="1" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td width="1"><img src="templates/<!--{$template_name}-->/bildumrandung/elo.gif" width="14" height="14" /></td>
+								<td width="1"><img src="templates/<!--{$template_name}-->/bildumrandung/lor.gif" width="10" height="14" /></td>
+								<td width="<!--{$content_width}-->" background="templates/<!--{$template_name}-->/bildumrandung/bo.gif"></td>
+								<td width="1"><img src="templates/<!--{$template_name}-->/bildumrandung/rol.gif" width="10" height="14" /></td>
+								<td width="1"><img src="templates/<!--{$template_name}-->/bildumrandung/ero.gif" width="14" height="14" /></td>
+							</tr>
+							<tr>
+								<td>
+									<table width="9" height="<!--{$content_height}-->" border="0" cellpadding="0" cellspacing="0">
+										<tr>
+											<td height="1"><img src="templates/<!--{$template_name}-->/bildumrandung/lou.gif" width="14" height="10" /></td>
+										</tr>
+										<tr>
+											<td background="templates/<!--{$template_name}-->/bildumrandung/bl.gif">&nbsp;</td>
+										</tr>
+										<tr>
+											<td height="1"><img src="templates/<!--{$template_name}-->/bildumrandung/luo.gif" width="14" height="10" /></td>
+										</tr>
+									</table>
+								</td>
+								<td colspan="3"><a href="<!--{$thumb_link}--><!--{$sid}-->#<!--{$content_id}-->" class="content"><!--{$html}--> border="0"></a></td>
+								<td>
+									<table width="9" height="<!--{$content_height}-->" border="0" cellpadding="0" cellspacing="0">
+										<tr>
+											<td height="1"><img src="templates/<!--{$template_name}-->/bildumrandung/rou.gif" width="14" height="10" /></td>
+										</tr>
+										<tr>
+											<td background="templates/<!--{$template_name}-->/bildumrandung/br.gif">&nbsp;</td>
+										</tr>
+										<tr>
+											<td height="1"><img src="templates/<!--{$template_name}-->/bildumrandung/ruo.gif" width="14" height="10" /></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td width="1" height="1"><img src="templates/<!--{$template_name}-->/bildumrandung/elu.gif" width="14" height="14" /></td>
+								<td width="1" height="1"><img src="templates/<!--{$template_name}-->/bildumrandung/lur.gif" width="10" height="14" /></td>
+								<td width="<!--{$content_width}-->" height="1" background="templates/<!--{$template_name}-->/bildumrandung/bu.gif"></td>
+								<td width="1" height="1"><img src="templates/<!--{$template_name}-->/bildumrandung/rul.gif" width="10" height="14" /></td>
+								<td width="1" height="1"><img src="templates/<!--{$template_name}-->/bildumrandung/eru.gif" width="14" height="14" /></td>
+							</tr>
+						</table>
 				</div>
 			</td>
 			<td>
