@@ -506,6 +506,41 @@ class categorie
 		return OP_SUCCESSFUL;
 	}
 
+	
+	function get_comments_amount()
+	{
+		global $db, $config_vars;	
+		
+		if ($this->id != $config_vars['root_categorie'])
+		{
+		
+			//get the comments from  cat
+			$sql = 'SELECT count(cat_comments.id) FROM ' . $config_vars['table_prefix'] . 'cat_comments AS cat_comments WHERE cat_comments.owner_id = ' . $this->id;
+			if (!$result = $db->sql_query($sql))
+			{
+				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
+			}
+			$row = $db->sql_fetchrow($result);
+			$amount = $row[0];
+		
+			//get the comments from content
+			$sql = 'SELECT count(content_comments.id) 
+					FROM ' . $config_vars['table_prefix'] . 'content_comments AS content_comments, ' . $config_vars['table_prefix'] . 'content_in_cat AS content_in_cat 
+					WHERE (content_in_cat.cat_id = ' . $this->id . ') AND (content_in_cat.content_id = content_comments.owner_id)';
+			if (!$result = $db->sql_query($sql))
+			{
+				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
+			}
+			$row = $db->sql_fetchrow($result);
+			$amount += $row[0];
+			$child_cats = get_cats_of_cat($this->id);	
+			for($i=0; $i < sizeof($child_cats); $i++)
+			{
+				$amount += $child_cats[$i]->get_comments_amount();
+			}
+		}
+		return $amount;
+	}
 
 	
 }

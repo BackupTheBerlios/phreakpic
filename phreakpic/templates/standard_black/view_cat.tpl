@@ -42,6 +42,7 @@
 			<td width="75%"><!--{$lang.description}--></td>
 			<td><!--{$lang.amount}--></td>
 			<td><!--{$lang.rating}--></td>
+			<td><!--{$lang.comments_amount}--></td>
 			<!--{if $mode == 'edit'}-->
 				<td><!--{$lang.catgroup}--></td>
 				<td><!--{$lang.delete}--></td>
@@ -85,8 +86,9 @@
 				<!--{else}-->
 					<td id="td_cat" name="td_cat"><a name="cat_link" href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->&first_content=0<!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
 					<td><!--{$child_cat_infos[id].description}--></td>
-					<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
+					<td><!--{$child_cat_infos[id].content_amount}-->&nbsp;(<!--{$child_cat_infos[id].content_child_amount}-->)</td>
 					<td><!--{$child_cat_infos[id].current_rating}--></td>
+					<td><!--{$child_cat_infos[id].comments_amount}--></td>
 				<!--{/if}-->
 				
 				
