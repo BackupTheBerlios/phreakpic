@@ -44,9 +44,8 @@ class album_content
 	var $remove_from_group;
 	var $new_filename;
 	
-	var $old_cat;
-	var $delete_content_cat;
-	var $new_cat;
+	var $remove_from_cat;
+	var $add_to_cat;
 	
 	
 	function get_editable_values($cat_id)
@@ -554,17 +553,17 @@ class album_content
 		
 		$this->fill_content_in_cat();	
 		
-		if (is_object($delete_content_cat))
+		if (is_object($del_content_cat))
 		{
-			$delete_content_cat->commit();
+			$del_content_cat->commit();
 		}
-		if (is_object($new_cat))
+		if (is_object($this->add_to_cat))
 		{
-			$new_cat->commit();
+			$this->add_to_cat->commit();
 		}
-		if (is_object($old_cat))
+		if (is_object($this->remove_from_cat))
 		{
-			$old_cat->commit();
+			$this->remove_from_cat->commit();
 		}
 		
 		return OP_SUCESSFUL;
@@ -678,14 +677,14 @@ class album_content
 
 		// get objekt for the new_cat
 
-		$new_cat = new categorie();
-		$new_cat->generate_from_id($new_cat_id);
+		$add_to_cat = new categorie();
+		$add_to_cat->generate_from_id($new_cat_id);
 		
 		// user needs content_add rights in the cat where he wants to add that content
-		if (check_cat_action_allowed($new_cat->catgroup_id, $userdata['user_id'], "content_add"))
+		if (check_cat_action_allowed($add_to_cat->catgroup_id, $userdata['user_id'], "content_add"))
 		{
 			$this->cat_ids[] = $new_cat_id;
-			$new_cat->set_content_amount($new_cat->get_content_amount()+1);
+			$add_to_cat->set_content_amount($add_to_cat->get_content_amount()+1);
 			$this->new_filename=$this->generate_filename();
 			return OP_SUCCESSFUL;
 		}
@@ -705,8 +704,8 @@ class album_content
 			$this->generate_content_in_cat_data();
 		}
 				
-		$old_cat = new categorie();
-		if ($old_cat->generate_from_id($old_cat_id) != OP_SUCCESSFUL)
+		$this->remove_from_cat = new categorie();
+		if ($this->remove_from_cat->generate_from_id($old_cat_id) != OP_SUCCESSFUL)
 		{
 			message_die(GENERAL_ERROR, "Error generate_form_id in remove_from_cat", '', __LINE__, __FILE__);
 		}
@@ -714,14 +713,14 @@ class album_content
 		
 
 		// check perms (needs content_remove)
-		if (check_cat_action_allowed($old_cat->catgroup_id, $userdata['user_id'], "content_remove"))
+		if (check_cat_action_allowed($this->remove_from_cat->catgroup_id, $userdata['user_id'], "content_remove"))
 		{
 			// check if content is in cat
 			if (in_array($old_cat_id,$this->cat_ids))
 			{
 				// unset the key that contains the cat to be removed
 				array_splice($this->cat_ids,array_search($old_cat_id,$this->cat_ids),1);
-				$old_cat->set_content_amount($old_cat->get_content_amount()-1);
+				$this->remove_from_cat->set_content_amount($this->remove_from_cat->get_content_amount()-1);
 				$this->new_filename=$this->generate_filename();
 				return OP_SUCCESSFUL;
 			}
