@@ -1,18 +1,25 @@
 <?php 
 include_once(ROOT_PATH . './classes/album_content.inc.php');
 
-DEFINE('SQL_ERROR','SQL_ERROR');
-DEFINE('AUTH_ERROR','AUTH_ERROR');
-DEFINE('FILE_ERROR','FILE_ERROR');
+DEFINE('SQL_ERROR','1');
+DEFINE('AUTH_ERROR','2');
+DEFINE('FILE_ERROR','3');
+DEFINE('GENERAL_ERROR','3');
 
 function error_report($type, $ident , $line, $file,$sql='')
 {
-	global $userdata,$smarty,$db,$config_vars,$QUERY_STRING;
+	global $userdata,$smarty,$db,$config_vars,$QUERY_STRING,$error;
 	
+	switch ($type)
+	{
+		case SQL_ERROR: $error_info['type'] = 'SQL_ERROR'; break;
+		case AUTH_ERROR: $error_info['type'] = 'AUTH_ERROR'; break;
+		case FILE_ERROR: $error_info['type'] = 'FILE_ERROR'; break;
+		case GENERAL_ERROR: $error_info['type'] = 'GENERAL_ERROR'; break;
+	}
 	
-	$error_info['type'] = $type;
 	$error_info['ident'] = $ident;
-	$error_info['text'] = 'not yet';
+	$error_info['text'] = $error[$ident];
 	$error_info['line'] = $line;
 	$error_info['file'] = $file;
 	$error_info['sql'] = $sql;
@@ -22,8 +29,8 @@ function error_report($type, $ident , $line, $file,$sql='')
 	
 	// submit error to db
 	$sql = "INSERT INTO " . $config_vars['table_prefix'] . "error_reports
-				(type,file,line,sql,ident,user_id,query_string)
-				VALUES ('{$error_info['type']}','{$error_info['file']}','{$error_info['line']}','{$error_info['sql']}','{$error_info['ident']}','{$userdata['user_id']}','$QUERY_STRING')";
+				(type,file,line,sql,ident,user_id,query_string,error_time)
+				VALUES ('{$type}','{$error_info['file']}','{$error_info['line']}','{$error_info['sql']}','{$error_info['ident']}','{$userdata['user_id']}','$QUERY_STRING','" . date("Y-m-d H:i:s") . "')";
 	if (!$result = $db->sql_query($sql))
 	{
 		message_die(GENERAL_ERROR, "Error report failed", '', __LINE__, __FILE__, $sql);
