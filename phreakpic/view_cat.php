@@ -12,7 +12,6 @@ include_once('./includes/template.inc.php');
 validate_config();
 
 
-
 // bigbrother stop the view of the last viewed content
 session_start();
 
@@ -119,8 +118,8 @@ if (isset($child_cats))
 	{
 		$child_cat_infos[$i]['id'] = $child_cats[$i]->get_id();
 		$child_cat_infos[$i]['parent_id'] = $child_cats[$i]->get_parent_id();
-		$child_cat_infos[$i]['name'] = $child_cats[$i]->get_name();
-		$child_cat_infos[$i]['description'] = $child_cats[$i]->get_description();
+		$child_cat_infos[$i]['name'] = htmlspecialchars($child_cats[$i]->get_name());
+		$child_cat_infos[$i]['description'] = htmlspecialchars($child_cats[$i]->get_description());
 		$child_cat_infos[$i]['content_amount'] = $child_cats[$i]->get_content_amount();
 		$child_cat_infos[$i]['content_child_amount'] = $child_cats[$i]->get_child_content_amount() - $child_cat_infos[$i]['content_amount'];
 		$child_cat_infos[$i]['current_rating'] = $child_cats[$i]->get_current_rating();
@@ -345,7 +344,7 @@ $smarty->assign('nav_string', build_nav_string($HTTP_GET_VARS['cat_id']));
 $smarty->assign('redirect', PHREAKPIC_PATH . "$template_file.php");
 $smarty->assign('thumb_size', $config_vars['thumb_size']['maxsize']);
 $smarty->assign('title_page',$lang['view_cat']);
-$smarty->assign('title_name',$category->get_name());
+$smarty->assign('title_name',htmlspecialchars($category->get_name()));
 
 
 $end_time = getmicrotime();

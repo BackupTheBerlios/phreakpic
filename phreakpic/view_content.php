@@ -182,12 +182,12 @@ if (check_content_action_allowed($content->get_contentgroup_id(),$userdata['user
 
 // show content
 $nav_string = build_nav_string($HTTP_GET_VARS['cat_id']);
-$nav_content['name']=$content->get_name();
+$nav_content['name']=htmlspecialchars($content->get_name());
 $nav_string[]=$nav_content;
 $smarty->assign('nav_string',$nav_string);
 $content->inc_views();
 $smarty->assign('html', $content->get_html());
-$smarty->assign('name', $content->get_name());
+$smarty->assign('name', htmlspecialchars($content->get_name()));
 $smarty->assign('content_id', $content->get_id());
 $smarty->assign('views', $content->get_views());
 $smarty->assign('current_rating', $content->get_current_rating());
@@ -209,7 +209,7 @@ $smarty->assign('content_width',$content->width);
 //titel
 $smarty->assign('title_site',$board_config['sitename']);
 $smarty->assign('title_page',$lang['view_content']);
-$smarty->assign('title_name',$content->get_name());
+$smarty->assign('title_name',htmlspecialchars($content->get_name()));
 
 $smarty->assign('current_page',"view_content.php?cat_id={$HTTP_GET_VARS['cat_id']}&content_id={$HTTP_GET_VARS['content_id']}");
 
