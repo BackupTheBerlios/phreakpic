@@ -140,8 +140,8 @@ $smarty->assign('redirect', PHREAKPIC_PATH . 'view_content.php');
 //assign link back to thumbs;
 $smarty->assign('thumb_link',$HTTP_SESSION_VARS['thumb_link']);
 
-
-//$smarty->assign('content_size',$content->get_content_size()); //thats the height and width of the object...
+$smarty->assign('content_height',$content->height);
+$smarty->assign('content_width',$content->width);
 //$smarty->assign('id',$id);
 $end_time = getmicrotime();
 $execution_time = $end_time - $start_time;
