@@ -2,15 +2,15 @@
 define ("ROOT_PATH",'');
 include_once('./includes/common.inc.php');
 include_once('./classes/album_content.inc.php');
-include_once('./languages/'.$userdata['user_lang'].'/lang_main.php');
 include_once('./includes/template.inc.php');
 include_once('./modules/pic_managment/interface.inc.php');
-
 include_once('./includes/functions.inc.php');
 
 
 // bigbrother stop the view of the last viewed content
 session_start();
+
+
 
 stop_view($HTTP_SESSION_VARS['view_start'],$HTTP_SESSION_VARS['view_content_id']);
 $HTTP_SESSION_VARS['view_start'] = 0;
@@ -59,9 +59,11 @@ if (isset($HTTP_POST_VARS['cat_delete']))
 //get the cats in the actual cat and information about them
 $child_cats = get_cats_of_cat($cat_id);
 
+
 //Get the contents of the actual cat and their thumbnails plus information like
 $category = new categorie;
 $category->generate_from_id($cat_id);
+
 
 
 if (isset($child_cats))
@@ -337,8 +339,16 @@ $smarty->assign('cat_id',$cat_id);
 // }
 // 
 // 
+
+// proceed comments
+$comment_type='cat';
+include ('includes/proceed_comment.inc.php');
 //Show comments
+
+
+
 $root_comments = get_comments_of_cat($cat_id);
+
 if (sizeof($root_comments) > 0)
 {
 	for ($i = 0; $i < sizeof($root_comments); $i++)
@@ -352,9 +362,10 @@ else
 	$smarty->assign('comments','false');
 }
 
-$comment_type='cat';
 
-include ('includes/proceed_comment.inc.php');
+
+
+
 
 
 //thats for the index.php who needs another template file. index.php just set the $template_file to another value and includes this file
