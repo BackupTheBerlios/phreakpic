@@ -7,6 +7,19 @@ $start_time = getmicrotime();
 include_once('includes/phpbb.inc.php');
 include_once('config.inc.php');
 
+
+if (!is_file('./languages/'.$userdata['user_lang'].'/lang_main.php'))
+{
+	$userdata['user_lang'] = $config_vars['default_lang'];
+}
+
+if (!is_dir($userdata['photo_user_template']))
+{
+	$userdata['photo_user_template'] = $config_vars['default_template'];
+}
+
+
+
 define("GENERATE_NAMES", 1); //for functions add_dir
 define("BLANK_NAMES", 0);
 
