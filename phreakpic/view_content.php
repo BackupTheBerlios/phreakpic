@@ -62,7 +62,13 @@ if (is_object($surrounding_content['next']))
 {
 	$smarty->assign('is_next_content', true);
 	$smarty->assign('next_thumb',$surrounding_content['next']->get_thumb());
+	if (isset($HTTP_GET_VARS['slideshow']))
+	{
+		$smarty->assign('meta',"<meta http-equiv=\"refresh\" content=\"{$HTTP_GET_VARS['slideshow']}; URL=view_content.php?cat_id=$cat_id&content_id={$surrounding_content['next']->id}&slideshow={$HTTP_GET_VARS['slideshow']}&$sid#pic\">");
+	}
+
 }
+
 
 // do commit
 if ($mode=='commit')

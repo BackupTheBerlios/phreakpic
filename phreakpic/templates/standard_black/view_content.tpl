@@ -61,8 +61,8 @@
 			<td>fehlt: Poll</td>
 			<td>
 				<div align="center">
-			<!--{$lang.full_size}--> <input type="radio" name="size" onclick="imageSize(0)"> <!--{$lang.fit_size}--> <input type="radio" name="size" onclick="imageSize(1)">
-				<a name="pic"></a>
+			<!--{$lang.full_size}--> <input type="radio" name="size" checked onclick="imageSize(0)"> <!--{$lang.fit_size}--> <input type="radio" name="size" onclick="imageSize(1)">
+					<a name="pic">A</a>
 						<table width="1" border="0" cellpadding="0" cellspacing="0">
 							<tr>
 								<td width="1"><img src="templates/<!--{$template_name}-->/img/elo.gif" width="14" height="14" /></td>
@@ -108,15 +108,18 @@
 								<td width="1" height="1"><img src="templates/<!--{$template_name}-->/img/eru.gif" width="14" height="14" /></td>
 							</tr>
 						</table>
-				</div>
-			</td>
-			<td>
-			
-			
-			
-				<!--{if $mode == edit}-->
-					<form 
-action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->" method="POST">
+						
+						<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->&slideshow=5<!--{$sid}-->#pic">Slideshow</a>
+						
+							
+						
+						
+						
+						</div>
+						</td><td>
+						
+					<!--{if $mode == edit}-->
+					<form action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->" method="POST">
 					
 					<!--{if $edit_info.allow_edit == true}-->
 						<!--{$lang.name}-->: <input type="text" onfocus="keyoff()" onblur="keyon()" name="name" value="<!--{$name}-->"><br>
@@ -197,5 +200,7 @@ action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--
 			</td>
 		</tr>
 	</table>
+	
 </div>
+
 <!--{include file="$template_name/footer.tpl"}-->

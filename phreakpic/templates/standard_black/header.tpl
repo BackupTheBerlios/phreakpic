@@ -2,6 +2,7 @@
 <html>
 <!--{config_load file="$template_name/config.cfg"}-->
 <head>
+	<!--{$meta}-->
 	<title><!--{$title_site}--> :: <!--{$title_page}--> - <!--{$title_name"}--></title>
 	<link rel="stylesheet" href="templates/<!--{$template_name}-->/design.css" type="text/css" />
 </head>
