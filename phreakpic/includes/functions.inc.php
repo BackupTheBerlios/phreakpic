@@ -156,7 +156,6 @@ function generate_array_from_row($row)
 function generate_where($field,$array)
 {
 	// generates an string that can be used in an sql where, which limits the query to all entry where $field is in $array
-	$where="";
 	for ($i=0;$i<sizeof($array);$i++)
 	{
 		$where=$where." ".$field." like ".$array[$i];
@@ -166,6 +165,10 @@ function generate_where($field,$array)
 	if (!isset($where))
 	{
 		$where = 0;
+	}
+	if (!isset($where))
+	{
+		$where="'0'";
 	}
 	return $where;
 }
