@@ -11,47 +11,55 @@ class group
 	function delete()
 	{
 		global $db,$config_vars;
-		// remove from content table
-		$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . "s WHERE id = " . $this->id;
-		if (!$result = $db->sql_query($sql))
+		if (check_auth_action_allowed())
 		{
-			message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+			// remove from content table
+			$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . "s WHERE id = " . $this->id;
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+			}
+			unset($this->id);
 		}
-		unset($this->id);
+		return OP_NP_MISSING_DELETE;
 	}
 	
 	function commit()
 	{
 		global $db,$config_vars;
-		if (!isset($this->id))
+		if (check_group_action_allowed())
 		{
-			// this is object is not yet in the datebase, make a new entry
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . "s (name, description)
-				VALUES ('$this->name', '$this->description')";
-			if (!$result = $db->sql_query($sql))
+			if (!isset($this->id))
 			{
-				message_die(GENERAL_ERROR, "Error while submitting a new group object to the db", '', __LINE__, __FILE__, $sql);
-			}
-			return OP_SUCCESSFULL;
-			
-			// set id;
-			$this->id = $db->sql_nextid();
+				// this is object is not yet in the datebase, make a new entry
+				$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . "s (name, description)
+					VALUES ('$this->name', '$this->description')";
+				if (!$result = $db->sql_query($sql))
+				{
+					message_die(GENERAL_ERROR, "Error while submitting a new group object to the db", '', __LINE__, __FILE__, $sql);
+				}
+				return OP_SUCCESSFULL;
 
-			
-		}
-		else
-		{
-			// object is already in the database just du an update
-			$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . " 
-				SET 	name = '$this->name', 
-					description = '$this->description'
-				WHERE id = $this->id";
-			if (!$result = $db->sql_query($sql))
-			{
-				message_die(GENERAL_ERROR, "Error while updating an existing cat object to the db", '', __LINE__, __FILE__, $sql);
+				// set id;
+				$this->id = $db->sql_nextid();
+
+
 			}
-			return OP_SUCCESSFULL;
+			else
+			{
+				// object is already in the database just du an update
+				$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . " 
+					SET 	name = '$this->name', 
+						description = '$this->description'
+					WHERE id = $this->id";
+				if (!$result = $db->sql_query($sql))
+				{
+					message_die(GENERAL_ERROR, "Error while updating an existing cat object to the db", '', __LINE__, __FILE__, $sql);
+				}
+				return OP_SUCCESSFULL;
+			}
 		}
+		return OP_NP_MISSING_EDIT;
 	}
 	
 	function generate_from_id($id)
@@ -122,19 +130,27 @@ class usergroup extends group
 	function add_user($user_id)
 	{
 		global $db,$config_vars;
-		if (!$this->user_in_group($user_id))
+		
+		if (check_group_action_allowed())
 		{
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "user_in_group (user_id,group_id) 
-				VALUES ('$user_id','$this->id')";
-			if (!$result = $db->sql_query($sql))
+			if (!$this->user_in_group($user_id))
 			{
-				message_die(GENERAL_ERROR, "Error while adding user to group", '', __LINE__, __FILE__, $sql);
+				$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "user_in_group (user_id,group_id) 
+					VALUES ('$user_id','$this->id')";
+				if (!$result = $db->sql_query($sql))
+				{
+					message_die(GENERAL_ERROR, "Error while adding user to group", '', __LINE__, __FILE__, $sql);
+				}
+				return OP_SUCCESSFUL;
 			}
-			return OP_SUCCESSFUL;
+			else
+			{
+				return OP_USER_ALREADY_IN_GROUP;
+			}
 		}
 		else
 		{
-			return OP_USER_ALREADY_IN_GROUP;
+			return OP_NP_MISSING_EDIT;
 		}
 	
 	}
@@ -142,19 +158,27 @@ class usergroup extends group
 	function remove_user($user_id)
 	{
 		global $db,$config_vars;
-		if ($this->user_in_group($user_id))
+		
+		if (check_group_action_allowed())
 		{
-			$sql = 'DELETE FROM ' . $config_vars['table_prefix'] . "user_in_group 
-				WHERE (user_id = $user_id) and group_id = $this->id";
-			if (!$result = $db->sql_query($sql))
+			if ($this->user_in_group($user_id))
 			{
-				message_die(GENERAL_ERROR, "Error while removing user from group", '', __LINE__, __FILE__, $sql);
+				$sql = 'DELETE FROM ' . $config_vars['table_prefix'] . "user_in_group 
+					WHERE (user_id = $user_id) and group_id = $this->id";
+				if (!$result = $db->sql_query($sql))
+				{
+					message_die(GENERAL_ERROR, "Error while removing user from group", '', __LINE__, __FILE__, $sql);
+				}
+				return OP_SUCCESSFUL;
 			}
-			return OP_SUCCESSFUL;
+			else
+			{
+				return OP_USER_NOT_IN_GROUP;
+			}
 		}
 		else
 		{
-			return OP_USER_NOT_IN_GROUP;
+			return OP_NP_MISSING_EDIT;
 		}
 
 	}

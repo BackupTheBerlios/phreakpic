@@ -26,75 +26,70 @@ class phreak_auth
 
 	function delete()
 	{
-		global $db,$config_vars;
-		// remove from content table
-		$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE id = " . $this->id;
-		
-		if (!$result = $db->sql_query($sql))
-		{
-			message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
-		}
-		unset($this->id);
 	}
 	
 	function commit($where)
 	{
 	
-				global $db,$config_vars;
-		if (!$this->in_db)
+		global $db,$config_vars;
+		if (check_auth_action_allowed())
 		{
-			// this is object is not yet in the datebase, make a new entry
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this). ' (';
-			
-			// get the set vars from db_vars
-			foreach ($this->db_vars as $value)
-			{			
-				$sql = $sql . "`$value`, ";
-			}
-			// unset the last ','
-			$sql{strlen($sql)-2}=' ';
-
-			$sql = $sql . ') VALUES ( ';
-			
-			foreach ($this->db_vars as $value)
-			{			
-				$sql = $sql . "'{$this->$value}', ";
-			}
-			$sql{strlen($sql)-2}=' ';
-			
-			$sql = $sql . ')';
-			
-			if (!$result = $db->sql_query($sql))
+			if (!$this->in_db)
 			{
-				message_die(GENERAL_ERROR, "Error while submitting a new auth object to the db", '', __LINE__, __FILE__, $sql);
-			}
-			return OP_SUCCESSFULL;
-			
-			$this->in_db = true;
-			
-		}
-		else
-		{
-			// object is already in the database just du an update
-			$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . ' SET ';
-			
-			// get the set vars from db_vars
-			foreach ($this->db_vars as $value)
-			{			
-				$sql = $sql . "`$value` = '{$this->$value}', ";
-			}
-			// unset the last ','
-			$sql{strlen($sql)-2}=' ';
+				// this is object is not yet in the datebase, make a new entry
+				$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this). ' (';
 
-			$sql = $sql . "WHERE $where";
-			
-			if (!$result = $db->sql_query($sql))
-			{
-				message_die(GENERAL_ERROR, "Error while updating an existing cat_auth object to the db", '', __LINE__, __FILE__, $sql);
+				// get the set vars from db_vars
+				foreach ($this->db_vars as $value)
+				{			
+					$sql = $sql . "`$value`, ";
+				}
+				// unset the last ','
+				$sql{strlen($sql)-2}=' ';
+
+				$sql = $sql . ') VALUES ( ';
+
+				foreach ($this->db_vars as $value)
+				{			
+					$sql = $sql . "'{$this->$value}', ";
+				}
+				$sql{strlen($sql)-2}=' ';
+
+				$sql = $sql . ')';
+
+				if (!$result = $db->sql_query($sql))
+				{
+					message_die(GENERAL_ERROR, "Error while submitting a new auth object to the db", '', __LINE__, __FILE__, $sql);
+				}
+				return OP_SUCCESSFULL;
+
+				$this->in_db = true;
+
 			}
-			return OP_SUCCESSFUL;
+			else
+			{
+				// object is already in the database just du an update
+				$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . ' SET ';
+				// get the set vars from db_vars
+				foreach ($this->db_vars as $value)
+				{			
+					$sql = $sql . "`$value` = '{$this->$value}', ";
+				}
+				// unset the last ','
+				$sql{strlen($sql)-2}=' ';
+				$sql = $sql . "WHERE $where";
+				if (!$result = $db->sql_query($sql))
+				{
+					message_die(GENERAL_ERROR, "Error while updating an existing cat_auth object to the db", '', __LINE__, __FILE__, $sql);
+				}
+				return OP_SUCCESSFUL;
+			
+			
+			}
 		}
-	
+			
+		return OP_NP_MISSING_EDIT;
+
 	}
 	
 	function generate($usergroup_id,$group_id)
@@ -292,15 +287,22 @@ class cat_auth extends phreak_auth
 	
 	function delete()
 	{
-		global $db,$config_vars;
-		// remove from content table
-		$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE (usergroup_id = $this->usergroup_id) and (catgroup_id = $this->catgroup_id)";
-		
-		if (!$result = $db->sql_query($sql))
+		if (check_auth_action_allowed())
 		{
-			message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+			global $db,$config_vars;
+			// remove from content table
+			$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE (usergroup_id = $this->usergroup_id) and (catgroup_id = $this->catgroup_id)";
+
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+			}
+			unset($this->id);
 		}
-		unset($this->id);
+		else
+		{
+			return OP_NP_MISSING_DELETE;
+		}
 	}
 
 	
@@ -401,37 +403,34 @@ class content_auth extends phreak_auth
 	
 	function content_auth()
 	{
-	
-		
-	
 		$this->db_vars[] = 'contentgroup_id';
-		
-	
-		
-		
 	}
 	
 	function generate($usergroup_id,$group_id)
 	{
 		phreak_auth::generate($usergroup_id,$group_id);
 		$this->old_contentgroup_id = $this->contentgroup_id;
-		
 	}
 	
 	function delete()
 	{
 		global $db,$config_vars;
-		// remove from content table
-		$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE (usergroup_id = $this->usergroup_id) and (contentgroup_id = $this->contentgroup_id)";
-		if (!$result = $db->sql_query($sql))
+		if (check_auth_action_allowed())
 		{
-			message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+			// remove from content table
+			$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE (usergroup_id = $this->usergroup_id) and (contentgroup_id = $this->contentgroup_id)";
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+			}
+			unset($this->id);
 		}
-		unset($this->id);
+		else
+		{
+			return OP_NP_MISSING_DELETE;
+		}
+			
 	}
-
-	
-
 	
 	function set_group_id($id)
 	{
@@ -460,10 +459,8 @@ class content_auth extends phreak_auth
 	{
 		$where = "(usergroup_id = $this->old_usergroup_id) and (contentgroup_id = $this->old_contentgroup_id)";
 		phreak_auth::commit($where);
-
-
 	}
-
-
 }
+
+
 ?>
