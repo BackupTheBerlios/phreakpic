@@ -1,7 +1,12 @@
 <?php
 	include_once(ROOT_PATH . 'includes/common.inc.php');
 	include_once(SMARTY_DIR.'Smarty.class.php');
+	
+	// include the language files
 	include_once(ROOT_PATH . './languages/'.$userdata['user_lang'].'/lang_main.php');
+	// include lang file with admin customizable words (no error message because their might not be one
+	@include_once(ROOT_PATH . './languages/'.$userdata['user_lang'].'/lang_custom.php');
+	
 
 	$smarty = new Smarty;
 	$smarty->template_dir = ROOT_PATH . 'templates/';
