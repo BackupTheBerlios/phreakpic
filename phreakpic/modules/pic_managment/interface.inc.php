@@ -2,6 +2,7 @@
 require_once('includes/common.inc.php');
 require_once('classes/album_content.inc.php');
 require_once('classes/categorie.inc.php');
+require_once('classes/user_feedback.inc.php');
 
 // Get Functions
 
@@ -178,6 +179,32 @@ function get_content_from_row($row)
 		return $contentobj;
 	}
 	return OP_FAILED;
+}
+
+
+// Comment Functions
+
+function get_comments_of_content($content_id)
+{
+	global $config_vars,$db;
+	// makes this to the first comment of content $content_id
+	$sql = 'SELECT * FROM ' . $config_vars['table_prefix'] . 'content_comments
+		WHERE (owner_id = ' .$content_id . ') and (parent_id = 0)';
+		
+	if (!$result = $db->sql_query($sql))
+	{
+		message_die(GENERAL_ERROR, "Error generating initial comment", '', __LINE__, __FILE__, $sql);
+	}
+	
+	
+	while ($row = $db->sql_fetchrow($result))
+	{
+		$com = new content_comment();
+		$com->generate_from_row($row);	
+		$com_array[] = $com;
+	}
+	
+	return $com_array;
 }
 
 
