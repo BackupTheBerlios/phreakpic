@@ -8,6 +8,7 @@ class auth
 	var $view;
 	var $delete;
 	var $edit;
+	var $comment_edit;
 	
 	// need to save those becuase object is identified by them
 	var $old_usergroup_id;
@@ -85,11 +86,24 @@ class auth
 		return $this->view;
 	}
 	
+	function set_comment_edit($comment_edit=1)
+	{
+		$this->comment_edit = $comment_edit;
+		return OP_SUCCESFULL;
+	}
+	
+				
+	function get_comment_edit()
+	{
+		return $this->comment_edit;
+	}
+	
 	function set_view($view=1)
 	{
 		$this->view = $view;
 		return OP_SUCCESFULL;
 	}
+
 
 	function unset_view()
 	{
@@ -155,8 +169,8 @@ class cat_auth extends auth
 		if (!$this->in_db)
 		{
 			// this is object is not yet in the datebase, make a new entry
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . " (`usergroup_id`,`catgroup_id`,`view`,`delete`,`edit`)
-				VALUES ('$this->usergroup_id', '$this->catgroup_id','$this->view','$this->delete','$this->edit')";
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . " (`usergroup_id`,`catgroup_id`,`view`,`delete`,`edit`,`comment_edit`)
+				VALUES ('$this->usergroup_id', '$this->catgroup_id','$this->view','$this->delete','$this->edit','$this->comment_edit')";
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Error while submitting a new auth object to the db", '', __LINE__, __FILE__, $sql);
@@ -174,9 +188,9 @@ class cat_auth extends auth
 					`catgroup_id` = '$this->catgroup_id',
 					`view` = '$this->view',
 					`delete` = '$this->delete',
-					`edit` = '$this->delete'		
+					`edit` = '$this->edit',
+					`comment_edit` = '$this->comment_edit'		
 				WHERE (usergroup_id = $this->old_usergroup_id) and (catgroup_id = $this->old_catgroup_id)";
-			echo "<br>$sql<br>";
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Error while updating an existing cat_auth object to the db", '', __LINE__, __FILE__, $sql);
@@ -200,5 +214,80 @@ class cat_auth extends auth
 
 class content_auth extends auth
 {
+	var $contentgroup_id;
+	
+	var $old_contentgroup_id;
+	
+	function generate($usergroup_id,$group_id)
+	{
+		auth::generate($usergroup_id,$group_id);
+		$this->old_contentgroup_id = $this->contentgroup_id;
+		
+	}
+	
+	function delete()
+	{
+		global $db,$config_vars;
+		// remove from content table
+		$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE (usergroup_id = $this->usergroup_id) and (contentgroup_id = $this->contentgroup_id)";
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+		}
+		unset($this->id);
+	}
+
+	
+
+	
+	function set_group_id($id)
+	{
+		$this->contentgroup_id = $id;
+		return OP_SUCCSESSFUL;
+	}
+	
+	function get_group_id($id)
+	{
+		return $this->contentgroup_id;
+	}
+	
+	function commit()
+	{
+		global $db,$config_vars;
+		if (!$this->in_db)
+		{
+			// this is object is not yet in the datebase, make a new entry
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . " (`usergroup_id`,`contentgroup_id`,`view`,`delete`,`edit`,`comment_edit`)
+				VALUES ('$this->usergroup_id', '$this->contentgroup_id','$this->view','$this->delete','$this->edit','$this->comment_edit')";
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Error while submitting a new auth object to the db", '', __LINE__, __FILE__, $sql);
+			}
+			return OP_SUCCESSFULL;
+			
+			$this->in_db = true;
+			
+		}
+		else
+		{
+			// object is already in the database just du an update
+			$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . " 
+				SET 	`usergroup_id` = '$this->usergroup_id', 
+					`contentgroup_id` = '$this->contentgroup_id',
+					`view` = '$this->view',
+					`delete` = '$this->delete',
+					`edit` = '$this->edit',
+					`comment_edit` = '$this->comment_edit'
+				WHERE (usergroup_id = $this->old_usergroup_id) and (contentgroup_id = $this->old_contentgroup_id)";
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Error while updating an existing cat_auth object to the db", '', __LINE__, __FILE__, $sql);
+			}
+			return OP_SUCCESSFUL;
+		}
+
+	}
+
+
 }
 ?>
