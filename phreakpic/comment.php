@@ -1,16 +1,42 @@
 <?php
-	include_once ("includes/common.inc.php");
-	include_once('./includes/template.inc.php');
+include_once ("includes/common.inc.php");
+include_once('./includes/template.inc.php');
+include_once('./classes/user_feedback.inc.php');
 	
-	$smarty->assign('mode', $mode);
-	$smarty->assign('type', $type);
-	$smarty->assign('parent_id', $parent_id);
-	$smarty->assign('cat_id', $cat_id);
 	
-	if (isset($content_id))
+	
+$smarty->assign('mode', $mode);
+$smarty->assign('type', $type);
+if (isset($content_id))
+{
+	$smarty->assign('oontent_id', $content_id);
+	$smarty->assign('oontent_id_string', "&content_id=$content_id");
+}
+$smarty->assign('cat_id', $cat_id);
+	
+	if ($mode == "add")
 	{
-		$smarty->assign('oontent_id', $content_id);
-		$smarty->assign('oontent_id_string', "&content_id=$content_id");
+		$smarty->assign('parent_id', $parent_id);
+		
+
+	
 	}
-	$smarty->display($userdata['photo_user_template'].'/comment.tpl');
+	
+	if ($mode == 'edit_comment')
+	{
+		if ($type == 'content')
+		{
+			$comment = new content_comment();
+		}
+		else
+		{
+			$comment = new cat_comment();
+		}
+		$comment->generate_from_id($id);
+		$smarty->assign('text',$comment->get_feedback());
+		$smarty->assign('topic',$comment->get_topic());
+		// parent id is just as id here
+		$smarty->assign('parent_id',$id);
+	}
+$smarty->display($userdata['photo_user_template'].'/comment.tpl');
 ?>

@@ -10,9 +10,9 @@
 <form action="view_<!--{$type}-->.php?cat_id=<!--{$cat_id}--><!--{$oontent_id_string}-->" method="POST">
  
 
-Topic: <input type="text" name="topic">
+Topic: <input type="text" name="topic" value="<!--{$topic}-->">
 <br>Text:<br>
-<textarea name="comment_text" cols="70" rows="10"></textarea>
+<textarea name="comment_text" cols="70" rows="10"><!--{$text}--></textarea>
 
 <input type="hidden" name="mode" value="<!--{$mode}-->">
 <input type="hidden" name="parent_id" value="<!--{$parent_id}-->">

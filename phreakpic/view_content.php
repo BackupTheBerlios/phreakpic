@@ -25,13 +25,24 @@ if ($mode == "add")
 	
 }
 
+if ($mode == 'edit_comment')
+{
+	$comment = new content_comment();
+	$comment->generate_from_id($HTTP_POST_VARS['parent_id']);
+	$comment->set_feedback($HTTP_POST_VARS['comment_text']);
+	$comment->set_topic($HTTP_POST_VARS['topic']);
+	$comment->set_changed_count($comment->get_changed_count()+1);
+	$comment->set_last_changed_date(date("Y-m-d H:i:s"));
+	$comment->commit();	
+}
 
 
 
 $content = get_content_object_from_id($content_id);
 if (!is_object($content))
 {
-	message_die(GENERAL_ERROR, "Could not generate content from id", '', __LINE__, __FILE__, $sql);
+	message_die(GENERAL_ERROR, "Could not generate content from id", '', __LINE__, 
+__FILE__, $sql);
 }
 
 
@@ -85,7 +96,8 @@ if (is_array($add_to_cats))
 // Check if user has content_remove rights on this categorie
 $cat_obj = new categorie();
 $cat_obj->generate_from_id($cat_id);
-if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'content_remove'))
+if 
+(check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'content_remove'))
 {
 	$smarty->assign('allow_content_remove',1);
 	if ($mode == "edit")
@@ -161,17 +173,23 @@ if ($mode == "commit")
 	if ($redirect_to_cat)
 	{
 		// redirect to cat view
-		$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/", getenv("SERVER_SOFTWARE")) ) ? "Refresh: 0; URL=" : "Location: ";
+		$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/", 
+getenv("SERVER_SOFTWARE")) ) ? "Refresh: 0; URL=" : "Location: ";
 		header($header_location . append_sid("view_cat.php?cat_id=$cat_id", true));
 	}
 }
+
+
+
+
+	
 
 
 //Show comments
 $root_comments = get_comments_of_content($content_id);
 for ($i = 0; $i < sizeof($root_comments); $i++)
 {
-	make_comments($root_comments[$i],0);
+	make_comments($root_comments[$i],0,$content->check_perm('comment_edit'));
 }
 $smarty->assign('comments',$comments);
 
