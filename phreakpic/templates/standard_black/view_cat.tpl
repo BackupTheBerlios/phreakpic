@@ -39,10 +39,10 @@
 				
 				<!--{if ($mode == 'edit') and ($child_cat_infos[id].edit == true)}-->
 					<td id="td_cat" name="td_cat">
-						<input name="cat_name[]" type="text" value="<!--{$child_cat_infos[id].name}-->">
+						<input name="cat_name[<!--{$smarty.section.id.index}-->]" type="text" value="<!--{$child_cat_infos[id].name}-->">
 					</td>
 					<td>
-						<input name="cat_description[]" type="text" value="<!--{$child_cat_infos[id].description}-->">
+						<input name="cat_description[<!--{$smarty.section.id.index}-->]" type="text" value="<!--{$child_cat_infos[id].description}-->">
 					</td>
 					<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
 					<td><!--{$child_cat_infos[id].current_rating}--></td>
@@ -51,7 +51,7 @@
 					
 					<!--{if ($child_cat_infos[id].remove_from_group == 'true')}-->	
 					
-						<select name="cat_catgroup[]">
+						<select name="cat_catgroup[<!--{$smarty.section.id.index}-->]">
 							<!--{section name=cat_id loop=$add_to_catgroups}-->
 							<!--{if $child_cat_infos[id].catgroup_id == $add_to_catgroups[cat_id].id}-->
 								<option selected value="<!--{$add_to_catgroups[cat_id].id}-->"><!--{$add_to_catgroups[cat_id].name}--></option>
@@ -64,7 +64,7 @@
 					</td>
 					<td>
 						<!--{if ($allow_cat_remove == 'true')}-->	
-						<select name="cat_parent_cat[]">
+						<select name="cat_parent_cat[<!--{$smarty.section.id.index}-->]">
 							<!--{section name=cat_parent_id loop=$add_to_cats}-->
 								<!--{if $child_cat_infos[id].parent_id == $add_to_cats[cat_parent_id].id}-->
 									<option selected value="<!--{$add_to_cats[cat_parent_id].id}-->"><!--{$add_to_cats[cat_parent_id].name}--></option>
