@@ -3,6 +3,8 @@ $config_vars = array
 (
 	//Database
 	'table_prefix' => 'photo_',
+	
+	'content_path_prefix' => 'content',
 
 	//Picture stuff
 	'thumb_size' =>
@@ -16,7 +18,9 @@ $config_vars = array
 	// ID of the cat where to put pictures that are no longer linked in any cat
 	'deleted_content_cat' => 1,
 	
-	'root_categorie' => 0
+	'root_categorie' => 0,
+	
+	'dir_mask' => 0777
     
 );
 ?>
