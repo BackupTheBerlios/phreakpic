@@ -1,0 +1,31 @@
+PhreakPic provides an customizable search function. 
+The admin can create XML descriptions of sql queries. 
+These queries must return the content_id(s) of the content resulting the search.
+In the querie you can add fields and parameters that the user can specify.
+The followin document describes the creating of those XML description.
+
+The most outer tags must be <sql>...</sql>.
+In between is the query and other tags that construct the sql querie, in the same order, in the end.
+All normal text is unaltered put in the sql queri. So an simple exmaple could be:
+<sql>SELECT id from phreakpic_content</sql>
+This would return all content in the album.
+
+Param Tag:
+Description: With this tag you can add variables to the querie. These can not be changed by the user
+Syntax: <param type="[variable]"></param>	
+[variable] specifies what value should be used there. Current the following are supported:
+current_user_id: User Id of the current user.
+
+Subsql Tag:
+Description: Specifies plain sql queries
+
+Field Tag:
+
+<field name="a">
+	<descr>Text before</descr>
+	<type>DROPDOWN</type>
+	<subsql>name_of_subsql</subsql>
+	<value>a,b,c</value>
+	
+</field>
+

@@ -1,0 +1,16 @@
+Error Handling. (not yet fully implemented)
+
+Design:
+There error hanling consits of one global container in which every error (or warning) message is stored.
+
+Interface:
+All error in the container will be displayed in a list in n new browser window.
+The user can give a comment what he was doing when before the error occurse
+
+Fatal Errors:
+If a fatal error occurs the script will be stoped right away and the message will be display in the same browser window.
+
+Coding:
+The global container is an array.
+Every error is an object.
+At the end of each page the array is parsed and if needed the error pages created.

@@ -15,7 +15,6 @@ for beta relase:
 X rename cats
 X rename class auth in phreak_auth and maybe the others also
 X handle auth when groups are deleted
-- use language files everywhere
 X Design authorisation for adding people to groups
 X Design which content/catgroups can be selected when creating new content/cat
 X vollständiges admin interface (wie letzendlich auch immer)
@@ -23,7 +22,7 @@ X vollständiges admin interface (wie letzendlich auch immer)
   X auths
 
 0.8:
-Bugs: 
+Bugs:
 X thumbfile in album_content
 - rotate
 Features
@@ -33,25 +32,31 @@ X user selector for edit comment
 - Check PostgreSQL compatibility
 - Polls
 - add auth checking to all the set function in auth, group, etc
-- Design 
+- Improve templates
 X custom fields
   - additional parameters (allow arrays, get selectable data from an sql,...)
 	- deaktivierung einzelner felder
 	- Wiki ability ?
 - Fix database out of sync bugs (content and comment)
 - Rename dir when rename cat
-
+- finish new error handling
+- use language files everywhere
+- Report bug link ?
 
 1.0:
 
 soon future:
-- Design authorisation for creating auths.... 
+- Docus
+- Design authorisation for creating auths....
 - BigBrother User Interface (and set BigBrother Level option)
 - clean up requires and includes
 - remove vars from url and use sessions for them
 - code review und einheitlich machen (speziell view_cat, view_content)
 - doppelten code in funktionen packen
-
+- Favourites
+- Basket:
+	- multiple baskets
+	- add to favourites
 
 
 future:
