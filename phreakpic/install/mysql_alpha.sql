@@ -4,8 +4,8 @@
 # http://phpmyadmin.sourceforge.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Oct 01, 2002 at 12:13 AM
-# Server version: 3.23.52
+# Generation Time: Nov 29, 2002 at 07:41 PM
+# Server version: 3.23.53
 # PHP Version: 4.2.3
 # Database : `phpBB2`
 # --------------------------------------------------------
@@ -44,6 +44,7 @@ CREATE TABLE `photo_cat_comments` (
   `parent_id` smallint(6) NOT NULL default '0',
   `topic` text NOT NULL,
   `last_changed_date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `poster_name` varchar(25) default NULL,
   PRIMARY KEY  (`id`),
   KEY `id` (`id`)
 ) TYPE=MyISAM;
@@ -132,6 +133,7 @@ CREATE TABLE `photo_content_comments` (
   `parent_id` smallint(6) NOT NULL default '0',
   `topic` text NOT NULL,
   `last_changed_date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `poster_name` varchar(25) default NULL,
   PRIMARY KEY  (`id`),
   KEY `id` (`id`)
 ) TYPE=MyISAM;
@@ -172,6 +174,21 @@ CREATE TABLE `photo_contentgroups` (
   `id` int(11) NOT NULL auto_increment,
   `name` text NOT NULL,
   `description` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `id_2` (`id`)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Table structure for table `photo_custom_searches`
+#
+
+CREATE TABLE `photo_custom_searches` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(50) NOT NULL default '',
+  `xml` text NOT NULL,
+  `params` text NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `id_2` (`id`)
