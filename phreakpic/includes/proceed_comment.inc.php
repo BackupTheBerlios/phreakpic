@@ -39,16 +39,21 @@ if ($HTTP_POST_VARS['mode'] == 'edit_comment')
 		$comment->set_feedback($HTTP_POST_VARS['comment_text']);
 		$comment->set_topic($HTTP_POST_VARS['topic']);
 		$comment->set_poster_name($HTTP_POST_VARS['poster_name']);
-		$comment->set_user_id($HTTP_POST_VARS['user_id']);
+
+		// dont change user id if it has not set (occures when normal users edit their postings)
+		if (isset($HTTP_POST_VARS['user_id']))
+		{
+			$comment->set_user_id($HTTP_POST_VARS['user_id']);
+		}
 		$comment->set_changed_count($comment->get_changed_count()+1);
 		$comment->set_last_changed_date(date("Y-m-d H:i:s"));
-		$comment->commit();	
+		$comment->commit();
 	}
 }
 
 
 if ($HTTP_GET_VARS['mode'] == 'del_comment')
-{	
+{
 
 	$comment = new $class;
 	$error = $comment->generate_from_id($comment_id);
