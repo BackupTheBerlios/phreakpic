@@ -397,9 +397,8 @@ if (!isset($template_file))
 
 
 $smarty->assign('nav_string', build_nav_string($cat_id));
-$smarty->assign('template_name', $userdata['photo_user_template']);
-$smarty->assign('sid','&sid='.$userdata['session_id']);
-$smarty->assign('username', $userdata['username']);
+$smarty->assign('php_self', $PHP_SELF);
+
 
 $end_time = getmicrotime();
 $execution_time = $end_time - $start_time;

@@ -246,7 +246,6 @@ for ($i = 0; $i < sizeof($root_comments); $i++)
 $smarty->assign('comments',$comments);
 
 
-$smarty->assign('lang', $lang);
 $smarty->assign('nav_string', build_nav_string($cat_id));
 $smarty->assign('html', $content->get_html());
 $smarty->assign('name', $content->get_name());
@@ -254,8 +253,9 @@ $smarty->assign('content_id', $content->get_id());
 $smarty->assign('views', $content->get_views());
 $smarty->assign('current_rating', $content->get_current_rating());
 $smarty->assign('cat_id', $cat_id);
-$smarty->assign('template_name', $userdata['photo_user_template']);
-$smarty->assign('sid','&sid='.$userdata['session_id']);
+$smarty->assign('php_self', $PHP_SELF);
+
+
 
 //$smarty->assign('content_size',$content->get_content_size()); //thats the height and width of the object...
 //$smarty->assign('id',$id);
