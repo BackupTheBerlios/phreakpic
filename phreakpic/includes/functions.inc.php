@@ -99,7 +99,7 @@ function make_comments($comment, $level)
 {
 	global $comments;
 	$comment_infos['level'] = $level;
-	$comment_infos['id'] = $comment->$id;    //get_id();
+	$comment_infos['id'] = $comment->id;    //get_id();
 	$comment_infos['text'] = $comment->get_feedback();
 	$user_data = get_userdata(intval($comment->get_user_id()));
 	$comment_infos['username'] = $user_data['username'];
