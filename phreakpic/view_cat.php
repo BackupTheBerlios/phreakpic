@@ -2,9 +2,10 @@
 define ("ROOT_PATH",'');
 include_once('./includes/common.inc.php');
 include_once('./classes/album_content.inc.php');
+include_once('./languages/'.$userdata['user_lang'].'/lang_main.php');
 include_once('./includes/template.inc.php');
 include_once('./modules/pic_managment/interface.inc.php');
-include_once('./languages/'.$userdata['user_lang'].'/lang_main.php');
+
 include_once('./includes/functions.inc.php');
 
 
@@ -342,7 +343,7 @@ if (sizeof($root_comments) > 0)
 {
 	for ($i = 0; $i < sizeof($root_comments); $i++)
 	{
-		make_comments($root_comments[$i],0,check_cat_action_allowed($cat_id,$userdata['user_id'],'content_edit'));
+		make_comments($root_comments[$i],0,check_cat_action_allowed($cat_id,$userdata['user_id'],'comment_edit'));
 	}
 	$smarty->assign('comments',$comments);
 }
