@@ -34,7 +34,7 @@ function check_cat_action_allowed($catgroup_id,$user_id,$action)
 	$usergroup_ids=get_groups_of_user($user_id);
 	
 	// add the default usergroups
-	$usergroup_ids=array_merge($usergroup_ids,$config_vars['default_usergroup_ids']);
+	$usergroup_ids=array_merge($usergroup_ids,$config_vars['auto_usergroup_ids']);
 
 	// if the user is in no usergroup then disallow the action
 	if (!isset($usergroup_ids))
@@ -83,7 +83,7 @@ function check_content_action_allowed($contentgroup_id,$user_id,$action)
 	$usergroup_ids=get_groups_of_user($user_id);	
 	// check if there is at least one entry where in one of the $user_groups is $action allowed in $contentgroup_id
 	// add the default usergroups
-	$usergroup_ids=array_merge($usergroup_ids,$config_vars['default_usergroup_ids']);
+	$usergroup_ids=array_merge($usergroup_ids,$config_vars['auto_usergroup_ids']);
 	
 	$where = generate_where('usergroup_id',$usergroup_ids);
 
@@ -137,7 +137,7 @@ function get_allowed_contentgroups_where($user_id,$action,$field='contentgroup_i
 //	$sql = 'select contentgroup_id from '.$config_vars['table_prefix']."content_auth where ($action like 1) and $where";
 
 // EXPERIMENTAL SQL which doesnt needs get_groups_of_user
-	$default_usergroups_where = generate_where('auth.usergroup_id',$config_vars['default_usergroup_ids']);
+	$default_usergroups_where = generate_where('auth.usergroup_id',$config_vars['auto_usergroup_ids']);
 	
                                            
 	$sql ='SELECT auth.contentgroup_id, uig.group_id FROM '.$config_vars['table_prefix'].'content_auth as auth, '.$config_vars['table_prefix']."user_in_group AS uig 
@@ -182,7 +182,7 @@ function get_allowed_catgroups_where($user_id,$action,$field='catgroup_id')
 	$usergroup_ids = get_groups_of_user($user_id);
 	
 		// add the default usergroups
-	$usergroup_ids=array_merge($usergroup_ids,$config_vars['default_usergroup_ids']);
+	$usergroup_ids=array_merge($usergroup_ids,$config_vars['auto_usergroup_ids']);
 
 	
 		
