@@ -163,6 +163,8 @@ class cat_auth extends auth
 			}
 			return OP_SUCCESSFULL;
 			
+			$this->in_db = true;
+			
 		}
 		else
 		{
