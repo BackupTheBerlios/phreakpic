@@ -340,7 +340,7 @@ function getfile($in_file)
 	return substr($in_file,0,strrpos($in_file,"."));	
 }
 
-/*function linkencode ($p_url) {
+function linkencode ($p_url) {
 	// needs php 4.1.0
  $ta = parse_url($p_url);
  if (!empty($ta[scheme])) { $ta[scheme].='://'; }
@@ -362,15 +362,15 @@ function getfile($in_file)
  $tu.=rawurlencode($tok).'/';
  $tok=strtok("\\/");
  }
- $ta[path]='/'.trim($tu, '/');
+ $ta[path]=trim($tu, '/');
  }
  if (!empty($ta[query])) { $ta[query]='?'.$ta[query]; }
  if (!empty($ta[fragment])) { $ta[fragment]='#'.$ta[fragment]; }
  return implode('', array($ta[scheme], $ta[user], $ta[pass], $ta[host], 
 $ta[port], $ta[path], $ta[query], $ta[fragment]));
-}*/
+}
 
-function  linkencode($str)
+function  linkencode1($str)
 {
 	// encodes a string so it can be used as an html link e.g. in urls
 	// for php < 4.1.0
