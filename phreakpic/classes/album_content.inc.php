@@ -42,7 +42,7 @@ class album_content
 	var $thumbfile;
 	var $add_to_group;
 	var $remove_from_group;
-	
+	var $new_filename;
 	
 	
 	function get_editable_values($cat_id)
@@ -215,7 +215,6 @@ class album_content
 				$this->cat_ids[] = $row['cat_id'];
 			}
 		}
-
 	}
 	
 	function get_place_in_cat()
@@ -434,32 +433,41 @@ class album_content
 		if (sizeof($this->cat_ids) == 0)
 		{
 			// move content in the deleted pics cat.
+			$del_content_cat = new categorie();
+			$del_content_cat->generate_from_id($config_vars['deleted_content_cat']);
+			$del_content_cat->content_amount++;
+			$del_content_cat->commit();
+			
 			$this->cat_ids[0] = $config_vars['deleted_content_cat'];
+			
 		}
 		
 		
 		
 		// move to the new calculated localtaion (may be the same)		
-		$new_file=$this->generate_filename();
 		
-		if (!is_dir(dirname($new_file)))
+		if (isset($this->new_filename))
 		{
-			makedir(dirname($new_file));
-		}
 		
-		//echo "rename({$this->file},$new_file)<br>";
-		if (rename($this->file,$new_file));
-		{
-			$this->set_file($new_file); 
+			if (!is_dir(dirname($this->new_filename)))
+			{
+				makedir(dirname($this->new_filename));
+			}
+
+			//echo "rename({$this->file},$new_file)<br>";
+			if (rename($this->file,$this->new_filename));
+			{
+				$this->set_file($this->new_filename); 
+			}
+			//echo "rename pic" .$this->file." -> ".$new_file."<br>";
+
+			// move thumb
+			if (!is_dir(dirname($this->get_thumbfile())))
+			{
+				makedir(dirname($this->get_thumbfile()));
+			}
 		}
-		//echo "rename pic" .$this->file." -> ".$new_file."<br>";
-		
-		// move thumb
-		if (!is_dir(dirname($this->get_thumbfile())))
-		{
-			makedir(dirname($this->get_thumbfile()));
-		}
-		
+
 		
 		//echo "rename thumb" .$this->thumbfile." -> ".$this->get_thumbfile()."<br>";
 		// but first check if thumb exists
@@ -629,6 +637,15 @@ class album_content
 		{
 			$this->generate_content_in_cat_data();
 		}
+		
+		if (is_array($this->cat_ids))
+		{
+			if (in_array($new_cat_id,$this->cat_ids))
+			{
+				return OP_CONTENT_ALREADY_IN_CAT;
+			}
+		}
+		
 
 		
 		
@@ -678,6 +695,7 @@ class album_content
 				array_splice($this->cat_ids,array_search($old_cat_id,$this->cat_ids),1);
 				$old_cat->set_content_amount($old_cat->get_content_amount()-1);
 				$old_cat->commit();
+				$this->new_filename=$this->generate_filename();
 				return OP_SUCCESSFUL;
 			}
 			else
@@ -826,6 +844,7 @@ class album_content
 	{
 		global $config_vars;
 		//check if content is already in a cat 
+		
 		
 		if (!isset($this->cat_ids))
 		{
@@ -996,6 +1015,7 @@ class picture extends album_content
 
 	function get_thumb()
 	{
+			//	return dirname($this->file) . '/thumbs/' . basename($this->file);	
 		if (!is_file($this->get_thumbfile()))
 		{
 			$this->generate_thumb();
@@ -1003,6 +1023,8 @@ class picture extends album_content
 		
 		$array['content_id'] = $this->id;
 		$size=getimagesize($this->get_thumbfile());
+		$array['thumb_width'] = $this->$size[1];
+		$array['thumb_height'] = $this->$size[2];
 		$array['html'] = "<img src=".linkencode($this->get_thumbfile())." $size[3]>";
 		$array['width'] = $this->width;
 		$array['height'] = $this->height;
