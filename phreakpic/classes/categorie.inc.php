@@ -50,6 +50,16 @@ class categorie
 		
 	}
 	
+	function check_perm($perm)
+	{
+		global $userdata;
+		if (!isset($$perm))
+		{
+			$this->$perm = check_cat_action_allowed($this->catgroup_id, $userdata['user_id'], $perm);
+		}
+		return $this->$perm;
+	}
+	
 	
 	function set_is_serie($new_val)
 	{
@@ -252,7 +262,7 @@ class categorie
 					unset($this->id);
 					return OP_SUCCESSFUL;
 				}
-				return OP_PARTLY_SUCCESSFULL;
+				return OP_PARTLY_SUCCESSFUL;
 				
 			}
 			else
@@ -291,7 +301,7 @@ class categorie
 			}
 			
 			$this->id = $db->sql_nextid();
-			return OP_SUCCESSFULL;
+			return OP_SUCCESSFUL;
 			
 
 			
@@ -312,7 +322,7 @@ class categorie
 			{
 				message_die(GENERAL_ERROR, "Error while updating an existing cat object to the db", '', __LINE__, __FILE__, $sql);
 			}
-			return OP_SUCCESSFULL;
+			return OP_SUCCESSFUL;
 
 			
 			
