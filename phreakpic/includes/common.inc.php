@@ -26,6 +26,12 @@ if ((!is_dir($userdata['photo_user_template'])) or (!isset($userdata['photo_user
 	$userdata['photo_user_template'] = $config_vars['default_template'];
 }
 
+if (!isset($userdata['content_per_page']))
+{
+	$userdata['content_per_page'] = $config_vars['default_content_per_page'];
+}
+
+
 
 
 define("GENERATE_NAMES", 1); //for functions add_dir
