@@ -6,7 +6,7 @@
 						<!--{/if}-->
 					</font>
 				</p>
-				<p><font size="-2">Photolib pre Alpha</font></p>
+				<p><font size="-2">PhreakPic Alpha</font></p>
 			</div>
 		</td>
 	</tr>
