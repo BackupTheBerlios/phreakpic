@@ -1,12 +1,14 @@
 <?php
 require_once(ROOT_PATH . 'classes/auth.inc.php');
+require_once(ROOT_PATH . 'classes/base.inc.php');
 
 // Group, User, Auth editing functions
-class base_group
+class base_group extends phreakpic_base
 {
 	var $id;
 	var $name;
 	var $description;
+	var $processing_vars = Array('name','description');
 	
 	function delete()
 	{
