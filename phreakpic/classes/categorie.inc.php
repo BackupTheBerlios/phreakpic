@@ -9,6 +9,7 @@ class categorie
 	var $parent_id;
 	var $current_rating;
 	var $is_serie;
+	var $content_amount;
 	
 	function categorie()
 	{
@@ -51,6 +52,7 @@ class categorie
 	{
 		// deletes the categorie assigned with this object from the database
 		global $db,$config_vars;
+		
 		if (isset($this->id))
 		{
 			// check if user has permission to do that
@@ -77,6 +79,7 @@ class categorie
 				{
 					message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
 				}
+				unset($this->id);
 				return OP_SUCCESSFULL;
 			}
 			else
@@ -98,8 +101,8 @@ class categorie
 		if (!isset($this->id))
 		{
 			// this is object is not yet in the datebase, make a new entry
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id)
-				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id')";
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id,is_serie,content_amount)
+				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$this->is_serie', '$this->content_amount')";
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
@@ -116,6 +119,8 @@ class categorie
 					current_rating = '$this->current_rating', 
 					parent_id = '$this->parent_id', 
 					catgroup_id = '$this->catgroup_id'
+					is_serie = '$this->is_serie'
+					content_amount = '$this->content_am'
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
