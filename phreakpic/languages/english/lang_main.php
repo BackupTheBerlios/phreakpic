@@ -119,6 +119,6 @@ $lang['add_user_to_group'] = 'Add user to group';
 $lang['users_not_in_group'] = 'User not in group';
 $lang['users_in_group'] = 'User in group';
 
-
+$lang['basket'] = 'Basket';
 
 ?>

@@ -120,6 +120,6 @@ $lang['add_user_to_group'] = 'Benutzer in Gruppen hinzufügen';
 $lang['users_not_in_group'] = 'Benutzer, die nicht in der Gruppe sind';
 $lang['users_in_group'] = 'Benutzer, die in der Gruppe sind';
 
-
+$lang['basket'] = 'Korb';
 
 ?>
