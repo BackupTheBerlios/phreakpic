@@ -61,26 +61,34 @@
 				Bewertung: <!--{$thumbs[thumb_cols][thumb_cell].current_rating}--><br>
 				Views: <!--{$thumbs[thumb_cols][thumb_cell].views}--><br>
 				<!--{if $mode == edit}-->
+					<input name="place_in_array[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
+					<input name="content_id[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
 					<!--{if $thumbs[thumb_cols][thumb_cell].allow_edit == true}-->
-						Name: <input name="name[]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].name}-->" size="30"><br>
-						lock:<input name="lock[<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->]" type="checkbox" value="true">
-						delete:<input name="delete[<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->]" type="checkbox" value="true"><br>
-						<!--move to cat:
-						<select name="move_to_cat">
-							 <option value="wert">bezeichnung</option>
-						</select><br>-->
-						<input name="place_in_array[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
-						<input name="content_id[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->">
+						Name: <input name="name[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].name}-->" size="20"><br>
+						Place in Cat: <input name="place_in_cat[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_cat}-->" size="10"><br>
+						lock:<input name="lock[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox" <!--{$thumbs[thumb_cols][thumb_cell].locked}-->>
 						
-					<!--{else}-->
-						keine edit rechte<br>
 					<!--{/if}-->
+					<!--{if  $thumbs[thumb_cols][thumb_cell].allow_delete == true}-->
+						real delete:<input name="delete[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
+					<!--{/if}-->
+					<!--{if  $allow_content_remove == true}-->
+						remove from cat:<input name="unlink[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
+					<!--{/if}-->
+					<!--{if  $allow_link == true}-->
+							link:<input name="link[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
+							<!--{if  $allow_content_remove == true}-->
+								move:<input name="move[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
+							<!--{/if}-->
+					<!--{/if}-->
+					
 				<!--{/if}-->
 			</td>
 			<!--{/section}-->
 		</tr>
 		<!--{/section}-->
 	</table>
+	
 	<div align="center">
 	<!--{if $mode != edit}-->
 		<a href="view_cat.php?mode=edit&cat_id=<!--{$cat_id}-->">editieren</a>
@@ -89,6 +97,15 @@
 		<!--{/if}-->
 	<!--{else}-->
 		<input name="mode" type="hidden" value="edited">
+		
+		<!--{if  $allow_link == true}-->		
+			to Cat 
+			<select name="to_cat">
+			<!--{section name=id loop=$add_to_cats}-->
+				<option value="<!--{$add_to_cats[id].id}-->"><!--{$add_to_cats[id].name}--></option>
+			<!--{/section}-->
+			</select><br>
+		<!--{/if}-->
 		<input name="submit" type="submit" id="submit" value="Abschicken">
 		</form>
 	<!--{/if}-->
