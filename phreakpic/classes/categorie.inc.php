@@ -12,6 +12,7 @@ class categorie
 	var $is_serie=false;
 	var $content_amount=0;
 	var $child_content_amount=0;
+	var $child_comments_amount=0;
 	var $description;
 	
 	function categorie()
@@ -295,8 +296,8 @@ class categorie
 			}
 			
 			// this is object is not yet in the datebase, make a new entry
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id,is_serie,content_amount,description,child_content_amount)
-				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$is_serie', '$this->content_amount', '$this->description', '$this->child_content_amount')";
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id,is_serie,content_amount,description,child_content_amount,child_comments_amount)
+				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$is_serie', '$this->content_amount', '$this->description', '$this->child_content_amount', '$this->child_comments_amount')";
 			if (!$result = $db->sql_query($sql))
 			{
 				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
@@ -319,7 +320,8 @@ class categorie
 					is_serie = '$this->is_serie',
 					content_amount = '$this->content_amount',
 					description = '$this->description',
-					child_content_amount = '$this->child_content_amount'
+					child_content_amount = '$this->child_content_amount',
+					child_comments_amount = '$this->child_comments_amount'
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
@@ -538,40 +540,52 @@ class categorie
 	}
 	
 	
-
+	function get_child_comments_amount()
+	{
+		return $this->child_comments_amount;
+	}
 	
-	function get_comments_amount()
+	function set_child_comments_amount($val)
+	{
+		$this->child_comments_amount = $val;
+		return OP_SUCCESSFUL;
+	}
+	
+	function calc_child_comments_amount()
 	{
 		global $db, $config_vars;	
 		
-		if ($this->id != $config_vars['root_categorie'])
+		
+		
+		//get the comments from  cat
+		$sql = 'SELECT count(cat_comments.id) FROM ' . $config_vars['table_prefix'] . 'cat_comments AS cat_comments WHERE cat_comments.owner_id = ' . $this->id;
+		if (!$result = $db->sql_query($sql))
 		{
+			error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
+		}
+		$row = $db->sql_fetchrow($result);
+		$amount = $row[0];
+
+		//get the comments from content
+		$sql = 'SELECT count(content_comments.id) 
+				FROM ' . $config_vars['table_prefix'] . 'content_comments AS content_comments, ' . $config_vars['table_prefix'] . 'content_in_cat AS content_in_cat 
+				WHERE (content_in_cat.cat_id = ' . $this->id . ') AND (content_in_cat.content_id = content_comments.owner_id)';
+		if (!$result = $db->sql_query($sql))
+		{
+			error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
+		}
+		$row = $db->sql_fetchrow($result);
+		$amount += $row[0];
 		
-			//get the comments from  cat
-			$sql = 'SELECT count(cat_comments.id) FROM ' . $config_vars['table_prefix'] . 'cat_comments AS cat_comments WHERE cat_comments.owner_id = ' . $this->id;
-			if (!$result = $db->sql_query($sql))
-			{
-				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
-			}
-			$row = $db->sql_fetchrow($result);
-			$amount = $row[0];
 		
-			//get the comments from content
-			$sql = 'SELECT count(content_comments.id) 
-					FROM ' . $config_vars['table_prefix'] . 'content_comments AS content_comments, ' . $config_vars['table_prefix'] . 'content_in_cat AS content_in_cat 
-					WHERE (content_in_cat.cat_id = ' . $this->id . ') AND (content_in_cat.content_id = content_comments.owner_id)';
-			if (!$result = $db->sql_query($sql))
-			{
-				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
-			}
-			$row = $db->sql_fetchrow($result);
-			$amount += $row[0];
 			$child_cats = get_cats_of_cat($this->id);	
 			for($i=0; $i < sizeof($child_cats); $i++)
 			{
-				$amount += $child_cats[$i]->get_comments_amount();
+				if ($child_cats[$i]->id != $config_vars['root_categorie'])
+				{
+					$amount += $child_cats[$i]->calc_child_comments_amount();
+				}
 			}
-		}
 		return $amount;
 	}
 

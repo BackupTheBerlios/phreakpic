@@ -195,6 +195,9 @@ class comment extends user_feedback
 			// set id;
 			$this->id = $db->sql_nextid();
 			
+// TODO: update child_comments of cats
+
+			
 		}
 		else
 		{

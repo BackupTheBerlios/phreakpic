@@ -111,7 +111,7 @@ if (isset($child_cats))
 		$child_cat_infos[$i]['remove_from_group'] = $child_cats[$i]->check_perm('remove_from_group');
 		$child_cat_infos[$i]['edit'] = $child_cats[$i]->check_perm('edit');
 		$child_cat_infos[$i]['catgroup_id'] = $child_cats[$i]->get_catgroup_id();
-		$child_cat_infos[$i]['comments_amount'] = $child_cats[$i]->get_comments_amount();
+		$child_cat_infos[$i]['comments_amount'] = $child_cats[$i]->get_child_comments_amount();
 
 	}
 	// in edit mode check on which cats user has rights to remove cat
