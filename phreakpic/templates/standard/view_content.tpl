@@ -118,7 +118,7 @@
 							&nbsp;
 						</td>
 						<td>
-							<!--{include file="$template_name/show_comments.tpl"}-->
+							<!--{include file="$template_name/show_comments.tpl" type="content"}-->
 						</td>
 					</tr>
 				</table>
