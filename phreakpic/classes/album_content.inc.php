@@ -35,6 +35,8 @@ class album_content
 	var $view;
 	var $delete;
 	var $thumbfile;
+	var $add_to_group;
+	var $remove_from_group;
 	
 	
 	function check_perm($perm)
@@ -100,7 +102,7 @@ class album_content
 		global $db,$config_vars,$userdata,$filetypes;
 
 		// get auth where
-		$auth_where = get_allowed_contentgroups_where('content.contentgroup_id',$userdata['user_id'], "view");
+		$auth_where = get_allowed_contentgroups_where($userdata['user_id'], "view",'content.contentgroup_id');
 
 		// get all content
 
