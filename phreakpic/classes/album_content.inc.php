@@ -692,9 +692,14 @@ class album_content extends phreakpic_base
 	
 	function generate_from_id($id)
 	{
+		
 		//global $PHP_SELF,$QUERY_STRING;
 		// Füllt das Objekt mit den daten des Contents mit id == $id aus der Datenbank
 		global $db,$config_vars;
+		if (!isset($id))
+		{
+			return OP_FAILED;
+		}
 		$sql = 'select * from ' . $config_vars['table_prefix'] . "content where id = $id";
 
 		if (!$result = $db->sql_query($sql))
