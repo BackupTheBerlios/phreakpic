@@ -23,4 +23,15 @@
 	$smarty->assign('template_name', $userdata['photo_user_template']);
 	$smarty->assign('sid','&sid='.$userdata['session_id']);
 	$smarty->assign('username', $userdata['username']);
+	
+	
+	//set if the actual user is admin or not
+	if ($userdata['user_level'] == 1)
+	{
+		$smarty->assign('user_level','admin');
+	}
+	else
+	{
+		$smarty->assign('user_level','user');
+	}
 ?>
