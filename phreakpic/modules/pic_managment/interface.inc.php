@@ -41,7 +41,7 @@ function get_cats_of_cat($parent_id)
 
 }
 
-function get_content_of_cat($cat_id,$start=-1,$anzahl=0)
+function get_content_of_cat($cat_id,$start=-1,$anzahl=-1)
 {
 	// Returns an Array of album_content objects of all content which is in the categorie with id $cat_id
 	global $db,$config_vars,$userdata,$filetypes;
@@ -68,7 +68,7 @@ function get_content_of_cat($cat_id,$start=-1,$anzahl=0)
 		WHERE	($auth_where) and 
 			(content.id = content_in_cat.content_id) and 
 			(content_in_cat.cat_id = $cat_id)
-		ORDER BY content_in_cat.place_in_cat $limit";
+		ORDER BY content_in_cat.place_in_cat";
 		
 		
 		
@@ -77,25 +77,26 @@ function get_content_of_cat($cat_id,$start=-1,$anzahl=0)
 		error_report(SQL_ERROR, 'get_content_of_cat' , __LINE__, __FILE__,$sql);
 	}
 	
+	$viewable_amount = $db->sql_affectedrows($result);
+		
 	
-	
-	while ($row = $db->sql_fetchrow($result))
+	// we only want the rows from $start
+	if ($start != -1)
 	{
-		
-		// creating objects for every content
-/*		$objtyp = $filetypes[getext($row['file'])];
-		if (isset($objtyp))
-		{
-			$contentobj = new $objtyp;
-			if ($contentobj->generate_from_row($row) != OP_SUCCESSFUL)
-			{
-				return OP_FAILED;
-			}
-		}
-		
-		$objarray[]=$contentobj;*/
+		$db->sql_rowseek($start,$result);
+	}
+	if ($anzahl == -1)
+	{	
+		$anzahl = $viewable_amount;
+	}
+	
+	// and only $anzahl ones
+	for ($i=0;$i<$anzahl;$i++)
+	{
+		$row = $db->sql_fetchrow($result);
 		
 		// delete place_in_cat from $row
+		// why that ?
 		unset($row['place_in_cat']);
 		$content=get_content_from_row($row);
 		if (is_object($content))
@@ -104,8 +105,9 @@ function get_content_of_cat($cat_id,$start=-1,$anzahl=0)
 		}
 		
 	}
-	
-	return $objarray;
+	$returns['viewable_amount'] = $viewable_amount;
+	$returns['content_obj_array'] = $objarray;
+	return $returns;
 
 }
 
