@@ -2,7 +2,7 @@
 
 //Template System
 //absolute path to smarty
-define("SMARTY_DIR","/usr/local/httpd/htdocs/smarty/");
+define("SMARTY_DIR","/home/httpd/htdocs/smarty/");
 
 //relative path from phreakpic to phpBB2 (if the URL is "http://www.blabla.com/com/phpBB2/" and phreakpic is at "http://www.blabla.com/com/phreakpic/" then PHPBB_DIR will be "../phpBB2/")
 //Don't forget the / at end!
@@ -11,8 +11,7 @@ define("PHPBB_PATH","../phpBB2/");
 //relative path from phpBB2 to phreakpic see above
 define("PHREAKPIC_PATH","../phreakpic/");
 
-
-
+//link for the home button
 define("SERVER_NAME","http://192.168.101.2");
 
 
@@ -55,6 +54,13 @@ $config_vars = array
 	'default_template' => 'standard',
 
 	// language used if not setted by user
-	'default_lang' => 'german'
+	'default_lang' => 'german',
+	
+	'default_upload_dir' => 'upload',
+	
+	// the ids of the usergroups in which every user is automaicly
+	'default_usergroup_ids' => Array(1),
+	
+	
 );
 ?>
