@@ -1152,16 +1152,22 @@ class picture extends album_content
 		$exif_fields = Array('DateTimeOriginal','Flash');
 		$ifd0_fields = Array('Model');
 		
-		$exif= exif_read_data($this->get_file(),'',true);
+		@$exif= exif_read_data($this->get_file(),'',true);
 				
 		foreach ($exif_fields as $value)
 		{
-			$returns[$value] = $exif['EXIF'][$value];
+			if (isset($exif['EXIF'][$value]))
+			{
+				$returns[$value] = $exif['EXIF'][$value];
+			}
 		}
 		
 		foreach ($ifd0_fields as $value)
 		{
-			$returns[$value] = $exif['IFD0'][$value];
+			if (isset($exif['IFD0'][$value]))
+			{
+				$returns[$value] = $exif['IFD0'][$value];
+			}
 		}	
 		
 		return $returns;
