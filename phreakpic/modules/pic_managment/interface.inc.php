@@ -188,7 +188,7 @@ function get_cats_data_where_perm($data,$perm)
 		return;
 	}
 
-	$sql = "SELECT $data FROM " . $config_vars['table_prefix'] . "cats WHERE ('$auth_where')";
+	$sql = "SELECT $data FROM " . $config_vars['table_prefix'] . "cats WHERE ($auth_where)";
 
 	if (!$result = $db->sql_query($sql))
 	{
@@ -207,7 +207,7 @@ function get_catgroups_data_where_perm($data,$perm)
 
 	$where = get_allowed_catgroups_where($userdata['user_id'],$perm,'id');
 	
-	$sql = "select $data from {$config_vars['table_prefix']}catgroups where '$where'";
+	$sql = "select $data from {$config_vars['table_prefix']}catgroups where $where";
 	
 	if (!$result = $db->sql_query($sql))
 	{
