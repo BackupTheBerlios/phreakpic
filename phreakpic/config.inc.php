@@ -25,6 +25,8 @@ $config_vars = array
 	'dir_mask' => 0775,
    
 	//view_cat.php the Colums of the table, where we can see the thumbnails
-	'thumb_table_cols' => 4
+	'thumb_table_cols' => 4,
+	'default_template' => 'standard',
+	'default_lang' => 'german'
 );
 ?>
