@@ -22,7 +22,7 @@ function check_group_action_allowed()
 function check_cat_action_allowed($catgroup_id,$user_id,$action)
 {
 	// Returns TRUE if the user with id $user_id is allowed to do $action with the categories in in the catgroup with id $catgroup_id
-	global $db,$config_vars;
+	global $db,$config_vars,$userdata;
 	
 	// if the current user is admin allow everything
 	if ($userdata['user_level'] == ADMIN)
@@ -68,11 +68,12 @@ function check_content_action_allowed($contentgroup_id,$user_id,$action)
 {
 	// Returns TRUE if the user with id $user_id is allowed to do $action with content in $contentgroup_id
 	
-	global $db,$config_vars;	
+	global $db,$config_vars,$userdata;	
 	
 	// if the current user is admin allow everything
 	if ($userdata['user_level'] == ADMIN)
 	{
+	
 		return true;
 	}
 
@@ -111,7 +112,7 @@ function get_allowed_contentgroups_where($user_id,$action,$field='contentgroup_i
 	// Returns an SQL where that limits a query to the content where $action if allowed by $user_id.
 	// $action must be the name of a field out of the content_auth table, which says if this action is allowed or not
 
-	global $db,$config_vars;	
+	global $db,$config_vars,$userdata;	
 	
 	
 	// if the current user is admin allow everything
@@ -168,7 +169,7 @@ function get_allowed_catgroups_where($user_id,$action,$field='catgroup_id')
 	// Returns an SQL where that limits a query to the categories where $action if allowed by $user_id.
 	// $action must be the name of a field out of the cat_auth table, which says if this action is allowed or no
 	
-	global $db,$config_vars;	
+	global $db,$config_vars,$userdata;	
 	
 	// if the current user is admin allow everything
 	if ($userdata['user_level'] == ADMIN)
