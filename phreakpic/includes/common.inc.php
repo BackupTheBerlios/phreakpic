@@ -17,7 +17,11 @@ define("OP_NP_MISSING_CAT_MOVE", 0); //return value for class functions who chec
 define("OP_NP_MISSING_CAT_ADD", 5);
 define("OP_NP_MISSING_EDIT", 6);
 define("OP_NP_MISSING_DELETE", 7);
+define("OP_NP_MISSING_VIEW", 12);
 
+// Groups and Users
+define("OP_USER_ALREADY_IN_GROUP",10);
+define("OP_USER_NOT_IN_GROUP",11);
 
 //Class vars
 define("NOT_SUPPORTED", 1); //return value for dummy functions in classes. When function will be not implemented in the extended object, this will be returned.
@@ -28,4 +32,6 @@ define("CDM_MOVE_CONTENT",1);
 
 //Template System
 define("SMARTY_DIR","../smarty/");
+
+
 ?>
