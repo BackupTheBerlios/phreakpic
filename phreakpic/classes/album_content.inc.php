@@ -82,6 +82,10 @@ class album_content
 	
 	function set_place_in_cat($cat,$place)
 	{
+		if (!isset($this->place_in_cat))
+		{
+			$this->generate_content_in_cat_data();
+		}
 		$this->place_in_cat[$cat] = $place;
 	}
 	
@@ -162,8 +166,11 @@ class album_content
 		{
 			return OP_NP_MISSING_EDIT;
 		}
-
-		
+	}
+	
+	function get_locked()
+	{
+		return $this->locked;
 	}
 	
 	function unlock()
@@ -230,9 +237,24 @@ class album_content
 		//or create a new db entry if object is not yet in db
 		global $db,$config_vars;
 		
+				// fill palce_in_cat and cat_ids array if they are not yet filled;
+		if ((!isset($this->cat_ids)) or (!isset($this->place_in_cat)))
+		{
+			
+			$this->generate_content_in_cat_data();
+		}
 		
 		
 		$this->calc_size();
+		
+		
+		
+		// if content is in no cat anymore
+		if (sizeof($this->cat_ids) == 0)
+		{
+			// move content in the deleted pics cat.
+			$this->cat_ids[0] = $config_vars['deleted_content_cat'];
+		}
 		
 		
 		
@@ -269,15 +291,9 @@ class album_content
 			
 			// update content_in_cat table
 			// i will do this by first deleting all entry with this content and then generate them all new
-
+			
 			$this->clear_content_in_cat();			
 
-			// if content is in no cat anymore
-			if (sizeof($cat_ids) == 0)
-			{
-				// move content in the deleted pics cat.
-				$cat_ids[] = $config_vars['deleted_content_cat'];
-			}
 		}
 		else
 		{
@@ -295,8 +311,9 @@ class album_content
 			$this->id = $db->sql_nextid();
 		}
 		
-		// fill palce_in_cat array;
-		$this->get_place_in_cat();
+		
+		
+		
 		// add content to the cats	
 		
 		$this->fill_content_in_cat();	
@@ -548,7 +565,7 @@ class album_content
 		foreach($this->cat_ids as $key => $value)
 		{
 			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "content_in_cat (cat_id,content_id,place_in_cat)
-				VALUES ('" . $this->cat_ids[$key]. "', '$this->id', '" . $this->place_in_cat[$key]. "')";
+				VALUES ('" . $this->cat_ids[$key]. "', '$this->id', '" . $this->place_in_cat[$this->cat_ids[$key]]. "')";
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Error during inserting into content_in_cat", '', __LINE__, __FILE__, $sql);
@@ -577,9 +594,9 @@ class album_content
 		//check if content is already in a cat 
 		if (!isset($this->cat_ids))
 		{
+			
 			$this->generate_content_in_cat_data();
 		}
-		
 		if (sizeof($this->cat_ids)>0)
 		{
 			$cat_obj = new categorie();
