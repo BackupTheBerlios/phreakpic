@@ -66,7 +66,7 @@ class phreak_auth
 				$sql = $sql . ')';
 				if (!$result = $db->sql_query($sql))
 				{
-					message_die(GENERAL_ERROR, "Error while submitting a new auth object to the db", '', __LINE__, __FILE__, $sql);
+					error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);	
 				}
 				return OP_SUCCESSFULL;
 
@@ -87,7 +87,7 @@ class phreak_auth
 				$sql = $sql . "WHERE $where";
 				if (!$result = $db->sql_query($sql))
 				{
-					message_die(GENERAL_ERROR, "Error while updating an existing cat_auth object to the db", '', __LINE__, __FILE__, $sql);
+					error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 				}
 				return OP_SUCCESSFUL;
 			
@@ -109,7 +109,7 @@ class phreak_auth
 			WHERE (usergroup_id = $usergroup_id) and (" . ereg_replace("_auth$","",get_class($this)) . "group_id = $group_id)";
 		if (!$result = $db->sql_query($sql))
 		{
-			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
 		
 		$row = $db->sql_fetchrow($result);
@@ -302,7 +302,7 @@ class cat_auth extends phreak_auth
 
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 			}
 			unset($this->id);
 		}
@@ -428,7 +428,7 @@ class content_auth extends phreak_auth
 			$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE (usergroup_id = $this->usergroup_id) and (contentgroup_id = $this->contentgroup_id)";
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 			}
 			unset($this->id);
 		}

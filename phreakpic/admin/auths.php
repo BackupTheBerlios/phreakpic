@@ -13,7 +13,7 @@ session_start();
 //check if User is allowed to view this file
 if ($userdata['user_level'] != 1)
 {
-	message_die(GENERAL_ERROR, "You are not Administrator", '', __LINE__, __FILE__, $sql);
+	error_report(AUTH_ERROR, 'no_admin' , __LINE__, __FILE__,$sql);
 }
 
 
@@ -35,8 +35,6 @@ else
 
 
 
-// get all usergroups
-$sql = 'SELECT id,name FROM ' . $config_vars['table_prefix'] . 'usergroups';
 
 
 
@@ -116,11 +114,13 @@ if (isset($HTTP_POST_VARS['change_auth']))
 }
 
 
+// get all usergroups
+$sql = 'SELECT id,name FROM ' . $config_vars['table_prefix'] . 'usergroups';
 
 
 if (!$result = $db->sql_query($sql))
 {
-	message_die(GENERAL_ERROR, "Could not get groups of user", '', __LINE__, __FILE__, $sql);
+	error_report(SQL_ERROR, 'get_usergroups_of_user' , __LINE__, __FILE__,$sql);
 }
 
 while ($row = $db->sql_fetchrow($result))
@@ -135,7 +135,7 @@ $sql = 'SELECT id,name FROM ' . $config_vars['table_prefix'] . $type . 'groups';
 
 if (!$result = $db->sql_query($sql))
 {
-	message_die(GENERAL_ERROR, "Could not get groups of user", '', __LINE__, __FILE__, $sql);
+	error_report(SQL_ERROR, 'get_groups_of_user' , __LINE__, __FILE__,$sql);
 }
 
 while ($row = $db->sql_fetchrow($result))

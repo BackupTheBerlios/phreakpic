@@ -41,7 +41,7 @@ class categorie
 		
 		if (!$result = $db->sql_query($sql))
 		{
-			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
 		
 		$row = $db->sql_fetchrow($result);
@@ -132,7 +132,7 @@ class categorie
 		$sql = 'select * from ' . $config_vars['table_prefix'] . "cats where id like $id";
 		if (!$result = $db->sql_query($sql))
 		{
-			message_die(GENERAL_ERROR, "Could not get categorie from id", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
 		
 		$row = $db->sql_fetchrow($result);
@@ -257,7 +257,7 @@ class categorie
 					$sql = 'DELETE FROM '. $config_vars['table_prefix'] . "cats where id like $this->id";
 					if (!$result = $db->sql_query($sql))
 					{
-						message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
+						error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 					}
 					unset($this->id);
 					return OP_SUCCESSFUL;
@@ -297,7 +297,7 @@ class categorie
 				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$is_serie', '$this->content_amount', '$this->description')";
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 			}
 			
 			$this->id = $db->sql_nextid();
@@ -320,7 +320,7 @@ class categorie
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Error while updating an existing cat object to the db", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'commmit' , __LINE__, __FILE__,$sql);
 			}
 			return OP_SUCCESSFUL;
 
@@ -449,7 +449,7 @@ class categorie
 		$sql = "SELECT count(cat_id) FROM {$config_vars['table_prefix']}content_in_cat where cat_id={$this->id}";
 		if (!$result = $db->sql_query($sql))
 		{
-			message_die(GENERAL_ERROR, "Coudnt get content amount", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'calc_content_amount' , __LINE__, __FILE__,$sql);
 		}
 		$row = $db->sql_fetchrow($result);
 		return $row[0];

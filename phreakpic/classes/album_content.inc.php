@@ -626,7 +626,7 @@ class album_content
 		
 		if (!$result = $db->sql_query($sql))
 		{
-			error_report(SQL_ERROR, 'generate_from_id' , __LINE__, __FILE__,$sql);
+			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
 		
 		$row = $db->sql_fetchrow($result);
@@ -731,7 +731,7 @@ class album_content
 		$this->remove_from_cat = new categorie();
 		if ($this->remove_from_cat->generate_from_id($old_cat_id) != OP_SUCCESSFUL)
 		{
-			error_report(GENERAL_ERROR, 'generate_from_id' , __LINE__, __FILE__);
+			error_report(GENERAL_ERROR, 'generate' , __LINE__, __FILE__);
 		}
 
 		

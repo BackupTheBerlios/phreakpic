@@ -219,7 +219,7 @@ function field_param($value,$tree)
 					$sql = $entitie->sql;
 					if (!$result = $db->sql_query($sql))
 					{
-						message_die(GENERAL_ERROR, "Error in subsql", '', __LINE__, __FILE__, $sql);
+						error_report(SQL_ERROR, 'subsql' , __LINE__, __FILE__,$sql);
 					}
 					
 					while ($row = $db->sql_fetchrow($result))

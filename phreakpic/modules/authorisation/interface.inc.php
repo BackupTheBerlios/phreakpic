@@ -47,7 +47,7 @@ function check_cat_action_allowed($catgroup_id,$user_id,$action)
 	
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Could not check whether the user is allowed to this action", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'action_allowed' , __LINE__, __FILE__,$sql);
 	}
 
 
@@ -91,7 +91,7 @@ function check_content_action_allowed($contentgroup_id,$user_id,$action)
 	
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Could not check whether the user is allowed to this action", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'action_allowed' , __LINE__, __FILE__,$sql);
 	}
 
 
@@ -146,7 +146,7 @@ function get_allowed_contentgroups_where($user_id,$action,$field='contentgroup_i
 	
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Could not check whether the contentgroups where this user is allowed to this action", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'action_allowed' , __LINE__, __FILE__,$sql);
 	}
 
 	while ($row = $db->sql_fetchrow($result))
@@ -198,7 +198,7 @@ function get_allowed_catgroups_where($user_id,$action,$field='catgroup_id')
 	$sql = 'select catgroup_id from '.$config_vars['table_prefix']."cat_auth where ($action like 1) and ($where)";
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Could not check whether the contentgroups where this user is allowed to this action", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'action_allowed' , __LINE__, __FILE__,$sql);
 	}
 
 	while ($row = $db->sql_fetchrow($result))
@@ -225,7 +225,7 @@ function get_groups_of_user($user_id)
 	
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Could not get groups of user", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_groups_of_user' , __LINE__, __FILE__,$sql);
 	}
 
 	while ($row = $db->sql_fetchrow($result))

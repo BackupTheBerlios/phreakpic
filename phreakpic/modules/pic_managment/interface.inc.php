@@ -24,7 +24,7 @@ function get_cats_of_cat($parent_id)
 
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Konnte Kategorie nicht auswählen", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_cats_of_cat' , __LINE__, __FILE__,$sql);
 	}
 	// generate categorie objects for each categorie that is returned by the query
 	while ($row = $db->sql_fetchrow($result))
@@ -74,7 +74,7 @@ function get_content_of_cat($cat_id,$start=-1,$anzahl=0)
 		
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Couldnt get data of the of the content in the cat", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_content_of_cat' , __LINE__, __FILE__,$sql);
 	}
 	
 	
@@ -120,7 +120,7 @@ function get_content_from_sql($sql_where_clause)
 
 	if (!$result = $db->query($sql))
 	{
-		message_die(GENERAL_ERROR, "Konnte Bilder nicht auswählen bei eigener WHERE clause", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_content_from_sql' , __LINE__, __FILE__,$sql);
 	}
 
 	while ($row = $db->sql_fetchrow($result))
@@ -200,7 +200,7 @@ function get_cats_data_where_perm($data,$perm)
 
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Konnte Kategorie nicht auswählen", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_cats_data_where_perm' , __LINE__, __FILE__,$sql);
 	}
 
 	// generate categorie objects for each categorie that is returned by the query
@@ -219,7 +219,7 @@ function get_catgroups_data_where_perm($data,$perm)
 	
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Could not check whether the contentgroups where this user is allowed to this action", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_catgroups_data_where_perm' , __LINE__, __FILE__,$sql);
 	}
 	
 	// generate catgroup array for each catgroup that is returned by the query
@@ -238,7 +238,7 @@ function get_contentgroups_data_where_perm($data,$perm)
 	
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Could not check whether the contentgroups where this user is allowed to this action", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_contentgroups_data_where_perm' , __LINE__, __FILE__,$sql);
 	}
 	
 	// generate catgroup array for each catgroup that is returned by the query
@@ -262,7 +262,7 @@ function get_comments_of_content($content_id)
 		
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Error generating initial comment", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_comments' , __LINE__, __FILE__,$sql);
 	}
 	
 	
@@ -285,7 +285,7 @@ function get_comments_of_cat($cat_id)
 		
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Error generating initial comments for cat", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_comments' , __LINE__, __FILE__,$sql);
 	}
 	
 	

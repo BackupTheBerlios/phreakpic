@@ -42,7 +42,7 @@ $sql="SELECT * from {$config_vars['table_prefix']}custom_searches";
 
 if (!$result = $db->sql_query($sql))
 {
-	message_die(GENERAL_ERROR, "Error in sql", '', __LINE__, __FILE__, $sql);
+	error_report(SQL_ERROR, 'get_custom_searches' , __LINE__, __FILE__,$sql);
 }
 while ($row = $db->sql_fetchrow($result))
 {
@@ -69,14 +69,12 @@ if (isset($query))
 	$sql="SELECT xml from {$config_vars['table_prefix']}custom_searches WHERE id=$query";
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Error in sql", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'custom_search' , __LINE__, __FILE__,$sql);
 	}
 	$row = $db->sql_fetchrow($result);
 	
 	// generate param array
 	
-	
-		
 	$query_sql=parse_xml($row[0]);
 	
 	
@@ -97,7 +95,7 @@ if (isset($query))
 				if (get_class($value)=='sql_field')
 				{
 					$y++;
-					field_param($value);
+					field_param($value,$query_sql);
 					
 				}
 			}
@@ -107,14 +105,7 @@ if (isset($query))
 		if (get_class($query_part)=='sql_field')
 		{
 			$y++;
-			field_param($query_part);
-// 			$field['name']=$query_part->name;
-// 			$field['type']=$query_part->type;
-// 			$field['descr']=$query_part->descr;
-// 			$field['value']=generate_values($query_part->value);
-// 			$field['loop']=0;
-// 			$fields[0][$y]=$field;
-			
+			field_param($query_part,$query_sql);
 			
 		}
 		
@@ -146,7 +137,7 @@ if (isset($submit))
 	
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Error in sql", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'custom_search' , __LINE__, __FILE__,$sql);
 	}
 		
 	//fill content array with result from query

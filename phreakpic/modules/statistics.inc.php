@@ -13,7 +13,8 @@ function get_views($content_id,$user_id=-2)
 	$sql = 'SELECT COUNT(*) FROM ' . $config_vars['table_prefix'] . "views WHERE content_id = $content_id $userwhere"; 
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Couldnt get place_in_cat", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_views' , __LINE__, __FILE__,$sql);
+		
 	}
 	$row = $db->sql_fetchrow($result);
 	return $row[0];
@@ -34,7 +35,7 @@ function get_viewed_time($content_id,$user_id=-2)
 	$sql = 'SELECT UNIX_TIMESTAMP(start),UNIX_TIMESTAMP(end) FROM ' . $config_vars['table_prefix'] . "views WHERE (content_id = $content_id) and (end !=0) $userwhere"; 
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Couldnt get place_in_cat", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_viewed_time' , __LINE__, __FILE__,$sql);
 	}
 	$viewed_time = 0;
 	while ($row = $db->sql_fetchrow($result))
@@ -58,7 +59,7 @@ function get_content_by_views($order='DESC',$limit_start=0,$limit_end=-1)
 		LIMIT $limit_start,$limit_end";
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Couldnt get content by views", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_content_by_views' , __LINE__, __FILE__,$sql);
 	}
 
 	while ($row = $db->sql_fetchrow($result))
@@ -84,7 +85,7 @@ function get_content_by_viewed_length($order='DESC',$limit_start=0,$limit_end=-1
 		
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Couldnt get content by views", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_content_by_viewed_length' , __LINE__, __FILE__,$sql);
 	}
 
 	while ($row = $db->sql_fetchrow($result))
@@ -114,7 +115,8 @@ function get_content_ordered_by($by,$filter=true,$order='DESC',$limit_start=0,$l
 		
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Couldnt get content by views", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'get_content_ordered_by' , __LINE__, __FILE__,$sql);
+		
 	}
 
 	while ($row = $db->sql_fetchrow($result))

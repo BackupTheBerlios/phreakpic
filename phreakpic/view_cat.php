@@ -11,6 +11,7 @@ include_once('./includes/template.inc.php');
 // move this to index.php
 validate_config();
 
+
 // bigbrother stop the view of the last viewed content
 session_start();
 
@@ -72,7 +73,7 @@ if (isset($HTTP_POST_VARS['edit_cat']))
 			$error=$child_cats[$i]->delete('CDM_REMOVE_CONTENT');
 			if ($error != OP_SUCCESSFUL)
 			{
-				message_die(GENERAL_ERROR, "Couldnt del cat Error nr. $error", '', __LINE__, __FILE__);
+				error_report(GENERAL_ERROR, 'del_cat' , __LINE__, __FILE__,$error);
 			}
 			
 		}
@@ -81,7 +82,7 @@ if (isset($HTTP_POST_VARS['edit_cat']))
 			$error=$child_cats[$i]->commit();
 			if ($error != OP_SUCCESSFUL)
 			{
-				message_die(GENERAL_ERROR, "Couldnt commit cat Error nr. $error", '', __LINE__, __FILE__);
+				error_report(GENERAL_ERROR, 'cat_commit' , __LINE__, __FILE__,$error);
 			}
 		}
 		

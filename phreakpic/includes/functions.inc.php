@@ -481,7 +481,7 @@ function stop_view($start_view,$content_id)
 		WHERE (user_id = " . $userdata['user_id'] . ") and (start = '$start_view') and (content_id = $content_id)";
 	if (!$result = $db->sql_query($sql))
 	{
-		message_die(GENERAL_ERROR, "Couldn't start view", '', __LINE__, __FILE__, $sql);
+		error_report(SQL_ERROR, 'stop_view' , __LINE__, __FILE__,$sql);
 	}
 }
 

@@ -17,7 +17,7 @@ class group
 			$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . "s WHERE id = " . $this->id;
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 			}
 			unset($this->id);
 		}
@@ -36,7 +36,7 @@ class group
 					VALUES ('$this->name', '$this->description')";
 				if (!$result = $db->sql_query($sql))
 				{
-					message_die(GENERAL_ERROR, "Error while submitting a new group object to the db", '', __LINE__, __FILE__, $sql);
+					error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 				}
 				return OP_SUCCESSFULL;
 
@@ -54,7 +54,7 @@ class group
 					WHERE id = $this->id";
 				if (!$result = $db->sql_query($sql))
 				{
-					message_die(GENERAL_ERROR, "Error while updating an existing cat object to the db", '', __LINE__, __FILE__, $sql);
+					error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 				}
 				return OP_SUCCESSFULL;
 			}
@@ -71,7 +71,7 @@ class group
 		$sql = 'select * from ' . $config_vars['table_prefix'] . get_class($this) . "s where id like $id";
 		if (!$result = $db->sql_query($sql))
 		{
-			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
 		
 		$row = $db->sql_fetchrow($result);
@@ -139,7 +139,7 @@ class usergroup extends group
 					VALUES ('$user_id','$this->id')";
 				if (!$result = $db->sql_query($sql))
 				{
-					message_die(GENERAL_ERROR, "Error while adding user to group", '', __LINE__, __FILE__, $sql);
+					error_report(SQL_ERROR, 'add_user' , __LINE__, __FILE__,$sql);
 				}
 				return OP_SUCCESSFUL;
 			}
@@ -168,7 +168,7 @@ class usergroup extends group
 					WHERE (user_id = $user_id) and group_id = $this->id";
 				if (!$result = $db->sql_query($sql))
 				{
-					message_die(GENERAL_ERROR, "Error while removing user from group", '', __LINE__, __FILE__, $sql);
+					error_report(SQL_ERROR, 'remove_user' , __LINE__, __FILE__,$sql);
 				}
 				return OP_SUCCESSFUL;
 			}
@@ -191,7 +191,7 @@ class usergroup extends group
 		$sql = 'SELECT user_id FROM ' . $config_vars['table_prefix'] . "user_in_group where (user_id = $user_id) and (group_id = $this->id)";
 		if (!$result = $db->sql_query($sql))
 		{
-			message_die(GENERAL_ERROR, "Error while checking wether user is in group", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'user_in_group' , __LINE__, __FILE__,$sql);
 		}
 		
 		// if there is a row returned the user is in that group

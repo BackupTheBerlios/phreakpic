@@ -158,7 +158,7 @@ class comment extends user_feedback
 		
 		if (!$result = $db->sql_query($sql))
 		{
-			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'get_childs' , __LINE__, __FILE__,$sql);
 		}
 		
 		while ($row = $db->sql_fetchrow($result))
@@ -188,7 +188,7 @@ class comment extends user_feedback
 				
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Error while submitting a new group object to the db", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 			}
 			return OP_SUCCESSFULL;
 			
@@ -212,7 +212,7 @@ class comment extends user_feedback
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Error while updating an existing cat object to the db", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 			}
 			return OP_SUCCESSFULL;
 		}
@@ -229,7 +229,7 @@ class comment extends user_feedback
 			
 		if (!$result = $db->sql_query($sql))
 		{
-			message_die(GENERAL_ERROR, "Error generating initial comment", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'generate_initial_for_content' , __LINE__, __FILE__,$sql);
 		}
 
 		return $this->generate_from_row($db->sql_fetchrow($result));
@@ -244,7 +244,7 @@ class comment extends user_feedback
 			WHERE id like $id";
 		if (!$result = $db->sql_query($sql))
 		{
-			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
+			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
 		$row = $db->sql_fetchrow($result);
 		return $this->generate_from_row($row);
@@ -277,7 +277,7 @@ class content_comment extends comment
 			$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content_comments WHERE id = " . $this->id;
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 			}
 			unset($this->id);
 			}
@@ -308,7 +308,7 @@ class cat_comment extends comment
 			$sql = "DELETE FROM " . $config_vars['table_prefix'] . "cat_comments WHERE id = " . $this->id;
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 			}
 			unset($this->id);
 		}
@@ -344,7 +344,7 @@ class rating extends user_feedback
 				
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Error while submitting a new group object to the db", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 			}
 			return OP_SUCCESSFULL;
 			
@@ -364,7 +364,7 @@ class rating extends user_feedback
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
-				message_die(GENERAL_ERROR, "Error while updating an existing cat object to the db", '', __LINE__, __FILE__, $sql);
+				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 			}
 			return OP_SUCCESSFULL;
 		}
