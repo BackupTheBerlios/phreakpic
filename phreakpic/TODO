@@ -21,14 +21,17 @@ X Design which content/catgroups can be selected when creating new content/cat
 X vollständiges admin interface (wie letzendlich auch immer)
   X usergroups
   X auths
-	
-1.0:
+
+0.8:
 - upload per zip/gzip file
 - handle comments when cat or content is deleted
 - user selector for edit comment
 - Check PostgreSQL compatibility
 - Polls
 - add auth checking to all the set function in auth, group, etc
+- Design 
+
+1.0:
 
 soon future:
 - Design authorisation for creating auths.... 

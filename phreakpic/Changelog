@@ -1,3 +1,6 @@
+0.8:
+- can upload content as zip file
+
 Beta Release:
 - Added recursive change of groups (Tesla)
 - Merged cat- and contentgroups (Tesla)
