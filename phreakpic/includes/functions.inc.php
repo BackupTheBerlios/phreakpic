@@ -133,6 +133,10 @@ function make_comments($comment, $level,$editable)
 
 function stop_view($start_view,$content_id)
 {
+	if ((!isset($start_view)) or ((!isset($content_id))))
+	{
+		return OP_FAILED;
+	}
 	global $db,$config_vars,$userdata;
 	$now = date("Y-m-d H:i:s");
 	$sql = 'UPDATE  '. $config_vars['table_prefix'] ."views 
