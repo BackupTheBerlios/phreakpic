@@ -8,26 +8,31 @@ require_once('classes/categorie.inc.php');
 function get_cats_of_cat($parent_id)
 {
 	// Returns an array of categorie Objects of all categories which are under the categorie with ihe id $parent_id
-   global $db,$config_vars,$userdata;
-   
-   // get the sql where to limit the query to categories which the user is allowed to view
-   $auth_where=get_allowed_catgroups_where($userdata['user_id'],"view");
-   
-   $sql = "SELECT * FROM " . $config_vars['table_prefix'] . "cats WHERE (parent_id = '$parent_id') and $auth_where";
+	global $db,$config_vars,$userdata;
 
-   if (!$result = $db->query($sql))
-   {
-      message_die(GENERAL_ERROR, "Konnte Kategorie nicht auswählen", '', __LINE__, __FILE__, $sql);
-   }
+	// get the sql where to limit the query to categories which the user is allowed to view
+	$auth_where=get_allowed_catgroups_where($userdata['user_id'],"view");
 
-   // generate categorie objects for each categorie that is returned by the query
-   while ($row = $db->sql_fetchrow($result))
-   {
-      $catobj= new categorie();
-      $cat_objects[]=$catobj;
-   }
-   
-   return $cat_data;
+	$sql = "SELECT * FROM " . $config_vars['table_prefix'] . "cats WHERE (parent_id = '$parent_id') and $auth_where";
+
+	if (!$result = $db->query($sql))
+	{
+	message_die(GENERAL_ERROR, "Konnte Kategorie nicht auswählen", '', __LINE__, __FILE__, $sql);
+	}
+
+	// generate categorie objects for each categorie that is returned by the query
+	while ($row = $db->sql_fetchrow($result))
+	{
+	$catobj= new categorie();
+	if ($catobj->generate_from_row($row) != OP_SUCCESSFUL)
+	{
+		return OP_FAILED;
+	}
+
+	$cat_objects[]=$catobj;
+	}
+
+	return $cat_data;
 
 }
 
@@ -73,7 +78,12 @@ function get_content_of_cat($cat_id)
 		if (isset($objtyp))
 		{
 			$contentobj = new $objtyp;
+			if ($contentobj->generate_from_row($row) != OP_SUCCESSFUL)
+			{
+				return OP_FAILED;
+			}
 		}
+		
 		$objarray[]=contentobj;
 	}
 	
@@ -125,7 +135,7 @@ function get_content_object_from_id($id)
 		if (isset($objtyp))
 		{
 			$incontent = new $objtyp;
-			//this sucks (additional sql query) but its ok for no 
+			//this sucks (additional sql query) but its ok for now
 			$inconten->generate_fom_id($id);
 		}
 		return $incontent;
