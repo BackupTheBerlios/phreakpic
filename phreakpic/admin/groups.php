@@ -3,6 +3,7 @@ define(ROOT_PATH,'../');
 include_once(ROOT_PATH . 'includes/common.inc.php');
 include_once(ROOT_PATH . 'includes/template.inc.php');
 include_once(ROOT_PATH . 'classes/group.inc.php');
+include_once(ROOT_PATH . 'classes/meta.inc.php');
 include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 
 session_start();
@@ -12,67 +13,74 @@ if ($userdata['user_level'] != 1)
 	error_report(AUTH_ERROR, 'no_admin' , __LINE__, __FILE__);
 }
 
-if (isset($HTTP_GET_VARS['type']))
-{
+$allowed_types= Array ('content_meta_field','usergroup','group');
+
+if (in_array($HTTP_GET_VARS['type'],$allowed_types))
+{	
 	$HTTP_SESSION_VARS['type']=$HTTP_GET_VARS['type'];
 }
 else
 {
-	if (isset($HTTP_SESSION_VARS['type']))
+	if (!isset($HTTP_SESSION_VARS['type']))
 	{
-		$HTTP_SESSION_VARS['type'] = 'user';
+		$HTTP_SESSION_VARS['type'] = 'usergroup';
 	}
 }
 
-$type = $HTTP_SESSION_VARS['type'];
 
-$groupclass = $type . 'group';
 
+
+$entry = new $type();
 
 
 if (isset($HTTP_POST_VARS['delete']))
 {
-	$del_group = new $groupclass();
-	$del_group->generate_from_id($HTTP_GET_VARS['sel_group_id']);
-	$del_group->delete();
+	$entry->generate_from_id($HTTP_GET_VARS['sel_group_id']);
+	$entry->delete();
 }
 
 if (isset($HTTP_POST_VARS['create']))
 {
-	if ($HTTP_POST_VARS['name']=='')
+	
+	if ($HTTP_POST_VARS[$entry->processing_vars[0]]=='')
 	{
 		error_report(INFORMATION,'enter_name',__LINE__,__FILE__);
 	}
-	$group = new $groupclass();
-	
-	$group->set_name($HTTP_POST_VARS['name']);
-	$group->set_description($HTTP_POST_VARS['description']);
-	$group->commit();
-	$HTTP_GET_VARS['sel_group_id'] = $group->id;
+
+	$entry->set_vars($HTTP_POST_VARS);
+	$entry->commit();
+	$HTTP_GET_VARS['sel_group_id'] = $entry->id;
 }
 
 
 if (isset($HTTP_POST_VARS['change']))
 {
-	$group = new $groupclass();
-	$group->generate_from_id($HTTP_GET_VARS['sel_group_id']);
-	$group->set_name($HTTP_POST_VARS['name']);
-	$group->set_description($HTTP_POST_VARS['description']);
-	$group->commit();
+	// make sure at first var is set
+	if ($HTTP_POST_VARS[$entry->processing_vars[0]]=='')
+	{
+		error_report(INFORMATION,'enter_name',__LINE__,__FILE__);
+	}
+	
+	$entry->generate_from_id($HTTP_GET_VARS['sel_group_id']);
+	$entry->set_vars($HTTP_POST_VARS);
+	$entry->commit();
 }
 
 
 
 // get all usergroups
-$sql = "SELECT * from " . $config_vars['table_prefix'] . "{$groupclass}s";
+$sql = "SELECT * from " . $config_vars['table_prefix'] . "{$type}s";
 if (!$result = $db->sql_query($sql))
 {
 	error_report(AUTH_ERROR, 'get_groups' , __LINE__, __FILE__,$sql);
 }
 while ($row = $db->sql_fetchrow($result))
 {
+	
 	$groups[] = $row;
 }
+
+
 
 // get data of selected group
 foreach ($groups as $value)
@@ -85,11 +93,12 @@ foreach ($groups as $value)
 	}
 }
 
+$smarty->assign('processing_vars',$entry->processing_vars);
 $smarty->assign('groups',$groups);
 $smarty->assign('sel_group_id',$HTTP_GET_VARS['sel_group_id']);
 $smarty->assign('sel_group',$sel_group);
-$smarty->assign('group_name',$lang[$type.'groups']);
-$smarty->assign('new_group',$lang["new_".$type.'group']);
+$smarty->assign('group_name',$lang[$type.'s']);
+$smarty->assign('new_group',$lang["new_".$type]);
 $smarty->display($userdata['photo_user_template'].'/admin/groups.tpl');
 
 ?>
