@@ -242,6 +242,7 @@ CREATE TABLE photo_error_reports (
   type tinyint(30) NOT NULL default '0',
   user_id int(11) NOT NULL default '0',
   query_string text NOT NULL,
+	error_time datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (id),
   UNIQUE KEY id (id),
   KEY id_2 (id)
