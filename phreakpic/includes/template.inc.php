@@ -15,7 +15,7 @@
 	$smarty->cache_dir = ROOT_PATH . 'smarty_cache/';
 	$smarty->left_delimiter = '<!--{';
 	$smarty->right_delimiter = '}-->';
-	$smarty->force_compile = '1';
+	$smarty->force_compile = '0';
 	
 	$smarty->debugging = false;
 	//$smarty->debug_tpl = SMARTY_DIR.'debug.tpl';
