@@ -4,16 +4,18 @@ Beta Release:
 - Cleaned up ACP (Tesla)
 - Date at comments now follow the dateformat of phpBB (Tesla)
 - Added current picture and thread to the write comment page (Tesla)
-- Added Thumbs per page selector
-- Added content basket
-- Added download for content basket
-- Added user profile configuration
-- Added basket page
-- Child content amount now saved in db (for performance)
-- Comments amount saved in db (for performace)
-- added phpBB avatars to the comments
-- fixed problem when a picture was in thumb view several times
-- made nav bar an include
+- Added Thumbs per page selector (Tesla)
+- Added content basket (Tesla)
+- Added download for content basket (Tesla)
+- Added user profile configuration (Tesla)
+- Added basket page (Tesla)
+- Child content amount now saved in db (for performance) (Tesla)
+- Comments amount saved in db (for performace) (Tesla)
+- added phpBB avatars to the comments (Tesla)
+- fixed problem when a picture was in thumb view several times (Tesla)
+- made nav bar an include (Tesla)
+- added phpBB2 avatar to comments (Tesla)
+- added possibility the change parent cat of cat (Tesla)
 
 Changed Tables:
 Added:
