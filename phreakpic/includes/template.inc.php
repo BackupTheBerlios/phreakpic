@@ -53,5 +53,7 @@
 	
 	$smarty->assign('total_content',$root_cat->get_child_content_amount());
 	$smarty->assign('total_comments',$root_cat->get_child_comments_amount());
+	$smarty->assign('root_path',ROOT_PATH);
+	
 	
 ?>
