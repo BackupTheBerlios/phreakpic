@@ -83,7 +83,7 @@ class album_content
 		// name
 		if ($this->set_name($vals['name']) != OP_SUCCESSFUL)
 		{
-			die('Konnte Name '.$vals['name'].' von '.$vals['content_id'].' nicht setzen ('.$i);
+			die('Konnte Name '.$vals['name'].' von '.$this->id.' nicht setzen ('.$i);
 		}
   
 		// place_in_cat
