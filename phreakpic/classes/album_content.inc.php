@@ -237,7 +237,6 @@ class album_content
 	
 	function generate_from_row($row)
 	{
-		// fills the object with the data in $row. $row is one result row from an sql query
 		if (is_array($row))
 		{
 			// fill the var of the object with the data from the database (the field names of the database are the same than the var names)
@@ -319,9 +318,13 @@ class album_content
 
 	function add_to_cat($new_cat_id)
 	{
-		//adds the actual object to the cat with id == $new_cat_id. Checks if actual user is allowed to.
 		global $userdata;
+		
+		
+		//adds the actual object to the cat with id == $new_cat_id. Checks if actual user is allowed to.
+
 		// get objekt for the new_cat
+
 		$new_cat = new categorie();
 		$new_cat->generate_from_id($new_cat_id);
 		
@@ -339,7 +342,6 @@ class album_content
 	
 	function remove_from_cat($old_cat_id)
 	{
-		// removes content from cat $old_cat_id
 		global $userdata;
 		
 		$old_cat = new categorie();
@@ -479,7 +481,6 @@ class album_content
 	
 	function clear_content_in_cat()
 	{
-		// deletes content_in_cat table entry for this content
 		global $db;
 		$sql = "DELETE FROM '" . $config_vars['table_prefix'] . "content_in_cat'
 		WHERE content_id = $this->id";
@@ -493,7 +494,6 @@ class album_content
 	
 	function generate_filename()
 	{
-		// returns a string to the filename (with path) to the content. Calculated from the cat it is in
 		global $config_vars;
 		//check if content is already in a cat 
 		if (sizeof($this->cat_ids)>0)
@@ -502,22 +502,23 @@ class album_content
 			$cat_obj->generate_from_id($this->cat_ids[0]);
 			$path = $cat_obj->get_name();
 			
-			// make $path is it doesnt exists
 			
-			if (!is_dir($config_vars['content_path_prefix'] . '/' . $path))
-			{
-				makedir($config_vars['content_path_prefix'] . '/' . $path);
-			}
+			
 			while ($cat_obj->get_parent_id() != $config_vars['root_categorie'])
 			{
 				
 				$old_cat_id=$cat_obj->get_parent_id();
 				$cat_obj = new categorie();
 				$cat_obj->generate_from_id($old_cat_id);
-				
 				$path = $cat_obj->get_name() . '/' . $path;
-				
 			}
+			
+			// make $path is it doesnt exists
+			if (!is_dir($config_vars['content_path_prefix'] . '/' . $path))
+			{
+				makedir($config_vars['content_path_prefix'] . '/' . $path);
+			}
+	
 			
 			$path = $path . '/' . basename($this->file);
 			return $config_vars['content_path_prefix'] .'/' . $path;
@@ -535,7 +536,6 @@ class album_content
 	
 	function start_view()
 	{
-		//must be called when someone starts watching the pic. (For logging)
 		global $config_vars,$userdata;
 		$now = date("Y-m-d H:i:s");
 		$sql = 'INSERT INTO '. $config_vars['table_prefix'] .'views (user_id,content_id,start) VALUES ('.$userdata['user_id']. ',' . $this->id . ",$now)";
@@ -548,13 +548,13 @@ class album_content
 class picture extends album_content
 {
 
-	
+
 	function calc_size()
 	{
-		// get width and height of pic
-		$size = getimagesize($this->file);
-		$this->width = $size[0];
-		$this->height = $size[1];
+			// get width and height of pic
+			$size = getimagesize($this->file);
+			$this->width = $size[0];
+			$this->height = $size[1];
 	}
 	
 
