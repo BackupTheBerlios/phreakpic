@@ -2,15 +2,13 @@
 define ("ROOT_PATH",'');
 include_once('./includes/common.inc.php');
 include_once('./classes/album_content.inc.php');
-include_once('./includes/template.inc.php');
 include_once('./modules/pic_managment/interface.inc.php');
 include_once('./includes/functions.inc.php');
-
+include_once('./languages/' . $userdata['user_lang'] . '/lang_main.php');
+include_once('./includes/template.inc.php');
 
 // bigbrother stop the view of the last viewed content
 session_start();
-
-
 
 stop_view($HTTP_SESSION_VARS['view_start'],$HTTP_SESSION_VARS['view_content_id']);
 $HTTP_SESSION_VARS['view_start'] = 0;
@@ -376,9 +374,9 @@ if (!isset($template_file))
 
 
 $smarty->assign('nav_string', build_nav_string($cat_id));
-$smarty->assign('lang',$lang);
 $smarty->assign('template_name', $userdata['photo_user_template']);
 $smarty->assign('sid','&sid='.$userdata['session_id']);
+$smarty->assign('username', $userdata['username']);
 
 $end_time = getmicrotime();
 $execution_time = $end_time - $start_time;
