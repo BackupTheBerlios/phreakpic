@@ -6,13 +6,13 @@ class group
 {
 	var $id;
 	var $name;
-	var $describtion;
+	var $description;
 	
 	function delete()
 	{
 		global $db,$config_vars;
 		// remove from content table
-		$sql = "DELETE FROM '" . $config_vars['table_prefix'] . get_class($this) . " WHERE 'id' = " . $this->id;
+		$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . "s WHERE id = " . $this->id;
 		if (!$result = $db->sql_query($sql))
 		{
 			message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
@@ -26,8 +26,8 @@ class group
 		if (!isset($this->id))
 		{
 			// this is object is not yet in the datebase, make a new entry
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . " (name, describtion)
-				VALUES ('$this->name', '$this->describtion')";
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . "s (name, description)
+				VALUES ('$this->name', '$this->description')";
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Error while submitting a new group object to the db", '', __LINE__, __FILE__, $sql);
@@ -44,8 +44,8 @@ class group
 			// object is already in the database just du an update
 			$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . " 
 				SET 	name = '$this->name', 
-					describtion = '$this->describtion'
-				WHERE id like $this->id";
+					description = '$this->description'
+				WHERE id = $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Error while updating an existing cat object to the db", '', __LINE__, __FILE__, $sql);
@@ -103,14 +103,14 @@ class group
 		return $this->name;
 	}
 	
-	function set_describtion($new_desc)
+	function set_description($new_desc)
 	{
-		$this->describtion = $new_desc;
+		$this->description = $new_desc;
 	}
 	
-	function get_describtion()
+	function get_description()
 	{	
-		return $this->describtion;
+		return $this->description;
 	}
 
 }
@@ -122,9 +122,9 @@ class usergroup extends group
 	function add_user($user_id)
 	{
 		global $db,$config_vars;
-		if (!user_in_group($user_id))
+		if (!$this->user_in_group($user_id))
 		{
-			$sql = 'INSERT INTO' . $config_vars['table_prefix'] . "user_in_group (user_id,group_id) 
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "user_in_group (user_id,group_id) 
 				VALUES ('$user_id','$this->id')";
 			if (!$result = $db->sql_query($sql))
 			{
@@ -142,9 +142,9 @@ class usergroup extends group
 	function remove_user($user_id)
 	{
 		global $db,$config_vars;
-		if (user_in_group($user_id))
+		if ($this->user_in_group($user_id))
 		{
-			$sql = 'DELETE FROM' . $config_vars['table_prefix'] . "user_in_group 
+			$sql = 'DELETE FROM ' . $config_vars['table_prefix'] . "user_in_group 
 				WHERE (user_id = $user_id) and group_id = $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
@@ -163,7 +163,7 @@ class usergroup extends group
 	{
 		// return true if $user_id is in this group
 		global $db,$config_vars;
-		$sql = 'select user_id from' . $config_vars['table_prefix'] . "user_in_group where (user_id = $user_id) and (group_id = $group_id)";
+		$sql = 'SELECT user_id FROM ' . $config_vars['table_prefix'] . "user_in_group where (user_id = $user_id) and (group_id = $this->id)";
 		if (!$result = $db->sql_query($sql))
 		{
 			message_die(GENERAL_ERROR, "Error while checking wether user is in group", '', __LINE__, __FILE__, $sql);
