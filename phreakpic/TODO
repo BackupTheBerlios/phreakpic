@@ -2,20 +2,19 @@ for alpha release:
 X name finden
 X fix security hole with $root_path (hope so)
 - interfaces für add_dir...
-
 X add_parsed_dir_to_cat
 X Anonymouse Login
 X Edit Comments
   X Delete Comments: unterschiedliche behandlung falls unter kommentare vorhanden sind
 X Bigbrother feature
   X Bigbrother auswertungen
-
 X session id bei jedem link weitergeben
 X Add file to cat edit hinzufügen
 
 for beta relase:
 
 - handle comments when cat or content is deleted
+- handle auth when groups are deleted
 - use language files everywhere
 - BigBrother User Interface
 - Polls
@@ -25,7 +24,7 @@ for beta relase:
 - doppelten code in funktionen packen
 - vollständiges admin interface (wie letzendlich auch immer)
   X usergroups
-  - auths
+  X auths
 - remove vars from url and use sessions for them
 
 afterwards:
