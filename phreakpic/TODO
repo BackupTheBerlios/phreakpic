@@ -1,7 +1,7 @@
 for alpha release:
 X name finden
 X fix security hole with $root_path (hope so)
-- interfaces für add_dir...
+X interfaces für add_dir...
 X add_parsed_dir_to_cat
 X Anonymouse Login
 X Edit Comments
@@ -12,23 +12,32 @@ X session id bei jedem link weitergeben
 X Add file to cat edit hinzufügen
 
 for beta relase:
-- rename cats
-- rename class auth in phreak_auth and maybe the others also
-- clean up requires and includes
+X rename cats
+X rename class auth in phreak_auth and maybe the others also
 - handle comments when cat or content is deleted
-- handle auth when groups are deleted
+X handle auth when groups are deleted
 - use language files everywhere
 - BigBrother User Interface
-- Polls
-- Design authorisation for adding people to groups creating auths.... 
-- Design which content/catgroups can be selected when creating new content/cat
-- code review und einheitlich machen (speziell view_cat, view_content)
-- doppelten code in funktionen packen
-- vollständiges admin interface (wie letzendlich auch immer)
+X Design authorisation for adding people to groups
+- Design authorisation for creating auths.... 
+X Design which content/catgroups can be selected when creating new content/cat
+X vollständiges admin interface (wie letzendlich auch immer)
   X usergroups
   X auths
-- remove vars from url and use sessions for them
 
-afterwards:
+- upload per zip/gzip file
+
+
+soon future:
+- clean up requires and includes
+- remove vars from url and use sessions for them
+- code review und einheitlich machen (speziell view_cat, view_content)
+- doppelten code in funktionen packen
+- Check PostgreSQL compatibility
+- add auth checking to all the set function in auth, group, etc
+
+
+future:
+- Polls
 - custom fields
 - movie support

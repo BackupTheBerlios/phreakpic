@@ -19,11 +19,14 @@ Beta Release:
 - change group of a cat (Tesla)
 - edit comments (Tesla)
 - some exif informations (Tesla)
+- added rights management for adding and removing user to usergroups (Tesla)
+- created UCP (Tesla)
 
 Changed Tables:
 Added:
 - error_reports
 - groups
+- usergroup_auth
 Deleted:
 - catgroups
 - contentgroups
