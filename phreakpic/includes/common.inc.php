@@ -67,6 +67,7 @@ define("OP_NP_MISSING_CAT_ADD", 5);
 define("OP_NP_MISSING_EDIT", 6);
 define("OP_NP_MISSING_DELETE", 7);
 define("OP_NP_MISSING_VIEW", 12);
+define("OP_NP_MISSING_COMMENT_EDIT", 16);
 
 
 // Groups and Users

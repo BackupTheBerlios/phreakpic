@@ -26,7 +26,7 @@ $lang['send'] = 'Abschicken';
 $lang['search'] = 'Suchen';
 $lang['new_post'] = 'neu';
 $lang['comment_has_been_changed'] = 'Beitrag wurde %s mal geändert, zuletzt am %s';
-$lang[''] = '';
+$lang['user_id'] = 'User ID';
 $lang[''] = '';
 $lang[''] = '';
 
