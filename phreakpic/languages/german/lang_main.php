@@ -53,6 +53,7 @@ $lang['rotate_180'] = '180';
 $lang['view_content']="Sachen anzeigen";
 $lang['full_size']="Vollbild";
 $lang['fit_size']="Auf seite anpassen";
+$lang['slideshow']="Slideshow";
 
 //view_cat.tpl
 $lang['view_cat']="Kategorie anzeigen";

@@ -54,7 +54,7 @@ $lang['to_group'] = 'to group';
 $lang['view_content']="View Content";
 $lang['full_size']="Original Size";
 $lang['fit_size']="Fit to page";
-
+$lang['slideshow']="Slideshow";
 
 
 //view_cat.tpl
