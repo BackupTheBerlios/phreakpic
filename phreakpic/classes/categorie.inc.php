@@ -449,16 +449,20 @@ class categorie
 		global $userdata;
 
 		// get objekt for the parent cat
-		$parent = new categorie();
-		if ($parent->generate_from_id($new_parent_id) == OP_SUCCESSFUL)
+		$new_parent = new categorie();
+		if ($new_parent->generate_from_id($new_parent_id) == OP_SUCCESSFUL)
 		{
 			// check if user has cat_add rights in the parent group
-			if (check_cat_action_allowed($parent->catgroup_id,$userdata['user_id'],'cat_add'))
+			if (check_cat_action_allowed($new_parent->catgroup_id,$userdata['user_id'],'cat_add'))
 			{
-				// if this categoris is already in the db you also need move rights
-				if (isset($this->id) and (!check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'move')))
+				$parent = new categorie();
+				if ($parent->generate_from_id($this->parent_id) == OP_SUCCESSFUL)
 				{
-					return OP_NP_MISSING_CAT_MOVE;
+					// if this categoris is already in the db you also need move rights
+					if (isset($this->id) and (!check_cat_action_allowed($parent->catgroup_id,$userdata['user_id'],'cat_remove')))
+					{
+						return OP_NP_MISSING_CAT_MOVE;
+					}
 				}
 				$this->parent_id=$new_parent_id;
 				return OP_SUCCESSFUL;
@@ -473,7 +477,7 @@ class categorie
 			return OP_PARENT_ID_INVALID;
 		}
 	}
-	
+
 	function get_current_rating()
 	{
 		return $this->current_rating;
