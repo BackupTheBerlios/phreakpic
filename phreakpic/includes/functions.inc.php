@@ -1,5 +1,5 @@
 <?php
-include_once(ROOT_PATH . './classes/album_content.inc.php');
+//include_once(ROOT_PATH . './classes/album_content.inc.php');
 
 
 function database_encode($string)
