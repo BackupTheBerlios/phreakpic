@@ -52,6 +52,7 @@
 			<td>fehlt: Poll</td>
 			<td> 
 				<div align="center">
+				<a name="#pic"></a>
 						<table width="1" border="0" cellpadding="0" cellspacing="0">
 							<tr>
 								<td width="1"><img src="templates/<!--{$template_name}-->/img/elo.gif" width="14" height="14" /></td>
@@ -105,7 +106,7 @@
 			
 				<!--{if $mode == edit}-->
 					<form 
-action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->" method="POST">
+action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->" method="POST">
 					
 					<!--{if $edit_info.allow_edit == true}-->
 						<!--{$lang.name}-->: <input type="text" name="name" value="<!--{$name}-->"><br>

@@ -43,11 +43,11 @@ function switchTd(x,y)
 	<!--{if $mode == edit}-->
 		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content" name="content" onKeyDown="switchTd('1','1')">
 	<!--{/if}-->
-	<table border="0" align="center" cellspacing="10">
+	<table border="0" align="center" cellspacing="10" cellpadding="3">
 		<!--{section name=thumb_cols loop=$thumbs}-->
 		<tr>
 			<!--{section name=thumb_cell loop=$thumbs[thumb_cols]}-->
-			<td name="td_thumb" onclick="switchTd(<!--{$smarty.section.thumb_cols.index}-->,<!--{$smarty.section.thumb_cell.index}-->)">
+			<td width="<!--{$thumb_size}-->" height="<!--{$thumb_size}-->" name="td_thumb" onclick="switchTd(<!--{$smarty.section.thumb_cols.index}-->,<!--{$smarty.section.thumb_cell.index}-->)" align="left" valign="bottom"  bgcolor="444444">
 				<!--{*Possible fields of this table are: 
 					html			the html tag to display the content
 					name			the name of it
@@ -59,15 +59,15 @@ function switchTd(x,y)
 					
 					allow_edit		this is for the edit fields. Don't use this...
 				*}-->
-				<table width="10" border="0" cellspacing="0" cellpadding="0">
-					<tr>
+<!--				<table border="0" cellspacing="0" cellpadding="5" bgcolor="333333">
+					<tr>-->
 						<a name="<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->">
-						<td>
-							<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}--><!--{$sid}-->">
-								<!--{$thumbs[thumb_cols][thumb_cell].html}-->
-							</a><br />
+						<!--<td width="<!--{$thumb_size}-->" bgcolor="333333">-->
+							<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}--><!--{$sid}-->#pic"><!--{$thumbs[thumb_cols][thumb_cell].html}--></a><br />
+						<!--</td>
+						<td>-->
 							<font size="-1">
-								<!--{$lang.name}-->: <!--{$thumbs[thumb_cols][thumb_cell].name}--><br>
+								<!--{$lang.name}-->: <!--{$thumbs[thumb_cols][thumb_cell].name|truncate:15:"...":true}--><br>
 								<!--{$lang.rating}-->: <!--{$thumbs[thumb_cols][thumb_cell].current_rating}--><br>
 								<!--{$lang.views}-->: <!--{$thumbs[thumb_cols][thumb_cell].views}--><br>
 								<!--{if $mode == edit}-->
@@ -75,13 +75,13 @@ function switchTd(x,y)
 									<input name="content_id[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
 									<!--{if $thumbs[thumb_cols][thumb_cell].allow_edit == true}-->
 										<!--{$lang.rotate}-->: 
-										<!--{$lang.rotate_free}-->: <input type="radio" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="free" checked><input type="text" name="rotate"><br> 
+										<!--<!--{$lang.rotate_free}-->: <input type="radio" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="free" checked><input type="text" name="rotate"><br>--> 
 										<!--{$lang.rotate_left}--> <input type="radio" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="-90">
 										<!--{$lang.rotate_180}--> <input type="radio" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="180">
 										<!--{$lang.rotate_right}--> <input type="radio" name="rotate_mode[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" value="90"><br>
-										<!--{$lang.name}-->: <input name="name[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].name}-->" size="20"><br>
-										<!--{$lang.place_in_cat}-->: <input name="place_in_cat[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_cat}-->" size="10"><br>
-										<a onDblClick="setCheckboxes('edit_content', !document.edit_content.elements['lock'][<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->].checked,'lock'); return false;"><!--{$lang.lock}--></a>:<input id="lock"  name="lock[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox" <!--{$thumbs[thumb_cols][thumb_cell].locked}-->>
+										<!--{$lang.name}-->: <input name="name[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].name}-->" size="10"><br>
+										<!--{$lang.place_in_cat}-->: <input name="place_in_cat[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_cat}-->" size="2"><br>
+										<!--<a onDblClick="setCheckboxes('edit_content', !document.edit_content.elements['lock'][<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->].checked,'lock'); return false;"><!--{$lang.lock}--></a>:<input id="lock"  name="lock[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox" <!--{$thumbs[thumb_cols][thumb_cell].locked}-->>
 									<!--{/if}-->
 									<!--{if  $thumbs[thumb_cols][thumb_cell].allow_delete == true}-->
 										<a onDblClick="setCheckboxes('edit_content', !document.edit_content.elements['delete'][<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->].checked,'delete'); return false;"><!--{$lang.delete}--></a>:<input id="delete" name="delete[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
@@ -97,13 +97,13 @@ function switchTd(x,y)
 									<!--{/if}-->
 									<!--{if  $$thumbs[thumb_cols][thumb_cell].allow_remove_from_group == true}-->
 										<a onDblClick="setCheckboxes('edit_content', !document.edit_content.elements['change_group'][<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->].checked,'change_group'); return false;"><!--{$lang.change_group}--> (<!--{$thumbs[thumb_cols][thumb_cell].contentgroup_name}-->)</a> :<input id="change_group" name="change_group[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
-									<!--{/if}-->
+									<!--{/if}-->-->
 								<!--{/if}-->
 							</font>
 						</td>
 						</a>
-					</tr>
-				</table>
+					<!--</tr>
+				</table>-->
 			</td>
 			<!--{/section}-->
 		</tr>

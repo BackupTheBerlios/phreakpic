@@ -80,7 +80,7 @@
 
 </div>
 
-<table width="95%" align="center" border="0">
+<table width="95%" align="center" border="1">
 	<tr>
 		<td width="20%">
 			&nbsp;
