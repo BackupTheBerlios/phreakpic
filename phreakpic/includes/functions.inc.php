@@ -5,21 +5,23 @@ function get_cats_string($cats)
 {
 	global $config_vars;
 	
-	
-	foreach ($cats as $key => $value)
+	if (is_array($cats))
 	{
-		$cat_obj = new categorie();
-		$cat_obj->generate_from_id($value['id']);
-		$name = $cat_obj->get_name();
-		
-		while ($cat_obj->get_parent_id() != $config_vars['root_categorie'])
+		foreach ($cats as $key => $value)
 		{
-			$old_cat_id=$cat_obj->get_parent_id();
 			$cat_obj = new categorie();
-			$cat_obj->generate_from_id($old_cat_id);
-			$name = $cat_obj->get_name() . '/' . $name;
+			$cat_obj->generate_from_id($value['id']);
+			$name = $cat_obj->get_name();
+
+			while ($cat_obj->get_parent_id() != $config_vars['root_categorie'])
+			{
+				$old_cat_id=$cat_obj->get_parent_id();
+				$cat_obj = new categorie();
+				$cat_obj->generate_from_id($old_cat_id);
+				$name = $cat_obj->get_name() . '/' . $name;
+			}
+			$cats[$key]['name']=$name;
 		}
-		$cats[$key]['name']=$name;
 	}
 	return $cats;
 }
@@ -43,8 +45,8 @@ function validate_config()
 	{
 		$error['thumb_size']=2;
 	}
-	elseif (($config_vars['thumb_size']['percent'] or isset($config_vars['thumb_size']['maxsize'])) 
-		and ($config_vars['thumb_size']['width'] or isset($config_vars['thumb_size']['height'])))
+	elseif ((isset($config_vars['thumb_size']['percent']) or isset($config_vars['thumb_size']['maxsize'])) 
+		and (isset($config_vars['thumb_size']['width']) or isset($config_vars['thumb_size']['height'])))
 	{
 		$error['thumb_size']=3;
 	}
@@ -154,6 +156,7 @@ function generate_array_from_row($row)
 function generate_where($field,$array)
 {
 	// generates an string that can be used in an sql where, which limits the query to all entry where $field is in $array
+	$where="";
 	for ($i=0;$i<sizeof($array);$i++)
 	{
 		$where=$where." ".$field." like ".$array[$i];
