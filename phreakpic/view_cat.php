@@ -6,6 +6,8 @@ include_once('./modules/pic_managment/interface.inc.php');
 include_once('./languages/'.$userdata['user_lang'].'/lang_main.php');
 include_once('./includes/functions.inc.php');
 
+
+
 if (!isset($cat_id))
 {
 	$cat_id = $config_vars['root_categorie'];
@@ -14,6 +16,7 @@ if (!isset($cat_id))
 
 //get the cats in the actual cat and information about them
 $child_cats = get_cats_of_cat($cat_id);
+
 if (isset($child_cats))
 {
 	for ($i = 0; $i < sizeof($child_cats); $i++)
@@ -37,38 +40,112 @@ else
 //Get the contents of the actual cat and their thumbnails plus information like
 $category = new categorie;
 $category->generate_from_id($cat_id);
+
 $contents = get_content_of_cat($cat_id);
+
 if (is_array($contents))
 {
+
 	//editing the contents
 	if ((isset($submit)) and ($HTTP_POST_VARS['mode'] == 'edited'))
 	{
-		for ($i = 0; $i < sizeof($HTTP_POST_VARS['name']); $i++)
+		$add_to_cats = get_cats_data_where_perm('id,name','content_add');
+		// loop through all content
+		for ($i = 0; $i < sizeof($contents); $i++)	
 		{
-			if ($contents[$HTTP_POST_VARS['place_in_array'][$i]]->set_name($HTTP_POST_VARS['name'][$i]) != OP_SUCCESSFUL)
-			{
-				die('Konnte Name '.$HTTP_POST_VARS['name'][$i].' von '.$HTTP_POST_VARS['content_id'][$i].' nicht setzen ('.$i);
-			}
-			if ($HTTP_POST_VARS['lock'][$HTTP_POST_VARS['content_id'][$i]] == 'true')
-			{
-				if ($contents[$HTTP_POST_VARS['place_in_array'][$i]]->lock() != OP_SUCCESSFUL)
+			
+			
+			// set everything for edit
+			if ($contents[$i]->check_perm('edit'))
+			{	
+				// name
+				if ($contents[$i]->set_name($HTTP_POST_VARS['name'][$i]) != OP_SUCCESSFUL)
 				{
-					die('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht locken');
-				}	
-			}
-			if ($HTTP_POST_VARS['delete'][$HTTP_POST_VARS['content_id'][$i]] == 'true')
-			{
-				if ($contents[$HTTP_POST_VARS['place_in_array'][$i]]->remove_from_cat($cat_id) != OP_SUCCESSFUL)
+					die('Konnte Name '.$HTTP_POST_VARS['name'][$i].' von '.$HTTP_POST_VARS['content_id'][$i].' nicht setzen ('.$i);
+				}
+				// place_in_cat
+				// lock
+				if ($contents[$i]->set_place_in_cat($cat_id,$HTTP_POST_VARS['place_in_cat'][$i]) != OP_SUCCESSFUL)
 				{
-					die ('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht löschen');
+					die('Konnte Place in cat '.$HTTP_POST_VARS['place_in_cat'][$i].' von '.$HTTP_POST_VARS['content_id'][$i].' nicht setzen ('.$i);
+				}
+				if ($HTTP_POST_VARS['lock'][$i] == 'on')
+				{
+					if ($contents[$i]->lock() != OP_SUCCESSFUL)
+					{
+						die('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht locken');
+					}	
+				}
+				else
+				{
+					$contents[$i]->unlock();
 				}
 			}
-			$contents[$HTTP_POST_VARS['place_in_array'][$i]]->commit();
+			
+			
+			// check unlink
+			if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'content_remove'))
+			{
+				if ($HTTP_POST_VARS['unlink'][$i] == 'on')
+				{
+				echo "UNLINK";
+					if ($contents[$i]->remove_from_cat($cat_id) != OP_SUCCESSFUL)
+					{
+						die ('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht von der cat entfernen');
+					}
+				}				
+			}
+			
+			// check link
+			
+			if (is_array($add_to_cats))
+			{
+				// echo "I: ".$i." id ".$contents[$i]->id." link: ".$HTTP_POST_VARS['link'][$i]."<br>";
+				if ($HTTP_POST_VARS['link'][$i] == 'on')
+				{
+					if ($contents[$i]->add_to_cat($HTTP_POST_VARS['to_cat']) != OP_SUCCESSFUL)
+					{
+						die ('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht linken');
+					}
+				}
+				// check if you have content remove rights
+				if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'content_remove'))
+				{
+					if ($HTTP_POST_VARS['move'][$i] == 'on')
+					{
+					echo "MOVE";
+						if ($contents[$i]->add_to_cat($HTTP_POST_VARS['to_cat']) != OP_SUCCESSFUL)
+						{
+							die ('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht moven (add)');
+						}
+						if ($contents[$i]->remove_from_cat($cat_id) != OP_SUCCESSFUL)
+						{
+							die ('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht moven (remove)');
+						}
+					}
+				}
+					
+			}
+			
+			$contents[$i]->commit();
+			// check delete
+			if ($contents[$HTTP_POST_VARS['place_in_array'][$i]]->check_perm('delete'))
+			{
+				if ($HTTP_POST_VARS['delete'][$i] == 'on')
+				{
+					if ($contents[$i]->delete() != OP_SUCCESSFUL)
+					{
+						die('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht locken');
+					}	
+				}
+			}
+			
 		}
 		$smarty->assign('mode','view');
 		$smarty->assign('edited',true);
 		$contents = get_content_of_cat($cat_id);
 	}
+	
 	
 	
 	//show thumbnails and get some infos about the content
@@ -77,10 +154,28 @@ if (is_array($contents))
 		$thumb_infos = $contents[$i-1]->get_thumb();
 		if ($mode == 'edit')
 		{
+			// check if user is allowed to unlink from thie cat
+			$smarty->assign('allow_content_remove',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'content_remove'));
+
+
+
+			// Check if user has rights to add content to a cat
+			$add_to_cats = get_cats_data_where_perm('id,name','content_add');
+			if (is_array($add_to_cats))
+			{
+					$smarty->assign('allow_link',true);	
+					$smarty->assign('add_to_cats',$add_to_cats);
+			}
+
+		
 			$smarty->assign('mode','edit');
+			// check if user has edit perm to that content
 			$thumb_infos['allow_edit'] = $contents[$i-1]->check_perm('edit');
-			$thumb_infos['allow_unlink'] = check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'content_remove');
+			// check if user has delete perm to that content
+			$thumb_infos['allow_delete'] = $contents[$i-1]->check_perm('delete');
 			$thumb_infos['place_in_array'] = $i-1;
+			$place_in_cat_array = $contents[$i-1]->get_place_in_cat();
+			$thumb_infos['place_in_cat'] = $place_in_cat_array[$cat_id];
 		}
 		$array_row[] = $thumb_infos;
 		if ($i % $config_vars['thumb_table_cols'] == 0)
