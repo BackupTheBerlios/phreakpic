@@ -64,13 +64,17 @@ if (is_array($contents))
 					die('Konnte Name '.$HTTP_POST_VARS['name'][$i].' von '.$HTTP_POST_VARS['content_id'][$i].' nicht setzen ('.$i);
 				}
 				// place_in_cat
-				// lock
+				
 				if ($contents[$i]->set_place_in_cat($cat_id,$HTTP_POST_VARS['place_in_cat'][$i]) != OP_SUCCESSFUL)
 				{
 					die('Konnte Place in cat '.$HTTP_POST_VARS['place_in_cat'][$i].' von '.$HTTP_POST_VARS['content_id'][$i].' nicht setzen ('.$i);
 				}
+				
+				// lock
+				
 				if ($HTTP_POST_VARS['lock'][$i] == 'on')
 				{
+					
 					if ($contents[$i]->lock() != OP_SUCCESSFUL)
 					{
 						die('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht locken');
@@ -88,7 +92,7 @@ if (is_array($contents))
 			{
 				if ($HTTP_POST_VARS['unlink'][$i] == 'on')
 				{
-				echo "UNLINK";
+				
 					if ($contents[$i]->remove_from_cat($cat_id) != OP_SUCCESSFUL)
 					{
 						die ('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht von der cat entfernen');
@@ -113,7 +117,6 @@ if (is_array($contents))
 				{
 					if ($HTTP_POST_VARS['move'][$i] == 'on')
 					{
-					echo "MOVE";
 						if ($contents[$i]->add_to_cat($HTTP_POST_VARS['to_cat']) != OP_SUCCESSFUL)
 						{
 							die ('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht moven (add)');
@@ -133,9 +136,10 @@ if (is_array($contents))
 			{
 				if ($HTTP_POST_VARS['delete'][$i] == 'on')
 				{
+				
 					if ($contents[$i]->delete() != OP_SUCCESSFUL)
 					{
-						die('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht locken');
+						die('Konnte '.$HTTP_POST_VARS['name'][$i].' nicht löschen');
 					}	
 				}
 			}
@@ -176,6 +180,10 @@ if (is_array($contents))
 			$thumb_infos['place_in_array'] = $i-1;
 			$place_in_cat_array = $contents[$i-1]->get_place_in_cat();
 			$thumb_infos['place_in_cat'] = $place_in_cat_array[$cat_id];
+			if ($contents[$i-1]->get_locked())
+			{
+				$thumb_infos['locked'] = 'checked';
+			}
 		}
 		$array_row[] = $thumb_infos;
 		if ($i % $config_vars['thumb_table_cols'] == 0)
