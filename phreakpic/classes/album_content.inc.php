@@ -30,10 +30,59 @@ class album_content
 	var $locked;
 	var $width;
 	var $height;
+	var $edit;
+	var $view;
+	var $delete;
+	
+	
+	function check_perm($perm)
+	{
+		global $userdata;
+		if (!isset($$perm))
+		{
+			$this->$perm = check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], $perm);
+		}
+		return $this->$perm;
+	}
+
+	
 
 	function album_content() //Constructor
 	{
 
+	}
+	
+	function generate_content_in_cat_data()
+	{
+		global $db,$config_vars;	
+		$sql = 'SELECT cat_id,place_in_cat FROM '. $config_vars['table_prefix'] . 'content_in_cat where content_id = ' . $this->id;
+		
+ 		if (!$result = $db->sql_query($sql))
+ 		{
+ 			message_die(GENERAL_ERROR, "Couldnt get place_in_cat", '', __LINE__, __FILE__, $sql);
+ 		}
+
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$this->place_in_cat[$row['cat_id']] = $row['place_in_cat'];
+			$this->cat_ids[] = $row['cat_id'];
+		}
+
+	}
+	
+	function get_place_in_cat()
+	{
+
+		if (!isset($this->place_in_cat))
+		{
+			$this->generate_content_in_cat_data();
+		}
+		return $this->place_in_cat;
+	}
+	
+	function set_place_in_cat($cat,$place)
+	{
+		$this->place_in_cat[$cat] = $place;
 	}
 	
 	function get_surrounding_content($cat_id)
@@ -41,24 +90,7 @@ class album_content
 		// Returns an Array of album_content objects of all content which is in the categorie with id $cat_id
 		global $db,$config_vars,$userdata,$filetypes;
 
-		// all content in cat $cat_id	
-
-//		$sql = "SELECT content_id FROM " . $config_vars['table_prefix'] . "content_in_cat WHERE cat_id = '$cat_id' ";
-
-// 		if (!$result = $db->sql_query($sql))
-// 		{
-// 			message_die(GENERAL_ERROR, "Couldnt get content in cat", '', __LINE__, __FILE__, $sql);
-// 		}
-// 
-// 
-// 		while ($row = $db->sql_fetchrow($result))
-// 		{
-// 			// put all ids in one array
-// 			$content_ids[]=$row['content_id'];	
-// 
-// 		}
-
-//		$content_where = generate_where('content.id',$content_ids);
+		// get auth where
 		$auth_where = get_allowed_contentgroups_where('content.contentgroup_id',$userdata['user_id'], "view");
 
 		// get all content
@@ -79,7 +111,7 @@ class album_content
 		{
 			if ($row['id'] == $this->id)
 			{
-				$objarray['prev']=get_content_from_row($lastrow);
+				$objarray['prev'] = get_content_from_row($lastrow);
 				$objarray['next'] = get_content_from_row($db->sql_fetchrow($result));
 			}
 			$lastrow = $row;
@@ -93,6 +125,8 @@ class album_content
 		//Generates a thumbnail picture from the actual content in the size $thumb_size. check for making the size of the thumb right (higher pictures other than widther pictures).
 		return NOT_SUPPORTED;
 	}
+	
+	
 
 	function change_compression($compression)
 	{
@@ -114,6 +148,39 @@ class album_content
 	//returns the needed HTML Code to show the actual object.
 	return NOT_SUPPORTED;
 	}
+	
+	function lock()
+	{
+		global $userdata;
+		//set the name of the actual object. Checks if actual user is allowed to.
+		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
+		{
+			$this->locked=1;
+			return OP_SUCCESSFUL;
+		}
+		else
+		{
+			return OP_NP_MISSING_EDIT;
+		}
+
+		
+	}
+	
+	function unlock()
+	{
+		global $userdata;
+		//set the name of the actual object. Checks if actual user is allowed to.
+		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
+		{
+			$this->locked=0;
+			return OP_SUCCESSFULL;
+		}
+		else
+		{
+			return OP_NP_MISSING_EDIT;
+		}
+	}
+	
 
 	function delete()
 	{
@@ -123,7 +190,7 @@ class album_content
 		//check if the object is in the database
 		if (isset($this->id))
 		{  
-			if (check_content_action_allowed($this->content_group_id, $userdata['user_id'], "delete")) //Authorisation is okay
+			if (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "delete")) //Authorisation is okay
 			{
 				// remove from content table
 				$sql = "DELETE FROM '" . $config_vars['table_prefix'] . "content' WHERE 'id' = " . $this->id;
@@ -182,19 +249,19 @@ class album_content
 			// already in db
 
 			// update entry in content table
-			$sql = "UPDATE '" . $config_vars['table_prefix'] . "content'
-				SET	file = '$this->file ',
+			$sql = "UPDATE " . $config_vars['table_prefix'] . "content
+				SET	file = '$this->file',
 					name = '$this->name',
 					views = '$this->views',
 					current_rating = '$this->current_rating', 
 					creation_date = '$this->creation_date', 
 					contentgroup_id = '$this->contentgroup_id',
 					views = '$this->views',
-					locked = '$this->locked'
-					width = '$this->width'
+					locked = '$this->locked',
+					width = '$this->width',
 					height = '$this->height'
 				WHERE id like $this->id";
-					
+			
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Konnte Objekt nicht commiten", '', __LINE__, __FILE__, $sql);
@@ -227,6 +294,9 @@ class album_content
 			// set id of object to the id of the insert
 			$this->id = $db->sql_nextid();
 		}
+		
+		// fill palce_in_cat array;
+		$this->get_place_in_cat();
 		// add content to the cats	
 		
 		$this->fill_content_in_cat();	
@@ -295,7 +365,7 @@ class album_content
 		// check if file exists
 		if (is_file($file))
 		{
-			if (($this->id == 0) or (check_content_action_allowed($this->content_group_id, $userdata['user_id'], "edit")))
+			if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 			{
 				$this->file = $file;
 				return OP_SUCCESSFUL;
@@ -346,6 +416,13 @@ class album_content
 	{
 		global $userdata;
 		
+		
+		if (!is_array($this->cat_ids))
+		{
+			$this->generate_content_in_cat_data();
+		}
+
+		
 		$old_cat = new categorie();
 		$old_cat->generate_from_id($old_cat_id);
 
@@ -376,7 +453,7 @@ class album_content
 	{
 		global $userdata;
 		//set the name of the actual object. Checks if actual user is allowed to.
-		if (($this->id == 0) or (check_content_action_allowed($this->content_group_id, $userdata['user_id'], "edit")))
+		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
 			$this->name = $name;
 			return OP_SUCCESSFUL;
@@ -423,7 +500,7 @@ class album_content
 	{
 		global $userdata;
 		//set the creation_date of the actual object. Checks if actual user is allowed to.
-		if (($this->id == 0) or (check_content_action_allowed($this->content_group_id, $userdata['user_id'], "edit")))
+		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
 			$this->creation_date = $creation_date;
 			return OP_SUCCESSFUL;
@@ -483,8 +560,8 @@ class album_content
 	
 	function clear_content_in_cat()
 	{
-		global $db;
-		$sql = "DELETE FROM '" . $config_vars['table_prefix'] . "content_in_cat'
+		global $db,$config_vars;
+		$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content_in_cat
 		WHERE content_id = $this->id";
 
 		if (!$result = $db->sql_query($sql))
@@ -498,6 +575,11 @@ class album_content
 	{
 		global $config_vars;
 		//check if content is already in a cat 
+		if (!isset($this->cat_ids))
+		{
+			$this->generate_content_in_cat_data();
+		}
+		
 		if (sizeof($this->cat_ids)>0)
 		{
 			$cat_obj = new categorie();
@@ -662,4 +744,3 @@ class picture extends album_content
 
 
 ?>
-	
