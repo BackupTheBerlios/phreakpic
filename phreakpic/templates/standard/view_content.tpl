@@ -63,16 +63,38 @@
 				</div>
 			</td>
 			<td>
+			
+			
+			
 				<!--{if $mode == edit}-->
 					<form action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->" method="POST">
+					<!--{if $allow_edit eq 1}-->
 						Name: <input type="text" name="name" value="<!--{$name}-->"><br>
-						<!--{if $allow_delete eq 1}-->
-						Delete: <input type="checkbox" name="delete"><br>
-						<!--{/if}-->
 						Place in Cat: <input type="text" name="place_in_cat" value="<!--{$place_in_cat}-->"><br> 
-						Lock: <input type="checkbox" name="lock"><br>
-						Move to Cat: <br>
-						<input type="hidden" name="mode" value="commit">
+						Lock: <input type="checkbox" name="lock" <!--{$locked}-->><br>
+					
+					<!--{/if}-->
+					
+					<!--{if $allow_content_remove eq 1}-->
+						Delete: <input type="checkbox" name="delete"><br>
+						
+						
+							
+					<!--{/if}-->
+					<!--{if $allow_link eq 1}-->
+						Link: <input type="checkbox" name="link" ><br>
+						<!--{if $allow_content_remove eq 1}-->
+							Move: <input type="checkbox" name="move" ><br>
+						<!--{/if}-->
+					<!--{/if}-->
+					To Cat: 
+					<select name="to_cat">
+					<!--{section name=id loop=$add_to_cats}-->
+						<option value="<!--{$add_to_cats[id].id}-->"><!--{$add_to_cats[id].name}--></option>
+					<!--{/section}-->
+					</select><br>
+					
+					<input type="hidden" name="mode" value="commit">
 					<input type="submit">  
 					</form>
 				<!--{else}-->	
@@ -80,7 +102,7 @@
 					Bewertung: <!--{$current_rating}--><br>
 					Views: <!--{$views}--><br>
 					<a href="comment.php?mode=add&type=content&parent_id=0&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->"><!--{$lang.add_comment}--></a><br>
-					<!--{if $allow_edit eq 1}-->
+					<!--{if ($allow_edit eq 1) or ($allow_content_remove eq 1)}-->
 						<a href="view_content.php?mode=edit&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->"><!--{$lang.edit_content}--></a><br>
 					<!--{/if}-->	
 				<!--{/if}-->	

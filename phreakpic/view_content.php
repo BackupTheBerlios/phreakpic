@@ -52,6 +52,60 @@ if (is_object($surrounding_content['next']))
 	$smarty->assign('next_thumb',$surrounding_content['next']->get_thumb());
 }
 
+
+// Check if user has rights to add content to a cat
+
+
+
+$add_to_cats = get_cats_data_where_perm('id,name','content_add');
+if (is_array($add_to_cats))
+{
+	$smarty->assign('allow_link',1);	
+	if ($mode == "edit")
+	{
+		
+		$smarty->assign('add_to_cats',$add_to_cats);
+		$smarty->assign('mode','edit');
+	}
+	if ($mode == "commit")
+	{
+		// check link
+		if ($HTTP_POST_VARS['link'] == "on")
+		{
+			$content->add_to_cat($HTTP_POST_VARS['to_cat']);
+		}
+		
+				
+	}
+
+
+}
+
+// Check if user has content_remove rights on this categorie
+$cat_obj = new categorie();
+$cat_obj->generate_from_id($cat_id);
+if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'content_remove'))
+{
+	$smarty->assign('allow_content_remove',1);
+	if ($mode == "edit")
+	{
+		$smarty->assign('mode','edit');
+	}
+	
+	if ($mode == "commit")
+	{
+		// check delete
+		if ($HTTP_POST_VARS['delete'] == "on")
+		{
+			$content->remove_from_cat($cat_id);
+			$content->commit();
+		}
+		
+		// check move
+		
+	}
+}
+
 // Check if user has edit rights to this content
 if ($content->check_perm('edit'))
 {
@@ -62,14 +116,12 @@ if ($content->check_perm('edit'))
 		$smarty->assign('mode','edit');
 		$place_in_cat_array = $content->get_place_in_cat();
 		$smarty->assign('place_in_cat',$place_in_cat_array[$cat_id]);
+		if($content->get_locked())
+		{
+			$smarty->assign('locked','checked');
+		}
 		
 		// check if user has unlink rights
-		$cat_obj = new categorie();
-		$cat_obj->generate_from_id($cat_id);
-		if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'content_remove'))
-		{
-			$smarty->assign('allow_content_remove',1);
-		}
 		
 	}
 	
@@ -87,10 +139,7 @@ if ($content->check_perm('edit'))
 		
 		$content->set_place_in_cat($cat_id,$HTTP_POST_VARS['place_in_cat']);
 		
-		if ($content->$HTTP_POST_VARS['delete'] == "on")
-		{
-			$content->remove_from_cat($cat_id);
-		}
+		
 		
 		$content->set_name($HTTP_POST_VARS['name']);
 		
