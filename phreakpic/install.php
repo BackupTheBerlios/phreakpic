@@ -1,4 +1,5 @@
 <?php
+
 define ("ROOT_PATH",'');
 include_once ('includes/common.inc.php');
 include_once ('includes/functions.inc.php');
@@ -105,7 +106,7 @@ if ($mode == "check_user_info")
 		die('Phreakpic Path is wrong. Check if you have a trailing slash (like foo/bar/Phreakpic/ ).');
 	}
 	echo ('Phreakpic Path: <font color=#00ff00>OK</font><br>');
-	
+
 	//Smarty Dir
 	$check = file_exists($Smarty_dir . "Smarty.class.php");
 	if (empty($check))
@@ -137,7 +138,7 @@ if ($mode == "check_user_info")
 	
 	rmdir("$content_path_prefix/test_install_dir");
 	
-	
+
 	echo ('Upload Dir permissions: <font color=#00ff00>OK</font><br>');
 	
 	//upload path 
@@ -200,7 +201,7 @@ if ($mode == "check_user_info")
 	echo ('Database table prefix: <font color=#00ff00>OK</font><br>');
 	*/
 	
-	
+
 	echo ('</p>');
 	
 	
@@ -230,7 +231,7 @@ if ($mode == "check_user_info")
 	$filecontent = fread ($fd, filesize ("install/" . $dbdump));
 	fclose ($fd);
 	
-	$usable_dump = str_replace ("photo_", $phreakpic_table_prefix, $filecontent);
+	$usable_dump = str_replace ("phreakpic_", $phreakpic_table_prefix, $filecontent);
 	
 	$usable_dump = explode($available_dbms[$dbms]["DELIM"], $usable_dump);
 	
@@ -250,7 +251,7 @@ if ($mode == "check_user_info")
 	echo ('<font color=#00ff00>OK</font><br>');
 	
 	// changing phpBB2 tables
-	
+
 	echo ("Changing phpBB2 Tables <br>");
 	
 	echo ("Add user_template ");
@@ -261,7 +262,7 @@ if ($mode == "check_user_info")
 		die (mysql_errno().": ".mysql_error()."<BR>");
 	}
 	echo ('<font color=#00ff00>OK</font><br>');
-	
+
 	echo ("Add content_per_page ");
 	$check = mysql_db_query ($dbname, "ALTER TABLE {$table_prefix}users ADD phreakpic_content_per_page mediumint", $connect);
 	$check = true;
@@ -281,11 +282,14 @@ if ($mode == "check_user_info")
 	// give admin rights.
 	$userdata['user_level'] = ADMIN;
 	
+
+	$admin_group = new group;
 	
-	$admin_group = new catgroup;
 	$admin_group->name = ('Admin Group');
-	$admin_group->description = ('This is the Administrator Category Group, groups like the Root Car or Deleted Content belong to it. You can change the name and description, but never delete it!');
+	$admin_group->description = ('This is the Administrator Group, categories like the Root Car or Deleted Content belong to it. You can change the name and description, but never delete it!');
+	
 	echo("Admin Group: " . $admin_group->commit() . "<br>");
+	
 	
 	//root cat
 	$root_cat = new categorie;
@@ -294,9 +298,12 @@ if ($mode == "check_user_info")
 	$root_cat->name = ("root_cat");
 	$root_cat->description = ("This is your Root Category. You can change the name and description, but never delete it!");
 	$root_cat->commit();
+	
 	// set parent id to given id
 	$root_cat->parent_id = $root_cat->id;
+	
 	echo("Root Cat: " . $root_cat->commit() . "<br>");
+	
 	
 	
 	//deleted content cat
