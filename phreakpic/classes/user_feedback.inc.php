@@ -249,16 +249,26 @@ class content_comment extends comment
 		// check is user is allowed
 		$content = new album_content();
 		$content->generate_from_id($this->owner_id);
-	echo "HH";		
 		
 		if (($userdata['user_id'] == $this->user_id) or (check_content_action_allowed($content->get_contentgroup_id(),$userdata['user_id'],'content_edit')))
 		{
-			$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content_comments WHERE 'id' = " . $this->id;
+			// check wether the comment has child comments
+			if (is_array($this->get_childs()))
+			{
+				// comment has childs
+				$this->set_feedback('DELETED');
+				$this->commit();
+			}
+			else
+			{
+				// comment has no childs
+			$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content_comments WHERE id = " . $this->id;
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
 			}
 			unset($this->id);
+			}
 		}
 
 	}
