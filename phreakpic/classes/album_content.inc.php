@@ -688,7 +688,22 @@ class album_content
 			}
 	
 			$path = $path . '/' . basename($this->name) . '.' . getext($this->file)	;
-			return $config_vars['content_path_prefix'] .'/' . $path;
+			$filename = $config_vars['content_path_prefix'] .'/' . $path;
+			
+			// if filename has changed check if such a file does not already exists is so add a number behind till its a new file
+			if ($this->file != $filename)
+			{
+				$newfilename=$filename;
+				$i=0;
+				while (is_file($newfilename))
+				{
+					$newfilename=getfile($filename)."-$i.".getext($filename);
+					$i++;
+				}
+				$filename = $newfilename;
+			}
+			
+			return  $filename;
 		}
 		else
 		{
