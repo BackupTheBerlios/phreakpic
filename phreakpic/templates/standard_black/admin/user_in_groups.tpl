@@ -1,4 +1,4 @@
-<!--{include file="$template_name/header.tpl"}-->
+<!--{include file="$template_name/admin/header.tpl"}-->
 <br>
 <!--{$lang.new_usergroup}-->
 <form action="user_in_groups.php?usergroup=<!--{$sel_usergroup}--><!--{$sid}-->" method="POST">
@@ -81,4 +81,4 @@
 </tr>
 </table>
 </form>
-<!--{include file="$template_name/footer.tpl"}-->
+<!--{include file="$template_name/admin/footer.tpl"}-->

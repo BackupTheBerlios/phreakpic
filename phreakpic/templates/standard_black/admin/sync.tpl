@@ -1,4 +1,4 @@
-<!--{include file="$template_name/header.tpl"}-->
+<!--{include file="$template_name/admin/header.tpl"}-->
 <form action="sync.php?<!--{$sid}-->" method="post">
 	<!--{section name=missmatch loop=$missmatch_array}-->
 		<!--{if $missmatch_array[missmatch].type == 1}-->
@@ -10,4 +10,4 @@
 	<!--{/section}-->
 	<input type="submit" name="do_correct">
 </form>
-<!--{include file="$template_name/footer.tpl"}-->
+<!--{include file="$template_name/admin/footer.tpl"}-->

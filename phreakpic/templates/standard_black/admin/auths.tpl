@@ -1,4 +1,4 @@
-<!--{include file="$template_name/header.tpl"}-->
+<!--{include file="$template_name/admin/header.tpl"}-->
 <form action="auths.php?usergroup=<!--{$sel_usergroup}-->&group=<!--{$sel_group}--><!--{$sid}-->" method="POST">
 <table border=1>
 <tr>
@@ -72,4 +72,4 @@
 
 </form>
 
-<!--{include file="$template_name/footer.tpl"}-->
+<!--{include file="$template_name/admin/footer.tpl"}-->

@@ -1,4 +1,4 @@
-<!--{include file="header.tpl"}-->
+<!--{include file="admin/header.tpl"}-->
 Add_dir
 
 
@@ -20,4 +20,4 @@ New Cats Catgroup:
 
 Parsed/cat_id:
 
-<!--{include file="footer.tpl"}-->
+<!--{include file="admin/footer.tpl"}-->

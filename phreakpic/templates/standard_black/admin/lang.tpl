@@ -1,4 +1,4 @@
-<!--{include file="$template_name/header.tpl"}-->
+<!--{include file="$template_name/admin/header.tpl"}-->
 
 <form action="lang.php?<!--{$sid}-->" method="POST">
 <table border=1>
@@ -24,4 +24,4 @@
 <input name="submit" type="submit" ><br>
 </form>
 
-<!--{include file="$template_name/footer.tpl"}-->
+<!--{include file="$template_name/admin/footer.tpl"}-->
