@@ -14,7 +14,12 @@ function generate_where($field,$array)
 function getext($in_file)
 {
 	// return the file extension of $in_file (without a leading dot)
-	return(end(explode('.',$in_file)));
+	if (end(explode('.',$in_file)) != $in_file)
+	{
+		return(end(explode('.',$in_file)));
+	}
+	return "";
+	
 }
 
 function getfile($in_file)
@@ -49,7 +54,8 @@ function getfile($in_file)
  }
  if (!empty($ta[query])) { $ta[query]='?'.$ta[query]; }
  if (!empty($ta[fragment])) { $ta[fragment]='#'.$ta[fragment]; }
- return implode('', array($ta[scheme], $ta[user], $ta[pass], $ta[host], $ta[port], $ta[path], $ta[query], $ta[fragment]));
+ return implode('', array($ta[scheme], $ta[user], $ta[pass], $ta[host], 
+$ta[port], $ta[path], $ta[query], $ta[fragment]));
 }*/
 
 function  linkencode($str)
@@ -95,18 +101,22 @@ function build_nav_string($cat_id)
 }
 
 //get all comments and save it as an useable array
-function make_comments($comment, $level)
+function make_comments($comment, $level,$editable)
 {
-	global $comments;
+	global $comments,$userdata;
 	$comment_infos['level'] = $level;
 	$comment_infos['id'] = $comment->id;    //get_id();
-	$comment_infos['text'] = $comment->get_feedback();
-	$user_data = get_userdata(intval($comment->get_user_id()));
-	$comment_infos['username'] = $user_data['username'];
+	$comment_infos['text'] = nl2br($comment->get_feedback());
+	$comment_userdata = get_userdata(intval($comment->get_user_id()));
+	$comment_infos['username'] = $comment_userdata['username'];
 	$comment_infos['topic'] = $comment->get_topic();
 	$comment_infos['creation_date'] = $comment->get_creation_date();
 	$comment_infos['changed_count'] = $comment->get_changed_count();
 	$comment_infos['last_changed_date'] = $comment->get_last_changed_date();
+	if (($comment_userdata['user_id'] == $userdata['user_id']) or ($editable))
+	{
+		$comment_infos['editable'] = true;
+	}
 	
 	$comments[] = $comment_infos;
 	
@@ -116,7 +126,7 @@ function make_comments($comment, $level)
 	{
 		for ($i = 0; $i < sizeof($comment_childs); $i++)
 		{
-			make_comments($comment_childs[$i],$level+1);
+			make_comments($comment_childs[$i],$level+1,$editable);
 		}
 	}
 }
