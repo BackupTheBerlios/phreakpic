@@ -8,7 +8,7 @@ function check_auth_action_allowed()
 	
 	if ($userdata['user_level'] == ADMIN)
 	{
-		return true;
+		return '1';
 	}
 	
 	return false;
@@ -118,7 +118,7 @@ function get_allowed_contentgroups_where($user_id,$action,$field='contentgroup_i
 	// if the current user is admin allow everything
 	if ($userdata['user_level'] == ADMIN)
 	{
-		return '1';
+		return "'1'";
 	}
 
 	// first of all get the groups in which the user is.
@@ -159,7 +159,7 @@ function get_allowed_contentgroups_where($user_id,$action,$field='contentgroup_i
 //TODO: check this
 	if (!isset($r))
 	{
-		$r='0';
+		$r="'0'";
 	}
 	return $r;
 }
@@ -174,7 +174,8 @@ function get_allowed_catgroups_where($user_id,$action,$field='catgroup_id')
 	// if the current user is admin allow everything
 	if ($userdata['user_level'] == ADMIN)
 	{
-		return '1';
+	
+		return "'1'";
 	}
 	
 	// first of all get the groups in which the user is.
@@ -190,7 +191,7 @@ function get_allowed_catgroups_where($user_id,$action,$field='catgroup_id')
 	if (!isset($usergroup_ids))
 	{
 		// user is in now usergroups return 
-		return '0';
+		return "'0'";
 	}
 	
 	
