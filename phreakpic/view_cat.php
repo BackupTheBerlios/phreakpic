@@ -76,7 +76,7 @@ if (isset($child_cats))
 		$child_cat_infos[$i]['name'] = $child_cats[$i]->get_name();
 		$child_cat_infos[$i]['description'] = $child_cats[$i]->get_description();
 		$child_cat_infos[$i]['content_amount'] = $child_cats[$i]->get_content_amount();
-		$child_cat_infos[$i]['content_child_amount'] = $child_cats[$i]->get_child_content_amount();
+		$child_cat_infos[$i]['content_child_amount'] = $child_cats[$i]->get_child_content_amount() - $child_cat_infos[$i]['content_amount'];
 		$child_cat_infos[$i]['current_rating'] = $child_cats[$i]->get_current_rating();
 		
 	}
@@ -401,7 +401,9 @@ if (!isset($template_file))
 $smarty->assign('nav_string', build_nav_string($cat_id));
 $smarty->assign('redirect', PHREAKPIC_PATH . "$template_file.php");
 $smarty->assign('thumb_size', $config_vars['thumb_size']['maxsize']);
-
+$smarty->assign('title_site',$board_config['sitename']);
+$smarty->assign('title_page',$lang['view_cat']);
+$smarty->assign('title_name',$category->get_name());
 
 $end_time = getmicrotime();
 $execution_time = $end_time - $start_time;
