@@ -1,5 +1,7 @@
 0.8:
 - can upload content as zip file
+- customizable meta data for content
+
 
 Beta Release:
 - Added recursive change of groups (Tesla)

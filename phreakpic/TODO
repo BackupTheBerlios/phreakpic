@@ -23,13 +23,24 @@ X vollständiges admin interface (wie letzendlich auch immer)
   X auths
 
 0.8:
-- upload per zip/gzip file
+Bugs: 
+X thumbfile in album_content
+- rotate
+Features
+X/- upload per zip/gzip file
 - handle comments when cat or content is deleted
-- user selector for edit comment
+X user selector for edit comment
 - Check PostgreSQL compatibility
 - Polls
 - add auth checking to all the set function in auth, group, etc
 - Design 
+X custom fields
+  - additional parameters (allow arrays, get selectable data from an sql,...)
+	- deaktivierung einzelner felder
+	- Wiki ability ?
+- Fix database out of sync bugs (content and comment)
+- Rename dir when rename cat
+
 
 1.0:
 
@@ -45,5 +56,4 @@ soon future:
 
 future:
 - clean up file names and locations
-- custom fields
 - movie support
