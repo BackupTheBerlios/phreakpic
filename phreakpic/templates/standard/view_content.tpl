@@ -102,7 +102,11 @@ action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--
 					<!--{$lang.change_group}--><input type="checkbox" name="change_group" > to 
 					<select name="to_group">
 					<!--{section name=id loop=$add_to_contentgroups}-->
+						<!--{if $contentgroup == $add_to_contentgroups[id].id}-->
+						<option selected value="<!--{$add_to_contentgroups[id].id}-->"><!--{$add_to_contentgroups[id].name}--></option>
+						<!--{else}-->
 						<option value="<!--{$add_to_contentgroups[id].id}-->"><!--{$add_to_contentgroups[id].name}--></option>
+						<!--{/if}-->
 					<!--{/section}-->
 					</select><br>
 					<br>
