@@ -249,6 +249,27 @@ if ($mode == "check_user_info")
 	}
 	echo ('<font color=#00ff00>OK</font><br>');
 	
+	// changing phpBB2 tables
+	
+	echo ("Changing phpBB2 Tables <br>");
+	
+	echo ("Add user_template ");
+	$check = mysql_db_query ($dbname, "ALTER TABLE {$table_prefix}users ADD phreakpic_user_template TEXT", $connect);
+	$check = true;
+	if ($check == false)
+	{
+		die (mysql_errno().": ".mysql_error()."<BR>");
+	}
+	echo ('<font color=#00ff00>OK</font><br>');
+	
+	echo ("Add content_per_page ");
+	$check = mysql_db_query ($dbname, "ALTER TABLE {$table_prefix}users ADD phreakpic_content_per_page mediumint", $connect);
+	$check = true;
+	if ($check == false)
+	{
+		die (mysql_errno().": ".mysql_error()."<BR>");
+	}
+	echo ('<font color=#00ff00>OK</font><br>');
 	
 
 	//Filling basic Data in the DB
