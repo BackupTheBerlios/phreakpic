@@ -27,6 +27,29 @@ class user_feedback
 
 	}
 	
+	function generate_from_row($row)
+	{
+		if (is_array($row))
+		{
+			// fill the var of the object with the data from the database (the field names of the database are the same than the var names)
+			foreach ($row as $key => $value)
+			{
+				// filter out all keys which are not strings, because the array containt both assoziativ and numbers
+				if (is_string($key))
+				{
+					$this->$key = $value;
+				}
+
+			}
+			return OP_SUCCESSFUL;
+		}
+		else
+		{
+			return OP_FAILED;
+		}
+	}
+
+	
 	function set_feedback($new_feedback)
 	{
 		$this->feedback = $new_feedback;
@@ -196,28 +219,6 @@ class comment extends user_feedback
 
 	}
 	
-	function generate_from_row($row)
-	{
-		if (is_array($row))
-		{
-			// fill the var of the object with the data from the database (the field names of the database are the same than the var names)
-			foreach ($row as $key => $value)
-			{
-				// filter out all keys which are not strings, because the array containt both assoziativ and numbers
-				if (is_string($key))
-				{
-					$this->$key = $value;
-				}
-
-			}
-			return OP_SUCCESSFUL;
-		}
-		else
-		{
-			return OP_FAILED;
-		}
-	}
-
 	
 	function generate_initial_for_content($content_id)
 	{
@@ -263,6 +264,68 @@ class cat_comment extends comment
 	
 }
 
+class rating extends user_feedback
+{
+	var $type_id;
+	
+	function set_type_id($new_type_id)
+	{
+		$this->type_id = $new_type_id;
+	}
+	
+	function get_type_id()
+	{
+		return $this->type_id;
+	}
+	
+	function commit()
+	{
+		global $db,$config_vars;
+		if (!isset($this->id))
+		{
+			// this is object is not yet in the datebase, make a new entry
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . "s 
+				(owner_id, feedback, user_id, type_id)
+				VALUES ('$this->owner_id', '$this->feedback', '$this->user_id', '$this->type_id')";
+				
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Error while submitting a new group object to the db", '', __LINE__, __FILE__, $sql);
+			}
+			return OP_SUCCESSFULL;
+			
+			// set id;
+			$this->id = $db->sql_nextid();
+			
+		}
+		else
+		{
+			// object is already in the database just du an update
+			$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . "s  
+				SET	owner_id = '$this->owner_id',
+					comment_text = '$this->feedback',
+					user_id = '$this->user_id',
+					type_id = '$this->type_id',
+					
+				WHERE id like $this->id";
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Error while updating an existing cat object to the db", '', __LINE__, __FILE__, $sql);
+			}
+			return OP_SUCCESSFULL;
+		}
 
+	}
+	
+}
+
+class content_rating extends rating
+{
+}
+
+
+class cat_rating extends rating
+{
+}
 
 ?>
