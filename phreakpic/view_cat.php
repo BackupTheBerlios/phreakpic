@@ -32,24 +32,24 @@ unset($HTTP_SESSION_VARS['contents']);
 
 if (!isset($cat_id))
 {
-				$cat_id = $config_vars['root_categorie'];
-				$template_file = 'index';
+	$cat_id = $config_vars['root_categorie'];
+	$template_file = 'index';
 }
 
 
 // create new categorie
 if (isset($HTTP_POST_VARS['newcat']))
 {
-				$new_cat = new categorie();
-				$new_cat->set_parent_id($cat_id);
-				$new_cat->set_name($HTTP_POST_VARS['cat_name']);
-				$new_cat->set_description($HTTP_POST_VARS['cat_describtion']);
-				if ($HTTP_POST_VARS['cat_is_serie'] == 'on')
-				{
-								$new_cat->set_is_serie(1);
-				}
-				$new_cat->set_catgroup_id($HTTP_POST_VARS['add_to_catgroup']);
-				$new_cat->commit();
+	$new_cat = new categorie();
+	$new_cat->set_parent_id($cat_id);
+	$new_cat->set_name($HTTP_POST_VARS['cat_name']);
+	$new_cat->set_description($HTTP_POST_VARS['cat_describtion']);
+	if ($HTTP_POST_VARS['cat_is_serie'] == 'on')
+	{
+		$new_cat->set_is_serie(1);
+	}
+	$new_cat->set_catgroup_id($HTTP_POST_VARS['add_to_catgroup']);
+	$new_cat->commit();
 
 }
 
@@ -62,32 +62,32 @@ $child_cats = get_cats_of_cat($cat_id);
 
 if (isset($HTTP_POST_VARS['edit_cat']))
 {
-				for ($i = 0; $i < sizeof($child_cats); $i++)
-				{
-								$child_cats[$i]->set_name($HTTP_POST_VARS['cat_name'][$i]);
-								$child_cats[$i]->set_description($HTTP_POST_VARS['cat_description'][$i]);
-								$child_cats[$i]->set_catgroup_id($HTTP_POST_VARS['cat_catgroup'][$i],$HTTP_POST_VARS['cat_apply_recursive'][$i]);
+	for ($i = 0; $i < sizeof($child_cats); $i++)
+	{
+		$child_cats[$i]->set_name($HTTP_POST_VARS['cat_name'][$i]);
+		$child_cats[$i]->set_description($HTTP_POST_VARS['cat_description'][$i]);
+		$child_cats[$i]->set_catgroup_id($HTTP_POST_VARS['cat_catgroup'][$i],$HTTP_POST_VARS['cat_apply_recursive'][$i]);
 
-								if ($HTTP_POST_VARS['cat_delete'][$i] == 'on')
-								{
-												$error=$child_cats[$i]->delete('CDM_REMOVE_CONTENT');
-												if ($error != OP_SUCCESSFUL)
-												{
-																error_report(GENERAL_ERROR, 'del_cat' , __LINE__, __FILE__,$error);
-												}
+		if ($HTTP_POST_VARS['cat_delete'][$i] == 'on')
+		{
+			$error=$child_cats[$i]->delete('CDM_REMOVE_CONTENT');
+			if ($error != OP_SUCCESSFUL)
+			{
+				error_report(GENERAL_ERROR, 'del_cat' , __LINE__, __FILE__,$error);
+			}
 
-								}
-								else
-								{
-												$error=$child_cats[$i]->commit();
-												if ($error != OP_SUCCESSFUL)
-												{
-																error_report(GENERAL_ERROR, 'cat_commit' , __LINE__, __FILE__,$error);
-												}
-								}
+		}
+		else
+		{
+			$error=$child_cats[$i]->commit();
+			if ($error != OP_SUCCESSFUL)
+			{
+				error_report(GENERAL_ERROR, 'cat_commit' , __LINE__, __FILE__,$error);
+			}
+		}
 
-				}
-				$child_cats = get_cats_of_cat($cat_id);
+	}
+	$child_cats = get_cats_of_cat($cat_id);
 }
 
 
@@ -100,33 +100,33 @@ $category->generate_from_id($cat_id);
 
 if (isset($child_cats))
 {
-				for ($i = 0; $i < sizeof($child_cats); $i++)
-				{
-								$child_cat_infos[$i]['id'] = $child_cats[$i]->get_id();
-								$child_cat_infos[$i]['name'] = $child_cats[$i]->get_name();
-								$child_cat_infos[$i]['description'] = $child_cats[$i]->get_description();
-								$child_cat_infos[$i]['content_amount'] = $child_cats[$i]->get_content_amount();
-								$child_cat_infos[$i]['content_child_amount'] = $child_cats[$i]->get_child_content_amount() - $child_cat_infos[$i]['content_amount'];
-								$child_cat_infos[$i]['current_rating'] = $child_cats[$i]->get_current_rating();
-								$child_cat_infos[$i]['remove_from_group'] = $child_cats[$i]->check_perm('remove_from_group');
-								$child_cat_infos[$i]['edit'] = $child_cats[$i]->check_perm('edit');
-								$child_cat_infos[$i]['catgroup_id'] = $child_cats[$i]->get_catgroup_id();
+	for ($i = 0; $i < sizeof($child_cats); $i++)
+	{
+		$child_cat_infos[$i]['id'] = $child_cats[$i]->get_id();
+		$child_cat_infos[$i]['name'] = $child_cats[$i]->get_name();
+		$child_cat_infos[$i]['description'] = $child_cats[$i]->get_description();
+		$child_cat_infos[$i]['content_amount'] = $child_cats[$i]->get_content_amount();
+		$child_cat_infos[$i]['content_child_amount'] = $child_cats[$i]->get_child_content_amount() - $child_cat_infos[$i]['content_amount'];
+		$child_cat_infos[$i]['current_rating'] = $child_cats[$i]->get_current_rating();
+		$child_cat_infos[$i]['remove_from_group'] = $child_cats[$i]->check_perm('remove_from_group');
+		$child_cat_infos[$i]['edit'] = $child_cats[$i]->check_perm('edit');
+		$child_cat_infos[$i]['catgroup_id'] = $child_cats[$i]->get_catgroup_id();
 
-				}
-				// in edit mode check on which cats user has rights to remove cat
-				if ($mode == 'edit')
-				{
-								$smarty->assign('allow_cat_remove',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'cat_remove'));
-				}
+	}
+	// in edit mode check on which cats user has rights to remove cat
+	if ($mode == 'edit')
+	{
+		$smarty->assign('allow_cat_remove',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'cat_remove'));
+	}
 
-				$smarty->assign('child_cat_infos',$child_cat_infos);
-				$smarty->assign('number_of_child_cats',$i);
+	$smarty->assign('child_cat_infos',$child_cat_infos);
+	$smarty->assign('number_of_child_cats',$i);
 
 }
 else
 {
-				//no child cats
-				$smarty->assign('number_of_child_cats',0);
+	//no child cats
+	$smarty->assign('number_of_child_cats',0);
 }
 
 
@@ -134,16 +134,16 @@ else
 $smarty->assign('allow_cat_add',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'cat_add'));
 if ($mode == 'edit')
 {
-				$smarty->assign('mode','edit');
-				$add_to_catgroups = get_catgroups_data_where_perm('id,name','add_to_group');
-				$smarty->assign('add_to_catgroups',$add_to_catgroups);
+	$smarty->assign('mode','edit');
+	$add_to_catgroups = get_catgroups_data_where_perm('id,name','add_to_group');
+	$smarty->assign('add_to_catgroups',$add_to_catgroups);
 
-				// get contentgroups where user has add rights
-				$add_to_contentgroups = get_contentgroups_data_where_perm('id,name','add_to_group');
-				if (is_array($add_to_contentgroups))
-				{
-								$smarty->assign('add_to_contentgroups',$add_to_contentgroups);
-				}
+	// get contentgroups where user has add rights
+	$add_to_contentgroups = get_contentgroups_data_where_perm('id,name','add_to_group');
+	if (is_array($add_to_contentgroups))
+	{
+		$smarty->assign('add_to_contentgroups',$add_to_contentgroups);
+	}
 
 
 }
@@ -202,37 +202,37 @@ include "includes/view_thumbs.php";
 
 if ($content_per_page > 0)
 {
-				$i=0;
-				while (($i*$content_per_page)<$category->get_content_amount())
-				{
-								$cat_nav_links[] = $i * $content_per_page;
-								$i++;
-				}
+	$i=0;
+	while (($i*$content_per_page)<$category->get_content_amount())
+	{
+		$cat_nav_links[] = $i * $content_per_page;
+		$i++;
+	}
 
-				// only assign if there is more than 1 page
-				if (sizeof($cat_nav_links)>1)
-				{
-								$smarty->assign('cat_nav_links',$cat_nav_links);
-				}
-				$smarty->assign('first_content',$HTTP_SESSION_VARS['first_content']);
+	// only assign if there is more than 1 page
+	if (sizeof($cat_nav_links)>1)
+	{
+		$smarty->assign('cat_nav_links',$cat_nav_links);
+	}
+	$smarty->assign('first_content',$HTTP_SESSION_VARS['first_content']);
 
-				if ($HTTP_SESSION_VARS['first_content']+$content_per_page>=$category->get_content_amount())
-				{
-								$smarty->assign('first_content_next',0);
-				}
-				else
-				{
-								$smarty->assign('first_content_next',$HTTP_SESSION_VARS['first_content']+$content_per_page);
-				}
+	if ($HTTP_SESSION_VARS['first_content']+$content_per_page>=$category->get_content_amount())
+	{
+		$smarty->assign('first_content_next',0);
+	}
+	else
+	{
+		$smarty->assign('first_content_next',$HTTP_SESSION_VARS['first_content']+$content_per_page);
+	}
 
-				if ($HTTP_SESSION_VARS['first_content']-$userdata['content_per_page'] < 0)
-				{
-												$smarty->assign('first_content_prev', (int)($category->get_content_amount()/$content_per_page)*$content_per_page);
-				}
-				else
-				{
-								$smarty->assign('first_content_prev', $HTTP_SESSION_VARS['first_content']-$content_per_page);
-				}
+	if ($HTTP_SESSION_VARS['first_content']-$userdata['content_per_page'] < 0)
+	{
+		$smarty->assign('first_content_prev', (int)($category->get_content_amount()/$content_per_page)*$content_per_page);
+	}
+	else
+	{
+		$smarty->assign('first_content_prev', $HTTP_SESSION_VARS['first_content']-$content_per_page);
+	}
 }
 
 // content_per_page selector
@@ -269,15 +269,15 @@ $root_comments = get_comments_of_cat($cat_id);
 
 if (sizeof($root_comments) > 0)
 {
-				for ($i = 0; $i < sizeof($root_comments); $i++)
-				{
-								make_comments($root_comments[$i],0,check_cat_action_allowed($cat_id,$userdata['user_id'],'comment_edit'));
-				}
-				$smarty->assign('comments',$comments);
+	for ($i = 0; $i < sizeof($root_comments); $i++)
+	{
+		make_comments($root_comments[$i],0,check_cat_action_allowed($cat_id,$userdata['user_id'],'comment_edit'));
+	}
+	$smarty->assign('comments',$comments);
 }
 else
 {
-				$smarty->assign('comments','false');
+	$smarty->assign('comments','false');
 }
 
 
@@ -290,7 +290,7 @@ $smarty->assign('thumb_link',$HTTP_SESSION_VARS['thumb_link']);
 //thats for the index.php who needs another template file. index.php just set the $template_file to another value and includes this file
 if (!isset($template_file))
 {
-				$template_file = 'view_cat';
+	$template_file = 'view_cat';
 }
 
 
