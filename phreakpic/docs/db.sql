@@ -4,7 +4,7 @@
 # http://phpmyadmin.sourceforge.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Sep 20, 2002 at 07:43 PM
+# Generation Time: Sep 21, 2002 at 12:54 AM
 # Server version: 3.23.52
 # PHP Version: 4.2.3
 # Database : `phpBB2`
@@ -24,7 +24,7 @@ CREATE TABLE `photo_cat_auth` (
   `content_add` enum('0','1') NOT NULL default '0',
   `content_remove` enum('0','1') NOT NULL default '0',
   `cat_remove` enum('0','1') NOT NULL default '0',
-  `content_edit` enum('0','1') NOT NULL default '0'
+  `comment_edit` enum('0','1') NOT NULL default '0'
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
@@ -167,7 +167,7 @@ CREATE TABLE `photo_content_ratings` (
 CREATE TABLE `photo_contentgroups` (
   `id` int(11) NOT NULL auto_increment,
   `name` text NOT NULL,
-  `describtion` text NOT NULL,
+  `description` text NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `id_2` (`id`)
