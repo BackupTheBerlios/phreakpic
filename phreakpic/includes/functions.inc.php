@@ -433,7 +433,7 @@ function build_nav_string($cat_id)
 //get all comments and save it as an useable array
 function make_comments($comment, $level,$editable)
 {
-	global $comments,$userdata,$board_config;
+	global $comments,$userdata,$board_config,$lang;
 	$comment_infos['level'] = $level;
 	$comment_infos['id'] = $comment->id;    //get_id();
 	$comment_infos['text'] = nl2br(htmlspecialchars($comment->get_feedback()));
@@ -459,6 +459,7 @@ function make_comments($comment, $level,$editable)
 	$comment_infos['changed_count'] = $comment->get_changed_count();
 	$comment_infos['last_changed_date'] = date($userdata['user_dateformat'],strtotime($comment->get_last_changed_date()));
 	$comment_infos['poster_name'] = $comment->get_poster_name();
+	$comment_infos['comment_has_been_changed'] = sprintf($lang['comment_has_been_changed'],$comment_infos['changed_count'],$comment_infos['last_changed_date']);
 	if (($comment_userdata['user_id'] == $userdata['user_id']) or ($editable))
 	{
 		$comment_infos['editable'] = true;
