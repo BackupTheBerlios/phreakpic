@@ -579,7 +579,7 @@ class album_content extends phreakpic_base
 		//echo "rename thumb" .$this->thumbfile." -> ".$this->get_thumbfile()."<br>";
 		// but first check if thumb exists
 		
-		//echo "rename({$this->thumbfile},".$this->get_thumbfile().")<br>";
+		//echo "rename({/*$this->thumbfile*/},".$this->get_thumbfile().")<br>";
 		
 		if (is_file($this->thumbfile))
 		{
@@ -694,7 +694,9 @@ class album_content extends phreakpic_base
 		}
 		
 		$row = $db->sql_fetchrow($result);
-		return $this->generate_from_row($row);
+		$result =  $this->generate_from_row($row);
+		$this->thumbfile = $this->get_thumbfile();
+		return $result;
 		
 	}
 	 
