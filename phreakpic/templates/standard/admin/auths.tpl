@@ -1,4 +1,4 @@
-<!--{include file="header.tpl"}-->
+<!--{include file="$template_name/header.tpl"}-->
 <form action="auths.php?usergroup=<!--{$sel_usergroup}-->&group=<!--{$sel_group}-->" method="POST">
 <table border=1>
 <tr>
@@ -67,9 +67,9 @@
 <input name="change_auth" type="submit" value="<!--{$lang.commit}-->"><br><br>
 <!--{$new_group}-->:<br><br>
 <!--{$lang.name}-->: <input type="text" name="name"><br>
-<!--{$lang.description}-->: <textarea name="describtion" cols="30" rows="4"></textarea>
+<!--{$lang.description}-->: <textarea name="description" cols="30" rows="4"></textarea>
 <input name="new_group" type="submit" value="<!--{$lang.create}-->"><br>
 
 </form>
 
-<!--{include file="footer.tpl"}-->
+<!--{include file="$template_name/footer.tpl"}-->
