@@ -23,7 +23,7 @@
 </script>
 
 	<!--{if $basket_enable}-->
-		Objects in Basket: <span id="basket_content_amount">0</span>
+		<!--{$lang.objects_in_basket}-->: <span id="basket_content_amount">0</span>
 		<a href="basket.php?<!--{$sid}-->"><!--{$lang.basket}--></a>
 		<a href="<!--{$thumb_link}-->&mode=download<!--{$sid}-->">Download</a>
 		
@@ -144,10 +144,10 @@
 <table border=1>
 <tr>
 <td>
-For all selected Change
+<!--{$lang.for_all_selected}-->
 </td>
 <td>
-For all Change
+<!--{$lang.for_all}-->
 </td>
 </tr>
 <tr>

@@ -1,6 +1,6 @@
 <!--{include file="$template_name/header.tpl"}-->
 
-Error report has been saved. Thank You 
+<!--{$lang.error_has_been_saved}-->
 
 
 <!--{include file="$template_name/footer.tpl"}-->

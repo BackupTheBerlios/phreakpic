@@ -24,7 +24,7 @@
 			</tr>
 			<tr>
 				<!--{if $error_info.type != 'INFORMATION'}-->
-				<td align="center"><br>The error has been reported to the admin, to help you can write what you where trying to do<br>
+				<td align="center"><br><!--{$lang.error_has_been_reported}--><br>
 				<form action="<!--{$ROOT_PATH}-->error_send.php?error_id=<!--{$error_info.id}--><!--{$sid}-->" method="POST">
 					<textarea cols="70" rows="10" name="comment"></textarea><br>
 					<input type="submit" name="send">
