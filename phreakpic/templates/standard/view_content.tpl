@@ -116,11 +116,11 @@
 action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->" method="POST">
 					
 					<!--{if $edit_info.allow_edit == true}-->
-						<!--{$lang.name}-->: <input type="text" name="name" value="<!--{$name}-->"><br>
-						<!--{$lang.place_in_cat}-->: <input type="text" name="place_in_cat" value="<!--{$edit_info.place_in_cat}-->"><br> 
+						<!--{$lang.name}-->: <input type="text" onfocus="keyoff()" onblur="keyon()" name="name" value="<!--{$name}-->"><br>
+						<!--{$lang.place_in_cat}-->: <input type="text" onfocus="keyoff()" onblur="keyon()" name="place_in_cat" value="<!--{$edit_info.place_in_cat}-->"><br> 
 						<!--{$lang.lock}-->: <input type="checkbox" name="lock" <!--{$edit_info.locked}-->><br>
 						<!--{$lang.rotate}-->: 
-						<!--{$lang.rotate_free}-->: <input type="radio" name="rotate_mode" value="free" checked><input type="text" name="rotate"><br> 
+						<!--{$lang.rotate_free}-->: <input type="radio" name="rotate_mode" value="free" checked><input type="text" onfocus="keyoff()" onblur="keyon()" name="rotate"><br> 
 						<!--{$lang.rotate_left}--> <input type="radio" name="rotate_mode" value="-90">
 						<!--{$lang.rotate_180}--> <input type="radio" name="rotate_mode" value="180">
 						<!--{$lang.rotate_right}--> <input type="radio" name="rotate_mode" value="90"><br>
