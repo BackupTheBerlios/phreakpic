@@ -510,10 +510,45 @@ function display_cookie_content_amount()
 
 }
 
+function add_all_to_basket()
+{
+	icons = document.getElementsByName('basket_icon_name')
+	
+	for (var loop=0; loop < icons.length; loop++)
+	{
+		if (!(icons[loop].added))
+		{	
+			b=icons[loop].id.indexOf('[')
+			e=icons[loop].id.indexOf(']')
+			id=icons[loop].id.substring(b+1, e);
+			add_to_basket(id);
+		}
+		
+	}
+}
+
+function remove_all_from_basket()
+{
+	icons = document.getElementsByName('basket_icon_name')
+	
+	for (var loop=0; loop < icons.length; loop++)
+	{
+		if ((icons[loop].added))
+		{	
+			b=icons[loop].id.indexOf('[')
+			e=icons[loop].id.indexOf(']')
+			id=icons[loop].id.substring(b+1, e);
+			remove_from_basket(id);
+		}
+		
+	}
+}
+
+
 function add_to_basket(content_id)
 {
 	
-	if (document.getElementsByName("basket_icon["+content_id+"]")[0].added)
+	if (document.getElementById("basket_icon["+content_id+"]").added)
 	{
 		remove_from_basket(content_id);
 		return;
@@ -553,17 +588,17 @@ function remove_from_basket(content_id)
 
 function set_add_icon(content_id)
 {
-	document.getElementsByName("basket_icon["+content_id+"]")[0].src="templates/"+template_name+"/img/add.gif";
-	document.getElementsByName("basket_icon["+content_id+"]")[0].added=false;	
+	document.getElementById("basket_icon["+content_id+"]").src="templates/"+template_name+"/img/add.gif";
+	document.getElementById("basket_icon["+content_id+"]").added=false;	
 }
 
 
 function set_remove_icon(content_id)
 {
-	if (document.getElementsByName("basket_icon["+content_id+"]")[0])
+	if (document.getElementById("basket_icon["+content_id+"]"))
 	{
-		document.getElementsByName("basket_icon["+content_id+"]")[0].src="templates/"+template_name+"/img/remove.gif";
-		document.getElementsByName("basket_icon["+content_id+"]")[0].added=true;
+		document.getElementById("basket_icon["+content_id+"]").src="templates/"+template_name+"/img/remove.gif";
+		document.getElementById("basket_icon["+content_id+"]").added=true;
 	}
 }
 

@@ -29,7 +29,8 @@ table_cols = <!--{$table_cols|default:0}-->
 
 
 <!--{if $is_content == true}-->
-	<span id="basket_content_amount">0</span>
+	Objects in Basket: <span id="basket_content_amount">0</span>
+	<a href="<!--{$thumb_link}-->&mode=download<!--{$sid}-->">Download</a>
 
 
 	<!--{if $mode == edit}-->
@@ -57,7 +58,7 @@ table_cols = <!--{$table_cols|default:0}-->
 						
 						<!--<td width="<!--{$thumb_size}-->" bgcolor="333333">-->
 						
-							<img name="basket_icon[<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->]" src="templates/<!--{$template_name}-->/img/add.gif" onclick="add_to_basket(<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->)">
+							<img name="basket_icon_name" id="basket_icon[<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->]" src="templates/<!--{$template_name}-->/img/add.gif" onclick="add_to_basket(<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->)">
 							
 							<a name="link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}--><!--{$sid}-->#pic"><!--{$thumbs[thumb_cols][thumb_cell].html}--></a><br />
 						<!--</td>
@@ -189,7 +190,8 @@ For all Change
 	<input name="submit" type="submit" id="submit" value="<!--{$lang.commit}-->">
 	</form>
 <!--{/if}-->
-
+<img name="add_all" src="templates/<!--{$template_name}-->/img/add.gif" onclick="add_all_to_basket()">
+<img name="remove_all" src="templates/<!--{$template_name}-->/img/remove.gif" onclick="remove_all_from_basket()">
 <script type="text/javascript" language="javascript">
 	var cookie_content_string=get_basket();
 </script>
