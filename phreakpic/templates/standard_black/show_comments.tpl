@@ -24,7 +24,7 @@
 				<td valign="top">
 					<b><!--{$comments[index].username}--><!--{$comments[index].poster_name}--></b>
 					<!--{if $comments[index].new == true}-->
-						<font size="-2">new posting</font>
+						<span class="gentiny"><!--{$lang.new_post}--></span>
 					<!--{/if}-->	
 					<br>
 					<!--{$comments[index].avatar}-->

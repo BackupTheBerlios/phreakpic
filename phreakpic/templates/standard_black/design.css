@@ -57,6 +57,11 @@ a.thumb:hover
 	font-size: 10px;
 }
 
+.gentiny
+{
+	font-size: 8px;
+}
+
 #cat_table_head
 {
 	white-space:nowrap;

@@ -1,12 +1,13 @@
 			<div align="center">
 				<p>
-					<font size="-1">
 						<!--{if $user_level == "admin"}-->
+						<span class="gensmall">
 							<a href="admin/index.php?<!--{$sid}-->"><!--{$lang.goto_admin}--></a>
+						</span>
 						<!--{/if}-->
-					</font>
+					
 				</p>
-				<p><font size="-2">PhreakPic Alpha</font></p>
+				<p><span class="gensmall">PhreakPic Alpha</span></p>
 			</div>
 		</td>
 	</tr>
