@@ -191,6 +191,16 @@ else
 {
 	$content_per_page = $HTTP_GET_VARS['content_per_page'];
 	$HTTP_SESSION_VARS['content_per_page'] = $content_per_page;
+	
+	if ($HTTP_SESSION_VARS['content_per_page'] == -1)
+	{
+		$HTTP_SESSION_VARS['first_content'] = 0;
+	}
+	elseif ($HTTP_SESSION_VARS['first_content'] + $HTTP_SESSION_VARS['content_per_page'] > $category->get_content_amount())
+	{
+		$HTTP_SESSION_VARS['first_content'] = intval($category->get_content_amount() / $HTTP_SESSION_VARS['content_per_page']) * $HTTP_SESSION_VARS['content_per_page'];
+	}
+	
 }
 
 
