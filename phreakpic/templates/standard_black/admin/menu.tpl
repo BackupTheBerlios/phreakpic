@@ -7,10 +7,11 @@
 <a href="groups.php?<!--{$sid}-->&type=user" target="site"><!--{$lang.usergroups}--></a><br>
 <a href="user_in_groups.php?<!--{$sid}-->" target="site"><!--{$lang.users_in_group}--></a><br>
 <br>
-<a href="groups.php?<!--{$sid}-->&type=content" target="site"><!--{$lang.contentgroups}--></a><br>
+<a href="groups.php?<!--{$sid}-->&type=" target="site"><!--{$lang.groups}-->:Gruppen</a><br>
+<br>
 <a href="auths.php?<!--{$sid}-->&type=content" target="site"><!--{$lang.content_auth}--></a><br>
 <br>
-<a href="groups.php?<!--{$sid}-->&type=cat" target="site"><!--{$lang.catgroups}--></a><br>
+
 <a href="auths.php?<!--{$sid}-->&type=cat" target="site"><!--{$lang.cat_auth}--></a><br>
 <br>
 <a href="sync.php?<!--{$sid}-->" target="site"><!--{$lang.sync}--></a><br>

@@ -2,7 +2,7 @@
 require_once(ROOT_PATH . 'classes/auth.inc.php');
 
 // Group, User, Auth editing functions
-class group
+class base_group
 {
 	var $id;
 	var $name;
@@ -125,7 +125,7 @@ class group
 
 
 
-class usergroup extends group
+class usergroup extends base_group
 {
 	function add_user($user_id)
 	{
@@ -208,7 +208,7 @@ class usergroup extends group
 	}
 }
 
-class catgroup extends group
+class group extends base_group
 {
 	function get_auth($usergroup_id)	
 	{
@@ -220,7 +220,5 @@ class catgroup extends group
 
 }
 
-class contentgroup extends group
-{
-}
+
 ?>

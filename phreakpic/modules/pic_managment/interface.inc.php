@@ -215,7 +215,7 @@ function get_catgroups_data_where_perm($data,$perm)
 
 	$where = get_allowed_catgroups_where($userdata['user_id'],$perm,'id');
 	
-	$sql = "select $data from {$config_vars['table_prefix']}catgroups where $where";
+	$sql = "select $data from {$config_vars['table_prefix']}groups where $where";
 	
 	if (!$result = $db->sql_query($sql))
 	{
@@ -234,7 +234,7 @@ function get_contentgroups_data_where_perm($data,$perm)
 	global $db,$config_vars,$userdata;	
 
 	$where = get_allowed_contentgroups_where($userdata['user_id'],$perm,'id');
-	$sql = "select $data from {$config_vars['table_prefix']}contentgroups where $where";
+	$sql = "select $data from {$config_vars['table_prefix']}groups where $where";
 	
 	if (!$result = $db->sql_query($sql))
 	{
@@ -258,7 +258,7 @@ function get_comments_of_content($content_id)
 	global $config_vars,$db;
 	// makes this to the first comment of content $content_id
 	$sql = 'SELECT * FROM ' . $config_vars['table_prefix'] . 'content_comments
-		WHERE (owner_id = ' .$content_id . ') and (parent_id = 0)';
+		WHERE (owner_id = ' .$content_id . ') and (parent_id = 0) ORDER BY creation_date' ;
 		
 	if (!$result = $db->sql_query($sql))
 	{
@@ -281,7 +281,7 @@ function get_comments_of_cat($cat_id)
 	global $config_vars,$db;
 	// makes this to the first comment of content $content_id
 	$sql = 'SELECT * FROM ' . $config_vars['table_prefix'] . 'cat_comments
-		WHERE (owner_id = ' .$cat_id . ') and (parent_id = 0)';
+		WHERE (owner_id = ' .$cat_id . ') and (parent_id = 0) ORDER BY creation_date';
 		
 	if (!$result = $db->sql_query($sql))
 	{

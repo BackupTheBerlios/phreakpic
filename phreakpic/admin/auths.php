@@ -131,7 +131,7 @@ while ($row = $db->sql_fetchrow($result))
 
 
 // get all groups
-$sql = 'SELECT id,name FROM ' . $config_vars['table_prefix'] . $type . 'groups';
+$sql = 'SELECT id,name FROM ' . $config_vars['table_prefix'] . 'groups';
 
 if (!$result = $db->sql_query($sql))
 {

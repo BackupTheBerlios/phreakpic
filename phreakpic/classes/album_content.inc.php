@@ -58,7 +58,7 @@ class album_content
 
 		
 		// get current contentgroup
-		$c_group = new contentgroup();
+		$c_group = new group();
 		$c_group->generate_from_id($this->get_contentgroup_id());
 		$thumb_infos['contentgroup_name'] = $c_group->get_name();
 		

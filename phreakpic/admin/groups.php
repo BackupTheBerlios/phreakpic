@@ -13,7 +13,7 @@ if ($userdata['user_level'] != 1)
 	error_report(AUTH_ERROR, 'no_admin' , __LINE__, __FILE__);
 }
 
-if (($HTTP_GET_VARS['type']=='content') or ($HTTP_GET_VARS['type']=='cat') or ($HTTP_GET_VARS['type']=='user'))
+if (($HTTP_GET_VARS['type']=='') or ($HTTP_GET_VARS['type']=='user'))
 {
 	$HTTP_SESSION_VARS['type']=$HTTP_GET_VARS['type'];
 }
@@ -43,7 +43,12 @@ if (isset($HTTP_POST_VARS['delete']))
 
 if (isset($HTTP_POST_VARS['create']))
 {
+	if ($HTTP_POST_VARS['name']=='')
+	{
+		error_report(INFORMATION,'enter_name',__LINE__,__FILE__);
+	}
 	$group = new $groupclass();
+	
 	$group->set_name($HTTP_POST_VARS['name']);
 	$group->set_description($HTTP_POST_VARS['description']);
 	$group->commit();
