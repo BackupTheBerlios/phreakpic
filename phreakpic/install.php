@@ -3,9 +3,10 @@
 
 // Some Config vars
 
-$version = "alpha";
+//$version = "alpha";
 
-$dbdump = "mysql_$version.sql";
+//$dbdump = "mysql_$version.sql";
+$dbdump = "mysql.sql";
 
 
 $available_dbms = array(
