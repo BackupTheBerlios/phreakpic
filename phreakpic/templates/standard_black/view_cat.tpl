@@ -125,6 +125,9 @@
 <p>&nbsp;</p>
 
 
+
+<div align="center"><!--{$viewable_total_cats}--><br><!--{$viewable_total_content}--></div> 
+
 <!--{include file="$template_name/view_thumbs.tpl"}-->
 
 <br>
