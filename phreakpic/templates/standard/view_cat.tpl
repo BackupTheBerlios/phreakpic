@@ -4,7 +4,7 @@
 	var cat_sel=0;
 </script>
 
-<a name="nav_link" href="index.php?<!--{$sid}-->"><!--{$lang.home}--></a> --
+<a name="nav_link" href="index.php?first_content=0<!--{$sid}-->"><!--{$lang.home}--></a> --
 <!--{section name=id loop=$nav_string}-->
 	<!--{if $smarty.section.id.last}-->
 		<!--{$nav_string[id].name}-->
@@ -12,7 +12,7 @@
 			catback=<!--{$smarty.section.id.index}-->
 		</script>
 	<!--{else}-->
-		<a name="nav_link" href="view_cat.php?cat_id=<!--{$nav_string[id].id}--><!--{$sid}-->">
+		<a name="nav_link" href="view_cat.php?cat_id=<!--{$nav_string[id].id}-->&first_content=0<!--{$sid}-->">
 		<!--{$nav_string[id].name}--></a> --
 	<!--{/if}-->
 <!--{/section}-->
@@ -28,7 +28,7 @@
 		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="delete_cat">
 		<!--{section name=id loop=$number_of_child_cats}-->
 			<tr>
-				<td name="td_cat"><a name="cat_link" href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}--><!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
+				<td name="td_cat"><a name="cat_link" href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->&first_content=0<!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
 				<td><!--{$child_cat_infos[id].description}--></td>
 				<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
 				<td><!--{$child_cat_infos[id].current_rating}--></td>
@@ -67,6 +67,26 @@
 
 
 <!--{include file="$template_name/view_thumbs.tpl"}-->
+
+<br>
+
+<!--{if $first_content  != 0}-->
+	<a href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$first_content_prev}--><!--{$sid}-->">Prev</a>
+<!--{/if}-->
+
+<!--{section name=nav_page loop=$cat_nav_links}-->
+	<!--{if $cat_nav_links[nav_page] == $first_content}-->
+		<b><!--{$smarty.section.nav_page.index}--></b>
+	<!--{else}-->
+		<a href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$cat_nav_links[nav_page]}--><!--{$sid}-->"><!--{$smarty.section.nav_page.index}--></a>
+	<!--{/if}-->
+<!--{/section}-->
+
+<!--{if $first_content_next != $cat_nav_links[0]}-->
+	<a href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$first_content_next}--><!--{$sid}-->">Next</a>
+<!--{/if}-->
+
+
 
 
 

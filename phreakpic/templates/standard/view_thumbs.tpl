@@ -21,7 +21,6 @@ table_cols = <!--{$table_cols|default:0}-->
 	var sy=0;
 </script>
 
-
 <!--{if $is_content == true}-->
 	<!--{if $mode == edit}-->
 	<div align="center"><span onclick="tog('adv_edit');" >Toggle Options</span></div><br>
@@ -68,7 +67,6 @@ table_cols = <!--{$table_cols|default:0}-->
 						<!--{$lang.name}-->: <input name="name[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" onfocus="keyoff()" onblur="keyon()" value="<!--{$thumbs[thumb_cols][thumb_cell].name}-->" size="11"><br>
 						<!--{$lang.place_in_cat}-->: <input id="place_in_cat" name="place_in_cat[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="text" onfocus="keyoff()" onblur="keyon()" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_cat}-->" size="4"><br>
 						<!--{$lang.lock}-->:<input id="lock"  name="lock[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox" <!--{$thumbs[thumb_cols][thumb_cell].locked}-->>
-
 					<!--{/if}-->
 					<!--{if  $thumbs[thumb_cols][thumb_cell].allow_delete == true}-->
 						<!--{$lang.delete}-->:<input id="delete" name="delete[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
