@@ -22,6 +22,10 @@
 	//$smarty->debug_tpl = SMARTY_DIR.'debug.tpl';
 
 	
+	//this vars are needed on every page
+	$smarty->assign('title_site',$board_config['sitename']);
+	
+		
 	//this vars are needed in view_cat AND view_content
 	$smarty->assign('lang',$lang);
 	$smarty->assign('phpbb_path', ROOT_PATH . PHPBB_PATH);

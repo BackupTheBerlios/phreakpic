@@ -62,10 +62,14 @@ if ($root_id != 0)
 
 
 $smarty->assign('cat_id', $cat_id);
+
+//there is no usefull title_name...
+//$smarty->assign('title_name','');
 	
 	if ($mode == "add")
 	{
 		$smarty->assign('parent_id', $parent_id);
+		$smarty->assign('title_page',$lang['add_comment']);
 	}
 	
 	if ($mode == 'edit_comment')
@@ -81,8 +85,11 @@ $smarty->assign('cat_id', $cat_id);
 		$comment->generate_from_id($id);
 		$smarty->assign('text',$comment->get_feedback());
 		$smarty->assign('topic',$comment->get_topic());
+		$smarty->assign('title_page',$lang['edit_comment']);
+		$smarty->assign('title_name',$comment->get_topic());
 		// parent id is just as id here
 		$smarty->assign('parent_id',$id);
 	}
+	
 $smarty->display($userdata['photo_user_template'].'/comment.tpl');
 ?>

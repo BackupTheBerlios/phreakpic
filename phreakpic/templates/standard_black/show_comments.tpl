@@ -27,7 +27,7 @@
 			<!--{if $comments[index].changed_count > 0}-->
 				Beitrag wurde <!--{$comments[index].changed_count}--> mal geändert, zuletzt am <!--{$comments[index].last_changed_date}-->
 			<!--{/if}-->
-			<!--{if $comments[index].editable == true}-->
+			<!--{if $comments[index].editable == true and $hide_controlles == false}-->
 				<a href="comment.php?mode=edit_comment&type=<!--{$type}-->&id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">edit</a>
 				<a href="view_<!--{$type}-->.php?mode=del_comment&comment_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">delete</a>
 			<!--{/if}-->
