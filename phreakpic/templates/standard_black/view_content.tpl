@@ -84,11 +84,11 @@
 			
 			
 			<!--{if $mode == 'edit_meta'}-->
-					<input type="submit" name="edit_meta" value="Commit">
+					<input type="submit" name="edit_meta" value="<!--{$lang.commit}-->">
 					<input type="submit" name="edit_meta_add" value="Add">
 			<!--{else}-->
 				<!--{if $allow_meta_edit == true}-->
-					<a href="view_content.php?mode=edit_meta&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->"><!--{$lang.edit_meta}--></a><br>
+					<a href="view_content.php?mode=edit_meta&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->"><!--{$lang.edit_meta_data}--></a><br>
 				<!--{/if}-->
 			<!--{/if}-->
 			</form>
