@@ -14,6 +14,7 @@ if ($mode == "add")
 	$comment->set_user_id($userdata['user_id']);
 	$comment->set_owner_id($$id);
 	$comment->set_parent_id($parent_id);
+	$comment->set_poster_name($poster_name);
 	$comment->commit();
 }
 

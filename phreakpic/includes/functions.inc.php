@@ -231,7 +231,7 @@ function ForceDirectories( $path,$umask)
 	{ 
 		return 1; // avoid 'xyz:\' problem. 
 	} 
-	return ( ForceDirectories( dirname( $path)) and mkdir( $path, $umask)); 
+	return ( ForceDirectories( dirname( $path),$umask) and mkdir( $path, $umask)); 
 }
  
 
@@ -270,6 +270,7 @@ function make_comments($comment, $level,$editable)
 	$comment_infos['creation_date'] = $comment->get_creation_date();
 	$comment_infos['changed_count'] = $comment->get_changed_count();
 	$comment_infos['last_changed_date'] = $comment->get_last_changed_date();
+	$comment_infos['poster_name'] = $comment->get_poster_name();
 	if (($comment_userdata['user_id'] == $userdata['user_id']) or ($editable))
 	{
 		$comment_infos['editable'] = true;
