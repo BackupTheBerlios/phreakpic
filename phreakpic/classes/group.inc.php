@@ -1,5 +1,5 @@
 <?php
-require_once('classed/auth.inc.php');
+require_once('classes/auth.inc.php');
 
 // Group, User, Auth editing functions
 class group
@@ -54,7 +54,9 @@ class group
 	{
 		// Füllt das Objekt mit den daten der gruppe mit id == $id aus der Datenbank. Benutzt den table der wie die klasse heist
 		global $db,$config_vars;
-		$sql = 'select * from ' . $config_vars['table_prefix'] . get_class($this) . " where id like $id";
+		
+		// generating the table from the class name plus a traling s 
+		$sql = 'select * from ' . $config_vars['table_prefix'] . get_class($this) . "s where id like $id";
 		if (!$result = $db->sql_query($sql))
 		{
 			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
@@ -182,6 +184,7 @@ class catgroup extends group
 		// returns an auth object with the auth of $usergroup_id to this catgroup
 		$auth = new cat_auth();
 		$auth->generate($usergroup_id,$this->id);
+		return $auth;
 	}
 
 }
