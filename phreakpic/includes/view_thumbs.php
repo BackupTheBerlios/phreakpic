@@ -19,13 +19,16 @@ if ($mode == 'download')
 	$zip= new PclZip($filename);
 	$zip->create($files);
 	
-	// send zip to browser
-	$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/", 
-	getenv("SERVER_SOFTWARE")) ) ? "Refresh: 0; URL=" : "Location: ";
-	header($header_location . append_sid($filename, true));
-	
 	//delete zip
-//	unlink('content.zip');
+	$HTTP_SESSION_VARS['delete_files'][] = $filename;
+
+	
+	// send zip to browser
+ 	$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/", 
+ 	getenv("SERVER_SOFTWARE")) ) ? "Refresh: 0; URL=" : "Location: ";
+ 	header($header_location . append_sid($filename, true));
+	
+	
 	
 	
 }

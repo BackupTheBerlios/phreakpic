@@ -480,11 +480,23 @@ function make_comments($comment, $level,$editable)
 
 function stop_view($start_view,$content_id)
 {
+	global $db,$config_vars,$userdata,$HTTP_SESSION_VARS;
+	
+	// delete files in $HTTP_SESSION_VARS['delete_files']. actually it doesnt really belong here, but this funtion is called at start of every page so its a good place
+	if (is_array($HTTP_SESSION_VARS['delete_files']))
+	{
+		foreach ($HTTP_SESSION_VARS['delete_files'] as $index => $file)
+		{
+			unlink($file);
+			unset($HTTP_SESSION_VARS['delete_files'][$index]);
+		}
+	}
+
 	if (($start_view==0) or (!isset($start_view)) or ((!isset($content_id))))
 	{
 		return OP_FAILED;
 	}
-	global $db,$config_vars,$userdata;
+	
 	$now = date("Y-m-d H:i:s");
 	$sql = 'UPDATE  '. $config_vars['table_prefix'] ."views SET" .
 		KEY_QUOTE.'end' . KEY_QUOTE . " = '$now'
