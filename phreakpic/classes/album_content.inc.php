@@ -47,20 +47,20 @@ class album_content extends phreakpic_base
 	var $remove_from_group;
 	var $new_filename;
 
-	
+
 	var $commit_parent_cats;
 	var $remove_from_cat;
 	var $add_to_cat;
-	
+
 	function inc_comments_amount()
 	{
 		$this->comments_amount++;
-		
+
 		if (!is_array($this->cat_ids))
 		{
 			$this->generate_content_in_cat_data();
 		}
-		
+
 		if (is_array($this->cat_ids))
 		{
 			foreach($this->cat_ids as $cat_id)
@@ -69,7 +69,7 @@ class album_content extends phreakpic_base
 				$cat->generate_from_id($cat_id);
 				$cat->inc_child_comments_amount();
 				$this->commit_parent_cats[] = $cat;
-				
+
 			}
 		}
 	}
@@ -120,19 +120,21 @@ class album_content extends phreakpic_base
 		$sql = 'SELECT count(id) FROM ' . $config_vars['table_prefix'] . 'content_comments WHERE owner_id = ' . $this->id;
 		if (!$result = $db->sql_query($sql))
 		{
-			error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
+			$error = new phreak_error(E_ERROR,SQL_ERROR,__LINE__,__FILE__,'calc_comments_amount',$this->id,0,0,$sql);
+			$error->commit();
+			//error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 		}
 		$row = $db->sql_fetchrow($result);
 		return $row[0];
 	}
-	
 
-	
-	
+
+
+
 	function get_editable_values($cat_id)
 	{
 		global $userdata;
-		
+
 
 		// Check if user has the right to remove the content from the contentgroup
 		$thumb_infos['allow_remove_from_group'] = $this->check_perm('remove_from_group');
@@ -145,7 +147,7 @@ class album_content extends phreakpic_base
 
 		// check if user has edit perm to that content
 		$thumb_infos['allow_edit'] = $this->check_perm('edit');
-			
+
 		// check if user has delete perm to that content
 		$thumb_infos['allow_delete'] = $this->check_perm('delete');
 
@@ -269,7 +271,9 @@ class album_content extends phreakpic_base
 
 			if (!$result = $db->sql_query($sql))
 			{
-				error_report(SQL_ERROR, 'get_place_in_cat' , __LINE__, __FILE__,$sql);
+				$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'generate_content_in_cat_data',$this->id,0,0,$sql);
+				$error->commit();
+				//error_report(SQL_ERROR, 'get_place_in_cat' , __LINE__, __FILE__,$sql);
 			}
 
 			while ($row = $db->sql_fetchrow($result))
@@ -316,7 +320,9 @@ class album_content extends phreakpic_base
 
  		if (!$result = $db->sql_query($sql))
  		{
-			error_report(SQL_ERROR, 'get_surrounding_content' , __LINE__, __FILE__,$sql);
+			$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'get_surrounding_content',$this->id,0,0,$sql);
+			$error->commit();
+			//error_report(SQL_ERROR, 'get_surrounding_content' , __LINE__, __FILE__,$sql);
  		}
 		$objarray['place']=1;
 		$objarray['amount'] = $db->sql_affectedrows();
@@ -362,7 +368,7 @@ class album_content extends phreakpic_base
 	function get_html()
 	{
 	//returns the needed HTML Code to show the actual object.
-	
+
 	// incrase views
 	
 	}
@@ -378,24 +384,26 @@ class album_content extends phreakpic_base
 	{
 		global $userdata;
 
-		$result = new phreak_error();
-		$result->set_object_id($this->id);
-		$result->set_is_value($this->lock);
-		$result->set_should_value(1);
-		$result->set_operation('lock');
+// 		$result = new phreak_error();
+// 		$result->set_object_id($this->id);
+// 		$result->set_is_value($this->lock);
+// 		$result->set_should_value(1);
+// 		$result->set_operation('lock');
 		//set the name of the actual object. Checks if actual user is allowed to.
 		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
 			$this->locked=1;
-			$result->set_type(NO_ERROR);
-			return $result;
+// 			$result->set_type(NO_ERROR);
+			return OP_SUCCESSFUL;
 
 		}
 		else
 		{
-			$result->set_why(OP_NP_MISSING_EDIT);
-			$result->set_type(AUTH_ERROR);
-			return $result;
+			$error = new phreak_error(E_WARNING,AUTH_ERROR,__LINE__,__FILE__,'lock',$this->id,$this->lock,1,$sql);
+			$error->commit();
+// 			$result->set_why(OP_NP_MISSING_EDIT);
+// 			$result->set_type(AUTH_ERROR);
+			return $error;
 		}
 	}
 
@@ -408,25 +416,27 @@ class album_content extends phreakpic_base
 	{
 		global $userdata;
 
-		$result = new phreak_error();
-		$result->set_object_id($this->id);
-		$result->set_is_value($this->lock);
-		$result->set_should_value(0);
-		$result->set_operation('unlock');
+// 		$result = new phreak_error();
+// 		$result->set_object_id($this->id);
+// 		$result->set_is_value($this->lock);
+// 		$result->set_should_value(0);
+// 		$result->set_operation('unlock');
 
 		//set the name of the actual object. Checks if actual user is allowed to.
 		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
 			$this->locked=0;
-			$result->set_type(NO_ERROR);
-			return $result;
+// 			$result->set_type(NO_ERROR);
+			return OP_SUCCESSFUL;
 
 		}
 		else
 		{
-			$result->set_why(OP_NP_MISSING_EDIT);
-			$result->set_type(AUTH_ERROR);
-			return $result;
+// 			$result->set_why(OP_NP_MISSING_EDIT);
+// 			$result->set_type(AUTH_ERROR);
+			$error = new phreak_error(E_WARNING,AUTH_ERROR,__LINE__,__FILE__,'unlock',$this->id,$this->lock,0,$sql);
+			$error->commit();
+			return $error;
 		}
 	}
 
@@ -436,9 +446,9 @@ class album_content extends phreakpic_base
 	//delete the actual object from Database and filesystem. Checks if the actual object ist yet in database. Also checks authorisation.
 	global $db, $config_vars;
 
-	$result = new phreak_error();
-	$result->set_object_id($this->id);
-	$result->set_operation('delete');
+// 		$result = new phreak_error();
+// 	$result->set_object_id($this->id);
+// 	$result->set_operation('delete');
 
 
 		//check if the object is in the database
@@ -447,45 +457,53 @@ class album_content extends phreakpic_base
 
 			if ($this->check_perm('delete')) //Authorisation is okay
 			{
-			
+
 				//remove views for this picture
 				$sql = 'DELETE FROM ' . $config_vars['table_prefix'] . "views WHERE content_id = " . $this->id;
 				if (!$result = $db->sql_query($sql))
 				{
-					error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+					$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'delete',$this->id,0,0,$sql);
+					$error->commit();
+//					error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 				}
-				
-				
-				
+
+
+
 
 				// remove from content table
 				$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content WHERE id = " . $this->id;
 				if (!$result = $db->sql_query($sql))
 				{
-					error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+					$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'delete',$this->id,0,0,$sql);
+					$error->commit();
+//					error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 				}
-				
+
 				$this->clear_content_in_cat();
-				
+
 				if (is_file($this->file))
 				{
 					if (!unlink($this->file))
 					{
-						error_report(FILE_ERROR, 'delete' , __LINE__, __FILE__);
+						$error = new phreak_error(E_WARNING,FILE_ERROR,__LINE__,__FILE__,'delete');
+						$error->commit();
+//						error_report(FILE_ERROR, 'delete' , __LINE__, __FILE__);
 					}
-					
+
 				}
-				
+
 				if (is_file($this->get_thumbfile()))
 				{
 					if (!unlink($this->get_thumbfile()))
 					{
-						error_report(FILE_ERROR, 'delete' , __LINE__, __FILE__);
+						$error = new phreak_error(E_WARNING,FILE_ERROR,__LINE__,__FILE__,'delete');
+						$error->commit();
+//						error_report(FILE_ERROR, 'delete' , __LINE__, __FILE__);
 					}
 				}
 
 				unset($this->id);
-				
+
 				// decrase content amount
 				foreach ($this->cat_ids as $id)
 				{
@@ -494,17 +512,17 @@ class album_content extends phreakpic_base
 					$this->remove_from_cat->set_content_amount($this->remove_from_cat->get_content_amount()-1);
 					$this->remove_from_cat->commit();
 				}
-				
-				
+
+
 				// remove from content_in_cat table
 
-				
+
 				unset($this->file);
 				unset($this->cat_ids);
 				unset($this->place_in_cat);
 
-				
-				
+
+
 
 				return OP_SUCCESSFUL;
 
@@ -625,7 +643,9 @@ class album_content extends phreakpic_base
 
 			if (!$result = $db->sql_query($sql))
 			{
-				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
+				$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'commit',$this->id,0,0,$sql);
+				$error->commit();
+				//error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 			}
 
 			// update content_in_cat table
@@ -649,7 +669,9 @@ class album_content extends phreakpic_base
 				'1') : ('0')) . "','$this->width','$this->height','$this->comments_amount')";
 			if (!$result = $db->sql_query($sql))
 			{
-				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
+				$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'commit',$this->id,0,0,$sql);
+				$error->commit();
+//				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 			}
 			// set id of object to the id of the insert
 			$this->id = $db->sql_nextid();
@@ -704,7 +726,9 @@ class album_content extends phreakpic_base
 
 		if (!$result = $db->sql_query($sql))
 		{
-			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
+			$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'generate',$this->id,0,0,$sql);
+			$error->commit();
+//			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
 
 		$row = $db->sql_fetchrow($result);
@@ -726,7 +750,7 @@ class album_content extends phreakpic_base
 		//get the id of the actual object. Checks if actual user is allowed to.
 		return $this->id;
 	}
-  
+
 	function set_file($file)
 	{
 		global $userdata;
@@ -761,10 +785,10 @@ class album_content extends phreakpic_base
 	{
 		global $userdata;
 
-		$result = new phreak_error();
-		$result->set_object_id($this->id);
-		$result->set_should_value($new_cat_id);
-		$result->set_operation('add_to_cat');
+// 		$result = new phreak_error();
+// 		$result->set_object_id($this->id);
+// 		$result->set_should_value($new_cat_id);
+// 		$result->set_operation('add_to_cat');
 
 
 		if (!is_array($this->cat_ids))
@@ -776,9 +800,11 @@ class album_content extends phreakpic_base
 		{
 			if (in_array($new_cat_id,$this->cat_ids))
 			{
-				$result->set_why(OP_CONTENT_ALREADY_IN_CAT);
-				$result->set_type(GENERAL_ERROR);
-				return $result;
+/*				$result->set_why(OP_CONTENT_ALREADY_IN_CAT);
+				$result->set_type(GENERAL_ERROR);*/
+				$error = new phreak_error(E_NOTICE,GENERAL_ERROR,__LINE__,__FILE__,'add_to_cat',$this->id,0,0,$sql);
+				$error->commit();
+				return $error;
 			}
 		}
 
@@ -799,14 +825,15 @@ class album_content extends phreakpic_base
 			$this->add_to_cat->set_content_amount($this->add_to_cat->get_content_amount()+1);
 			$this->new_filename=$this->generate_filename();
 
-			$result->set_type(NO_ERROR);
-			return $result;
+			return OP_SUCCESSFUL;
 		}
 		else
 		{
-			$result->set_why(OP_NP_MISSING_CONTENT_ADD);
-			$result->set_type(AUTH_ERROR);
-			return $result;
+// 			$result->set_why(OP_NP_MISSING_CONTENT_ADD);
+// 			$result->set_type(AUTH_ERROR);
+			$error = new phreak_error(E_WARNING,AUTH_ERROR,__LINE__,__FILE__,'add_to_cat',$this->id,0,0,$sql);
+			$error->commit();
+			return $error;
 		}
 	}
 
@@ -814,10 +841,10 @@ class album_content extends phreakpic_base
 	{
 		global $userdata;
 
-		$result = new phreak_error();
-		$result->set_object_id($this->id);
-		$result->set_should_value($old_cat_id);
-		$result->set_operation('remove_from_cat');
+// 		$result = new phreak_error();
+// 		$result->set_object_id($this->id);
+// 		$result->set_should_value($old_cat_id);
+// 		$result->set_operation('remove_from_cat');
 
 
 
@@ -827,11 +854,7 @@ class album_content extends phreakpic_base
 		}
 
 		$this->remove_from_cat = new categorie();
-		if ($this->remove_from_cat->generate_from_id($old_cat_id) != OP_SUCCESSFUL)
-		{
-			error_report(GENERAL_ERROR, 'generate' , __LINE__, __FILE__);
-		}
-
+		$this->remove_from_cat->generate_from_id($old_cat_id);
 
 
 		// check perms (needs content_remove)
@@ -845,21 +868,26 @@ class album_content extends phreakpic_base
 				$this->remove_from_cat->set_content_amount($this->remove_from_cat->get_content_amount()-1);
 				$this->new_filename=$this->generate_filename();
 
-				$result->set_type(NO_ERROR);
-				return $result;
+// 				$result->set_type(NO_ERROR);
+				return OP_SUCCESSFUL;
 			}
 			else
 			{
-				$result->set_why(OP_CONTENT_NOT_IN_CAT);
-				$result->set_type(GENERAL_ERROR);
-				return $result;
+				$error = new phreak_error(E_WARNING,GENERAL_ERROR,__LINE__,__FILE__,'remove_from_cat',$this->id,0,$old_cat_id,$sql);
+				$error->commit();
+/*				$result->set_why(OP_CONTENT_NOT_IN_CAT);
+				$result->set_type(GENERAL_ERROR);*/
+				return $error;
 			}
 		}
 		else
 		{
-			$result->set_why(OP_NP_MISSING_EDIT);
-			$result->set_type(AUTH_ERROR);
-			return $result;
+/*			$result->set_why(OP_NP_MISSING_EDIT);
+			$result->set_type(AUTH_ERROR);*/
+			$error = new phreak_error(E_WARNING,AUTH_ERROR,__LINE__,__FILE__,'commit',$this->id,0,$old_cat_id,$sql);
+			$error->commit();
+			return $error;
+
 		}
 	}
 
@@ -879,24 +907,27 @@ class album_content extends phreakpic_base
 	{
 		global $userdata;
 
-		$result = new phreak_error();
-		$result->set_object_id($this->id);
-		$result->set_is_value($this->name);
-		$result->set_should_value($name);
-		$result->set_operation('set_name');
+// 		$result = new phreak_error();
+// 		$result->set_object_id($this->id);
+// 		$result->set_is_value($this->name);
+// 		$result->set_should_value($name);
+// 		$result->set_operation('set_name');
 
 		//set the name of the actual object. Checks if actual user is allowed to.
 		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
 			$this->name = $name;
-			$result->set_type(NO_ERROR);
-			return $result;
+// 			$result->set_type(NO_ERROR);
+			return OP_SUCCESSFUL;
 		}
 		else
 		{
-			$result->set_why(OP_NP_MISSING_EDIT);
-			$result->set_type(AUTH_ERROR);
-			return $result;
+/*			$result->set_why(OP_NP_MISSING_EDIT);
+			$result->set_type(AUTH_ERROR);*/
+			$error = new phreak_error(E_WARNING,AUTH_ERROR,__LINE__,__FILE__,'set_name',$this->id,$this->name,$name);
+			$error->commit();
+			return $error;
+
 		}
 	}
 
@@ -958,25 +989,28 @@ class album_content extends phreakpic_base
 	{
 		global $userdata;
 
-		$result = new phreak_error();
-		$result->set_object_id($this->id);
-		$result->set_is_value($this->contentgroup_id);
-		$result->set_should_value($contentgroup_id);
-
-		$result->set_operation('set_contentgroup_id');
+// 		$result = new phreak_error();
+// 		$result->set_object_id($this->id);
+// 		$result->set_is_value($this->contentgroup_id);
+// 		$result->set_should_value($contentgroup_id);
+// 
+// 		$result->set_operation('set_contentgroup_id');
 
 		//set the contentgroup_id of the actual object. checks if actual user is allwoed to.
 		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
 			$this->contentgroup_id = $contentgroup_id;
-			$result->set_type(NO_ERROR);
-			return $result;
+// 			$result->set_type(NO_ERROR);
+			return OP_SUCCESSFUL;
 
 		}
 		else
 		{
-			$result->set_why(OP_NP_MISSING_EDIT);
-			$result->set_type(AUTH_ERROR);
+// 			$result->set_why(OP_NP_MISSING_EDIT);
+// 			$result->set_type(AUTH_ERROR);
+			$error = new phreak_error(E_WARNING,AUTH_ERROR,__LINE__,__FILE__,'set_contentgroup_id',$this->id,$this->contentgroup_id,$contentgroup_id);
+			$error->commit();
+
 			return $result;
 		}
 	}
@@ -1000,13 +1034,15 @@ class album_content extends phreakpic_base
 				VALUES ('" . $this->cat_ids[$key]. "', '$this->id', '" . $this->place_in_cat[$this->cat_ids[$key]]. "')";
 			if (!$result = $db->sql_query($sql))
 			{
-				error_report(SQL_ERROR, 'fill_content_in_cat' , __LINE__, __FILE__,$sql);
+				$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'fill_content_in_cat',$this->id,0,0,$sql);
+				$error->commit();
+// 				error_report(SQL_ERROR, 'fill_content_in_cat' , __LINE__, __FILE__,$sql);
 			}
 		}
 
-		
+
 	}
-	
+
 	function clear_content_in_cat()
 	{
 		global $db,$config_vars;
@@ -1015,17 +1051,19 @@ class album_content extends phreakpic_base
 
 		if (!$result = $db->sql_query($sql))
 		{
-			error_report(SQL_ERROR, 'clear_content_in_cat' , __LINE__, __FILE__,$sql);
+			$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'clear_content_in_cat',$this->id,0,0,$sql);
+			$error->commit();
+// 			error_report(SQL_ERROR, 'clear_content_in_cat' , __LINE__, __FILE__,$sql);
 		}
 	}
-	
-	
+
+
 	function generate_filename()
 	{
 		global $config_vars;
-		//check if content is already in a cat 
-		
-		
+		//check if content is already in a cat
+
+
 		if (!isset($this->cat_ids))
 		{
 
@@ -1036,27 +1074,27 @@ class album_content extends phreakpic_base
 			$cat_obj = new categorie();
 			$cat_obj->generate_from_id($this->cat_ids[0]);
 			$path = $cat_obj->get_name();
-			
-			
-			
+
+
+
 			while ($cat_obj->get_parent_id() != $config_vars['root_categorie'])
 			{
-				
+
 				$old_cat_id=$cat_obj->get_parent_id();
 				$cat_obj = new categorie();
 				$cat_obj->generate_from_id($old_cat_id);
 				$path = $cat_obj->get_name() . '/' . $path;
 			}
-			
+
 			// make $path is it doesnt exists
 			if (!is_dir($config_vars['content_path_prefix'] . '/' . $path))
 			{
 				makedir($config_vars['content_path_prefix'] . '/' . $path);
 			}
-	
+
 			$path = $path . '/' . basename($this->name) . '.' . getext($this->file)	;
 			$filename = $config_vars['content_path_prefix'] .'/' . $path;
-			
+
 			// if filename has changed check if such a file does not already exists is so add a number behind till its a new file
 			if ($this->file != $filename)
 			{
@@ -1069,20 +1107,20 @@ class album_content extends phreakpic_base
 				}
 				$filename = $newfilename;
 			}
-			
+
 			return  $filename;
 		}
 		else
 		{
-			return OP_CONTENT_NOT_IN_CAT;	
+			return OP_CONTENT_NOT_IN_CAT;
 		}
 	}
-	
+
 	function get_thumbfile()
 	{
 		return dirname($this->file) . '/thumbs/' . basename($this->file);
 	}
-	
+
 	function start_view()
 	{
 		global $db,$config_vars,$userdata;
@@ -1090,7 +1128,9 @@ class album_content extends phreakpic_base
 		$sql = 'INSERT INTO '. $config_vars['table_prefix'] .'views (user_id,content_id,start) VALUES ('.$userdata['user_id']. ',' . $this->id . ",'$now')";
 		if (!$result = $db->sql_query($sql))
 		{
-			error_report(SQL_ERROR, 'start_view' , __LINE__, __FILE__,$sql);
+			$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'start_view',$this->id,0,0,$sql);
+			$error->commit();
+// 			error_report(SQL_ERROR, 'start_view' , __LINE__, __FILE__,$sql);
 		}
 		return $now;
 	}

@@ -38,7 +38,7 @@ class phreak_auth
 			{
 				// this is object is not yet in the datebase, make a new entry
 				$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this). ' (';
-				
+
 
 				// get the set vars from db_vars
 				foreach ($this->db_vars as $value)
@@ -51,23 +51,25 @@ class phreak_auth
 				$sql = $sql . ') VALUES ( ';
 
 				foreach ($this->db_vars as $value)
-				{			
+				{
 					// if false enter '0' postresql needs this.
 					if ($this->$value===false)
 					{
-						$sql = $sql . "'0', ";	
+						$sql = $sql . "'0', ";
 					}
 					else
 					{
-						$sql = $sql . "'{$this->$value}', ";	
+						$sql = $sql . "'{$this->$value}', ";
 					}
 				}
 				$sql{strlen($sql)-2}=' ';
-				
+
 				$sql = $sql . ')';
 				if (!$result = $db->sql_query($sql))
 				{
-					error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);	
+					$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'commit',$this->id,0,0,$sql);
+					$error->commit();
+// 					error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 				}
 				return OP_SUCCESSFULL;
 
@@ -89,7 +91,9 @@ class phreak_auth
 				
 				if (!$result = $db->sql_query($sql))
 				{
-					error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
+					$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'commit',$this->id,0,0,$sql);
+					$error->commit();
+// 					error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 				}
 				return OP_SUCCESSFUL;
 			
@@ -112,7 +116,9 @@ class phreak_auth
 			
 		if (!$result = $db->sql_query($sql))
 		{
-			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
+			$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'generate',$this->id,0,0,$sql);
+			$error->commit();
+// 			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
 		
 		$row = $db->sql_fetchrow($result);
@@ -311,7 +317,9 @@ class cat_auth extends phreak_auth
 
 			if (!$result = $db->sql_query($sql))
 			{
-				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+				$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'delete',$this->id,0,0,$sql);
+				$error->commit();
+// 				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 			}
 			unset($this->id);
 		}
@@ -444,7 +452,9 @@ class content_auth extends phreak_auth
 			$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE (usergroup_id = $this->usergroup_id) and (contentgroup_id = $this->contentgroup_id)";
 			if (!$result = $db->sql_query($sql))
 			{
-				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+				$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'delete',$this->id,0,0,$sql);
+				$error->commit();
+				//error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 			}
 			unset($this->id);
 		}
@@ -533,7 +543,9 @@ class usergroup_auth extends phreak_auth
 			$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE (usergroup_id = $this->usergroup_id) and (usergroupgroup_id = $this->usergroupgroup_id)";
 			if (!$result = $db->sql_query($sql))
 			{
-				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+				$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'delete',$this->id,0,0,$sql);
+				$error->commit();
+// 				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 			}
 			unset($this->id);
 		}

@@ -47,7 +47,9 @@ class categorie
 	
 		if (!$result = $db->sql_query($sql))
 		{
-			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
+			$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'fill_up',$this->id,0,0,$sql);
+			$error->commit();
+// 			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
 
 		$row = $db->sql_fetchrow($result);
@@ -138,11 +140,13 @@ class categorie
 		$sql = 'select * from ' . $config_vars['table_prefix'] . "cats where id like $id";
 		if (!$result = $db->sql_query($sql))
 		{
-			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
+			$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'generate',$this->id,0,0,$sql);
+			$error->commit();
+// 			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
 		
 		$row = $db->sql_fetchrow($result);
-		
+
 /*		if (is_array($row))
 		{
 			// fill the var of the object with the data from the database (the field names of the database are the same than the var names)
@@ -202,7 +206,7 @@ class categorie
 						// check is user is allowed to do that
 						if (check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'content_remove'))
 						{	
-						
+
 							// there is content to be removed
 							for ($i=0; $i<sizeof($content); $i++)
 							{
@@ -263,7 +267,9 @@ class categorie
 					$sql = 'DELETE FROM '. $config_vars['table_prefix'] . "cats where id like $this->id";
 					if (!$result = $db->sql_query($sql))
 					{
-						error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+						$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'delete',$this->id,0,0,$sql);
+						$error->commit();
+// 						error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 					}
 					unset($this->id);
 					return OP_SUCCESSFUL;
@@ -306,7 +312,9 @@ class categorie
 				VALUES ('" . database_encode($this->name) . "', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$is_serie', '$this->content_amount', '" . database_encode($this->description) . "', '$this->child_content_amount', '$this->child_comments_amount')";
 			if (!$result = $db->sql_query($sql))
 			{
-				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
+				$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'commit',$this->id,0,0,$sql);
+				$error->commit();
+// 				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 			}
 			
 			$this->id = $db->sql_nextid();
@@ -330,7 +338,9 @@ class categorie
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
-				error_report(SQL_ERROR, 'commmit' , __LINE__, __FILE__,$sql);
+				$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'commit',$this->id,0,0,$sql);
+				$error->commit();
+// 				error_report(SQL_ERROR, 'commmit' , __LINE__, __FILE__,$sql);
 			}
 			
 			
@@ -497,7 +507,9 @@ class categorie
 		$sql = "SELECT count(cat_id) FROM {$config_vars['table_prefix']}content_in_cat where cat_id={$this->id}";
 		if (!$result = $db->sql_query($sql))
 		{
-			error_report(SQL_ERROR, 'calc_content_amount' , __LINE__, __FILE__,$sql);
+			$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'calc_content_amount',$this->id,0,0,$sql);
+			$error->commit();
+// 			error_report(SQL_ERROR, 'calc_content_amount' , __LINE__, __FILE__,$sql);
 		}
 		$row = $db->sql_fetchrow($result);
 		return $row[0];
@@ -599,6 +611,8 @@ class categorie
 		$sql = 'SELECT count(cat_comments.id) FROM ' . $config_vars['table_prefix'] . 'cat_comments AS cat_comments WHERE cat_comments.owner_id = ' . $this->id;
 		if (!$result = $db->sql_query($sql))
 		{
+			$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'calc_child_comments_amoount',$this->id,0,0,$sql);
+			$error->commit();
 			error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 		}
 		$row = $db->sql_fetchrow($result);

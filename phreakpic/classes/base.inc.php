@@ -15,11 +15,13 @@ class phreakpic_base
 					$this->$key = $value;
 				}
 			}
+
 			return OP_SUCCESSFUL;
 		}
 		else
 		{
 			return OP_FAILED;
+
 		}
 	}
 	
@@ -32,7 +34,9 @@ class phreakpic_base
 		
 		if (!$result = $db->sql_query($sql))
 		{
-			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
+			$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'generate',$this->id,0,0,$sql);
+			$error->commit();
+// 			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
 		
 		$row = $db->sql_fetchrow($result);
@@ -48,7 +52,9 @@ class phreakpic_base
 		$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . "s WHERE (id = $this->id)";
 		if (!$result = $db->sql_query($sql))
 		{
-			error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
+			$error = new phreak_error(E_WARNING,SQL_ERROR,__LINE__,__FILE__,'delete',$this->id,0,0,$sql);
+			$error->commit();
+// 			error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 		}
 		
 	}
@@ -57,7 +63,7 @@ class phreakpic_base
 	{
 		
 		foreach ($this->processing_vars as $value)
-		{		
+		{
 			
 			$set_func = "set_$value";
 			$this->$set_func($vars[$value]);
