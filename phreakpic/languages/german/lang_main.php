@@ -12,6 +12,9 @@ $lang['website_home'] = 'Home';
 //in more than one file
 $lang['home'] = 'Start';
 
+//footer
+$lang['goto_admin'] = 'Administration';
+
 
 //comments
 $lang['add_comment'] = 'Kommentar hinzufügen';
