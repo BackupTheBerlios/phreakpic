@@ -197,7 +197,7 @@ function get_allowed_catgroups_where($user_id,$action,$field='catgroup_id')
 	
 	// get contentgroup_ids from the contents groups where at least one usergroup out of §users_groups is allowed to do $action
 	$where = generate_where('usergroup_id',$usergroup_ids);
-	$sql = 'select catgroup_id from '.$config_vars['table_prefix']."cat_auth where ($action like 1) and $where";
+	$sql = 'select catgroup_id from '.$config_vars['table_prefix']."cat_auth where ($action like 1) and ($where)";
 	
 	if (!$result = $db->sql_query($sql))
 	{
