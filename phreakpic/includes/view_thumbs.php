@@ -1,4 +1,33 @@
 <?php
+include_once(ROOT_PATH . 'libs/pclzip/pclzip.lib.php');
+
+if ($mode == 'download')
+{
+	$cookie = $_COOKIE[$config_vars['cookie_name'].'basket'];
+	$download_array=explode(':',$cookie);
+	
+	for ($i=0;$i<sizeof($download_array)-1;$i++)
+	{
+		$content_obj=new album_content();
+		$content_obj->generate_from_id($download_array[$i]);
+		$files[]=$content_obj->get_file();
+		
+	}
+	
+	// create zip
+	$zip= new PclZip("content.zip");
+	$zip->create($files);
+	
+	// send zip to browser
+	$header_location = ( @preg_match("/Microsoft|WebSTAR|Xitami/", 
+	getenv("SERVER_SOFTWARE")) ) ? "Refresh: 0; URL=" : "Location: ";
+	header($header_location . append_sid("test.zip", true));
+	
+	//delete zip
+	unlink('content.zip');
+	
+	
+}
 
 if (is_array($contents))
 {
