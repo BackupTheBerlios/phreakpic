@@ -1,6 +1,91 @@
 <?php
 include_once(ROOT_PATH . './classes/album_content.inc.php');
 
+function write_config($Smarty_dir,$phpBB_Path,$phreakpic_path,$Server_name)
+{
+	global $config_vars;
+	$config_content = "<?php
+
+//Template System
+//absolute path to smarty
+define(\"SMARTY_DIR\",\"" . $Smarty_dir . "\");
+
+//relative path from phreakpic to phpBB2 (if the URL is \"http://www.blabla.com/com/phpBB2/\" and phreakpic is at \"http://www.blabla.com/com/phreakpic/\" then PHPBB_DIR will be \"../phpBB2/\")
+//Don't forget the / at end!
+define(\"PHPBB_PATH\",\"" . $phpBB_Path . "\");
+
+//relative path from phpBB2 to phreakpic see above
+define(\"PHREAKPIC_PATH\",\"" . $phreakpic_path . "\");
+
+
+
+define(\"SERVER_NAME\",\"" . $Server_name . "\");
+
+
+
+\$config_vars = array
+(
+	//Database
+	'table_prefix' => '" . $config_vars['table_prefix'] . "',
+
+	// path to where the content should be stored
+	'content_path_prefix' => '" . $config_vars['content_path_prefix'] . "',
+
+	//Picture stuff
+	// size of thumbs (for generating)
+	'thumb_size' =>
+	array
+	(
+		// if set thumb is percent as big as the original picture
+	//	'percent' => '30',
+		// if set height will be exactly this value (if the width not set the apsectio ratio will be keept)
+	//	'height' => '130',
+		// if set width will be exactly this value
+	//	'width' => '100'
+		// if set the longer size will become this value
+		'maxsize' => '130'
+	),
+
+	// ID of the cat where to put pictures that are no longer linked in any cat
+	'deleted_content_cat' => {$config_vars['deleted_content_cat']},
+
+	// ID of the root categorie
+	'root_categorie' => {$config_vars['root_categorie']},
+
+	// Umask of new created directories
+	'dir_mask' => 0775,
+	
+	//view_cat.php the Colums of the table, where we can see the thumbnails
+	'thumb_table_cols' => {$config_vars['thumb_table_cols']},
+
+	// template used if not setted by user
+	'default_template' => '" . $config_vars['default_template'] . "',
+
+	// language used if not setted by user
+	'default_lang' => '" . $config_vars['default_lang'] . "',
+	
+	'default_upload_dir' => '{$config_vars['default_upload_dir']}',
+	
+	// the ids of the usergroups in which every user is automaicly
+	'default_usergroup_ids' => Array(),
+	
+	'default_content_per_page' => {$config_vars['default_content_per_page']}
+);
+?>";
+	$file = fopen(ROOT_PATH . "config.inc.php", "w+b");
+	if ($file == false)
+	{
+		die ('<br>Couldn\'t open the config File for writing. Maybe the permissions are not right. Please write the following Text to the file "config.inc.php".<br><p><textarea name="textfield" cols="100" rows="40">' . $config_content . '</textarea></p>');
+	}
+	
+	$write = fwrite($file,$config_content);
+	if ($write == false)
+	{
+		die ('<br>Couldn\'t write the config file. Please write the following Text to the file "config.inc.php".<br><p><textarea name="textfield" cols="100" rows="40">' . $config_content . '</textarea></p>');
+	}
+
+}
+
 function get_cats_string($cats)
 {
 	global $config_vars;
@@ -368,10 +453,27 @@ function get_installed_languages()
 		
 		}
 	}
-	
 	return $langs;
+}
+
+function get_installed_templates()
+{
+	$dir= ROOT_PATH . './templates/';
 	
-	
+	$dir_handle=opendir($dir);
+	while ($file = readdir ($dir_handle))
+	{
+			
+		if (($file != "." && $file != "..") and (is_dir($dir.$file)))
+		{	
+			if (is_file($dir.$file.'/index.tpl'))
+			{
+				$langs[]=$file;
+			}
+		
+		}
+	}
+	return $langs;
 }
 
 function add_content($POST_FILES,$name,$cat_id,$place_in_cat,$content_group)
