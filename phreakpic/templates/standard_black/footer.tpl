@@ -7,7 +7,7 @@
 						<!--{/if}-->
 					
 				</p>
-				<p><span class="gensmall">PhreakPic Alpha</span></p>
+				<p><span class="gensmall">PhreakPic Beta</span></p>
 			</div>
 		</td>
 	</tr>
