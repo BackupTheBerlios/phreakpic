@@ -10,6 +10,8 @@ define("OP_SUCCESSFUL", 1);
 define("OP_FAILED", 2);
 define("OP_PARENT_ID_INVALID",3);
 define("OP_NOT_IN_DB",4);
+define("OP_NOT_A_FILE",8);
+define("OP_CONTENT_NOT_IN_CAT",9);
 // Not Permitted (NP) constants
 define("OP_NP_MISSING_CAT_MOVE", 0); //return value for class functions who checks if the user is allowed to do something. If he is not, the functions returns this constant.
 define("OP_NP_MISSING_CAT_ADD", 5);
