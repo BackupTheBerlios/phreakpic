@@ -105,7 +105,8 @@
 			</td>
 			<td>
 				<div align="center">
-			<!--{$lang.full_size}--> <input type="radio" name="size" checked onclick="imageSize(0)"> <!--{$lang.fit_size}--> <input type="radio" name="size" onclick="imageSize(1)">
+				
+			<form><!--{$lang.full_size}--> <input type="radio" name="size" checked onclick="imageSize(0)"> <!--{$lang.fit_size}--> <input type="radio" name="size" onclick="imageSize(1)"></form>
 					<a name="pic"></a>
 						<table width="1" border="0" cellpadding="0" cellspacing="0">
 							<tr>
