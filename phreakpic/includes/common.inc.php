@@ -40,6 +40,7 @@ define("OP_NOT_A_FILE",8);
 define("OP_CONTENT_NOT_IN_CAT",9);
 define("OP_NO_CONTENT", 13);
 define("OP_PARTLY_SUCCESSFULL", 14);
+define("OP_CONTENT_ALREADY_IN_CAT", 15);
 // Not Permitted (NP) constants
 define("OP_NP_MISSING_CAT_MOVE", 0); //return value for class functions who checks if the user is allowed to do something. If he is not, the functions returns this constant.
 define("OP_NP_MISSING_CAT_ADD", 5);
