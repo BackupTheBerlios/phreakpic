@@ -1,10 +1,12 @@
 <?php 
 include_once(ROOT_PATH . './classes/album_content.inc.php');
 
+DEFINE('INFORMATION','0');
 DEFINE('SQL_ERROR','1');
 DEFINE('AUTH_ERROR','2');
 DEFINE('FILE_ERROR','3');
 DEFINE('GENERAL_ERROR','3');
+
 
 function error_report($type, $ident , $line, $file,$sql='')
 {
@@ -16,6 +18,7 @@ function error_report($type, $ident , $line, $file,$sql='')
 		case AUTH_ERROR: $error_info['type'] = 'AUTH_ERROR'; break;
 		case FILE_ERROR: $error_info['type'] = 'FILE_ERROR'; break;
 		case GENERAL_ERROR: $error_info['type'] = 'GENERAL_ERROR'; break;
+		case INFORMATION: $error_info['type'] = 'INFORMATION'; break;
 	}
 	
 	$error_info['ident'] = $ident;
@@ -26,16 +29,18 @@ function error_report($type, $ident , $line, $file,$sql='')
 	$error_info['debug'] = DEBUG;
 	
 	
-	
-	// submit error to db
-	$sql = "INSERT INTO " . $config_vars['table_prefix'] . "error_reports
-				(type,file,line,sql,ident,user_id,query_string,error_time)
-				VALUES ('{$type}','{$error_info['file']}','{$error_info['line']}','{$error_info['sql']}','{$error_info['ident']}','{$userdata['user_id']}','$QUERY_STRING','" . date("Y-m-d H:i:s") . "')";
-	if (!$result = $db->sql_query($sql))
+	if ($type != INFORMATION)
 	{
-		message_die(GENERAL_ERROR, "Error report failed", '', __LINE__, __FILE__, $sql);
+		// submit error to db
+		$sql = "INSERT INTO " . $config_vars['table_prefix'] . "error_reports
+					(type,file,line,sql,ident,user_id,query_string,error_time)
+					VALUES ('{$type}','{$error_info['file']}','{$error_info['line']}','{$error_info['sql']}','{$error_info['ident']}','{$userdata['user_id']}','$QUERY_STRING','" . date("Y-m-d H:i:s") . "')";
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Error report failed", '', __LINE__, __FILE__, $sql);
+		}
+		$error_info['id'] = $db->sql_nextid();
 	}
-	$error_info['id'] = $db->sql_nextid();
 
 	$smarty->assign('error_info',$error_info);
 	$smarty->display($userdata['photo_user_template']."/error_msg.tpl");
