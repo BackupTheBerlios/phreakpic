@@ -169,7 +169,6 @@ class album_content
 		$this->commit();
 		// check delete
 		
-		
 		if ($vals['delete'] == 'on')
 		{
 			if ($this->delete() != OP_SUCCESSFUL)
@@ -178,7 +177,6 @@ class album_content
 			}	
 			$redirect_to_cat=true;
 		}
-		
 		return $redirect_to_cat;
 	}
 	
@@ -373,18 +371,34 @@ class album_content
 				}
 				$this->clear_content_in_cat();
 				
-				
-				if (!unlink($this->file))
+				if (is_file($this->file))
 				{
-					message_die(GENERAL_ERROR, "Konnte Datei nicht löschen", '', __LINE__, __FILE__, '');
+					if (!unlink($this->file))
+					{
+						message_die(GENERAL_ERROR, "Konnte Datei nicht löschen", '', __LINE__, __FILE__, '');
+					}
+					
 				}
 				
-				if (!unlink($this->get_thumbfile()))
+				if (is_file($this->get_thumbfile()))
 				{
-					message_die(GENERAL_ERROR, "Konnte Thumb nicht löschen", '', __LINE__, __FILE__, '');
+					if (!unlink($this->get_thumbfile()))
+					{
+						message_die(GENERAL_ERROR, "Konnte Thumb nicht löschen", '', __LINE__, __FILE__, '');
+					}
 				}
 
 				unset($this->id);
+				
+				// decrase content amount
+				foreach ($this->cat_ids as $id)
+				{
+					$this->remove_from_cat = new categorie;
+					$this->remove_from_cat->generate_from_id($id);
+					$this->remove_from_cat->set_content_amount($this->remove_from_cat->get_content_amount()-1);
+					$this->remove_from_cat->commit();
+				}
+				
 				
 				// remove from content_in_cat table
 				
@@ -392,6 +406,8 @@ class album_content
 				unset($this->file);
 				unset($this->cat_ids);
 				unset($this->place_in_cat);
+				
+				
 				
 				
 				return OP_SUCCESSFUL;
@@ -952,7 +968,7 @@ class picture extends album_content
 	function calc_size()
 	{
 			// get width and height of pic
-			$size = getimagesize($this->file);
+			@$size = getimagesize($this->file);
 			$this->width = $size[0];
 			$this->height = $size[1];
 	}
@@ -962,11 +978,17 @@ class picture extends album_content
 	function generate_thumb($thumb_size = '0')
 	{
 		global $config_vars;
+		
+		if (!is_file($this->file))
+		{
+			return;
+		}
 		// if $thumb_size is not set == 0 then set it from the config vars
 		if ($thumb_size == '0')
 		{
 			$thumb_size = $config_vars['thumb_size'];
 		}
+		
 		
 		
 		$thumbfile=$this->get_thumbfile();
@@ -1048,7 +1070,7 @@ class picture extends album_content
 		}
 		
 		$array['content_id'] = $this->id;
-		$size=getimagesize($this->get_thumbfile());
+		@$size=getimagesize($this->get_thumbfile());
 		$array['thumb_width'] = $this->$size[1];
 		$array['thumb_height'] = $this->$size[2];
 		$array['html'] = "<img src=".linkencode($this->get_thumbfile())." $size[3]>";
