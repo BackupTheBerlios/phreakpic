@@ -122,6 +122,8 @@ $lang['change_group'] = 'change group';
 $lang['cat_auth'] = 'Categorie Permissions';
 $lang['content_auth'] = 'Content 	Permissions';
 $lang['groups'] = 'Groups';
+$lang['add_user'] = 'Add User';
+$lang['remove_user'] = 'Remove User';
 
 
 //admin/user_in_group

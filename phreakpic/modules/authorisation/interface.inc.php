@@ -19,6 +19,47 @@ function check_group_action_allowed()
 	return check_auth_action_allowed();
 }
 
+function check_usergroup_action_allowed($usergroupgroup_id,$user_id,$action)
+{
+	// Returns TRUE if the user with id $user_id is allowed to do $action with the categories in in the catgroup with id $catgroup_id
+	global $db,$config_vars,$userdata;
+	
+	// if the current user is admin allow everything
+	if ($userdata['user_level'] == ADMIN)
+	{
+		return true;
+	}
+	
+	// check in which groups the user is
+	$usergroup_ids=get_groups_of_user($user_id);
+	
+	// add the default usergroups
+	$usergroup_ids=array_merge($usergroup_ids,$config_vars['auto_usergroup_ids']);
+
+	// if the user is in no usergroup then disallow the action
+	if (!isset($usergroup_ids))
+	{
+		return false;
+	}
+	
+	$where = generate_where('usergroup_id',$usergroup_ids);
+	$sql = 'select usergroup_id from '.$config_vars['table_prefix']."usergroup_auth where (`$action` like 1) and (usergroupgroup_id like $usergroupgroup_id) and ($where) limit 1";
+	if (!$result = $db->sql_query($sql))
+	{
+		error_report(SQL_ERROR, 'action_allowed' , __LINE__, __FILE__,$sql);
+	}
+
+
+	if ($db->sql_affectedrows()>=1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 function check_cat_action_allowed($catgroup_id,$user_id,$action)
 {
 	// Returns TRUE if the user with id $user_id is allowed to do $action with the categories in in the catgroup with id $catgroup_id
@@ -58,9 +99,6 @@ function check_cat_action_allowed($catgroup_id,$user_id,$action)
 	{
 		return false;
 	}
-
-	
-
 }
 
 function check_content_action_allowed($contentgroup_id,$user_id,$action)

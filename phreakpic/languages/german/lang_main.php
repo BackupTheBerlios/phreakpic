@@ -118,6 +118,8 @@ $lang['change_group'] = 'Gruppe ändern';
 $lang['cat_auth'] = 'Kategorie Rechte';
 $lang['content_auth'] = 'Content Rechte';
 $lang['groups'] = 'Gruppen';
+$lang['add_user'] = 'User hinzufügen';
+$lang['remove_user'] = 'User entfernen';
 
 
 //admin/user_in_group
