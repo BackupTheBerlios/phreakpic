@@ -257,6 +257,18 @@ class comment extends user_feedback
 
 class content_comment extends comment
 {
+	function commit()
+	{
+		if (!isset($this->id))
+		{
+			$content = new album_content();
+			$content->generate_from_id($this->owner_id);
+			$content->inc_comments_amount();
+			$content->commit();
+		}
+		comment::commit();
+	}
+
 	function delete()
 	{
 		global $db,$config_vars,$userdata;
@@ -282,6 +294,8 @@ class content_comment extends comment
 			{
 				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 			}
+			$content->dec_comments_amount();
+			$content->commit();
 			unset($this->id);
 			}
 		}
@@ -297,6 +311,21 @@ class cat_comment extends comment
 	{
 		comment::comment();
 	}
+	
+	function commit()
+	{
+		if (!isset($this->id))
+		{
+			$cat = new categorie();
+			$cat->generate_from_id($this->owner_id);
+			$cat->inc_child_comments_amount();
+			$cat->commit();
+		}
+		comment::commit();
+	}
+	
+	
+	
 	function delete()
 	{
 		global $db,$config_vars,$userdata;
@@ -313,6 +342,9 @@ class cat_comment extends comment
 			{
 				error_report(SQL_ERROR, 'delete' , __LINE__, __FILE__,$sql);
 			}
+			$cat->dec_child_comments_amount();
+			$cat->commit();
+			
 			unset($this->id);
 		}
 

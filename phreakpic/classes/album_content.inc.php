@@ -40,12 +40,87 @@ class album_content
 	var $view;
 	var $delete;
 	var $thumbfile;
+	var $comments_amount;
 	var $add_to_group;
 	var $remove_from_group;
 	var $new_filename;
 	
+	
+	var $commit_parent_cats;
 	var $remove_from_cat;
 	var $add_to_cat;
+	
+	function inc_comments_amount()
+	{
+		$this->comments_amount++;
+		
+		if (!is_array($this->cat_ids))
+		{
+			$this->generate_content_in_cat_data();
+		}
+		
+		if (is_array($this->cat_ids))
+		{
+			foreach($this->cat_ids as $cat_id)
+			{
+				$cat = new categorie();
+				$cat->generate_from_id($cat_id);
+				$cat->inc_child_comments_amount();
+				$this->commit_parent_cats[] = $cat;
+				
+			}
+		}
+	}
+	
+	function dec_comments_amount()
+	{
+		$this->comments_amount--;
+		
+		if (!is_array($this->cat_ids))
+		{
+			$this->generate_content_in_cat_data();
+		}
+		
+		if (is_array($this->cat_ids))
+		{
+			foreach($this->cat_ids as $cat_id)
+			{
+				$cat = new categorie();
+				$cat->generate_from_id($cat_id);
+				$cat->dec_child_comments_amount();
+				$this->commit_parent_cats[] = $cat;
+				
+			}
+		}
+	}
+	
+	function get_comments_amount()
+	{
+		return $this->comments_amount;
+	}
+	
+	function set_comments_amount($val)
+	{
+		$this->comments_amount = $val;
+		return OP_SUCCESSFUL;
+	}
+
+	
+	
+	function calc_comments_amount()
+	{
+		global $db,$config_vars;
+		
+		$sql = 'SELECT count(id) FROM ' . $config_vars['table_prefix'] . 'content_comments WHERE owner_id = ' . $this->id;
+		if (!$result = $db->sql_query($sql))
+		{
+			error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
+		}
+		$row = $db->sql_fetchrow($result);
+		return $row[0];
+	}
+	
+	
 	
 	
 	function get_editable_values($cat_id)
@@ -450,7 +525,7 @@ class album_content
 		}
 		
 		
-		$this->calc_size();
+		
 		
 		
 		
@@ -535,7 +610,8 @@ class album_content
 					contentgroup_id = '$this->contentgroup_id',
 					locked = '$this->locked',
 					width = '$this->width',
-					height = '$this->height'
+					height = '$this->height',
+					comments_amount = '$this->comments_amount'
 				WHERE id = $this->id";
 			
 			if (!$result = $db->sql_query($sql))
@@ -551,15 +627,16 @@ class album_content
 		}
 		else
 		{
+			$this->calc_size();	
 			//not in db
 			$this->creation_date=date("Y-m-d H:i:s");
 			// add content to the content table
 			
 			//using a shorter version of boolean transmission for locked
 			$sql = "INSERT INTO " . $config_vars['table_prefix'] . "content
-				(file,name,views,current_rating,creation_date,contentgroup_id,locked,width,height)
+				(file,name,views,current_rating,creation_date,contentgroup_id,locked,width,height,comments_amount)
 				VALUES ('$this->file', '$this->name', '$this->views', '$this->current_rating', '$this->creation_date', '$this->contentgroup_id', '" . (($this->locked) ? (
-				'1') : ('0')) . "','$this->width','$this->height')";
+				'1') : ('0')) . "','$this->width','$this->height','$this->comments_amount')";
 			if (!$result = $db->sql_query($sql))
 			{
 				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
@@ -586,6 +663,14 @@ class album_content
 		if (is_object($this->remove_from_cat))
 		{
 			$this->remove_from_cat->commit();
+		}
+		
+		if (is_array($this->commit_parent_cats))
+		{
+			foreach($this->commit_parent_cats as $parent_cat)
+			{
+				$parent_cat->commit();
+			}
 		}
 		
 		return OP_SUCESSFUL;
@@ -1085,6 +1170,7 @@ class picture extends album_content
 		$array['name'] = $this->get_name();
 		$array['current_rating'] = $this->get_current_rating();
 		$array['views'] = $this->get_views();
+		$array['comments_amount'] = $this->get_comments_amount();
 		return $array;
 	}
 	
@@ -1095,6 +1181,7 @@ class picture extends album_content
 			exec("convert -rotate $degrees \"$this->file\" \"$this->file\"");
 			unlink ($this->thumbfile);
 			$this->generate_thumb();
+			$this->calc_size();
 			return OP_SUCCESSFUL;
 		}
 		return OP_NP_MISSING_EDIT;

@@ -15,6 +15,9 @@ class categorie
 	var $child_comments_amount=0;
 	var $description;
 	
+	// vars for objects to be commited on commit()
+	var $commit_parent_cat;
+	
 	function categorie()
 	{
 	}
@@ -339,6 +342,11 @@ class categorie
 				$cat->commit();
 			}
 			
+			if (isset($this->commit_parent_cat))
+			{
+				$this->commit_parent_cat->commit();
+			}
+			
 			return OP_SUCCESSFUL;
 
 			
@@ -538,6 +546,31 @@ class categorie
 		
 		
 	}
+	
+	function inc_child_comments_amount()
+	{
+		global $config_vars;
+		$this->child_comments_amount++;
+		if ($this->get_id() != $config_vars['root_categorie'])
+		{
+			$this->commit_parent_cat = new categorie();
+			$this->commit_parent_cat->generate_from_id($this->get_parent_id());
+			$this->commit_parent_cat->inc_child_comments_amount();
+		}
+	}
+	
+	function dec_child_comments_amount()
+	{
+		global $config_vars;
+		$this->child_comments_amount--;
+		if ($this->get_id() != $config_vars['root_categorie'])
+		{
+			$this->commit_parent_cat = new categorie();
+			$this->commit_parent_cat->generate_from_id($this->get_parent_id());
+			$this->commit_parent_cat->dec_child_comments_amount();
+		}
+	}
+	
 	
 	
 	function get_child_comments_amount()
