@@ -1,6 +1,7 @@
 <?php
 include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 include_once(ROOT_PATH . 'classes/categorie.inc.php');
+include_once(ROOT_PATH . 'classes/group.inc.php');
 include_once(ROOT_PATH . 'includes/functions.inc.php');
 include_once(ROOT_PATH . 'modules/statistics.inc.php');
 
@@ -41,6 +42,142 @@ class album_content
 	var $thumbfile;
 	var $add_to_group;
 	var $remove_from_group;
+	
+	
+	
+	function get_editable_values($cat_id)
+	{
+		global $userdata;
+		
+		
+		// Check if user has the right to remove the content from the contentgroup
+		$thumb_infos['allow_remove_from_group'] = $this->check_perm('remove_from_group');
+
+		
+		// get current contentgroup
+		$c_group = new contentgroup();
+		$c_group->generate_from_id($this->get_contentgroup_id());
+		$thumb_infos['contentgroup_name'] = $c_group->get_name();
+		
+		// check if user has edit perm to that content
+		$thumb_infos['allow_edit'] = $this->check_perm('edit');
+			
+		// check if user has delete perm to that content
+		$thumb_infos['allow_delete'] = $this->check_perm('delete');
+		
+		// get place_in_cat
+		$place_in_cat_array = $this->get_place_in_cat();
+		$thumb_infos['place_in_cat'] = $place_in_cat_array[$cat_id];
+		
+		// check if locked
+		if ($this->get_locked())
+		{
+			$thumb_infos['locked'] = 'checked';
+		}
+		
+		return $thumb_infos;
+	}
+	
+	function edit_content($vals,$cat_id)
+	{
+		// name
+		if ($this->set_name($vals['name']) != OP_SUCCESSFUL)
+		{
+			die('Konnte Name '.$vals['name'].' von '.$vals['content_id'].' nicht setzen ('.$i);
+		}
+  
+		// place_in_cat
+		if ($this->set_place_in_cat($cat_id,$vals['place_in_cat']) != OP_SUCCESSFUL)
+		{
+			die('Konnte Place in cat '.$vals['place_in_cat'].' von '.$this->get_id().' nicht setzen');
+		}
+
+		// lock
+
+		if ($vals['lock'] == 'on')
+		{
+			if ($this->lock() != OP_SUCCESSFUL)
+			{
+				die('Konnte '.$vals['name'].' nicht locken');
+			}	
+		}
+		else
+		{
+			$this->unlock();
+		}
+
+		//rotate
+		if ($vals['rotate_mode'] == 'free')
+		{
+			if (intval($vals['rotate'])!=0) 
+			{
+				$this->rotate($vals['rotate']);
+			}
+		}
+		else
+		{
+			
+			$this->rotate($vals['rotate_mode']);
+		}
+		
+		// check unlink
+		if ($vals['unlink'] == 'on')
+		{
+			if ($this->remove_from_cat($cat_id) != OP_SUCCESSFUL)
+			{
+				die ('Konnte '.$vals['name'].' nicht von der cat entfernen');
+			}
+			$redirect_to_cat=true;
+		}				
+		
+
+		// check link
+		if ($vals['link'] == 'on')
+		{
+			if ($this->add_to_cat($vals['to_cat']) != OP_SUCCESSFUL)
+			{
+				die ('Konnte '.$vals['name'].' nicht linken');
+			}
+		}
+		
+		// check if you have content remove rights
+		if ($vals['move'] == 'on')
+		{
+			if ($this->add_to_cat($vals['to_cat']) != OP_SUCCESSFUL)
+			{
+				die ('Konnte '.$vals['name'].' nicht moven (add)');
+			}
+			if ($this->remove_from_cat($cat_id) != OP_SUCCESSFUL)
+			{
+				die ('Konnte '.$vals['name'].' nicht moven (remove)');
+			}
+			$redirect_to_cat=true;
+		}
+		
+		// check change group
+		if ($vals['change_group'] == 'on')
+		{
+			if ($this->set_contentgroup_id($vals['to_contentgroup']) != OP_SUCCESSFUL)
+			{
+				die ("konnte die Contentgruppe von {$vals['name']} nicht ändern");
+			}
+		}
+
+		$this->commit();
+		// check delete
+		
+		
+		if ($vals['delete'] == 'on')
+		{
+			if ($this->delete() != OP_SUCCESSFUL)
+			{
+				die('Konnte '.$vals['name'].' nicht löschen');
+			}	
+			$redirect_to_cat=true;
+		}
+		
+		return $redirect_to_cat;
+	}
 	
 	
 	function check_perm($perm)
