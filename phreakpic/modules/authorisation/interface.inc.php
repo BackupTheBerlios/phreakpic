@@ -113,12 +113,13 @@ function get_allowed_catgroups_where($user_id,$action)
 
 	while ($row = $db->sql_fetchrow($result))
 	{
-		$allowed_catgroups[]=$row['contentgroup_id'];
+		$allowed_catgroups[]=$row['catgroup_id'];
 		
 	}
 
 	return generate_where('catgroup_id',$allowed_catgroups);	
 }
+
 
 
 
