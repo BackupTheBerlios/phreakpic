@@ -467,41 +467,22 @@ function imageSize(size)
 	{
 		if ((window.innerWidth-document.getElementsByName('image')[0].width)>(window.innerHeight-document.getElementsByName('image')[0].height))
 		{
-			if (document.getElementsByName('image')[0].height<(window.innerHeight))
-			{
-				ratio=(window.innerHeight)/document.getElementsByName('image')[0].height;
-				document.getElementsByName('image')[0].height=(window.innerHeight);
-				document.getElementsByName('height_table')[0].height=(window.innerHeight);
-				document.getElementsByName('height_table')[1].height=(window.innerHeight);
-				document.getElementsByName('image')[0].width=document.getElementsByName('image')[0].width*ratio;
-			}
-			else
-			{
-				ratio=(window.innerWidth)/document.getElementsByName('image')[0].width;
-				document.getElementsByName('image')[0].width=(window.innerWidth);
-				document.getElementsByName('image')[0].height=document.getElementsByName('image')[0].height*ratio;
-				document.getElementsByName('height_table')[0].height=document.getElementsByName('image')[0].height*ratio;
-				document.getElementsByName('height_table')[1].height=document.getElementsByName('image')[0].height*ratio;
-			}
+			// adjust height
+			ratio=(window.innerHeight)/document.getElementsByName('image')[0].height;
+			document.getElementsByName('image')[0].height=(window.innerHeight);
+			document.getElementsByName('height_table')[0].height=(window.innerHeight);
+			document.getElementsByName('height_table')[1].height=(window.innerHeight);
+			document.getElementsByName('image')[0].width=document.getElementsByName('image')[0].width*ratio;
+			
 		}
 		else
 		{
-			if (document.getElementsByName('image')[0].width<(window.innerWidth))
-			{
-				ratio=(window.innerWidth)/document.getElementsByName('image')[0].width;
-				document.getElementsByName('image')[0].width=(window.innerWidth);
-				document.getElementsByName('image')[0].height=document.getElementsByName('image')[0].height*ratio;
-				document.getElementsByName('height_table')[0].height=document.getElementsByName('image')[0].height*ratio;
-				document.getElementsByName('height_table')[1].height=document.getElementsByName('image')[0].height*ratio;
-			}
-			else
-			{
-				ratio=(window.innerHeight)/document.getElementsByName('image')[0].height;
-				document.getElementsByName('image')[0].height=(window.innerHeight);
-				document.getElementsByName('image')[0].width=document.getElementsByName('image')[0].width*ratio;
-				document.getElementsByName('height_table')[0].Height=(window.innerHeight);
-				document.getElementsByName('height_table')[1].Height=(window.innerHeight);
-			}
+			// adjust breit 
+			ratio=(window.innerWidth)/document.getElementsByName('image')[0].width;
+			document.getElementsByName('image')[0].width=(window.innerWidth);
+			document.getElementsByName('image')[0].height=document.getElementsByName('image')[0].height*ratio;
+			document.getElementsByName('height_table')[0].height=document.getElementsByName('image')[0].height*ratio;
+			document.getElementsByName('height_table')[1].height=document.getElementsByName('image')[0].height*ratio;
 		}
 	}		
 }
