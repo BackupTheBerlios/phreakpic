@@ -41,7 +41,7 @@ function get_cats_of_cat($parent_id)
 
 }
 
-function get_content_of_cat($cat_id)
+function get_content_of_cat($cat_id,$start=-1,$anzahl=0)
 {
 	// Returns an Array of album_content objects of all content which is in the categorie with id $cat_id
 	global $db,$config_vars,$userdata,$filetypes;
@@ -56,7 +56,10 @@ function get_content_of_cat($cat_id)
 	$auth_where = get_allowed_contentgroups_where($userdata['user_id'], "view",'content.contentgroup_id');
 	
 
-	
+	if ($anzahl!=0)	
+	{
+		$limit="LIMIT $start, $anzahl";
+	}
 	// get all content
 	
 	$sql = 	'SELECT content.*,content_in_cat.place_in_cat 
@@ -65,7 +68,8 @@ function get_content_of_cat($cat_id)
 		WHERE	($auth_where) and 
 			(content.id = content_in_cat.content_id) and 
 			(content_in_cat.cat_id = $cat_id)
-		ORDER BY content_in_cat.place_in_cat";
+		ORDER BY content_in_cat.place_in_cat $limit";
+		
 		
 		
 	if (!$result = $db->sql_query($sql))
