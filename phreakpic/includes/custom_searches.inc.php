@@ -17,6 +17,13 @@ class custom_sql
 			}
 			if ($value->type == XML_ELEMENT_NODE)
 			{	
+				if ($value->tagname=='subsql')
+				{
+					$f=new sql_subsql();
+					$f->create_from_xml($value);
+					$this->entities[]=$f;
+				
+				}
 				if ($value->tagname=='field')
 				{
 					$f=new sql_field();
@@ -36,30 +43,56 @@ class custom_sql
 	
 	}
 }
-class sql_field
+
+class sql_subsql
 {
 	var $name;
-	var $type;
-	var $value;
-	var $descr;
-	
+	var $sql;
 	function get_vars($element,$var)
 	{
-		
 		$xml=$element->get_elements_by_tagname($var);
+		
 		if (isset($xml[0]))
 		{
 			$content=$xml[0]->children();
 			$this->$var=$content[0]->content;
-			
+		}
+	}
+	
+	function create_from_xml($element)
+	{
+		$child=$element->children();
+		$this->sql = $child[0]->content;
+		$this->name=$element->get_attribute('name');
+	}
+}
+class sql_field
+{
+	var $name;
+	var $type;
+	var $displayed;
+	var $value;
+	var $descr;
+	var $subsql;
+	
+	function get_vars($element,$var)
+	{
+		$xml=$element->get_elements_by_tagname($var);
+		
+		if (isset($xml[0]))
+		{
+			$content=$xml[0]->children();
+			$this->$var=$content[0]->content;
 		}
 	}
 	
 	function create_from_xml($element)
 	{
 		$this->get_vars($element,'type');
+		$this->get_vars($element,'displayed');
 		$this->get_vars($element,'value');
 		$this->get_vars($element,'descr');
+		$this->get_vars($element,'subsql');
 		$this->name=$element->get_attribute('name');
 	}
 }
@@ -100,7 +133,6 @@ function parse_xml($xml)
 
 
 	$query_sql=new custom_sql;
-
 	$query_sql->create_from_xml($root);
 	return $query_sql;
 }
@@ -156,14 +188,52 @@ function make_sql($returns)
 		
 }
 
-function field_param($value)
+function field_param($value,$tree)
 {
-	global $x,$y,$fields,$loops,$HTTP_SESSION_VARS,$HTTP_POST_VARS;
+	global $x,$y,$fields,$loops,$HTTP_SESSION_VARS,$HTTP_POST_VARS,$db;
 	
 	$field['name']=$value->name;
 	$field['type']=$value->type;
-	$field['descr']=$value->descr;
-	$field['value']=generate_values($value->value);
+	if (!isset($value->subsql))
+	{
+		$field['descr']=$value->descr;
+		if (isset($value->displayed))
+		{
+			$field['displayed']=generate_values($value->displayed);
+		}
+		else
+		{
+			$field['displayed']=generate_values($value->value);
+		}
+		$field['value']=generate_values($value->value);
+	}
+	else
+	{
+		foreach	($tree->entities as $entitie)
+		{
+			
+			if (get_class($entitie) == 'sql_subsql')
+			{
+				if ($entitie->name == $value->subsql)
+				{
+					$sql = $entitie->sql;
+					if (!$result = $db->sql_query($sql))
+					{
+						message_die(GENERAL_ERROR, "Error in subsql", '', __LINE__, __FILE__, $sql);
+					}
+					
+					while ($row = $db->sql_fetchrow($result))
+					{
+						
+						$field['value'][]=$row[0];
+						$field['displayed'][]=$row[1];
+					}
+
+					
+				}
+			}
+		}
+	}
 		
 	$field['loop']=$loops;
 	for ($x=0;$x<=$HTTP_SESSION_VARS['lines'][$field['loop']];$x++)
