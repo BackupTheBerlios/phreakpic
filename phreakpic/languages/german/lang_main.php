@@ -38,4 +38,12 @@ $lang['views'] = 'Views';
 $lang['edit_content'] = 'Editier dieses Bild';
 
 //view_cat.tpl
+
+
+//admin/auths.php
+$lang['usergroups'] = 'Benutzergruppen';
+$lang['perms'] = 'Rechte';
+$lang['contentgroups'] = 'Content Gruppen';
+$lang['catgroups'] = 'Kategorie Gruppen';
+
 ?>
