@@ -27,13 +27,19 @@ table_cols = <!--{$table_cols|default:0}-->
 		
 </script>
 
+	<!--{if $basket_enable}-->
+		Objects in Basket: <span id="basket_content_amount">0</span>
+		<a href="basket.php?<!--{$sid}-->"><!--{$lang.basket}--></a>
+		<a href="<!--{$thumb_link}-->&mode=download<!--{$sid}-->">Download</a>
+		
+		
+		<br>
+	<!--{/if}-->
+
+
 
 <!--{if $is_content == true}-->
 
-	<!--{if $basket_enable}-->
-		Objects in Basket: <span id="basket_content_amount">0</span>
-		<a href="<!--{$thumb_link}-->&mode=download<!--{$sid}-->">Download</a>
-	<!--{/if}-->
 
 
 	<!--{if $mode == edit}-->
