@@ -17,6 +17,17 @@ class categorie
 	}
 	
 	
+	function set_is_serie($new_val)
+	{
+		$this->is_serie=$new_val;
+		return OP_SUCCESSFUL;
+	}
+	
+	function get_is_serie()
+	{
+		return $this->is_serie;
+	}
+	
 	function get_parent_cat_array()
 	{
 		global $config_vars;
@@ -68,6 +79,11 @@ class categorie
 	function generate_from_id($id)
 	{
 		global $db,$config_vars;
+		
+		if (!isset($id))
+		{
+			return OP_FAILED;
+		}
 		// Füllt das Objekt mit den daten der Categorie mit id == $id aus der Datenbank
 		$sql = 'select * from ' . $config_vars['table_prefix'] . "cats where id like $id";
 		if (!$result = $db->sql_query($sql))
