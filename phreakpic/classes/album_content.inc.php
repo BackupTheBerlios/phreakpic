@@ -1,6 +1,7 @@
 <?php
 include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 include_once(ROOT_PATH . 'classes/categorie.inc.php');
+include_once(ROOT_PATH . 'classes/base.inc.php');
 include_once(ROOT_PATH . 'classes/group.inc.php');
 include_once(ROOT_PATH . 'includes/functions.inc.php');
 include_once(ROOT_PATH . 'modules/statistics.inc.php');
@@ -22,7 +23,7 @@ $filetypes = Array (
 	'mpg' => 'movie');
 
 
-class album_content
+class album_content extends phreakpic_base
 {
 	var $id;
 	var $file;
@@ -677,29 +678,7 @@ class album_content
 	}
 	
 	
-	function generate_from_row($row)
-	{
-		if (is_array($row))
-		{
-			// fill the var of the object with the data from the database (the field names of the database are the same than the var names)
-			foreach ($row as $key => $value)
-			{
-				// filter out all keys which are not strings, because the array containt both assoziativ and numbers
-				if (is_string($key))
-				{
-					$this->$key = $value;
-				}
-				
-				
-				$this->thumbfile=$this->get_thumbfile();
-			}
-			return OP_SUCCESSFUL;
-		}
-		else
-		{
-			return OP_FAILED;
-		}
-	}
+	
 	
 	
 	function generate_from_id($id)
