@@ -73,15 +73,15 @@ function new_categorie($parent_id,$name)
 	if (DB::isError($result)) 
 	{
 		echo ("ERROR");
-		message_die("", $result->getMessage(), '', __LINE__, __FILE__,$sql);
+		message_die("","During creation of a Categorie ","Something went wrong<br> ",  $result->getMessage(), '', __LINE__, __FILE__);
 	}
 	
-	$result->free();	
 }
 
 function new_serie($cat_id,$name,$pictures)
 {
 // Creates a serie in the Categorie with the id $cat_id, namde $name with the pictures in the array $pictures in the same order as they are in the array
+
 }
 
 
