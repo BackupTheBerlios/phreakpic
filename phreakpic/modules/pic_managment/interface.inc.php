@@ -45,7 +45,7 @@ function get_content_of_cat($cat_id)
 	
 	$sql = "SELECT content_id FROM " . $config_vars['table_prefix'] . "content_in_cat WHERE cat_id = '$cat_id' ORDER BY place_in_cat";
 
-	if (!$result = $db->query($sql))
+	if (!$result = $db->sql_query($sql))
 	{
 		message_die(GENERAL_ERROR, "Couldnt get content in cat", '', __LINE__, __FILE__, $sql);
 	}
@@ -66,7 +66,7 @@ function get_content_of_cat($cat_id)
 	$sql = 	'SELECT * FROM ' .  $config_vars['table_prefix'] . "content 
 		WHERE ($content_where) and ($auth_where)";
 	
-	if (!$result = $db->query($sql))
+	if (!$result = $db->sql_query($sql))
 	{
 		message_die(GENERAL_ERROR, "Couldnt get data of the of the content in the cat", '', __LINE__, __FILE__, $sql);
 	}
@@ -155,41 +155,48 @@ function get_content_object_from_id($id)
 function add_dir_to_cat($dir,$cat_id, $name_mode = GENERATE_NAMES)
 {
 	// Adds all pictures in the Directory $dir into the Categorie with the id $cat_id. If wanted it makes the names of the pics from the filenames
-	global $db;
-	global $config_vars;
+	global $db,$config_vars,$filetypes;
 
+	
 	$dir_handle=opendir($dir);
+	
 
 	//HIER NOCH CHECKEN WAS PASSIERT wenn $dir kein gültiges Verzeiczhnis ist
 
 
 	while ($file = readdir ($dir_handle))
 	{
-		if (($file != "." && $file != "..") and (isset($filetypes[$file]) )) // WELCHE DATEIENDUNGEN werden benutzt? Soll es einstellbar sein? Wenn ja, wo?
+		
+		if (($file != "." && $file != "..") and (isset($filetypes[getext($file)]) )) // WELCHE DATEIENDUNGEN werden benutzt? Soll es einstellbar sein? Wenn ja, wo?
 		{
 			$unsorted_files[] = $file;
+			
 		}
 	}
-
-
+	
+	
 	for ($i = 0; $i < sizeof($unsorted_files); $i++)
 	{
-		$dir_and_file = $dir . $file;
+		$dir_and_file = $dir . '/' . $unsorted_files[$i];
+		
+		
 		
 		// generate a new album_content obj
 		
-		$content = new $$filetyped[$file];
+		$content = new $filetypes[getext($unsorted_files[$i])];
 
 		//if the name of the picture should be the filename, get it and cutoff the dateiendung
 		if ($name_mode == GENERATE_NAMES)
 		{
 			$exploded_file = explode('.', $file);
 			$content->set_name($exploded_file);
+			
 		}
 		else
 		{
 			$name = '';
 		}
+		
 		
 		$content->add_to_cat($cat_id);
 		$content->set_file($dir_and_file);
