@@ -2,15 +2,18 @@
 
 //Template System
 //absolute path to smarty
-define("SMARTY_DIR","/home/httpd/htdocs/smarty/");
+define("SMARTY_DIR","/usr/local/httpd/htdocs/smarty/");
 
-//relative path to phpBB2 (if the URL is "http://www.blabla.com/com/phpBB2/" then PHPBB_DIR will be "/com/phpBB2/")
+//relative path from phreakpic to phpBB2 (if the URL is "http://www.blabla.com/com/phpBB2/" and phreakpic is at "http://www.blabla.com/com/phreakpic/" then PHPBB_DIR will be "../phpBB2/")
 //Don't forget the / at end!
-define("PHPBB_PATH","/phpBB2/");
+define("PHPBB_PATH","../phpBB2/");
+
+//relative path from phpBB2 to phreakpic see above
+define("PHREAKPIC_PATH","../phreakpic/");
 
 
-//
-define("SERVER_NAME","http://www.blabla.com");
+
+define("SERVER_NAME","http://192.168.101.2");
 
 
 $config_vars = array
