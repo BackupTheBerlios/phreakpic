@@ -510,7 +510,22 @@ function add_content($POST_FILES,$name,$cat_id,$place_in_cat,$content_group)
 
 }
 
-
+function array_minus_array($a,$b) 
+{ 
+	$c = Array();
+	foreach ($a as $key => $val) 
+	{ 
+		$posb = array_search($val,$b);
+		if (is_integer($posb)) 
+		{
+			unset($b[$posb]); 
+		} else 
+		{
+			$c[] = $val;
+		}
+	}
+	return $c;
+}
 
 
 
