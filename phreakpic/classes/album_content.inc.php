@@ -1,8 +1,8 @@
 <?php
-require_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
-require_once(ROOT_PATH . 'classes/categorie.inc.php');
-require_once(ROOT_PATH . 'includes/functions.inc.php');
-require_once(ROOT_PATH . 'modules/statistics.inc.php');
+include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
+include_once(ROOT_PATH . 'classes/categorie.inc.php');
+include_once(ROOT_PATH . 'includes/functions.inc.php');
+include_once(ROOT_PATH . 'modules/statistics.inc.php');
 
 
 // Holds information about which object to user with which file ending:
@@ -312,6 +312,7 @@ class album_content
 			makedir(dirname($new_file));
 		}
 		
+		//echo "rename({$this->file},$new_file)<br>";
 		if (rename($this->file,$new_file));
 		{
 			$this->set_file($new_file); 
@@ -326,12 +327,16 @@ class album_content
 		
 		
 		//echo "rename thumb" .$this->thumbfile." -> ".$this->get_thumbfile()."<br>";
+		// but first check if thumb exists
 		
-		if (rename($this->thumbfile,$this->get_thumbfile()));
+		//echo "rename({$this->thumbfile},".$this->get_thumbfile().")<br>";
+		if (is_file($this->thumbfile))
 		{
-			$this->thumbfile = $this->get_thumbfile();
+			if (rename($this->thumbfile,$this->get_thumbfile()));
+			{
+				$this->thumbfile = $this->get_thumbfile();
+			}
 		}
-		
 		
 		
 		
