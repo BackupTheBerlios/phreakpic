@@ -1,10 +1,18 @@
 <!--{include file="$template_name/header.tpl"}-->
+<script src="templates/<!--{$template_name}-->/functions.js" type="text/javascript" language="javascript">
+</script>
+<script type="text/javascript" language="javascript">
+	document.onkeypress = getkey_content;
+	var keyactive = true;
+</script>
+
+
 <div align="center">
 	<table width="95%" border="0" cellspacing="0" cellpadding="5">
 		<tr> 
 			<td height="45">
 				<!--{if $is_prev_content eq "true"}-->
-					<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$prev_thumb.content_id}--><!--{$sid}-->">
+					<a name="next_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$prev_thumb.content_id}--><!--{$sid}-->">
 						<!--{$prev_thumb.html}-->
 					</a><br>
 					<!--{$lang.nav_back}-->
@@ -17,7 +25,7 @@
 			<td height="45"> 
 				<div align="right">
 					<!--{if $is_next_content eq "true"}-->
-						<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$next_thumb.content_id}--><!--{$sid}-->">
+						<a name="prev_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$next_thumb.content_id}--><!--{$sid}-->">
 							<!--{$next_thumb.html}-->
 						</a><br>
 						<!--{$lang.nav_next}-->
@@ -75,7 +83,7 @@
 										</tr>
 									</table>
 								</td>
-								<td colspan="3"><a href="<!--{$thumb_link}--><!--{$sid}-->#<!--{$content_id}-->" class="content"><!--{$html}--> border="0"></a></td>
+								<td colspan="3"><a name="thumbs_link" href="<!--{$thumb_link}--><!--{$sid}-->#<!--{$content_id}-->" class="content"><!--{$html}--> border="0"></a></td>
 								<td>
 									<table width="9" height="<!--{$content_height}-->" border="0" cellpadding="0" cellspacing="0">
 										<tr>
@@ -109,8 +117,8 @@
 action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->" method="POST">
 					
 					<!--{if $edit_info.allow_edit == true}-->
-						<!--{$lang.name}-->: <input type="text" name="name" value="<!--{$name}-->"><br>
-						<!--{$lang.place_in_cat}-->: <input type="text" name="place_in_cat" value="<!--{$edit_info.place_in_cat}-->"><br> 
+						<!--{$lang.name}-->: <input type="text" onfocus="keyoff()" onblur="keyon()" name="name" value="<!--{$name}-->"><br>
+						<!--{$lang.place_in_cat}-->: <input type="text" onfocus="keyoff()" onblur="keyon()" name="place_in_cat" value="<!--{$edit_info.place_in_cat}-->"><br> 
 						<!--{$lang.lock}-->: <input type="checkbox" name="lock" <!--{$edit_info.locked}-->><br>
 						<!--{$lang.rotate}-->: 
 						<!--{$lang.rotate_free}-->: <input type="radio" name="rotate_mode" value="free" checked><input type="text" name="rotate"><br> 

@@ -1,10 +1,18 @@
 <!--{include file="$template_name/header.tpl"}-->
-<a href="index.php?&first_content=0<!--{$sid}-->"><!--{$lang.home}--></a> --
+<script type="text/javascript" language="javascript">
+	var cat_amount=<!--{$number_of_child_cats}-->
+	var cat_sel=0;
+</script>
+
+<a name="nav_link" href="index.php?first_content=0<!--{$sid}-->"><!--{$lang.home}--></a> --
 <!--{section name=id loop=$nav_string}-->
 	<!--{if $smarty.section.id.last}-->
 		<!--{$nav_string[id].name}-->
+		<script type="text/javascript" language="javascript">
+			catback=<!--{$smarty.section.id.index}-->
+		</script>
 	<!--{else}-->
-		<a href="view_cat.php?cat_id=<!--{$nav_string[id].id}-->&first_content=0<!--{$sid}-->">
+		<a name="nav_link" href="view_cat.php?cat_id=<!--{$nav_string[id].id}-->&first_content=0<!--{$sid}-->">
 		<!--{$nav_string[id].name}--></a> --
 	<!--{/if}-->
 <!--{/section}-->
@@ -20,9 +28,9 @@
 		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="delete_cat">
 		<!--{section name=id loop=$number_of_child_cats}-->
 			<tr>
-				<td><a href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->&first_content=0<!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
+				<td name="td_cat"><a name="cat_link" href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->&first_content=0<!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
 				<td><!--{$child_cat_infos[id].description}--></td>
-				<td><!--{$child_cat_infos[id].content_amount}--></td>
+				<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
 				<td><!--{$child_cat_infos[id].current_rating}--></td>
 				<!--{if ($allow_cat_remove == 'true') and ($mode == 'edit')}-->	
 					<td><input name="cat_delete" type="submit" id="<!--{$child_cat_infos[id].id}-->" value="<!--{$child_cat_infos[id].id}-->"></td>
@@ -42,7 +50,7 @@
 <!--{if  ($allow_cat_add == true) and ($mode == edit)}-->
 	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content">
 	<!--{$lang.add_new_cat}-->
-	<!--{$lang.name}-->: <input name="cat_name" type="text" size="20">
+	<!--{$lang.name}-->: <input name="cat_name" type="text" onfocus="keyoff()" onblur="keyon()" size="20">
 	<!--{$lang.catgroup}-->: 
 	<select name="add_to_catgroup">
 		<!--{section name=id loop=$add_to_catgroups}-->
@@ -50,7 +58,7 @@
 		<!--{/section}-->
 	</select>
 	<!--{$lang.is_serie}-->: <input name="cat_is_serie" type="checkbox"><br>
-	<!--{$lang.description}-->: <textarea name="cat_describtion" cols="70" rows="5"></textarea>
+	<!--{$lang.description}-->: <textarea name="cat_describtion" onfocus="keyoff()" onblur="keyon()" cols="70" rows="5"></textarea>
 	<input name="newcat" type="submit" id="submit" value="<!--{$lang.create}-->"><br>
 	</from>
 <!--{/if}-->
@@ -59,7 +67,6 @@
 
 
 <!--{include file="$template_name/view_thumbs.tpl"}-->
-
 
 <br>
 

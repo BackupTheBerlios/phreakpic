@@ -1,7 +1,7 @@
 <html>
 <!--{config_load file="$template_name/config.cfg"}-->
 <head>
-	<title><!--{$title}--></title>
+	<title><!--{$title_site}--> :: <!--{$title_page}--> - <!--{$title_name"}--></title>
 	<link rel="stylesheet" href="templates/<!--{$template_name}-->/design.css" type="text/css" />
 </head>
 <body bgcolor="<!--{#body_bg_color#}-->" text="<!--{#text_color#}-->" link="<!--{#link_color#}-->" vlink="<!--{#vlink_color#}-->" alink="<!--{#alink_color#}-->" leftmargin="5" topmargin="5" marginwidth="5" marginheight="5">
@@ -14,7 +14,6 @@
 							::
 							<a href="<!--{$phpbb_path}-->index.php?<!--{$sid}-->"><!--{$lang.forum}--></a> ::
 							<a href="<!--{$server_name}-->?<!--{$sid}-->"><!--{$lang.website_home}--></a> ::
-							<!--{$user_id}-->
 							<!--{if $user_id != -1}-->
 								<a href="<!--{$phpbb_path}-->login.php?logout=true<!--{$sid}-->"><!--{$lang.logout}--> [<!--{$username}-->]</a>
 							<!--{else}-->
