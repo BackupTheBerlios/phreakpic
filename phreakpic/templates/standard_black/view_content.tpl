@@ -58,7 +58,7 @@
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td>fehlt: Poll</td>
+			<td></td>
 			<td>
 				<div align="center">
 			<!--{$lang.full_size}--> <input type="radio" name="size" checked onclick="imageSize(0)"> <!--{$lang.fit_size}--> <input type="radio" name="size" onclick="imageSize(1)">
