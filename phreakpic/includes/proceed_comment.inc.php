@@ -3,7 +3,8 @@
 $class=$comment_type."_comment";
 $id=$comment_type."_id";
 
-if ($HTTP_GET_VARS['mode'] == 'edit_comments')
+
+if ($HTTP_POST_VARS['mode'] == 'edit_comments')
 {
 	$comment_edit=true;
 	$smarty->assign('mode','edit_comments');
@@ -16,7 +17,7 @@ else
 
 
 // Comments
-if ($mode == "add")
+if ($HTTP_POST_VARS['mode'] == "add")
 {
 	// add a new comment
 	$comment = new $class;
@@ -29,7 +30,7 @@ if ($mode == "add")
 	$comment->commit();
 }
 
-if ($mode == 'edit_comment')
+if ($HTTP_POST_VARS['mode'] == 'edit_comment')
 {
 	$comment = new $class;
 	$error = $comment->generate_from_id($HTTP_POST_VARS['parent_id']);
@@ -45,8 +46,10 @@ if ($mode == 'edit_comment')
 	}
 }
 
-if ($mode == 'del_comment')
-{
+
+if ($HTTP_GET_VARS['mode'] == 'del_comment')
+{	
+
 	$comment = new $class;
 	$error = $comment->generate_from_id($comment_id);
 	if ($error == OP_SUCCESSFUL)
