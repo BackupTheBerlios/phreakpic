@@ -993,7 +993,7 @@ class picture extends album_content
 	function get_html()
 	{
 		album_content::get_html();
-		return "<img src=".linkencode($this->get_file()).">";
+		return "<img src=".linkencode($this->get_file());
 	}
 
 	function get_thumb()
@@ -1100,7 +1100,7 @@ class movie extends album_content
 	function get_html()
 	{
 		album_content::get_html();
-		return "<embed src=".linkencode($this->get_file())."></embed>";
+		return "<embed src=".linkencode($this->get_file())."></embed";
 	}
 
 	function get_thumb()
