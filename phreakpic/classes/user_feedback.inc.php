@@ -218,6 +218,12 @@ class content_comment extends comment
 	
 }
 
+class cat_comment extends comment
+{
+	
+	
+}
 
 
-?> 
+
+?>
