@@ -10,6 +10,7 @@ class categorie
 	var $current_rating;
 	var $is_serie;
 	var $content_amount;
+	var $description;
 	
 	function categorie()
 	{
@@ -126,8 +127,8 @@ class categorie
 		if (!isset($this->id))
 		{
 			// this is object is not yet in the datebase, make a new entry
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id,is_serie,content_amount)
-				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$this->is_serie', '$this->content_amount')";
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . "cats (name, current_rating, parent_id, catgroup_id,is_serie,content_amount,description)
+				VALUES ('$this->name', '$this->current_rating', '$this->parent_id', '$this->catgroup_id', '$this->is_serie', '$this->content_amount', '$this->description')";
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
@@ -148,7 +149,8 @@ class categorie
 					parent_id = '$this->parent_id', 
 					catgroup_id = '$this->catgroup_id'
 					is_serie = '$this->is_serie'
-					content_amount = '$this->content_am'
+					content_amount = '$this->content_amount'
+					description = '$this->description'					
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
@@ -185,6 +187,26 @@ class categorie
 			return OP_NP_MISSING_EDIT;	
 		}
 	}
+	
+	function get_description()
+	{
+		return $this->description;
+	}
+	
+	function set_description($new_description)
+	{	
+		global $userdata;
+		if (($this->id == 0) or check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'edit'))
+		{
+			$this->description=$new_description;
+			return OP_SUCCESSFUL;
+		}
+		else
+		{
+			return OP_NP_MISSING_EDIT;	
+		}
+	}
+
 	
 	function get_catgroup_id()
 	{
@@ -250,6 +272,17 @@ class categorie
 	function set_current_rating($new_current_rating)
 	{
 		$this->current_rating = $new_current_rating;
+		return OP_SUCCESSFUL;
+	}
+
+	function get_content_amount()
+	{
+		return $this->content_amount;
+	}
+	
+	function set_content_amount($new_content_amount)
+	{
+		$this->content_amount = $new_content_amount;
 		return OP_SUCCESSFUL;
 	}
 
