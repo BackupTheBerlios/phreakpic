@@ -7,12 +7,18 @@
 <script type="text/javascript" language="javascript">
 document.onkeypress = getkey_default;
 var keyactive = true;
+<!--{if $is_error}-->
+error_window = window.open("error_report.php","aerror_window");
+	//error_window.focus();
+
+	//error_window.close();
+<!--{/if}-->
 </script>
 
 <!--{$meta}-->
-	
 
-	<title><!--{$title_site}--> :: <!--{$title_page}--> - <!--{$title_name"}--></title>
+
+	<title><!--{$title_site}--> :: <!--{$title_page}--> - <!--{$title_name}--></title>
 	<link rel="stylesheet" href="templates/<!--{$template_name}-->/design.css" type="text/css" />
 </head>
 
@@ -20,7 +26,6 @@ var keyactive = true;
 	<table border="0" cellpadding="10" cellspacing="0" bordercolor="#999999" width="100%" bgcolor="<!--{#body_table_bg_color#}-->" align="center">
 		<tr>
 			<td>
-			<!--{$lang.total_content}-->: <!--{$total_content}--> <!--{#navbar_seperator#}--> <!--{$lang.total_comments}-->: <!--{$total_comments}-->
 				<table border="1" align="right" cellspacing="0" cellpadding="10">
 					<tr>
 						<td>
