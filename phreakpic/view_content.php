@@ -134,10 +134,17 @@ for ($i = 0; $i < sizeof($root_comments); $i++)
 {
 	make_comments($root_comments[$i],0,$content->check_perm('comment_edit'));
 }
+
+
+
+
+
 $smarty->assign('comments',$comments);
+
 
 // show content
 $smarty->assign('nav_string', build_nav_string($cat_id));
+$content->inc_views();
 $smarty->assign('html', $content->get_html());
 $smarty->assign('name', $content->get_name());
 $smarty->assign('content_id', $content->get_id());
