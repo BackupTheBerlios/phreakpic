@@ -1,8 +1,15 @@
 <!--{config_load file="$template_name/config.cfg"}-->
-<form action="<!--{$thumb_link}--><!--{$sid}-->" method="post" name="edit_comments">
+
+
+<!--{if $mode == 'edit_comments'}-->
+	to:<br>
+	<input type="radio" name="comment_to" value="0">
+	<form action="<!--{$current_page}--><!--{$sid}-->" method="post" name="edit_comments">
+<!--{/if}-->
+
+
+
 <!--{section name=index loop=$comments}-->
-
-
 <!--{if $comments[index].level == 0}-->
 <table border="0" cellpadding="0" cellspacing="0" id="comment_thread_table">
 	<tr>
@@ -12,6 +19,7 @@
 	<tr>
 		<td>
 			<!--{if $mode == 'edit_comments'}-->
+			to:<br>
 				<input type="radio" name="comment_to" value="<!--{$comments[index].id}-->">
 			<!--{/if}-->
 			<!--{section name=level loop=$comments[index].level}-->
@@ -51,10 +59,13 @@
 					<div class="comment_text"><!--{$comments[index].text}--></div> <br>
 										
 					<!--{if $hide_controlles == false}-->
-						<!--{if $mode == 'edit_comments'}-->
-							<input type="checkbox" name="comment_move[]" value="<!--{$comments[index].id}-->" >
-						<!--{/if}-->
+						
 						<a href="comment.php?mode=add&type=<!--{$type}-->&parent_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">Antworten</a>
+						<!--{if $mode == 'edit_comments'}-->
+						<br>
+							<!--{$lang.move}--> <input type="checkbox" name="comment_move[]" value="<!--{$comments[index].id}-->" >
+							
+						<!--{/if}-->
 					<!--{/if}-->
 
 				</td>
@@ -68,6 +79,12 @@
 <br>
 <!--{/if}-->
 <!--{/section}-->
-<input type="submit" name="edit_comments">
-</form>
-<div align="center"><a href="<!--{$current_page}-->&mode=edit_comments<!--{$sid}-->">Edit Comments</a></div>
+<!--{if $mode == 'edit_comments'}-->
+	<input type="submit" name="edit_comments">
+	</form>
+<!--{/if}-->
+
+
+<!--{if $allow_comment_edit == true}-->
+	<div align="center"><a href="<!--{$current_page}-->&mode=edit_comments<!--{$sid}-->">Edit Comments</a></div>
+<!--{/if}-->

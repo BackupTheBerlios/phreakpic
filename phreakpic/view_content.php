@@ -173,6 +173,12 @@ for ($i = 0; $i < sizeof($root_comments); $i++)
 
 $smarty->assign('comments',$comments);
 
+if (check_content_action_allowed($content->get_contentgroup_id(),$userdata['user_id'],'comment_edit'))
+{
+	$smarty->assign('allow_comment_edit',true);
+}
+
+
 
 // show content
 $nav_string = build_nav_string($cat_id);
@@ -203,6 +209,8 @@ $smarty->assign('content_width',$content->width);
 $smarty->assign('title_site',$board_config['sitename']);
 $smarty->assign('title_page',$lang['view_content']);
 $smarty->assign('title_name',$content->get_name());
+
+$smarty->assign('current_page',"view_content.php?cat_id=$cat_id&content_id=$content_id");
 
 //$smarty->assign('id',$id);
 $end_time = getmicrotime();

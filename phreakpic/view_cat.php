@@ -157,6 +157,11 @@ if ($mode == 'edit')
 
 }
 
+if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'comment_edit'))
+{
+	$smarty->assign('allow_comment_edit',true);
+}
+
 // check if user is allowed to add content
 if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'content_add'))
 {
