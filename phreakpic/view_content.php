@@ -43,14 +43,29 @@ if ((!isset($cat_id)) or ($cat_id==''))
 if (isset($HTTP_SESSION_VARS['contents']))
 {
 	$smarty->assign('content_amount',sizeof($HTTP_SESSION_VARS['contents']));
-	for ($i=0;$i<sizeof($HTTP_SESSION_VARS['contents']);$i++)
+	
+	if (isset($HTTP_GET_VARS['place_in_content_array']))
 	{
-		if ($HTTP_SESSION_VARS['contents'][$i]->get_id() == $content_id)
+		$smarty->assign('content_nr',$HTTP_GET_VARS['place_in_content_array']+1);
+		$smarty->assign('next_place_in_content_array',$HTTP_GET_VARS['place_in_content_array']+1);
+		$smarty->assign('prev_place_in_content_array',$HTTP_GET_VARS['place_in_content_array']-1);
+		$surrounding_content['next']=$HTTP_SESSION_VARS['contents'][$HTTP_GET_VARS['place_in_content_array']+1];
+		$surrounding_content['prev']=$HTTP_SESSION_VARS['contents'][$HTTP_GET_VARS['place_in_content_array']-1];
+		
+	}
+	else
+	{
+		for ($i=0;$i<sizeof($HTTP_SESSION_VARS['contents']);$i++)
 		{
-			$smarty->assign('content_nr',$i+1);
-			$surrounding_content['next']=$HTTP_SESSION_VARS['contents'][$i+1];
-			$surrounding_content['prev']=$HTTP_SESSION_VARS['contents'][$i-1];
-			break;
+			if ($HTTP_SESSION_VARS['contents'][$i]->get_id() == $content_id)
+			{
+				$smarty->assign('content_nr',$i+1);
+				$smarty->assign('next_place_in_content_array',$i+1);
+				$smarty->assign('prev_place_in_content_array',$i-1);
+				$surrounding_content['next']=$HTTP_SESSION_VARS['contents'][$i+1];
+				$surrounding_content['prev']=$HTTP_SESSION_VARS['contents'][$i-1];
+				break;
+			}
 		}
 	}
 }

@@ -13,7 +13,7 @@
 		<tr> 
 			<td height="45">
 				<!--{if $is_prev_content eq "true"}-->
-					<a name="next_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$prev_thumb.content_id}--><!--{$sid}-->#pic">
+					<a name="next_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$prev_thumb.content_id}-->&place_in_content_array=<!--{$prev_place_in_content_array}--><!--{$sid}-->#pic">
 						<!--{$prev_thumb.html}-->
 					</a><br>
 					<!--{$lang.nav_back}-->
@@ -30,7 +30,7 @@
 			<td height="45"> 
 				<div align="right">
 					<!--{if $is_next_content eq "true"}-->
-						<a name="prev_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$next_thumb.content_id}--><!--{$sid}-->#pic">
+						<a name="prev_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$next_thumb.content_id}-->&place_in_content_array=<!--{$next_place_in_content_array}--><!--{$sid}-->#pic">
 							<!--{$next_thumb.html}-->
 						</a><br>
 						<!--{$lang.nav_next}-->
