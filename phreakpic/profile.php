@@ -39,6 +39,9 @@ if ($HTTP_SESSION_VARS['basket_enable'])
 	$smarty->assign('basket_enable','checked');
 }
 
+$nav_content['name']=$lang['profile'];
+$nav_string[]=$nav_content;
+$smarty->assign('nav_string',$nav_string);
 
 
 $smarty->display($userdata['photo_user_template'].'/profile.tpl');

@@ -178,6 +178,10 @@ if (($submit) or (!$no_instand_submit))
 	include "includes/view_thumbs.php";
 }
 
+$nav_content['name']=$lang['search'];
+$nav_string[]=$nav_content;
+$smarty->assign('nav_string',$nav_string);
+
 $end_time = getmicrotime();
 $execution_time = $end_time - $start_time;
 $smarty->display($userdata['photo_user_template']."/view_custom_searches.tpl");

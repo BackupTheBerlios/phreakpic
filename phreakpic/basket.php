@@ -18,6 +18,9 @@ for ($i=0;$i<sizeof($content_id_array)-1;$i++)
 
 include "includes/view_thumbs.php";
 
+$nav_content['name']=$lang['basket'];
+$nav_string[]=$nav_content;
+$smarty->assign('nav_string',$nav_string);
 
 
 $smarty->display($userdata['photo_user_template']."/basket.tpl");
