@@ -1,12 +1,12 @@
 for alpha release:
 X name finden
-- Design authorisation for adding people to groups creating auths.... 
+X fix security hole with $root_path (hope so)
 - interfaces für add_dir...
 - Polls
 X add_parsed_dir_to_cat
 X Anonymouse Login
 X Edit Comments
-  - Delete Comments: unterschiedliche behandlung falls unter kommentare vorhanden sind
+  X Delete Comments: unterschiedliche behandlung falls unter kommentare vorhanden sind
 X Bigbrother feature
   X Bigbrother auswertungen
     - User Interface
@@ -16,6 +16,9 @@ X Add file to cat edit hinzufügen
 
 
 for beta relase:
+- use language files everywhere
+- Design authorisation for adding people to groups creating auths.... 
+- Design which content/catgroups can be selected when creating new content/cat
 - code review und einheitlich machen (speziell view_cat, view_content)
 - doppelten code in funktionen packen
 - vollständiges admin interface (wie letzendlich auch immer)

@@ -4,8 +4,9 @@ function getmicrotime(){
     return ((float)$usec + (float)$sec); 
     } 
 $start_time = getmicrotime();
-include_once($root_path . 'includes/phpbb.inc.php');
-include_once($root_path . 'config.inc.php');
+echo ROOT_PATH;
+include_once(ROOT_PATH . 'includes/phpbb.inc.php');
+include_once(ROOT_PATH . 'config.inc.php');
 
 
 if (!is_file('./languages/'.$userdata['user_lang'].'/lang_main.php'))
@@ -51,8 +52,6 @@ define("NOT_SUPPORTED", 1); //return value for dummy functions in classes. When 
 define("CDM_REMOVE_CONTENT",0);
 define("CDM_MOVE_CONTENT",1);
 
-//Template System
-define("SMARTY_DIR","/home/httpd/htdocs/smarty/");
 
 
 ?>

@@ -1,4 +1,5 @@
 <?php
+define ("ROOT_PATH",'');
 include_once('./includes/common.inc.php');
 include_once('./classes/album_content.inc.php');
 include_once('./includes/template.inc.php');
