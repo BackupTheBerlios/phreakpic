@@ -6,14 +6,13 @@ include_once(ROOT_PATH . 'classes/group.inc.php');
 include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 
 session_start();
-
 //check if User is allowed to view this file
 if ($userdata['user_level'] != 1)
 {
 	error_report(AUTH_ERROR, 'no_admin' , __LINE__, __FILE__);
 }
 
-if (($HTTP_GET_VARS['type']=='') or ($HTTP_GET_VARS['type']=='user'))
+if (isset($HTTP_GET_VARS['type']))
 {
 	$HTTP_SESSION_VARS['type']=$HTTP_GET_VARS['type'];
 }
@@ -28,7 +27,6 @@ else
 		$type='user';
 	}
 }
-
 
 $groupclass = $type . 'group';
 
