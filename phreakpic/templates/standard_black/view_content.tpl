@@ -59,6 +59,41 @@
 		</tr>
 		<tr>
 			<td>
+			<form action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->" method="POST">
+			<!--{foreach from=$meta_fields  key=id item=fieldname}-->
+			
+				<b><!--{$fieldname}-->:</b> <br>
+				
+				
+				
+				<!--{foreach from=$meta_data[$id]  key=entry_id item=value}-->
+					<!--{if $mode == 'edit_meta'}-->
+						<input type="input" value="<!--{$value}-->" name="set_meta_data[<!--{$entry_id}-->]">
+					<!--{else}-->
+						<!--{$value}--> 
+					<!--{/if}-->
+					<br>
+				<!--{/foreach}-->
+				
+				<!--{if $mode == 'edit_meta'}-->
+					<input type="input" name="new_meta_data[<!--{$id}-->]" value="">
+				<!--{/if}-->
+			
+			<!--{/foreach}-->
+			<br>
+			
+			
+			<!--{if $mode == 'edit_meta'}-->
+					<input type="submit" name="edit_meta" value="Commit">
+					<input type="submit" name="edit_meta_add" value="Add">
+			<!--{else}-->
+				<!--{if $allow_meta_edit == true}-->
+					<a href="view_content.php?mode=edit_meta&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->"><!--{$lang.edit_meta}--></a><br>
+				<!--{/if}-->
+			<!--{/if}-->
+			</form>
+			
+			<br>
 			
 			<!--{foreach from=$additional_infos key=key item=value}-->
 			

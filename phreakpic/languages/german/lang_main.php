@@ -58,6 +58,7 @@ $lang['full_size']="Vollbild";
 $lang['fit_size']="Auf seite anpassen";
 $lang['slideshow']="Slideshow";
 $lang['stop']="Stop";
+$lang['edit_meta']="Meta daten editieren";
 
 //view_cat.tpl
 $lang['viewable_total_content'] = 'Du kannst %s von insgesamt %s Objekten sehen';
@@ -125,6 +126,7 @@ $lang['groups'] = 'Gruppen';
 $lang['add_user'] = 'User hinzufügen';
 $lang['remove_user'] = 'User entfernen';
 $lang['usergroup_auth'] = 'Benutzergruppen Rechte';
+$lang['edit_meta_data'] = 'Metadaten editieren';
 
 
 //admin/user_in_group
@@ -139,6 +141,7 @@ $lang['remove_from_basket'] = 'vom Korb entfernen';
 $lang['add_all_to_basket'] = 'alle Bilder zum Korb hinzufügen';
 $lang['remove_all_from_basket'] = 'alle Bilder vom Korb entfernen';
 $lang['objects_in_basket'] = 'Objekte im Korb';
+$lang['fieldname'] = 'Feldname';
 
 //error
 $lang['error_has_been_reported'] = 'Der Fehler wurde dem Administrator mitgeteillt. Um den fehler besser einzugrenzen kannst du beschreiben was du grad gemacht hast.';

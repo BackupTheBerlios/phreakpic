@@ -414,17 +414,18 @@ class cat_auth extends phreak_auth
 class content_auth extends phreak_auth
 {
 	var $contentgroup_id;
+	var $edit_meta_data;
 	
 	var $old_contentgroup_id;
 	
 	function content_auth()
 	{
 		// this array indicated which vars should be processed by external automatic processing
-		$this->processing_vars = Array('view','delete','edit','comment_edit','add_to_group','remove_from_group');
+		$this->processing_vars = Array('view','delete','edit','comment_edit','add_to_group','remove_from_group','edit_meta_data');
 	
 
 		// this vars will be stored in the db
-		$this->db_vars = Array('view','delete','edit','comment_edit','add_to_group','usergroup_id','remove_from_group');
+		$this->db_vars = Array('view','delete','edit','comment_edit','add_to_group','usergroup_id','remove_from_group','edit_meta_data');
 		$this->db_vars[] = 'contentgroup_id';
 	}
 	
@@ -474,6 +475,17 @@ class content_auth extends phreak_auth
 	function get_contentgroup_id()
 	{
 		return $this->contentgroup_id;
+	}
+	
+	function set_edit_meta_data($id)
+	{
+		$this->edit_meta_data = $id;
+		return OP_SUCCSESSFUL;
+	}
+	
+	function get_edit_meta_data()
+	{
+		return $this->edit_meta_data;
 	}
 
 	

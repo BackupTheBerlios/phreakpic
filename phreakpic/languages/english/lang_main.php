@@ -64,7 +64,7 @@ $lang['full_size']="Original Size";
 $lang['fit_size']="Fit to page";
 $lang['slideshow']="Slideshow";
 $lang['stop']="Stop";
-
+$lang['edit_meta']="Edit meta data";
 
 //view_cat.tpl
 $lang['viewable_total_content'] = 'You can see %s objects out of %s';
@@ -128,6 +128,7 @@ $lang['groups'] = 'Groups';
 $lang['add_user'] = 'Add User';
 $lang['remove_user'] = 'Remove User';
 $lang['usergroup_auth'] = 'Usergroup Rights';
+$lang['edit_meta_data'] = 'Edit metadata';
 
 //admin/user_in_group
 $lang['new_usergroup'] = 'Create new usergroup';
@@ -141,6 +142,7 @@ $lang['remove_from_basket'] = 'remove from basket';
 $lang['add_all_to_basket'] = 'add all pictures to basket';
 $lang['remove_all_from_basket'] = 'remove all pictures from basket';
 $lang['objects_in_basket'] = 'Objects in basket';
+$lang['fieldname'] = 'Fieldname';
 
 //error
 $lang['error_has_been_reported'] = 'The error has been reported to the admin, to help you can write what you where trying to do';

@@ -1,12 +1,16 @@
 <?php
 define ("ROOT_PATH",'');
+
 include_once('./includes/common.inc.php');
 include_once('./includes/template.inc.php');
 include_once('./classes/album_content.inc.php');
+include_once('./classes/meta.inc.php');
 include_once('./modules/pic_managment/interface.inc.php');
 include_once('./classes/categorie.inc.php');
 include_once('./includes/functions.inc.php');
 include_once('classes/user_feedback.inc.php');
+
+
 
 session_start();
 
@@ -94,6 +98,64 @@ if (is_object($surrounding_content['next']))
 	}
 
 }
+
+
+// get meta fields
+$sql = "SELECT * from " . $config_vars['table_prefix'] . "content_meta_fields";
+if (!$result = $db->sql_query($sql))
+{
+	error_report(AUTH_ERROR, 'get_groups' , __LINE__, __FILE__,$sql);
+}
+while ($row = $db->sql_fetchrow($result))
+{
+	
+	$meta_fields[$row['id']] = $row['fieldname'];
+}
+$smarty->assign('meta_fields',$meta_fields);
+
+// get meta data
+$meta = new content_meta_data();
+$meta->generate_from_content_id($content->get_id());
+
+
+// meta edit allowed ?
+if ($content->check_perm('edit_meta_data'))
+{
+	$smarty->assign('allow_meta_edit',true);
+	
+	//submits
+	
+	
+	if ((isset($HTTP_POST_VARS['edit_meta_add']) or (isset($HTTP_POST_VARS['edit_meta']))))
+	{
+		foreach($HTTP_POST_VARS['set_meta_data'] as $id=>$value)
+		{
+			$meta->set_meta_value($id,$value);
+		}
+		
+		foreach($HTTP_POST_VARS['new_meta_data'] as $field_id=>$value)
+		{
+				$meta->add_meta_value($field_id,$value);
+		}
+		$meta->commit();
+	}
+	
+	
+	if (isset($HTTP_POST_VARS['edit_meta_add']))
+	{
+		$HTTP_GET_VARS['mode']='edit_meta';
+	}
+	
+	// edit meta
+	if ($HTTP_GET_VARS['mode']=='edit_meta')
+	{
+		$smarty->assign('mode','edit_meta');	
+	}
+}
+
+
+
+$smarty->assign('meta_data',$meta->get_meta_data());
 
 
 // do commit
