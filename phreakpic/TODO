@@ -1,16 +1,19 @@
 for alpha release:
 - Polls
-- Anonymouse Login
-- Edit Comments
+X Anonymouse Login
+X Edit Comments
+- Delete Comments: unterschiedliche behandlung falls unter kommentare vorhanden sind
 - Bigbrother feature
+X session id bei jedem link weitergeben
 - Design authorisation for adding people to groups creating auths.... 
 - add_parsed_dir_to_cat
-- Add file to cat edit hinzufügen
+X Add file to cat edit hinzufügen
 - interfaces für add_dir
 
 for beta relase:
 - code review und einheitlich machen (speziell view_cat, view_content)
 - vollständiges admin interface (wie letzendlich auch immer)
+
 
 afterwards:
 - custom fields
