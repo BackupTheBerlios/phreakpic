@@ -1,5 +1,23 @@
 <?php
-require_once ('includes/functions.inc.php');
+require_once (ROOT_PATH . 'includes/functions.inc.php');
+
+
+function check_auth_action_allowed()
+{
+	global $userdata;
+	
+	if ($userdata['user_level'] == ADMIN)
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+function check_group_action_allowed()
+{
+	return check_auth_action_allowed();
+}
 
 function check_cat_action_allowed($catgroup_id,$user_id,$action)
 {
