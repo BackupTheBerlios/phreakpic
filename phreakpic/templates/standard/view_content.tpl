@@ -1,4 +1,4 @@
-<!--{include file="header.tpl"}-->
+<!--{include file="$template_name/header.tpl"}-->
 <div align="center">
 	<table width="95%" border="0" cellspacing="0" cellpadding="5">
 		<tr> 
@@ -13,7 +13,8 @@ href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$prev_thumb.conte
 					&nbsp;
 				<!--{/if}-->
 			</td>
-			<td height="45">fehlt: Sitenavigation</td>
+			
+      <td height="45">&nbsp;</td>
 			<td height="45"> 
 				<div align="right">
 					<!--{if $is_next_content eq "true"}-->
@@ -117,11 +118,9 @@ action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--
 					<!--{$lang.name}-->: <!--{$name}--><br>
 					<!--{$lang.rating}-->: <!--{$current_rating}--><br>
 					<!--{$lang.views}-->: <!--{$views}--><br>
-					<a 
-href="comment.php?mode=add&type=content&parent_id=0&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->"><!--{$lang.add_comment}--></a><br>
+					<a href="comment.php?mode=add&type=content&parent_id=0&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->"><!--{$lang.add_comment}--></a><br>
 					<!--{if ($allow_edit eq 1) or ($allow_content_remove eq 1)}-->
-						<a 
-href="view_content.php?mode=edit&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->"><!--{$lang.edit_content}--></a><br>
+						<a href="view_content.php?mode=edit&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->"><!--{$lang.edit_content}--></a><br>
 					<!--{/if}-->	
 				<!--{/if}-->	
 				
@@ -130,10 +129,10 @@ href="view_content.php?mode=edit&cat_id=<!--{$cat_id}-->&content_id=<!--{$conten
 		<tr>
 			<!--<td>&nbsp;</td>-->
 			<td colspan="3">
-				<table width="100%" align="left">
+				<table width="100%" align="left" border="0">
 					<tr>
-						<td width="20%">
-							&nbsp;
+						<td width="20%">&nbsp;
+							
 						</td>
 						<td>
 							<!--{include file="$template_name/show_comments.tpl" type="content"}-->
@@ -144,4 +143,4 @@ href="view_content.php?mode=edit&cat_id=<!--{$cat_id}-->&content_id=<!--{$conten
 		</tr>
 	</table>
 </div>
-<!--{include file="footer.tpl"}-->
+<!--{include file="$template_name/footer.tpl"}-->

@@ -162,7 +162,7 @@
 
 </div>
 
-<table width="95%" align="center" border="1">
+<table width="95%" align="center" border="0">
 	<tr>
 		<td width="20%">
 			&nbsp;
