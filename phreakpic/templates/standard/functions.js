@@ -259,6 +259,10 @@ function moveCursor(dx,dy,shift)
 	{
 		if (py<1)
 		{
+			if ((document.getElementsByName('prev_page')[0] != undefined))
+			{
+				location.href = document.getElementsByName('prev_page')[0].href;
+			}
 			return;
 		}
 		unsetCursor(px,py)
@@ -271,6 +275,10 @@ function moveCursor(dx,dy,shift)
 	{
 		if ((document.getElementsByName('td_thumb')[(py+1)*table_cols] == undefined))
 		{
+			if ((document.getElementsByName('next_page')[0] != undefined))
+			{
+				location.href = document.getElementsByName('next_page')[0].href;
+			}
 			return;
 		}
 		unsetCursor(px,py)

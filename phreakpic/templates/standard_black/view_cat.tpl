@@ -71,7 +71,7 @@
 <br>
 
 <!--{if $first_content  != 0}-->
-	<a href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$first_content_prev}--><!--{$sid}-->">Prev</a>
+	<a name="prev_page" href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$first_content_prev}--><!--{$sid}-->"><!--{$lang.nav_back}--></a>
 <!--{/if}-->
 
 <!--{section name=nav_page loop=$cat_nav_links}-->
@@ -83,7 +83,7 @@
 <!--{/section}-->
 
 <!--{if $first_content_next != $cat_nav_links[0]}-->
-	<a href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$first_content_next}--><!--{$sid}-->">Next</a>
+	<a name="next_page" href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$first_content_next}--><!--{$sid}-->"><!--{$lang.nav_next}--></a>
 <!--{/if}-->
 
 
