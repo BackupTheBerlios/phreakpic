@@ -532,6 +532,17 @@ class album_content
 	{
 		return dirname($this->file) . '/thumbs/' . basename($this->file);
 	}
+	
+	function start_view()
+	{
+		global $config_vars,$userdata;
+		$now = date("Y-m-d H:i:s");
+		$sql = 'INSERT INTO '. $config_vars['table_prefix'] .'views (user_id,content_id,start) VALUES ('.$userdata['user_id']. ',' . $this->id . ",$now)";
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Error adding start view to the db", '', __LINE__, __FILE__, $sql);
+		}
+	}
 
 }
 
