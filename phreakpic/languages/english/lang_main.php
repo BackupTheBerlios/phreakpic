@@ -23,7 +23,9 @@ $lang['wrote_at'] = 'wrote at';
 $lang['topic'] = 'topic';
 $lang['text'] = 'text';
 $lang['send'] = 'Send';
-$lang[''] = '';
+$lang['search'] = 'Search';
+$lang['new_post'] = 'new_post';
+$lang['comment_has_been_changed'] = 'This Post was changed %s times, last at %s';
 $lang[''] = '';
 $lang[''] = '';
 $lang[''] = '';
@@ -55,6 +57,7 @@ $lang['view_content']="View Content";
 $lang['full_size']="Original Size";
 $lang['fit_size']="Fit to page";
 $lang['slideshow']="Slideshow";
+$lang['stop']="Stop";
 
 
 //view_cat.tpl
@@ -71,6 +74,8 @@ $lang['edit'] = 'Edit';
 $lang['commit'] = 'Commit';
 $lang['file'] = 'File';
 $lang['comments_amount'] = 'Comments';
+$lang['for_all_selected']='For all selected' ;
+$lang['for_all']='For all' ;
 
 //add_content
 $lang['add_selected'] = 'Add Selected';
@@ -120,5 +125,14 @@ $lang['users_not_in_group'] = 'User not in group';
 $lang['users_in_group'] = 'User in group';
 
 $lang['basket'] = 'Basket';
+$lang['add_to_basket'] = 'add to basket';
+$lang['remove_from_basket'] = 'remove from basket';
+$lang['add_all_to_basket'] = 'add all pictures to basket';
+$lang['remove_all_from_basket'] = 'remove all pictures from basket';
+$lang['objects_in_basket'] = 'Objects in basket';
+
+//error
+$lang['error_has_been_reported'] = 'The error has been reported to the admin, to help you can write what you where trying to do';
+$lang['error_has_been_saved'] = 'Error report has been saved. Thank You ';
 
 ?>

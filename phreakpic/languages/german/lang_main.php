@@ -23,13 +23,12 @@ $lang['wrote_at'] = 'schrieb um';
 $lang['topic'] = 'Topic';
 $lang['text'] = 'Text';
 $lang['send'] = 'Abschicken';
+$lang['search'] = 'Suchen';
+$lang['new_post'] = 'neu';
+$lang['comment_has_been_changed'] = 'Beitrag wurde %s mal geändert, zuletzt am %s';
 $lang[''] = '';
 $lang[''] = '';
 $lang[''] = '';
-$lang[''] = '';
-$lang[''] = '';
-$lang[''] = '';
-
 
 //view_content.tpl
 $lang['nav_back'] = 'Zurück';
@@ -54,6 +53,7 @@ $lang['view_content']="Sachen anzeigen";
 $lang['full_size']="Vollbild";
 $lang['fit_size']="Auf seite anpassen";
 $lang['slideshow']="Slideshow";
+$lang['stop']="Stop";
 
 //view_cat.tpl
 $lang['view_cat']="Kategorie anzeigen";
@@ -70,6 +70,8 @@ $lang['commit'] = 'Abschicken';
 $lang['file'] = 'Datei';
 $lang['to_group'] = 'zu gruppe';
 $lang['comments_amount'] = 'Kommentare';
+$lang['for_all_selected']='Für alle selektierten';
+$lang['for_all']='Für alle';
 
 
 //add_content
@@ -122,5 +124,15 @@ $lang['users_not_in_group'] = 'Benutzer, die nicht in der Gruppe sind';
 $lang['users_in_group'] = 'Benutzer, die in der Gruppe sind';
 
 $lang['basket'] = 'Korb';
+$lang['add_to_basket'] = 'zum Korb hinzufügen';
+$lang['remove_from_basket'] = 'vom Korb entfernen';
+$lang['add_all_to_basket'] = 'alle Bilder zum Korb hinzufügen';
+$lang['remove_all_from_basket'] = 'alle Bilder vom Korb entfernen';
+$lang['objects_in_basket'] = 'Objekte im Korb';
+
+//error
+$lang['error_has_been_reported'] = 'Der Fehler wurde dem Administrator mitgeteillt. Um den fehler besser einzugrenzen kannst du beschreiben was du grad gemacht hast.';
+$lang['error_has_been_saved'] = 'Deine angaben wurden gespeichert. Vielen Dank';
+
 
 ?>
