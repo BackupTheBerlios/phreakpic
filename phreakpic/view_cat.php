@@ -193,7 +193,11 @@ if ($content_per_page > 0)
 		$i++;
 	}
 	
-	$smarty->assign('cat_nav_links',$cat_nav_links);
+	// only assign if there is more than 1 page
+	if (sizeof($cat_nav_links)>1)
+	{
+		$smarty->assign('cat_nav_links',$cat_nav_links);
+	}
 	$smarty->assign('first_content',$HTTP_SESSION_VARS['first_content']);
 	
 	if ($HTTP_SESSION_VARS['first_content']+$content_per_page>=$category->get_content_amount())
