@@ -72,8 +72,9 @@ function get_content_of_cat($cat_id = 0)
 	// get all content
 	
 	$sql = 	'SELECT content.*,content_in_cat.place_in_cat FROM ' .  $config_vars['table_prefix'] . "content as content,"  . $config_vars['table_prefix'] . "content_in_cat as content_in_cat
-		WHERE ($content_where) and ($auth_where) and (content.id = content_in_cat.content_id) ORDER BY content_in_cat.place_in_cat";
-		
+		WHERE ($content_where) and ($auth_where) and 
+			(content.id = content_in_cat.content_id) and (content_in_cat.cat_id = $cat_id)
+		ORDER BY content_in_cat.place_in_cat";
 		
 	
 	if (!$result = $db->sql_query($sql))
