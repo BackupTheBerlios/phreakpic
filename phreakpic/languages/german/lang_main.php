@@ -34,6 +34,7 @@ $lang['move'] = 'verschieben';
 $lang['to_cat'] = 'Zu Kategorie';
 $lang['rating'] = 'Bewertung';
 $lang['views'] = 'Views';
+$lang['edit_content'] = 'Editier dieses Bild';
 
 //view_cat.tpl
 ?>
