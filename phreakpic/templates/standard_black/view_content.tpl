@@ -8,15 +8,14 @@
 </script>
 
 
-
 	<table width="95%" border="0" cellspacing="0" cellpadding="5">
 		<tr> 
 			<td height="45">
 				<!--{if $is_prev_content eq "true"}-->
 					<a name="next_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$prev_thumb.content_id}-->&place_in_content_array=<!--{$prev_place_in_content_array}--><!--{$sid}-->#pic">
-						<!--{$prev_thumb.html}-->
-					</a><br>
-					<!--{$lang.nav_back}-->
+						<!--{$prev_thumb.html}--><br>
+						<!--{$lang.nav_back}-->
+					</a>
 				<!--{else}-->
 					 
 				<!--{/if}-->
@@ -31,15 +30,15 @@
 				<div align="right">
 					<!--{if $is_next_content eq "true"}-->
 						<a name="prev_link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$next_thumb.content_id}-->&place_in_content_array=<!--{$next_place_in_content_array}--><!--{$sid}-->#pic">
-							<!--{$next_thumb.html}-->
-						</a><br>
-						<!--{$lang.nav_next}-->
+							<!--{$next_thumb.html}--><br>
+							<!--{$lang.nav_next}-->
+						</a>
 					<!--{else}-->
 						 
 					<!--{/if}-->
 				</div>
 			</td>
-			
+
 		</tr>
 		<tr> 
 			<td>&nbsp;</td>
@@ -159,7 +158,7 @@
 						<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->#pic"><!--{$lang.stop}--></a>
 						<!--{/if}-->
 						
-							
+
 						
 						
 						
@@ -178,7 +177,7 @@
 						<!--{$lang.rotate_left}--> <input type="radio" name="rotate_mode" value="-90">
 						<!--{$lang.rotate_180}--> <input type="radio" name="rotate_mode" value="180">
 						<!--{$lang.rotate_right}--> <input type="radio" name="rotate_mode" value="90"><br>
-					
+
 					<!--{/if}-->
 					
 					<!--{if $allow_content_remove == true}-->
@@ -238,7 +237,7 @@
 				<table width="100%" align="left" border="0">
 					<tr>
 						<td width="20%">&nbsp;
-							
+
 						</td>
 						<td>
 							<!--{include file="$template_name/show_comments.tpl" type="content"}-->
