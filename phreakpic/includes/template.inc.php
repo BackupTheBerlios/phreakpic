@@ -5,6 +5,6 @@
 	$smarty = new Smarty;
 	$smarty->template_dir = './templates/';
 	$smarty->compile_dir = './templates_c/';
-//	$smarty->config_dir = ’/web/www.mydomain.com/smarty/guestbook/configs/’;
+	$smarty->config_dir = './templates/';
 	$smarty->cache_dir = './smarty_cache/';
 ?>
