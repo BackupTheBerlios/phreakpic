@@ -100,6 +100,10 @@ $lang['meta_fields'] = 'Meta Felder';
 //admin/config
 $lang['thumb_table_cols'] = 'Spalten in der Thumbansicht';
 $lang['content_per_page'] = 'Thumbnails pro Seite';
+$lang['max_pic_size'] = 'Maximale Bildgröße';
+$lang['height'] = 'Höhe';
+$lang['width'] = 'Breite';
+$lang['maxsize'] = 'Maximal';
 
 
 //admin/auths.php
