@@ -433,12 +433,27 @@ function build_nav_string($cat_id)
 //get all comments and save it as an useable array
 function make_comments($comment, $level,$editable)
 {
-	global $comments,$userdata;
+	global $comments,$userdata,$board_config;
 	$comment_infos['level'] = $level;
 	$comment_infos['id'] = $comment->id;    //get_id();
 	$comment_infos['text'] = nl2br(htmlspecialchars($comment->get_feedback()));
 	$comment_userdata = get_userdata(intval($comment->get_user_id()));
 	$comment_infos['username'] = $comment_userdata['username'];
+	switch( $comment_userdata['user_avatar_type'] )
+	{
+		case USER_AVATAR_UPLOAD:
+			$poster_avatar = ( $board_config['allow_avatar_upload'] ) ? '<img src="'.PHPBB_PATH . $board_config['avatar_path'] . '/' . $comment_userdata['user_avatar'] . '" alt="" border="0" />' : '';
+			break;
+		case USER_AVATAR_REMOTE:
+			$poster_avatar = ( $board_config['allow_avatar_remote'] ) ? '<img src="'.PHPBB_PATH . $comment_userdata['user_avatar'] . '" alt="" border="0" />' : '';
+			break;
+		case USER_AVATAR_GALLERY:
+		
+			$poster_avatar = ( $board_config['allow_avatar_local'] ) ? '<img src="'.PHPBB_PATH . $board_config['avatar_gallery_path'] . '/' . $comment_userdata['user_avatar'] . '" alt="" border="0" />' : '';
+			break;
+	}
+	
+	$comment_infos['avatar'] = $poster_avatar;
 	$comment_infos['topic'] = htmlspecialchars($comment->get_topic());
 	$comment_infos['creation_date'] = date($userdata['user_dateformat'],strtotime($comment->get_creation_date()));
 	$comment_infos['changed_count'] = $comment->get_changed_count();
