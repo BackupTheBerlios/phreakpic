@@ -74,6 +74,10 @@ $smarty->assign('cat_id', $HTTP_GET_VARS['cat_id']);
 	
 	if ($HTTP_GET_VARS['mode'] == 'edit_comment')
 	{
+		if ($userdata['user_level'] == ADMIN)
+		{
+			$smarty->assign('users_data',get_users_data('user_id,username'));
+		}
 		if ($HTTP_GET_VARS['type'] == 'content')
 		{
 			$comment = new content_comment();
@@ -92,6 +96,6 @@ $smarty->assign('cat_id', $HTTP_GET_VARS['cat_id']);
 		// parent id is just as id here
 		$smarty->assign('parent_id',$id);
 	}
-	
+
 $smarty->display($userdata['photo_user_template'].'/comment.tpl');
 ?>

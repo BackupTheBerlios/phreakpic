@@ -20,7 +20,16 @@
 				<!--{$lang.user_id}-->
 			</td>
 			<td>
-				<input type="text" name="user_id" value="<!--{$user_id}-->">
+				<select name="user_id">
+					<!--{section name=user loop=$users_data}-->
+						<!--{if $users_data[user].user_id == $user_id}-->
+							<option selected value="<!--{$users_data[user].user_id}-->"><!--{$users_data[user].username}--></option>
+						<!--{else}-->
+							<option value="<!--{$users_data[user].user_id}-->"><!--{$users_data[user].username}--></option>
+						<!--{/if}-->
+					<!--{/section}-->
+				</select>
+				
 			</td>
 		</tr>
 	

@@ -249,7 +249,29 @@ function get_contentgroups_data_where_perm($data,$perm)
 	
 }
 
+function get_users_data($data)
+{
+	// returns an indexed array containing all fields speicfied in $data in an assoc array 
+	
+	global $db,$config_vars,$userdata;	
 
+	
+	$sql = "select $data from ".USERS_TABLE;
+	
+	if (!$result = $db->sql_query($sql))
+	{
+		error_report(SQL_ERROR, 'get_contentgroups_data_where_perm' , __LINE__, __FILE__,$sql);
+	}
+	
+	while ($row = $db->sql_fetchrow($result))
+	{
+		$users[] = $row;
+	}
+	
+	
+	return $users;
+
+}
 
 
 
@@ -432,10 +454,6 @@ function add_dir_parsed($dir,$group_id,$parent_id=-1)
 
 }
 
-function get_unread_content_comments()
-{
-	$sql = "select comments.id from photo_content_comments as comments, photo_views as views WHERE (views.start < comments.creation_date) and (comments.id=views.content_id)";
-}
 
 
 ?>
