@@ -75,6 +75,7 @@ if (isset($HTTP_POST_VARS['add_registered_users_usergroup']))
 }
 elseif (isset($HTTP_POST_VARS['remove_registered_users_usergroup']))
 {
+
 	foreach ($HTTP_POST_VARS['selected_registered_users_usergroups'] as $value)
 	{
 		$key=array_keys($HTTP_SESSION_VARS['registered_users_usergroup_ids'],$value);
@@ -105,22 +106,37 @@ if (!$result = $db->sql_query($sql))
  }
  
  
-foreach($HTTP_SESSION_VARS['default_usergroup_ids'] as $group_ids)
+foreach($HTTP_SESSION_VARS['default_usergroup_ids'] as $key => $group_ids)
 {
 	$group_obj = new usergroup();
-	$group_obj->generate_from_id($group_ids);
-	$group['id'] = $group_obj->id;
-	$group['name'] = $group_obj->get_name();
-	$default_usergroups[] = $group;
+	
+	if ($group_obj->generate_from_id($group_ids) == OP_SUCCESSFUL)
+	{
+		$group['id'] = $group_obj->id;
+		$group['name'] = $group_obj->get_name();
+		$default_usergroups[] = $group;
+	}
+	else
+	{
+		// delete unproper entries
+		unset($HTTP_SESSION_VARS['default_usergroup_ids'][$key]);
+	}
 }
 
-foreach($HTTP_SESSION_VARS['registered_users_usergroup_ids'] as $group_ids)
+foreach($HTTP_SESSION_VARS['registered_users_usergroup_ids'] as $key => $group_ids)
 {
 	$group_obj = new usergroup();
-	$group_obj->generate_from_id($group_ids);
-	$group['id'] = $group_obj->id;
-	$group['name'] = $group_obj->get_name();
-	$registered_users_usergroups[] = $group;
+	if ($group_obj->generate_from_id($group_ids) == OP_SUCCESSFUL)
+	{
+		$group['id'] = $group_obj->id;
+		$group['name'] = $group_obj->get_name();
+		$registered_users_usergroups[] = $group;
+	}
+	else
+	{
+		// delete unproper entries
+		unset($HTTP_SESSION_VARS['registered_users_usergroup_ids'][$key]);
+	}
 }
 
 
