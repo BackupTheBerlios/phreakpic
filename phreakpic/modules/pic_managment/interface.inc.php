@@ -165,36 +165,37 @@ function add_dir_to_cat($dir,$cat_id, $name_mode = GENERATE_NAMES)
 
 	while ($file = readdir ($dir_handle))
 	{
-		if (($file != "." && $file != "..") and ($file == "*.jpg" or $file == "*.jpeg" or $file == "*.jpe")) // WELCHE DATEIENDUNGEN werden benutzt? Soll es einstellbar sein? Wenn ja, wo?
+		if (($file != "." && $file != "..") and (isset($filetypes[$file]) )) // WELCHE DATEIENDUNGEN werden benutzt? Soll es einstellbar sein? Wenn ja, wo?
 		{
 			$unsorted_files[] = $file;
-			$array_length++;
 		}
 	}
 
 
-	for ($j = 0; $j < $i; $j++)
+	for ($i = 0; $i < sizeof($unsorted_files); $i++)
 	{
 		$dir_and_file = $dir . $file;
+		
+		// generate a new album_content obj
+		
+		$content = new $$filetyped[$file];
 
 		//if the name of the picture should be the filename, get it and cutoff the dateiendung
 		if ($name_mode == GENERATE_NAMES)
 		{
 			$exploded_file = explode('.', $file);
-			$name = end($exploded_file);
+			$content->set_name($exploded_file);
 		}
 		else
 		{
 			$name = '';
 		}
-
-		$sql = "INSERT INTO " . $config_vars['table_prefix'] . "pics (name, file, cat_id, creation_date)
-			VALUES ('$name', '$dir_and_file', '$cat_id', '$creation_date')";
-
-		if (!$result = $db->query($sql))
-		{
-			message_die(GENERAL_ERROR, "Konnte das Bild nicht hinzufügen", '', __LINE__, __FILE__, $sql);
-		}
+		
+		$content->add_to_cat($cat_id);
+		$content->set_file($dir_and_file);
+		
+		$content->commit();
+		
 	}
 	closedir($dir_handle);
 }
