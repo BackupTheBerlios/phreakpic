@@ -64,6 +64,7 @@
 					</td>
 					<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
 					<td><!--{$child_cat_infos[id].current_rating}--></td>
+					<td><!--{$child_cat_infos[id].comments_amount}--></td>
 					<td>
 					
 					<!--{if ($child_cat_infos[id].remove_from_group == 'true')}-->	
