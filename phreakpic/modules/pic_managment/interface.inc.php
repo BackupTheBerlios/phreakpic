@@ -317,51 +317,72 @@ function add_dir_to_cat($dir,$cat_id, $contentgroup_id, $name_mode = GENERATE_NA
 	closedir($dir_handle);
 }
 
-function add_dir_parsed($dir)
+function add_dir_parsed($dir,$contentgroup_id,$parent_id=-1)
 {
 		// Add all pictures under the Directory $dir to categories and series depending on the relativ path to $dir
-	global $db;
-	global $config_vars;
+	global $db,$config_vars,$filetypes;
+	
+	if ($parent_id == -1)
+	{
+		$parent_id = $config_vars['root_categorie'];
+	}
 
 	$dir_handle = opendir($dir);
 	while ($file = readdir ($dir_handle))
-	{
+	{	
 		
 		if (($file != ".") && ($file != ".."))
 		{
+			$dir_and_file = $dir . '/' . $file;
 			if (isset($filetypes[getext($file)]))
-			{
+			{	
+			
 				// $file is content
-				$dir_and_file = $dir . '/' . $file;
 				// generate a new album_content obj
 				$content = new $filetypes[getext($file)];
 				//if the name of the picture should be the filename, get it and cutoff the dateiendung	
-				if ($name_mode == GENERATE_NAMES)
-				{
-					$content->set_name(getfile($file));
 
-				}
-				else
-				{
-					$name = '';
-				}
-
-				$content->add_to_cat($cat_id);
+				$content->set_name(getfile($file));
+				$content->add_to_cat($parent_id);
 				$content->set_file($dir_and_file);
 				$content->set_contentgroup_id($contentgroup_id);
-
 				$content->commit();
+				
 
 			}
-			elseif (is_dir($file))
+			elseif (is_dir($dir_and_file))
 			{
+				
 				//file is a sub dir
 				if (strpos($file,"cat_") === 0) // 3 = for zusätzliche typen gleicheit
 				{
 				// subdir cat
+					$cat = new categorie();
+					$cat->set_name(substr($file,4));
+					$cat->set_parent_id($parent_id);
+					$cat->fill_up();
+					
+					if (!isset($cat->id))
+					{
+					
+						$cat->commit();
+					}
+					add_dir_parsed($dir.'/'.$file,$contentgroup_id,$cat->get_id());
 				}
 				elseif (strpos($file,"serie_") === 0)
 				{
+					$cat = new categorie();
+					$cat->set_name(substr($file,6));
+					$cat->set_parent_id($parent_id);
+					$cat->set_is_serie(1);
+					$cat->fill_up();
+					
+					if (!isset($cat->id))
+					{
+					
+						$cat->commit();
+					}
+					add_dir_parsed($dir.'/'.$file,$contentgroup_id,$cat->get_id());
 				// subdir serie
 				}
 			}
