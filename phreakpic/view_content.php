@@ -28,26 +28,27 @@ $content = get_content_object_from_id($HTTP_GET_VARS['content_id']);
 if (!is_object($content))
 {
 	error_report(INFORMATION, 'content_not_existing' , __LINE__, __FILE__);
-	
+
 }
 
 
 // if there is no cat_id assigned take the first cat of the content
 
-if ((!isset($HTTP_GET_VARS['cat_id'])) or ($HTTP_GET_VARS['cat_id']==''))
+$ids=$content->get_cat_ids();
+if (!in_array($HTTP_GET_VARS['cat_id'],$ids))
 {
-	$ids=$content->get_cat_ids();
 	$HTTP_GET_VARS['cat_id']=$ids[0];
 }
 
 
 
-//get previous and next content and display the thumbnail if aviable 
+
+//get previous and next content and display the thumbnail if aviable
 // $surrounding_content = $content->get_surrounding_content($HTTP_GET_VARS['cat_id']);
 if (isset($HTTP_SESSION_VARS['contents']))
 {
 	$smarty->assign('content_amount',sizeof($HTTP_SESSION_VARS['contents']));
-	
+
 	if (isset($HTTP_GET_VARS['place_in_content_array']))
 	{
 		$smarty->assign('content_nr',$HTTP_GET_VARS['place_in_content_array']+1);
@@ -55,7 +56,7 @@ if (isset($HTTP_SESSION_VARS['contents']))
 		$smarty->assign('prev_place_in_content_array',$HTTP_GET_VARS['place_in_content_array']-1);
 		$surrounding_content['next']=$HTTP_SESSION_VARS['contents'][$HTTP_GET_VARS['place_in_content_array']+1];
 		$surrounding_content['prev']=$HTTP_SESSION_VARS['contents'][$HTTP_GET_VARS['place_in_content_array']-1];
-		
+
 	}
 	else
 	{
@@ -79,7 +80,7 @@ else
 	$smarty->assign('content_nr',$surrounding_content['place']);
 	$smarty->assign('content_amount',$surrounding_content['amount']);
 
-	
+
 }
 
 if (is_object($surrounding_content['prev']))
@@ -108,7 +109,7 @@ if (!$result = $db->sql_query($sql))
 }
 while ($row = $db->sql_fetchrow($result))
 {
-	
+
 	$meta_fields[$row['id']] = $row['fieldname'];
 }
 $smarty->assign('meta_fields',$meta_fields);
@@ -122,7 +123,7 @@ $meta->generate_from_content_id($content->get_id());
 if ($content->check_perm('edit_meta_data'))
 {
 	$smarty->assign('allow_meta_edit',true);
-	
+
 	//submits
 	
 	
@@ -215,7 +216,7 @@ $cat_obj = new categorie();
 $cat_obj->generate_from_id($HTTP_GET_VARS['cat_id']);
 if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'content_remove'))
 {
-	$smarty->assign('allow_content_remove',1);	
+	$smarty->assign('allow_content_remove',1);
 }
 
 if ($redirect_to_cat)
