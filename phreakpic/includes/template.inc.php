@@ -18,7 +18,7 @@
 	
 	//this vars are needed in view_cat AND view_content
 	$smarty->assign('lang',$lang);
-	$smarty->assign('phpbb_path', PHPBB_PATH);
+	$smarty->assign('phpbb_path', ROOT_PATH . PHPBB_PATH);
 	$smarty->assign('server_name', SERVER_NAME);
 	$smarty->assign('template_name', $userdata['photo_user_template']);
 	$smarty->assign('sid','&sid='.$userdata['session_id']);
