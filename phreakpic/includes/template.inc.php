@@ -1,6 +1,7 @@
 <?php
 	include_once(ROOT_PATH . 'includes/common.inc.php');
 	include_once(SMARTY_DIR.'Smarty.class.php');
+	include_once(ROOT_PATH.'./classes/categorie.inc.php');
 	
 	// include the language files
 	include_once(ROOT_PATH . './languages/'.$userdata['user_lang'].'/lang_main.php');
@@ -45,4 +46,12 @@
 	{
 		$smarty->assign('user_level','user');
 	}
+	
+	// get statistics data
+	$root_cat = new categorie();
+	$root_cat->generate_from_id($config_vars['root_categorie']);
+	
+	$smarty->assign('total_content',$root_cat->get_child_content_amount());
+	$smarty->assign('total_comments',$root_cat->get_child_comments_amount());
+	
 ?>

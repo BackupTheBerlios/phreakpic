@@ -11,8 +11,11 @@ $lang['forum'] = 'Zum Forum';
 $lang['website_home'] = 'Home';
 $lang['profile'] = 'Profil';
 $lang['ucp'] = 'User Admin';
+$lang['total_content'] = 'Anzahl der Bilder';
+$lang['total_comments'] = 'Anzahl der Kommentare';
 //in more than one file
 $lang['home'] = 'Start';
+
 
 //footer
 $lang['goto_admin'] = 'Administration';

@@ -11,6 +11,8 @@ $lang['forum'] = 'Forum';
 $lang['website_home'] = 'Home';
 $lang['profile'] = 'Profile';
 $lang['ucp'] = 'User Admin';
+$lang['total_content'] = 'Total Content';
+$lang['total_comments'] = 'Total Comments';
 //in more than one file
 $lang['home'] = 'Start';
 
