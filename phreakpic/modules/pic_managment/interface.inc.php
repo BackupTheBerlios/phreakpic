@@ -65,6 +65,7 @@ function get_content_of_cat($cat_id)
 	
 	$sql = 	'SELECT * FROM ' .  $config_vars['table_prefix'] . "content 
 		WHERE ($content_where) and ($auth_where)";
+		
 	
 	if (!$result = $db->sql_query($sql))
 	{
@@ -74,7 +75,7 @@ function get_content_of_cat($cat_id)
 	while ($row = $db->sql_fetchrow($result))
 	{
 		// creating objects for every content
-		$objtyp = $filetypes[$getext($row['file'])];
+		$objtyp = $filetypes[getext($row['file'])];
 		if (isset($objtyp))
 		{
 			$contentobj = new $objtyp;
@@ -84,7 +85,7 @@ function get_content_of_cat($cat_id)
 			}
 		}
 		
-		$objarray[]=contentobj;
+		$objarray[]=$contentobj;
 	}
 	
 	return $objarray;
@@ -184,19 +185,16 @@ function add_dir_to_cat($dir,$cat_id, $name_mode = GENERATE_NAMES)
 		// generate a new album_content obj
 		
 		$content = new $filetypes[getext($unsorted_files[$i])];
-
-		//if the name of the picture should be the filename, get it and cutoff the dateiendung
+		//if the name of the picture should be the filename, get it and cutoff the dateiendung	
 		if ($name_mode == GENERATE_NAMES)
 		{
-			$exploded_file = explode('.', $file);
-			$content->set_name($exploded_file);
+			$content->set_name(getfile($unsorted_files[$i]));
 			
 		}
 		else
 		{
 			$name = '';
 		}
-		
 		
 		$content->add_to_cat($cat_id);
 		$content->set_file($dir_and_file);
