@@ -14,7 +14,9 @@ $config_vars = array
 	),
 	
 	// ID of the cat where to put pictures that are no longer linked in any cat
-	'deleted_content_cat' => 1
+	'deleted_content_cat' => 1,
+	
+	'root_categorie' => 0
     
 );
 ?>
