@@ -167,18 +167,8 @@ class album_content
 	}
 	
 	
-	function generate_from_id($id)
+	function generate_from_row($row)
 	{
-		// Füllt das Objekt mit den daten des Contents mit id == $id aus der Datenbank
-		global $db,$config_vars;
-		$sql = 'select * from ' . $config_vars['table_prefix'] . "content where id like $id";
-		if (!$result = $db->sql_query($sql))
-		{
-			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
-		}
-		
-		$row = $db->sql_fetchrow($result);
-		
 		if (is_array($row))
 		{
 			// fill the var of the object with the data from the database (the field names of the database are the same than the var names)
@@ -197,6 +187,22 @@ class album_content
 		{
 			return OP_FAILED;
 		}
+	}
+	
+	
+	function generate_from_id($id)
+	{
+		// Füllt das Objekt mit den daten des Contents mit id == $id aus der Datenbank
+		global $db,$config_vars;
+		$sql = 'select * from ' . $config_vars['table_prefix'] . "content where id like $id";
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
+		}
+		
+		$row = $db->sql_fetchrow($result);
+		return generate_from_row($row);
+		
 	}
 	 
 	//set and get functions for every variable
