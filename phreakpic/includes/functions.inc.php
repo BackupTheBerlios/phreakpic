@@ -67,7 +67,10 @@ define(\"SERVER_NAME\",\"" . $Server_name . "\");
 	'default_upload_dir' => '{$config_vars['default_upload_dir']}',
 	
 	// the ids of the usergroups in which every user is automaicly
-	'default_usergroup_ids' => Array(),
+	'default_usergroup_ids' => Array(" . implode(',',$config_vars['default_usergroup_ids']) . "),
+	
+	// the ids of the usergroups in which every registered user is automaicly
+	'registered_users_usergroup_ids' => Array(" . implode(',',$config_vars['registered_users_usergroup_ids']) . "),
 	
 	'default_content_per_page' => {$config_vars['default_content_per_page']}
 );
