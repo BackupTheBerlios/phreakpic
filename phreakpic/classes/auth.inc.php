@@ -1,7 +1,7 @@
 <?php
 
 
-class auth
+class phreak_auth
 {
 	var $in_db=false;
 	var $usergroup_id;
@@ -18,7 +18,7 @@ class auth
 	{
 		global $db,$config_vars;
 		// remove from content table
-		$sql = "DELETE FROM '" . $config_vars['table_prefix'] . get_class($this) . " WHERE 'id' = " . $this->id;
+		$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE id = " . $this->id;
 		if (!$result = $db->sql_query($sql))
 		{
 			message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
@@ -151,14 +151,84 @@ class auth
 		
 }
 
-class cat_auth extends auth
+class cat_auth extends phreak_auth
 {
 	var $catgroup_id;
 	var $old_catgroup_id;
+	var $cat_add;
+	var $cat_remove;
+	var $content_add;
+	var $content_remove;
 	
+	
+	function delete()
+	{
+		global $db,$config_vars;
+		// remove from content table
+		$sql = "DELETE FROM " . $config_vars['table_prefix'] . get_class($this) . " WHERE (usergroup_id = $this->usergroup_id) and (catgroup_id = $this->catgroup_id)";
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+		}
+		unset($this->id);
+	}
+
+	
+		
+	function get_cat_add()
+	{
+		return $this->cat_add;
+	}
+
+
+	function set_cat_add($d = 1)
+	{
+		$this->cat_add = $d;
+		return OP_SUCCESFULL;
+	}
+
+	function get_cat_remove()
+	{
+		return $this->cat_remove;
+	}
+
+	function set_cat_remove($d = 1)
+	{
+		$this->cat_remove = $d;
+		return OP_SUCCESFULL;
+	}	
+	
+	function get_content_add()
+	{
+		return $this->content_add;
+	}
+
+
+	function set_content_add($d = 1)
+	{
+		$this->content_add = $d;
+		return OP_SUCCESFULL;
+	}
+	
+		
+	function get_content_remove()
+	{
+		return $this->content_remove;
+	}
+
+
+	function set_content_remove($d = 1)
+	{
+		$this->content_remove = $d;
+		return OP_SUCCESFULL;
+	}
+	
+	
+	
+		
 	function generate($usergroup_id,$group_id)
 	{
-		auth::generate($usergroup_id,$group_id);
+		phreak_auth::generate($usergroup_id,$group_id);
 		$this->old_catgroup_id = $this->catgroup_id;
 		
 	}
@@ -169,8 +239,8 @@ class cat_auth extends auth
 		if (!$this->in_db)
 		{
 			// this is object is not yet in the datebase, make a new entry
-			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . " (`usergroup_id`,`catgroup_id`,`view`,`delete`,`edit`,`comment_edit`)
-				VALUES ('$this->usergroup_id', '$this->catgroup_id','$this->view','$this->delete','$this->edit','$this->comment_edit')";
+			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . " (`usergroup_id`,`catgroup_id`,`view`,`delete`,`edit`,`comment_edit`,`cat_add`,`cat_remove`,`content_add`,`content_remove`)
+				VALUES ('$this->usergroup_id', '$this->catgroup_id','$this->view','$this->delete','$this->edit','$this->comment_edit','$this->cat_add','$this->cat_remove','$this->content_add','$this->content_remove')";
 			if (!$result = $db->sql_query($sql))
 			{
 				message_die(GENERAL_ERROR, "Error while submitting a new auth object to the db", '', __LINE__, __FILE__, $sql);
@@ -189,7 +259,11 @@ class cat_auth extends auth
 					`view` = '$this->view',
 					`delete` = '$this->delete',
 					`edit` = '$this->edit',
-					`comment_edit` = '$this->comment_edit'		
+					`comment_edit` = '$this->comment_edit',
+					`cat_add` = '$this->cat_add',
+					`cat_remove` = '$this->cat_remove',
+					`content_add` = '$this->content_add',
+					`content_remove` = '$this->content_remove'
 				WHERE (usergroup_id = $this->old_usergroup_id) and (catgroup_id = $this->old_catgroup_id)";
 			if (!$result = $db->sql_query($sql))
 			{
@@ -200,19 +274,19 @@ class cat_auth extends auth
 
 	}
 	
-	function set_catgroup_id($id)
+	function set_group_id($id)
 	{
 		$this->catgroup_id = $id;
 		return OP_SUCCSESSFUL;
 	}
 	
-	function get_catgroup_id($id)
+	function get_group_id($id)
 	{
 		return $this->catgroup_id;
 	}
 }
 
-class content_auth extends auth
+class content_auth extends phreak_auth
 {
 	var $contentgroup_id;
 	
@@ -220,7 +294,7 @@ class content_auth extends auth
 	
 	function generate($usergroup_id,$group_id)
 	{
-		auth::generate($usergroup_id,$group_id);
+		phreak_auth::generate($usergroup_id,$group_id);
 		$this->old_contentgroup_id = $this->contentgroup_id;
 		
 	}
