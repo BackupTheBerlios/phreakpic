@@ -80,6 +80,9 @@ $lang['cat_add'] = 'Kategorien hinzufügen';
 $lang['content_add'] = 'Content hinzufügen';
 $lang['content_remove'] = 'Content entfernen';
 $lang['cat_remove'] = 'Categorien hinzufügen';
+$lang['add_to_group'] = 'Zur Gruppe hinzufügen';
+$lang['remove_from_group'] = 'Von der Gruppe entfernen';
+$lang['change_group'] = 'Gruppe ändern';
 
 
 
