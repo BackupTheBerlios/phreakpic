@@ -4,8 +4,7 @@
 		<tr> 
 			<td height="45">
 				<!--{if $is_prev_content eq "true"}-->
-					<a 
-href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$prev_thumb.content_id}--><!--{$sid}-->">
+					<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$prev_thumb.content_id}--><!--{$sid}-->">
 						<!--{$prev_thumb.html}-->
 					</a><br>
 					<!--{$lang.nav_back}-->
@@ -18,8 +17,7 @@ href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$prev_thumb.conte
 			<td height="45"> 
 				<div align="right">
 					<!--{if $is_next_content eq "true"}-->
-						<a 
-href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$next_thumb.content_id}--><!--{$sid}-->">
+						<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$next_thumb.content_id}--><!--{$sid}-->">
 							<!--{$next_thumb.html}-->
 						</a><br>
 						<!--{$lang.nav_next}-->
@@ -36,7 +34,7 @@ href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$next_thumb.conte
 		</tr>
 		<tr> 
 			<td colspan="2">
-				<a href="index.php<!--{$sid}-->"><!--{$lang.home}--></a> --
+				<a href="index.php?<!--{$sid}-->"><!--{$lang.home}--></a> --
 				<!--{section name=id loop=$nav_string}-->
 					<a href="view_cat.php?cat_id=<!--{$nav_string[id].id}--><!--{$sid}-->">
 						<!--{$nav_string[id].name}--></a> --
