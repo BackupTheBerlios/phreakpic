@@ -145,7 +145,7 @@ function get_groups_of_user($user_id)
 	// Returns array of group_ids in which the user with id $user_id is
 	$sql = "
 		SELECT group_id from " . $config_vars['table_prefix'] . "user_in_group 
-		WHERE user_id like $user_id";
+		WHERE user_id = $user_id";
 	
 	if (!$result = $db->sql_query($sql))
 	{
@@ -155,8 +155,9 @@ function get_groups_of_user($user_id)
 	while ($row = $db->sql_fetchrow($result))
 	{
 		$group_ids[] = $row['group_id'];
+		
 	}
-		return $group_ids;
+	return $group_ids;
 
 }
 ?>
