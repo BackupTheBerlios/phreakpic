@@ -41,9 +41,8 @@ if (isset($content_to_add))
 	foreach ($content_to_add as $value)
 	{
 		
-		$POST_FILES['new_content_file']['name']=basename($value);
-		$POST_FILES['new_content_file']['tmp_name']=$value;
-		add_content($POST_FILES,"",$new_content_cat,$place,$new_content_group);
+		
+		add_content(basename($value),$value,"",$new_content_cat,$place,$new_content_group);
 		$place++;
 	}
 
