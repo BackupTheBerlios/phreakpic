@@ -57,6 +57,7 @@ if (is_object($surrounding_content['next']))
 
 
 
+
 $add_to_cats = get_cats_data_where_perm('id,name','content_add');
 if (is_array($add_to_cats))
 {
@@ -98,11 +99,19 @@ if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'c
 		if ($HTTP_POST_VARS['delete'] == "on")
 		{
 			$content->remove_from_cat($cat_id);
-			$content->commit();
 		}
 		
 		// check move
-		
+		// check if user has clicked the button
+		if ($HTTP_POST_VARS['move'] == "on")
+		{
+			// check if user has cats to move in
+			if (is_array($add_to_cats))
+			{
+				$content->remove_from_cat($cat_id);
+				$content->add_to_cat($HTTP_POST_VARS['to_cat']);
+			}
+		}
 	}
 }
 
@@ -139,12 +148,14 @@ if ($content->check_perm('edit'))
 		
 		$content->set_place_in_cat($cat_id,$HTTP_POST_VARS['place_in_cat']);
 		
-		
-		
 		$content->set_name($HTTP_POST_VARS['name']);
-		
-		$content->commit();
 	}
+}
+
+if ($mode == "commit")
+{
+	// commit all changes
+	$content->commit();	
 }
 
 
@@ -165,6 +176,7 @@ $smarty->assign('content_id', $content->get_id());
 $smarty->assign('views', $content->get_views());
 $smarty->assign('current_rating', $content->get_current_rating());
 $smarty->assign('cat_id', $cat_id);
+$smarty->assign('template_name', $userdata['photo_user_template']);
 //$smarty->assign('content_size',$content->get_content_size()); //thats the height and width of the object...
 //$smarty->assign('id',$id);
 $end_time = getmicrotime();

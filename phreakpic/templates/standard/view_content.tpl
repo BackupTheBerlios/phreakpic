@@ -118,17 +118,7 @@
 							&nbsp;
 						</td>
 						<td>
-							<!--{section name=index loop=$comments}-->
-								<!--{section name=level loop=$comments[index].level}-->
-									&nbsp; &nbsp; &nbsp; &nbsp;
-								<!--{/section}-->
-								<!--{if $comments[index].level == 0}-->
-									<div align="left">
-										---------------------------------<br>
-									</div>
-								<!--{/if}-->
-								<!--{$comments[index].text}--> - <a href="comment.php?mode=add&type=content&parent_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->">Antworten</a><br>
-							<!--{/section}-->
+							<!--{include file="$template_name/show_comments.tpl"}-->
 						</td>
 					</tr>
 				</table>
