@@ -613,11 +613,14 @@ class album_content
 	
 	function generate_from_id($id)
 	{
+		//global $PHP_SELF,$QUERY_STRING;
 		// Füllt das Objekt mit den daten des Contents mit id == $id aus der Datenbank
 		global $db,$config_vars;
 		$sql = 'select * from ' . $config_vars['table_prefix'] . "content where id = $id";
+		
 		if (!$result = $db->sql_query($sql))
 		{
+		//	error_report(SQL_ERROR, 0 , __LINE__, __FILE__,$sql);
 			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
 		}
 		
