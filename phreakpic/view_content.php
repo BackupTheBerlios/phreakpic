@@ -52,8 +52,7 @@ include ('includes/proceed_comment.inc.php');
 $content = get_content_object_from_id($content_id);
 if (!is_object($content))
 {
-	message_die(GENERAL_ERROR, "Could not generate content from id", '', __LINE__, 
-__FILE__, $sql);
+	message_die(GENERAL_ERROR, "Could not generate content from id", '', __LINE__, __FILE__, $sql);
 }
 
 
@@ -150,7 +149,17 @@ if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'c
 	}
 }
 
-
+// Check if the user has remove_from_group right for this content
+if ($content->check_perm('remove_from_group'))
+{
+	// get the groups where the user has add_to_group rights
+	$add_to_contentgroups = get_contentgroups_data_where_perm('id,name','add_to_group');
+	if (is_array($add_to_contentgroups))
+	{
+		$smarty->assign('allow_change_group','1');
+		$smarty->assign('add_to_contentgroups',$add_to_contentgroups);
+	}
+}
 
 
 // Check if user has edit rights to this content

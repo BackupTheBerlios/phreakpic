@@ -99,6 +99,16 @@ action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--
 						<option value="<!--{$add_to_cats[id].id}-->"><!--{$add_to_cats[id].name}--></option>
 					<!--{/section}-->
 					</select><br>
+					<!--{if $allow_change_group eq 1}-->
+					<!--{$lang.change_group}--><input type="checkbox" name="change_group" > to 
+					<select name="to_group">
+					<!--{section name=id loop=$add_to_contentgroups}-->
+						<option value="<!--{$add_to_contentgroups[id].id}-->"><!--{$add_to_contentgroups[id].name}--></option>
+					<!--{/section}-->
+					</select><br>
+					<br>
+					<!--{/if}-->
+					
 					
 					<input type="hidden" name="mode" value="commit">
 					<input type="submit">  
