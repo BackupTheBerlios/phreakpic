@@ -378,7 +378,7 @@ class album_content extends phreakpic_base
 		$result->set_object_id($this->id);
 		$result->set_is_value($this->lock);
 		$result->set_should_value(1);
-		$result->set_opeartion('lock');
+		$result->set_operation('lock');
 		//set the name of the actual object. Checks if actual user is allowed to.
 		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
@@ -453,7 +453,7 @@ class album_content extends phreakpic_base
 				
 				
 				
-					
+
 				// remove from content table
 				$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content WHERE id = " . $this->id;
 				if (!$result = $db->sql_query($sql))
@@ -501,7 +501,7 @@ class album_content extends phreakpic_base
 
 				
 				
-				
+
 				return OP_SUCCESSFUL;
 
 			}
@@ -562,7 +562,7 @@ class album_content extends phreakpic_base
 			}
 
 
-			//echo "rename({$this->file},$new_file)<br>";
+			// echo "rename({$this->file},$new_file)<br>";
 			if (rename($this->file,$this->new_filename))
 			{
 				$this->set_file($this->new_filename);
@@ -592,13 +592,13 @@ class album_content extends phreakpic_base
 			{
 				$this->thumbfile = $this->get_thumbfile();
 			}
-			else 
+			else
 			{
 				die('thumb rename failed');
 			}
 		}
-		
-		
+
+
 		// check if already in db)
 		if (isset($this->id))
 		{
@@ -606,11 +606,11 @@ class album_content extends phreakpic_base
 
 			// update entry in content table
 			$sql = "UPDATE " . $config_vars['table_prefix'] . "content
-				SET	
+				SET
 					file = '$this->file',
 					name = '" . database_encode($this->name) . "',
 					views = '$this->views',
-					current_rating = '$this->current_rating', 
+					current_rating = '$this->current_rating',
 					creation_date = '$this->creation_date',
 					contentgroup_id = '$this->contentgroup_id',
 					locked = '$this->locked',
@@ -618,16 +618,16 @@ class album_content extends phreakpic_base
 					height = '$this->height',
 					comments_amount = '$this->comments_amount'
 				WHERE id = $this->id";
-			
+
 			if (!$result = $db->sql_query($sql))
 			{
 				error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 			}
-			
+
 			// update content_in_cat table
 			// i will do this by first deleting all entry with this content and then generate them all new
-			
-			$this->clear_content_in_cat();			
+
+			$this->clear_content_in_cat();
 
 		}
 		else
@@ -637,7 +637,7 @@ class album_content extends phreakpic_base
 			//not in db
 			$this->creation_date=date("Y-m-d H:i:s");
 			// add content to the content table
-			
+
 			//using a shorter version of boolean transmission for locked
 			$sql = "INSERT INTO " . $config_vars['table_prefix'] . "content
 				(file,name,views,current_rating,creation_date,contentgroup_id,locked,width,height,comments_amount)
@@ -650,14 +650,14 @@ class album_content extends phreakpic_base
 			// set id of object to the id of the insert
 			$this->id = $db->sql_nextid();
 		}
-		
 
-		
-		
-		// add content to the cats	
+
+
+
+		// add content to the cats
 		
 		$this->fill_content_in_cat();	
-		
+
 		if (is_object($del_content_cat))
 		{
 			$del_content_cat->commit();
@@ -697,14 +697,14 @@ class album_content extends phreakpic_base
 		{
 			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
-		
+
 		$row = $db->sql_fetchrow($result);
 		$result =  $this->generate_from_row($row);
 		$this->thumbfile = $this->get_thumbfile();
 		return $result;
 
 	}
-	 
+
 	//set and get functions for every variable
 	function set_id($id)
 	{
@@ -755,7 +755,7 @@ class album_content extends phreakpic_base
 		$result = new phreak_error();
 		$result->set_object_id($this->id);
 		$result->set_should_value($new_cat_id);
-		$result->set_opeartion('add_to_cat');
+		$result->set_operation('add_to_cat');
 
 
 		if (!is_array($this->cat_ids))
@@ -808,7 +808,7 @@ class album_content extends phreakpic_base
 		$result = new phreak_error();
 		$result->set_object_id($this->id);
 		$result->set_should_value($old_cat_id);
-		$result->set_opeartion('remove_from_cat');
+		$result->set_operation('remove_from_cat');
 
 
 
@@ -954,7 +954,7 @@ class album_content extends phreakpic_base
 		$result->set_is_value($this->contentgroup_id);
 		$result->set_should_value($contentgroup_id);
 
-		$result->set_opeartion('set_contentgroup_id');
+		$result->set_operation('set_contentgroup_id');
 
 		//set the contentgroup_id of the actual object. checks if actual user is allwoed to.
 		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
@@ -1096,7 +1096,7 @@ class picture extends album_content
 	function calc_size()
 	{
 			// get width and height of pic
-			@$size = getimagesize($this->file);
+			$size = getimagesize(ROOT_PATH . $this->file);
 			$this->width = $size[0];
 			$this->height = $size[1];
 	}
