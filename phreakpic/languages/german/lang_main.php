@@ -58,7 +58,8 @@ $lang['full_size']="Vollbild";
 $lang['fit_size']="Auf seite anpassen";
 $lang['slideshow']="Slideshow";
 $lang['stop']="Stop";
-$lang['edit_meta']="Meta daten editieren";
+$lang['add']="Hinzufügen";
+
 
 //view_cat.tpl
 $lang['viewable_total_content'] = 'Du kannst %s von insgesamt %s Objekten sehen';
@@ -93,6 +94,7 @@ $lang['sync'] = 'Datenbank Synchronisieren';
 $lang['config'] = 'Konfiguration';
 $lang['default_template'] = 'Standard Template';
 $lang['default_language'] = 'Standard Sprache';
+$lang['meta_fields'] = 'Meta Felder';
 
 
 //admin/config

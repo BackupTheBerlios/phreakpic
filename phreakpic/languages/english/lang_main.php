@@ -64,7 +64,7 @@ $lang['full_size']="Original Size";
 $lang['fit_size']="Fit to page";
 $lang['slideshow']="Slideshow";
 $lang['stop']="Stop";
-$lang['edit_meta']="Edit meta data";
+$lang['add']="Add";
 
 //view_cat.tpl
 $lang['viewable_total_content'] = 'You can see %s objects out of %s';
@@ -94,6 +94,7 @@ $lang['uncheck_all'] = 'Uncheck All';
 //admin
 $lang['sync'] = 'Sync Database';
 $lang['config'] = 'Configuration';
+$lang['meta_fields'] = 'Meta fields';
 
 //admin/config
 $lang['thumb_table_cols'] = 'Cols in the Thumbnail view';
