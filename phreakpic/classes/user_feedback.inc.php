@@ -208,7 +208,7 @@ class comment extends user_feedback
 					parent_id = '$this->parent_id', 
 					topic = '$this->topic',
 					last_changed_date = '$this->last_changed_date',
-					poster_name = '$this->poster_name',
+					poster_name = '$this->poster_name'
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
