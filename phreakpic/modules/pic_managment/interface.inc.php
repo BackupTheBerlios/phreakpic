@@ -149,31 +149,59 @@ function get_pic_data($pic_id, $requested_fields)
 
 function add_dir_to_cat($dir,$cat_id, $name_mode = GENERATE_NAMES)
 {
-   // Adds all pictures in the Directory $dir into the Categorie with the id $cat_id
+   // Adds all pictures in the Directory $dir into the Categorie with the id $cat_id. If wanted it makes the names of the pics from the filenames
    global $db;
    global $config_vars;
 
-   // Verzeichniss öffnen
-   // Dateien finden, die Bilder sind. Was für Bildertypen werden zugelassen? Soll es ausgewählt werden können? Wo?
-   // Dateinamen auslesen
+   $dir_handle=opendir($dir);
 
-   // schleife für jede gefundene Datei
-   //
-   //if ($name_mode == GENERATE_NAMES)
-   //{
-   //
-   //}
+   //HIER NOCH CHECKEN WAS PASSIERT wenn $dir kein gültiges Verzeiczhnis ist
 
-   //$sql = "INSERT INTO " . $config_vars['table_prefix'] . "pics (name, file, cat_id, creation_date) VALUES ('name', '$file', '$cat_id', '$creation_date')";
 
-   //schleife ende
+	while ($file = readdir ($dir_handle))
+   {
+   	if (($file != "." && $file != "..") and ($file == "*.jpg" or $file == "*.jpeg" or $file == "*.jpe")) // WELCHE DATEIENDUNGEN werden benutzt? Soll es einstellbar sein? Wenn ja, wo?
+      {
+      	$unsorted_files[] = $file;
+         $array_length++;
+      }
+   }
 
+   sort
+   for ($j = 0; $j < $i; $j++)
+   {
+      	$dir_and_file = $dir . $file;
+
+         //if the name of the picture should be the filename, get it and cutoff the dateiendung
+         if ($name_mode == GENERATE_NAMES)
+         {
+         	$exploded_file = explode('.', $file);
+            $name = end($exploded_file);
+         }
+         else
+         {
+         	$name = '';
+         }
+
+         $sql = "INSERT INTO " . $config_vars['table_prefix'] . "pics (name, file, cat_id, creation_date)
+         	VALUES ('$name', '$dir_and_file', '$cat_id', '$creation_date')";
+
+         if (!$result = $db->query($sql))
+   		{
+			   message_die(GENERAL_ERROR, "Konnte das Bild nicht hinzufügen", '', __LINE__, __FILE__, $sql);
+		   }
+    	}
+	}
+	closedir($dir_handle);
 }
 
 function add_dir_parsed($dir)
 {
 	// Add all pictures under the Directory $dir to categories and series depending on the relativ path to $dir
+   global $db;
+   global $config_vars;
 
+   $dir_handle = opendir($dir);
 }
 
 function add_pic_to_cat($pic_dir,$cat_id)
