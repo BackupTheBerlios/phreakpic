@@ -66,7 +66,7 @@ if (isset($HTTP_POST_VARS['edit_cat']))
 	{
 		$child_cats[$i]->set_name($HTTP_POST_VARS['cat_name'][$i]);
 		$child_cats[$i]->set_description($HTTP_POST_VARS['cat_description'][$i]);
-		$child_cats[$i]->set_catgroup_id($HTTP_POST_VARS['cat_catgroup'][$i]);
+		$child_cats[$i]->set_catgroup_id($HTTP_POST_VARS['cat_catgroup'][$i],$HTTP_POST_VARS['cat_apply_recursive'][$i]);
 		
 		if ($HTTP_POST_VARS['cat_delete'][$i] == 'on')
 		{	

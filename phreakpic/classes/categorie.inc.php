@@ -379,12 +379,30 @@ class categorie
 		return $this->catgroup_id;
 	}
 	
-	function set_catgroup_id($new_catgroup_id)
+	function set_catgroup_id($new_catgroup_id,$recursive=false)
 	{
 		global $userdata;
 		if (($this->id == 0) or check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'edit'))
 		{
 			$this->catgroup_id=$new_catgroup_id;
+			if ($recursive)
+			{
+				$child_content = get_content_of_cat($this->id);
+				
+				foreach ($child_content as $content)
+				{
+					$content->set_contentgroup_id($new_catgroup_id);
+					$content->commit();
+				}
+				$child_cats = get_cats_of_cat($this->id);
+				foreach ($child_cats as $cat)
+				{
+					$cat->set_catgroup_id($new_catgroup_id);
+					$cat->commit();
+				}
+			}
+			
+			
 			return OP_SUCCESSFUL;
 		}
 		else

@@ -30,7 +30,6 @@
 
 <br>
 
-
 <!--{if $number_of_child_cats > 0}-->
 	<table width="100%" border="0" cellpadding="4">
 		<tr bgcolor="<!--{#table_head_bg_color#}-->" class="genmed" id="cat_table_head">
@@ -71,8 +70,7 @@
 								<option value="<!--{$add_to_catgroups[cat_id].id}-->"><!--{$add_to_catgroups[cat_id].name}--></option>
 							<!--{/if}-->
 							<!--{/section}-->
-						</select>
-					
+						</select><input type="checkbox" name="cat_apply_recursive[<!--{$smarty.section.id.index}-->]">
 					<!--{/if}-->
 					</td>
 					
