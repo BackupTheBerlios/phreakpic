@@ -867,10 +867,18 @@ class picture extends album_content
 	
 	function rotate($degrees)
 	{
-		exec("convert -rotate $degrees $this->file $this->file");
-		unlink ($this->thumbfile);
-		$this->generate_thumb();
+		
+		if ($this->check_perm('edit')) //Authorisation is okay
+		{
+		
+			exec("convert -rotate $degrees $this->file $this->file");
+			unlink ($this->thumbfile);
+			$this->generate_thumb();
+			return OP_SUCCESSFUL;
+		}
+		return OP_NP_MISSING_EDIT;
 	}
+	
 }
 
 
