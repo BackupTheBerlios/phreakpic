@@ -204,26 +204,39 @@ class album_content
 		//check if the object is in the database
 		if (isset($this->id))
 		{  
-			if (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "delete")) //Authorisation is okay
+			if ($this->check_perm('delete')) //Authorisation is okay
 			{
-				// remove from content table
-				$sql = "DELETE FROM '" . $config_vars['table_prefix'] . "content' WHERE 'id' = " . $this->id;
-				if (!$result = $db->sql_query($sql))
-				{
-					message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
-				}
-				unset($this->id);
-				
-				// remove from content_in_cat table
-				$this->clear_content_in_cat();
-				
-				unset($this->cat_ids);
-				
 				if (!unlink($this->file))
 				{
 					message_die(GENERAL_ERROR, "Konnte Datei nicht löschen", '', __LINE__, __FILE__, '');
 				}
+				
+				if (!unlink($this->get_thumbfile()))
+				{
+					message_die(GENERAL_ERROR, "Konnte Thumb nicht löschen", '', __LINE__, __FILE__, '');
+				}
+				
+				
+				
+					
+				// remove from content table
+				$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content WHERE 'id' = " . $this->id;
+				if (!$result = $db->sql_query($sql))
+				{
+					message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+				}
+				$this->clear_content_in_cat();
+				unset($this->id);
+				
+				// remove from content_in_cat table
+				
+				
 				unset($this->file);
+				unset($this->cat_ids);
+				unset($this->place_in_cat);
+				
+				
+				return OP_SUCCESSFUL;
 
 			}
 			else
@@ -274,7 +287,7 @@ class album_content
 		
 		if (!is_dir(dirname($new_file)))
 		{
-			makedir(dirname($new_file))
+			makedir(dirname($new_file));
 		}
 		
 		if (rename($this->file,$new_file));
@@ -286,7 +299,7 @@ class album_content
 		// move thumb
 		if (!is_dir(dirname($this->get_thumbfile())))
 		{
-			makedir(dirname($this->get_thumbfile()))
+			makedir(dirname($this->get_thumbfile()));
 		}
 		
 		
