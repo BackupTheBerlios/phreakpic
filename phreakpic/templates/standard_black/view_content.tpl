@@ -62,7 +62,7 @@
 			<td>
 				<div align="center">
 			<!--{$lang.full_size}--> <input type="radio" name="size" onclick="imageSize(0)"> <!--{$lang.fit_size}--> <input type="radio" name="size" onclick="imageSize(1)">
-				<a name="#pic"></a>
+				<a name="pic"></a>
 						<table width="1" border="0" cellpadding="0" cellspacing="0">
 							<tr>
 								<td width="1"><img src="templates/<!--{$template_name}-->/img/elo.gif" width="14" height="14" /></td>
