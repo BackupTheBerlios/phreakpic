@@ -1,10 +1,10 @@
 <!--{include file="$template_name/header.tpl"}-->
-<a href="index.php?<!--{$sid}-->"><!--{$lang.home}--></a> --
+<a href="index.php?&first_content=0<!--{$sid}-->"><!--{$lang.home}--></a> --
 <!--{section name=id loop=$nav_string}-->
 	<!--{if $smarty.section.id.last}-->
 		<!--{$nav_string[id].name}-->
 	<!--{else}-->
-		<a href="view_cat.php?cat_id=<!--{$nav_string[id].id}--><!--{$sid}-->">
+		<a href="view_cat.php?cat_id=<!--{$nav_string[id].id}-->&first_content=0<!--{$sid}-->">
 		<!--{$nav_string[id].name}--></a> --
 	<!--{/if}-->
 <!--{/section}-->
@@ -20,7 +20,7 @@
 		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="delete_cat">
 		<!--{section name=id loop=$number_of_child_cats}-->
 			<tr>
-				<td><a href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}--><!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
+				<td><a href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->&first_content=0<!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
 				<td><!--{$child_cat_infos[id].description}--></td>
 				<td><!--{$child_cat_infos[id].content_amount}--></td>
 				<td><!--{$child_cat_infos[id].current_rating}--></td>

@@ -33,15 +33,22 @@ if (!isset($cat_id))
 }
 
 //get previous and next content and display the thumbnail if aviable 
-
 // $surrounding_content = $content->get_surrounding_content($cat_id);
-for ($i=0;$i<sizeof($HTTP_SESSION_VARS['contents']);$i++)
+if (isset($HTTP_SESSION_VARS['contents']))
 {
-	if ($HTTP_SESSION_VARS['contents'][$i]->get_id() == $content_id)
+	for ($i=0;$i<sizeof($HTTP_SESSION_VARS['contents']);$i++)
 	{
-		$surrounding_content['next']=$HTTP_SESSION_VARS['contents'][$i+1];
-		$surrounding_content['prev']=$HTTP_SESSION_VARS['contents'][$i-1];
+		if ($HTTP_SESSION_VARS['contents'][$i]->get_id() == $content_id)
+		{
+			$surrounding_content['next']=$HTTP_SESSION_VARS['contents'][$i+1];
+			$surrounding_content['prev']=$HTTP_SESSION_VARS['contents'][$i-1];
+			break;
+		}
 	}
+}
+else
+{
+	$surrounding_content = $content->get_surrounding_content($cat_id);
 }
 
 if (is_object($surrounding_content['prev']))
@@ -138,8 +145,13 @@ $smarty->assign('current_rating', $content->get_current_rating());
 $smarty->assign('cat_id', $cat_id);
 $smarty->assign('redirect', PHREAKPIC_PATH . 'view_content.php');
 
+//calculate first_content
+if ($userdata['content_per_page']>0)
+{
+	$first_content = (int)($surrounding_content['place']/$userdata['content_per_page'])*$userdata['content_per_page'];
+}
 //assign link back to thumbs;
-$smarty->assign('thumb_link',$HTTP_SESSION_VARS['thumb_link']);
+$smarty->assign('thumb_link',$HTTP_SESSION_VARS['thumb_link']."&first_content=".$first_content);
 
 $smarty->assign('content_height',$content->height);
 $smarty->assign('content_width',$content->width);
