@@ -2,21 +2,23 @@ for alpha release:
 X name finden
 X fix security hole with $root_path (hope so)
 - interfaces für add_dir...
-- Polls
+
 X add_parsed_dir_to_cat
 X Anonymouse Login
 X Edit Comments
   X Delete Comments: unterschiedliche behandlung falls unter kommentare vorhanden sind
 X Bigbrother feature
   X Bigbrother auswertungen
-    - User Interface
+
 X session id bei jedem link weitergeben
 X Add file to cat edit hinzufügen
 
-
-
 for beta relase:
+
+- handle comments when cat or content is deleted
 - use language files everywhere
+- BigBrother User Interface
+- Polls
 - Design authorisation for adding people to groups creating auths.... 
 - Design which content/catgroups can be selected when creating new content/cat
 - code review und einheitlich machen (speziell view_cat, view_content)

@@ -29,6 +29,7 @@ $lang['name'] = 'Name';
 $lang['place_in_cat'] = 'Platz in Kategorie';
 $lang['lock'] = 'Sperren';
 $lang['delete'] = 'Löschen';
+$lang['unlink'] = 'unlink';
 $lang['link'] = 'link';
 $lang['move'] = 'verschieben';
 $lang['to_cat'] = 'Zu Kategorie';
