@@ -25,4 +25,7 @@ define("NOT_SUPPORTED", 1); //return value for dummy functions in classes. When 
 // Categorie delete modes
 define("CDM_REMOVE_CONTENT",0);
 define("CDM_MOVE_CONTENT",1);
+
+//Template System
+define("SMARTY_DIR","../smarty/");
 ?>
