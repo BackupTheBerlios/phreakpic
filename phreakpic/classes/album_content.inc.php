@@ -453,18 +453,28 @@ class album_content
 			{
 				makedir(dirname($this->new_filename));
 			}
+			
 
 			//echo "rename({$this->file},$new_file)<br>";
-			if (rename($this->file,$this->new_filename));
+			if (rename($this->file,$this->new_filename))
 			{
 				$this->set_file($this->new_filename); 
 			}
+			else 
+			{
+				die('content rename failed');
+			}
+			
 			//echo "rename pic" .$this->file." -> ".$new_file."<br>";
 
 			// move thumb
 			if (!is_dir(dirname($this->get_thumbfile())))
 			{
 				makedir(dirname($this->get_thumbfile()));
+			}
+			else 
+			{
+				die('content rename failed');
 			}
 		}
 
