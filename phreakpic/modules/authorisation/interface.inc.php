@@ -80,9 +80,8 @@ function check_content_action_allowed($contentgroup_id,$user_id,$action)
 		
 	
 	// check in which groups the user is
-	$usergroups_ids=get_groups_of_user($user_id);	
+	$usergroup_ids=get_groups_of_user($user_id);	
 	// check if there is at least one entry where in one of the $user_groups is $action allowed in $contentgroup_id
-	
 	// add the default usergroups
 	$usergroup_ids=array_merge($usergroup_ids,$config_vars['default_usergroup_ids']);
 	
