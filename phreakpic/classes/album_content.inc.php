@@ -210,7 +210,7 @@ class album_content
 		}
 		
 		$row = $db->sql_fetchrow($result);
-		return generate_from_row($row);
+		return $this->generate_from_row($row);
 		
 	}
 	 
@@ -481,7 +481,7 @@ class picture extends album_content
    
    function get_html()
    {
-   	return "<img src=".linkencode($this->get_file()).">";
+   	return "<img src=".linkencode($this->get_file())." width=100 height=100>";
    }
 }
 
