@@ -1,5 +1,9 @@
 <?php
 
+/* This is the sql shema for MySQL Database. Every SQL query will be called with
+* $query[] = "SQL QUERY";
+*/
+
 $query[] = "
 
 #
@@ -240,7 +244,16 @@ CREATE TABLE `" . $phreakpic_table_prefix . "views` (
 ";
 
 $query[] = "
-	ALTER TABLE `users` ADD `" . $phreakpic_table_prefix . "user_template` VARCHAR(50) DEFAULT '$default_template' NOT NULL
+	ALTER TABLE `" . $table_prefix . "users` ADD `" . $phreakpic_table_prefix . "user_template` VARCHAR(50) DEFAULT '$default_template' NOT NULL
 ";
 
+$query[] = "
+	INSERT INTO " . $phreakpic_table_prefix . "cats (id, name, current_rating, parent_id, catgroup_id, is_serie, content_amount, description) 
+		VALUES ('1', 'Root Category', 0, '1', 0, '0', 0, 'The Root Category')
+";
+
+$query[] = "
+	INSERT INTO " . $phreakpic_table_prefix . "cats (id, name, current_rating, parent_id, catgroup_id, is_serie, content_amount, description) 
+		VALUES ('2', 'Deleted Content Cat', 0, '2', 0, '0', 0, 'The Category where the deleted content will be stored.')
+";
 ?>
