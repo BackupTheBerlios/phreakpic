@@ -183,13 +183,14 @@ class categorie
 					
 					if (is_array($content))
 					{
+					
 						// check is user is allowed to do that
 						if (check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'content_remove'))
 						{	
 							// there is content to be removed
 							for ($i=0; $i<sizeof($content); $i++)
 							{
-								if ($content[$i]->remove_from_cat($this->id) == OP_SUCCESSFUL)
+								if (($content[$i]->remove_from_cat($this->id) == OP_SUCCESSFUL) and ($content[$i]->commit()))
 								{
 									$content_removed++;
 								}
@@ -433,6 +434,28 @@ class categorie
 	function get_content_amount()
 	{
 		return $this->content_amount;
+	}
+	
+	function get_child_content_amount()
+	{
+		global $config_vars;
+		$amount=$this->content_amount;
+		$cats = get_cats_of_cat($this->id);
+		if (is_array($cats))
+		{
+			foreach ($cats as $value)
+			{
+				if ($value->get_id() != $config_vars['root_categorie'])
+				{
+					
+					$amount+=$value->get_child_content_amount();
+				}
+			}
+		}
+		
+		return $amount;
+		
+		
 	}
 	
 	function set_content_amount($new_content_amount)
