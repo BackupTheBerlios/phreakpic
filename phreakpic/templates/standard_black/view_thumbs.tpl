@@ -79,6 +79,9 @@ table_cols = <!--{$table_cols|default:0}-->
 								<!--{$lang.rating}-->: <!--{$thumbs[thumb_cols][thumb_cell].current_rating}--><br>
 								<!--{$lang.views}-->: <!--{$thumbs[thumb_cols][thumb_cell].views}--><br>
 								<!--{$lang.comments_amount}-->: <!--{$thumbs[thumb_cols][thumb_cell].comments_amount}--><br>
+								<!--{foreach from=$thumbs[thumb_cols][thumb_cell].add_params item=value key=key}-->
+								<!--{$key}-->: <!--{$value}-->
+								<!--{/foreach}-->
 								<!--{if $mode == edit}-->
 									<input name="place_in_array[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">
 									<input name="content_id[]" type="hidden" value="<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->">

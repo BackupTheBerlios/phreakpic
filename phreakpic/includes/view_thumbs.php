@@ -95,10 +95,11 @@ if (is_array($contents))
 
 	
 	//show thumbnails and get some infos about the content
-	
 	for ($i = 1; $i <= sizeof($contents); $i++)
 	{	
 		$thumb_infos = $contents[$i-1]->get_thumb();
+		$thumb_infos['add_params']=$contents[$i-1]->add_params;
+	
 		if ($mode == 'edit')
 		{
 			// check what the user is allowed to edit

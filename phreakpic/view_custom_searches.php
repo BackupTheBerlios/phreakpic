@@ -153,9 +153,17 @@ if (($submit) or (!$no_instand_submit))
 	{
 		if (is_object(get_content_object_from_id($row[0])))
 		{
-			$contents[]=get_content_object_from_id($row[0]);
+			$new_content=get_content_object_from_id($row[0]);
+			$arr_keys = array_keys($row);
+			for ($i=3;$i<sizeof($arr_keys);$i+=2)
+			{
+				$new_content->add_params[$arr_keys[$i]] = $row[$arr_keys[$i]];
+			}
+			
+			$contents[]=$new_content;
 		}
 	}
+	
 	
 	// save contents array for view_content next and back buttons
 	$HTTP_SESSION_VARS['contents']=$contents;
