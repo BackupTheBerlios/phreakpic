@@ -152,12 +152,23 @@ if (check_cat_action_allowed($cat_obj->get_catgroup_id(),$userdata['user_id'],'c
 // Check if the user has remove_from_group right for this content
 if ($content->check_perm('remove_from_group'))
 {
-	// get the groups where the user has add_to_group rights
-	$add_to_contentgroups = get_contentgroups_data_where_perm('id,name','add_to_group');
-	if (is_array($add_to_contentgroups))
+	if ($mode == 'edit')
 	{
-		$smarty->assign('allow_change_group','1');
-		$smarty->assign('add_to_contentgroups',$add_to_contentgroups);
+		// get the groups where the user has add_to_group rights
+		$add_to_contentgroups = get_contentgroups_data_where_perm('id,name','add_to_group');
+		if (is_array($add_to_contentgroups))
+		{
+			$smarty->assign('allow_change_group','1');
+			$smarty->assign('add_to_contentgroups',$add_to_contentgroups);
+			$smarty->assign('contentgroup',$content->get_contentgroup_id());
+		}
+	}
+	if ($mode == 'commit')
+	{
+		if ($HTTP_POST_VARS['change_group'] == "on")
+		{
+			$content->set_contentgroup_id($HTTP_POST_VARS['to_group']);
+		}
 	}
 }
 
