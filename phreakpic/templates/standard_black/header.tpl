@@ -25,16 +25,16 @@ var keyactive = true;
 					<tr>
 						<td>
 							::
-							<a href="<!--{$phpbb_path}-->index.php?<!--{$sid}-->"><!--{$lang.forum}--></a> ::
-							<a href="<!--{$server_name}-->?<!--{$sid}-->"><!--{$lang.website_home}--></a> ::
+							<a href="<!--{$phpbb_path}-->index.php?<!--{$sid}-->" target="_parent"><!--{$lang.forum}--></a> ::
+							<a href="<!--{$server_name}-->?<!--{$sid}-->" target="_parent"><!--{$lang.website_home}--></a> ::
 							
-							<a href="view_custom_searches.php?<!--{$sid}-->"><!--{$lang.search}--></a> ::
+							<a href="<!--{$root_path}-->view_custom_searches.php?<!--{$sid}-->" target="_parent"><!--{$lang.search}--></a> ::
 							<!--{if $user_id != -1}-->
-							<a href="admin/ucp.php?<!--{$sid}-->"><!--{$lang.ucp}--></a> ::
+							<a href="<!--{$root_path}-->admin/ucp.php?<!--{$sid}-->" target="_parent"><!--{$lang.ucp}--></a> ::
 								<a href="<!--{$phpbb_path}-->login.php?logout=true<!--{$sid}-->"><!--{$lang.logout}--> [<!--{$username}-->]</a>
 							<!--{else}-->
 								
-								<a href="<!--{$phpbb_path}-->login.php?redirect=<!--{$redirect}--><!--{$sid}-->"><!--{$lang.login}--></a>
+								<a href="<!--{$phpbb_path}-->login.php?redirect=<!--{$redirect}--><!--{$sid}-->" target="_parent"><!--{$lang.login}--></a>
 							<!--{/if}-->
 							::
 						</td>
