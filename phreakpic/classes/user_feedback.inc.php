@@ -77,6 +77,17 @@ class comment extends user_feedback
 	{
 		return $this->parent_id;
 	}
+	
+	function set_topic($new_topic)
+	{
+		$this->topic = $new_topic;
+	}
+	
+	function get_topic()
+	{
+		return $this->topic;
+	}
+
 
 	
 	function get_childs()
@@ -112,7 +123,7 @@ class comment extends user_feedback
 		{
 			// this is object is not yet in the datebase, make a new entry
 			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . "s 
-				(owner_id, comment_text, user_id, creation_date, changed_count, parent_id, comment_topic)
+				(owner_id, feedback, user_id, creation_date, changed_count, parent_id, comment_topic)
 				VALUES ('$this->owner_id', '$this->feedback', '$this->user_id', '$this->creation_date', '$this->changed_count', '$this->parent_id', '$this->topic')";
 				
 			if (!$result = $db->sql_query($sql))
