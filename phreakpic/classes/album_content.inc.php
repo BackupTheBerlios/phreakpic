@@ -1115,12 +1115,14 @@ class picture extends album_content
 		}
 		
 		
-		
 		$dst_img = imagecreate($new_w,$new_h);
-		imagecopyresized($dst_img,$src_img,0,0,0,0,$new_w,$new_h,imagesx($src_img),imagesy($src_img));
+		imagejpeg($dst_img,$thumbfile,75);
+		$dst_img = imagecreatefromjpeg($thumbfile);
+		
+		imagecopyresampled($dst_img,$src_img,0,0,0,0,$new_w,$new_h,imagesx($src_img),imagesy($src_img));
 		if (!is_dir(dirname($thumbfile))) {makedir(dirname($thumbfile));}
 
-		imagejpeg($dst_img,$thumbfile);
+		imagejpeg($dst_img,$thumbfile,75);  // 75 == quality
 		ImageDestroy($src_img);
 		ImageDestroy($dst_img);
 	}
