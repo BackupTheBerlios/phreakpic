@@ -164,7 +164,7 @@ For all Change
 		</select><br>
 		
 		<!--{$lang.to_group}-->
-		<select name="to_contengroup">
+		<select name="to_contentgroup">
 		<!--{section name=id loop=$add_to_contentgroups}-->
 			<option value="<!--{$add_to_contentgroups[id].id}-->"><!--{$add_to_contentgroups[id].name}--></option>
 		<!--{/section}-->
