@@ -54,6 +54,16 @@ define(\"SERVER_NAME\",\"" . $Server_name . "\");
 		// if set the longer size will become this value
 		'maxsize' => '130'
 	),
+	
+	//if a submited picture is larger than this it will be resampled to this size
+	// format the same as in thumb_size 
+	'max_picture_size' =>
+	Array
+	(
+		'height' => '{$config_vars['max_picture_size']['height']}',
+		'width'	=> '{$config_vars['max_picture_size']['width']}',
+		'maxsize' => '{$config_vars['max_picture_size']['maxsize']}'
+	),
 
 	// ID of the cat where to put pictures that are no longer linked in any cat
 	'deleted_content_cat' => {$config_vars['deleted_content_cat']},

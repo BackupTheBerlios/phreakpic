@@ -27,6 +27,22 @@
 
 <!--{/section}-->
 </select></td></tr>
+<tr>
+	<td><b><!--{$lang.max_pic_size}--></b></td><td></td>
+</tr>
+<tr>
+	<td><!--{$lang.height}--></td><td><input type="text" name="max_pic_height" value="<!--{$config_vars.max_picture_size.height}-->" size="5"></td>
+</tr>
+<tr>
+	<td><!--{$lang.width}--></td><td><input type="text" name="max_pic_width" value="<!--{$config_vars.max_picture_size.width}-->" size="5"></td>
+</tr>
+<tr>
+	<td><!--{$lang.maxsize}--></td><td><input type="text" name="max_pic_maxsize" value="<!--{$config_vars.max_picture_size.maxsize}-->" size="5"></td>
+</tr>
+
+
+
+
 
 
 <tr><td>default usergroups</td>

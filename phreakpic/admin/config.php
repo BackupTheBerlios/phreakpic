@@ -6,6 +6,8 @@ include_once(ROOT_PATH . 'includes/template.inc.php');
 
 session_start();
 
+
+
 if ($HTTP_POST_VARS['default_basket_enable'] == 'on')
 {
 	$HTTP_SESSION_VARS['default_basket_enable'] = true;
@@ -28,6 +30,10 @@ if (isset($HTTP_POST_VARS['submit']))
  sort($HTTP_SESSION_VARS['selectable_content_per_page'], SORT_NUMERIC);
  $config_vars['selectable_content_per_page'] = $HTTP_SESSION_VARS['selectable_content_per_page'];
  $config_vars['default_basket_enable'] = $HTTP_SESSION_VARS['default_basket_enable'];
+ 
+ $config_vars['max_picture_size']['height'] = $HTTP_POST_VARS['max_pic_height'];
+ $config_vars['max_picture_size']['width'] = $HTTP_POST_VARS['max_pic_width'];
+ $config_vars['max_picture_size']['maxsize'] = $HTTP_POST_VARS['max_pic_maxsize'];
  
  write_config(SMARTY_DIR,PHPBB_PATH,PHREAKPIC_PATH,SERVER_NAME);
  
