@@ -76,10 +76,13 @@ if (is_array($contents))
 	
 	
 	// check if user is allowed to unlink from this cat
-	// das muss raus aus der loop
 	if ($mode == 'edit')
 	{
-		$smarty->assign('allow_content_remove',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'content_remove'));
+		$smarty->assign('mode','edit');
+		if (is_object($category))
+		{
+			$smarty->assign('allow_content_remove',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'content_remove'));
+		}
 
 		// Check if user has rights to add content to a cat (zu irgendeiner)
 		//dass auch
