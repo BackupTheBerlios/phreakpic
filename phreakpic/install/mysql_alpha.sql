@@ -4,9 +4,9 @@
 # http://phpmyadmin.sourceforge.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Nov 29, 2002 at 07:41 PM
-# Server version: 3.23.53
-# PHP Version: 4.2.3
+# Generation Time: Jan 04, 2003 at 09:38 PM
+# Server version: 3.23.54
+# PHP Version: 4.3.0
 # Database : `phpBB2`
 # --------------------------------------------------------
 
@@ -50,7 +50,6 @@ CREATE TABLE `photo_cat_comments` (
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
-
 #
 # Table structure for table `photo_cats`
 #
@@ -59,11 +58,13 @@ CREATE TABLE `photo_cats` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(200) NOT NULL default '',
   `current_rating` smallint(6) NOT NULL default '0',
-  `parent_id` int(11) NOT NULL default '0',
+  `parent_id` int(11) default '0',
   `catgroup_id` int(11) NOT NULL default '0',
   `is_serie` enum('0','1') NOT NULL default '0',
-  `content_amount` smallint(4) NOT NULL default '0',
+  `content_amount` mediumint(4) NOT NULL default '0',
   `description` text NOT NULL,
+  `child_content_amount` mediumint(9) NOT NULL default '0',
+  `child_comments_amount` smallint(6) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `id_2` (`id`)
@@ -85,6 +86,7 @@ CREATE TABLE `photo_content` (
   `current_rating` tinyint(4) NOT NULL default '0',
   `width` smallint(4) NOT NULL default '0',
   `height` smallint(4) NOT NULL default '0',
+  `comments_amount` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `id` (`id`)
 ) TYPE=MyISAM;
@@ -154,20 +156,6 @@ CREATE TABLE `photo_content_ratings` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `photo_groups`
-#
-
-CREATE TABLE `photo_groups` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` text NOT NULL,
-  `description` text NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `id` (`id`),
-  KEY `id_2` (`id`)
-) TYPE=MyISAM;
-# --------------------------------------------------------
-
-#
 # Table structure for table `photo_custom_searches`
 #
 
@@ -176,6 +164,41 @@ CREATE TABLE `photo_custom_searches` (
   `name` varchar(50) NOT NULL default '',
   `xml` text NOT NULL,
   `params` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `id_2` (`id`)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Table structure for table `photo_error_reports`
+#
+
+CREATE TABLE `photo_error_reports` (
+  `id` int(11) NOT NULL auto_increment,
+  `file` varchar(40) NOT NULL default '',
+  `line` int(11) NOT NULL default '0',
+  `sql` text NOT NULL,
+  `ident` varchar(50) NOT NULL default '',
+  `comment` text NOT NULL,
+  `type` tinyint(30) NOT NULL default '0',
+  `user_id` int(11) NOT NULL default '0',
+  `query_string` text NOT NULL,
+  `error_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `id_2` (`id`)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Table structure for table `photo_groups`
+#
+
+CREATE TABLE `photo_groups` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` text NOT NULL,
+  `description` text NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `id_2` (`id`)
@@ -213,25 +236,5 @@ CREATE TABLE `photo_views` (
   `content_id` int(11) default '0',
   `start` datetime NOT NULL default '0000-00-00 00:00:00',
   `end` datetime NOT NULL default '0000-00-00 00:00:00'
-) TYPE=MyISAM;
-
-#
-# Table structure for table `photo_error_reports`
-#
-
-CREATE TABLE photo_error_reports (
-  id int(11) NOT NULL auto_increment,
-  file varchar(40) NOT NULL default '',
-  line int(11) NOT NULL default '0',
-  sql text NOT NULL,
-  ident varchar(50) NOT NULL default '',
-  comment text NOT NULL,
-  type tinyint(30) NOT NULL default '0',
-  user_id int(11) NOT NULL default '0',
-  query_string text NOT NULL,
-	error_time datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  (id),
-  UNIQUE KEY id (id),
-  KEY id_2 (id)
 ) TYPE=MyISAM;
 
