@@ -8,54 +8,54 @@ class categorie
 	var $name;
 	var $catgroup_id;
 	var $parent_id;
-	var $current_rating=0;
-	var $is_serie=false;
-	var $content_amount=0;
-	var $child_content_amount=0;
-	var $child_comments_amount=0;
+	var $current_rating;
+	var $is_serie;
+	var $content_amount;
+	var $child_content_amount;
+	var $child_comments_amount;
 	var $description;
-	
+
 	// vars for objects to be commited on commit()
 	var $commit_parent_cat;
-	
+
 	function categorie()
 	{
 	}
-	
+
 	function fill_up()
 	{
 		// looks in the database for an entry that matches the already setted data and fills in the rest
-		
+
 		global $db,$config_vars;
-		
+
 		$vars = get_object_vars($this);
-		
+
 		foreach ($vars as $key => $value)
 		{
 			if (isset($value))
 			{
 				$where=$where." ($key = '$value') and";
 			}
-			
+
 		}
 		$where=  $where." 1";
-				
-		
-		
+
+
+
 		$sql = 'select * from ' . $config_vars['table_prefix'] . "cats WHERE $where";
-		
-		
+
+	
 		if (!$result = $db->sql_query($sql))
 		{
 			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
 		}
-		
+
 		$row = $db->sql_fetchrow($result);
 		return $this->generate_from_row($row);
 
-		
+
 	}
-	
+
 	function check_perm($perm)
 	{
 		global $userdata;
@@ -227,7 +227,7 @@ class categorie
 					// check if user is allowed th remove cats from this cat
 					$cats = get_cats_of_cat($this->id);
 					
-					
+
 					if (is_array($cats))
 					{
 						// there are cats to be removed
@@ -318,7 +318,7 @@ class categorie
 		{
 			// object is already in the database just du an update
 			$sql = 'UPDATE ' . $config_vars['table_prefix'] . "cats 
-				SET 	name = '". database_encode($this->name) . "', 
+				SET 	name = '". database_encode($this->name) . "',
 					current_rating = '$this->current_rating', 
 					parent_id = '$this->parent_id', 
 					catgroup_id = '$this->catgroup_id',
@@ -380,7 +380,7 @@ class categorie
 			return OP_NP_MISSING_EDIT;	
 		}
 	}
-	
+
 	function get_description()
 	{
 		return $this->description;
@@ -447,7 +447,7 @@ class categorie
 	function set_parent_id($new_parent_id)
 	{
 		global $userdata;
-		
+
 		// get objekt for the parent cat
 		$parent = new categorie();
 		if ($parent->generate_from_id($new_parent_id) == OP_SUCCESSFUL)
@@ -465,7 +465,7 @@ class categorie
 				}
 			else
 			{
-				return OP_NP_MISSING_CAT_ADD;	
+				return OP_NP_MISSING_CAT_ADD;
 			}
 		}
 		else
