@@ -410,6 +410,12 @@ class album_content
 	{
 		global $userdata;
 		
+		if (!is_array($this->cat_ids))
+		{
+			$this->generate_content_in_cat_data();
+		}
+
+		
 		
 		//adds the actual object to the cat with id == $new_cat_id. Checks if actual user is allowed to.
 
@@ -434,7 +440,6 @@ class album_content
 	{
 		global $userdata;
 		
-		
 		if (!is_array($this->cat_ids))
 		{
 			$this->generate_content_in_cat_data();
@@ -446,17 +451,18 @@ class album_content
 
 		// check perms (needs content_remove)
 		if (check_cat_action_allowed($old_cat->catgroup_id, $userdata['user_id'], "content_remove"))
-		
-		// check if content is in cat
-		if (in_array($old_cat_id,$this->cat_ids))
 		{
-			// unset the key that contains the cat to be removed
-			array_splice($this->cat_ids,array_search($old_cat_id,$this->cat_ids),1);
-			return OP_SUCCESSFUL;
-		}
-		else
-		{
-			return OP_CONTENT_NOT_IN_CAT;
+			// check if content is in cat
+			if (in_array($old_cat_id,$this->cat_ids))
+			{
+				// unset the key that contains the cat to be removed
+				array_splice($this->cat_ids,array_search($old_cat_id,$this->cat_ids),1);
+				return OP_SUCCESSFUL;
+			}
+			else
+			{
+				return OP_CONTENT_NOT_IN_CAT;
+			}
 		}
 	}
 	
