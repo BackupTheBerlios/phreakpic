@@ -177,5 +177,50 @@ class phreak_error
 }
 
 
+function error_report($type, $ident , $line, $file,$sql='')
+{
+	global $userdata,$smarty,$db,$config_vars,$QUERY_STRING,$error;
+
+	switch ($type)
+	{
+		case SQL_ERROR:
+			$error_info['type'] = 'SQL_ERROR';
+			$error_info['sql_error'] = $db->sql_error();
+			break;
+		case AUTH_ERROR: $error_info['type'] = 'AUTH_ERROR'; break;
+		case FILE_ERROR: $error_info['type'] = 'FILE_ERROR'; break;
+		case GENERAL_ERROR: $error_info['type'] = 'GENERAL_ERROR'; break;
+		case INFORMATION: $error_info['type'] = 'INFORMATION'; break;
+	}
+
+	$error_info['ident'] = $ident;
+	$error_info['text'] = $error[$ident];
+	$error_info['line'] = $line;
+	$error_info['file'] = $file;
+	$error_info['sql'] = $sql;
+	$error_info['debug'] = DEBUG;
+
+
+	if ($type != INFORMATION)
+	{
+		// submit error to db
+		$sql = "INSERT INTO " . $config_vars['table_prefix'] . "error_reports
+					(type,file,line,sql,ident,user_id,query_string,error_time)
+					VALUES ('{$type}','{$error_info['file']}','{$error_info['line']}','" . addslashes($error_info['sql']) . "','{$error_info['ident']}','{$userdata['user_id']}','$QUERY_STRING','" . date("Y-m-d H:i:s") . "')";
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Error report failed", '', __LINE__, __FILE__, $sql);
+		}
+		$error_info['id'] = $db->sql_nextid();
+	}
+
+	$smarty->assign('error_info',$error_info);
+	$smarty->assign('ROOT_PATH',ROOT_PATH);
+	$smarty->display($userdata['photo_user_template']."/error_msg.tpl");
+	die();
+}
+
+
+
 
 ?>
