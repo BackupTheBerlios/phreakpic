@@ -1,27 +1,41 @@
 <!--{include file="$template_name/header.tpl"}-->
+<!--{config_load file="$template_name/config.cfg"}-->
 <script type="text/javascript" language="javascript">
+	<!--
 	var cat_amount=<!--{$number_of_child_cats}-->
 	var cat_sel=0;
+	-->
 </script>
 
-<a name="nav_link" href="index.php?first_content=0<!--{$sid}-->"><!--{$lang.home}--></a> --
-<!--{section name=id loop=$nav_string}-->
-	<!--{if $smarty.section.id.last}-->
-		<!--{$nav_string[id].name}-->
-		<script type="text/javascript" language="javascript">
-			catback=<!--{$smarty.section.id.index}-->
-		</script>
-	<!--{else}-->
-		<a name="nav_link" href="view_cat.php?cat_id=<!--{$nav_string[id].id}-->&first_content=0<!--{$sid}-->">
-		<!--{$nav_string[id].name}--></a> --
-	<!--{/if}-->
-<!--{/section}-->
+<table nowrap="nowrap" style="white-space:nowrap" width="40%" bgcolor="<!--{#navbar_bg_color#}-->" border="0" cellpadding="0" id="navbar_table">
+	<tr>
+		<td>
+			<!--{$lang.navbar}--> <a name="nav_link" href="index.php?first_content=0<!--{$sid}-->"><!--{$lang.home}--></a><!--{$lang.navbar_seperator}-->
+			<!--{section name=id loop=$nav_string}-->
+				<!--{if $smarty.section.id.last}-->
+					<!--{$nav_string[id].name}-->
+					<script type="text/javascript" language="javascript">
+						<!--
+						catback=<!--{$smarty.section.id.index}-->
+						-->
+					</script>
+				<!--{else}-->
+					<a name="nav_link" href="view_cat.php?cat_id=<!--{$nav_string[id].id}-->&first_content=0<!--{$sid}-->">
+					<!--{$nav_string[id].name}--></a><!--{$lang.navbar_seperator}-->
+				<!--{/if}-->
+			<!--{/section}-->
+		</td>
+	</tr>
+</table>
+
+<br>
+
 
 <!--{if $number_of_child_cats > 0}-->
-	<table width="60%" border="1" cellpadding="5" align="center">
-		<tr>
-			<td><!--{$lang.name}--></td>
-			<td><!--{$lang.description}--></td>
+	<table width="100%" border="0" cellpadding="4">
+		<tr bgcolor="<!--{#table_head_bg_color#}-->" class="genmed" id="cat_table_head">
+			<td width="25%"><!--{$lang.name}--></td>
+			<td width="75%"><!--{$lang.description}--></td>
 			<td><!--{$lang.amount}--></td>
 			<td><!--{$lang.rating}--></td>
 			<!--{if $mode == 'edit'}-->
@@ -30,11 +44,10 @@
 				
 			<!--{/if}-->
 			
-			
 		</tr>
 		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_cat">
 		<!--{section name=id loop=$number_of_child_cats}-->
-			<tr>
+			<tr bgcolor="<!--{#table_bg_color#}-->">
 				
 				
 				<!--{if $mode == 'edit'}-->
@@ -82,8 +95,6 @@
 	<p><!--{$lang.no_subcategories}--></p>
 <!--{/if}-->
 
-<hr>
-
 
 <!--{if  ($allow_cat_add == true) and ($mode == edit)}-->
 	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post">
@@ -101,7 +112,7 @@
 	</form>
 <!--{/if}-->
 
-
+<p>&nbsp;</p>
 
 
 <!--{include file="$template_name/view_thumbs.tpl"}-->
@@ -147,7 +158,7 @@
 
 </div>
 
-<table width="95%" align="center" border="1">
+<table width="95%" align="center" border="0">
 	<tr>
 		<td width="20%">
 			&nbsp;

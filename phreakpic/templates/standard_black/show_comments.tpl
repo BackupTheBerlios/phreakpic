@@ -1,6 +1,7 @@
+<!--{config_load file="$template_name/config.cfg"}-->
 <!--{section name=index loop=$comments}-->
 <!--{if $comments[index].level == 0}-->
-<table border="1" cellpadding="0" cellspacing="0">
+<table border="0" cellpadding="0" cellspacing="0" id="comment_thread_table">
 	<tr>
 		<td>
 <!--{/if}-->
@@ -12,11 +13,10 @@
 			<!--{/section}-->
 			&nbsp;
 		</td>
-		<td <!--{if $comments[index].level == 0}-->bgcolor="#cccccc" width="100%"
-			>
+		<td <!--{if $comments[index].level == 0}--> bgcolor="<!--{#table_head_bg_color#}-->" width="100%">
 		<!--{else}-->
 			>
-			<hr>
+			<hr class="comment_hr">
 		<!--{/if}-->
 			<!--{if $comments[index].new == true}-->
 				new
@@ -35,7 +35,7 @@
 		</td>
 	</tr>
 		<td>&nbsp;</td>
-		<td><!--{$comments[index].text}--> <br> <a href="comment.php?mode=add&type=<!--{$type}-->&parent_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">Antworten</a></td>
+		<td><div class="comment_text"><!--{$comments[index].text}--></div> <br> <a href="comment.php?mode=add&type=<!--{$type}-->&parent_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">Antworten</a></td>
 </table>
 <!--{if $comments[index.index_next].level == 0}-->
 		</td>

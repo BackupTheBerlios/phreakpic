@@ -1,3 +1,4 @@
+<!--{config_load file="$template_name/config.cfg"}-->
 <script type="text/javascript" language="javascript">
 table_cols = <!--{$table_cols|default:0}-->
 </script>
@@ -25,11 +26,11 @@ table_cols = <!--{$table_cols|default:0}-->
 	<!--{if $mode == edit}-->
 		<form action="view_cat.php?cat_id=<!--{$cat_id}-->&content_per_page=<!--{$content_per_page}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content" name="edit_content" >
 	<!--{/if}-->
-	<table border="0" align="center" cellspacing="10" cellpadding="3">
+	<table border="0" align="center" cellspacing="10" cellpadding="10">
 		<!--{section name=thumb_cols loop=$thumbs}-->
-		<tr>
+		<tr bgcolor="<!--{#table_bg_color#}-->" valign="bottom">
 			<!--{section name=thumb_cell loop=$thumbs[thumb_cols]}-->
-			<td width="<!--{$thumb_size}-->" height="<!--{$thumb_size}-->" name="td_thumb" onclick="was_shift=false; switchTd(<!--{$smarty.section.thumb_cell.index}-->,<!--{$smarty.section.thumb_cols.index}-->)" align="left" valign="bottom"  bgcolor="444444">
+			<td width="<!--{$thumb_size}-->" height="<!--{$thumb_size}-->" name="td_thumb" onclick="was_shift=false; switchTd(<!--{$smarty.section.thumb_cell.index}-->,<!--{$smarty.section.thumb_cols.index}-->)">
 				<!--{*Possible fields of this table are: 
 					html			the html tag to display the content
 					name			the name of it
@@ -48,7 +49,7 @@ table_cols = <!--{$table_cols|default:0}-->
 							<a name="link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}--><!--{$sid}-->#pic"><!--{$thumbs[thumb_cols][thumb_cell].html}--></a><br />
 						<!--</td>
 						<td>-->
-							<font size="-1">
+							<span class="genmed">
 								<!--{$lang.name}-->: <!--{$thumbs[thumb_cols][thumb_cell].name|truncate:15:"...":true}--><br>
 								<!--{$lang.rating}-->: <!--{$thumbs[thumb_cols][thumb_cell].current_rating}--><br>
 								<!--{$lang.views}-->: <!--{$thumbs[thumb_cols][thumb_cell].views}--><br>
@@ -81,7 +82,7 @@ table_cols = <!--{$table_cols|default:0}-->
 										<!--{$lang.change_group}--> (<!--{$thumbs[thumb_cols][thumb_cell].contentgroup_name}-->): <input id="change_group" name="change_group[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
 									<!--{/if}-->-->
 								<!--{/if}-->
-							</font>
+							</span>
 						</td>
 						</a>
 					<!--</tr>

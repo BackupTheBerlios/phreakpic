@@ -6,7 +6,68 @@ a:link {
 }
 
 */
+font,th,td,p,span,div 
+{
+	font-family: Helvetica, Verdana, Arial, sans-serif;
+	color:efefef;
+
+}
+
+a
+{
+	text-decoration: none;
+}
+
+
 a.thumb:hover
 {
 	background-color: #00ff00;
+}
+
+
+#navbar_table
+{
+	border-width:2px;
+	border-style:solid;
+	border-color:444444;
+	padding:1px;
+}
+
+#comment_thread_table
+{
+	border-width:2px;
+	border-style:solid;
+	border-color:3E433E;
+	padding:1px;
+
+}
+
+.gennorm
+{
+	font-size: 14px;
+}
+
+.genmed
+{
+	font-size: 12px;
+}
+
+.gensmall
+{
+	font-size: 10px;
+}
+
+#cat_table_head
+{
+	white-space:nowrap;
+}
+
+.comment_hr
+{
+	color:00ff00;
+}
+
+.comment_text:first-letter
+{
+	color:ffffff;
 }
