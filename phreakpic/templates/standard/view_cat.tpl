@@ -22,7 +22,7 @@
 			<tr>
 				<td><a href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}--><!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
 				<td><!--{$child_cat_infos[id].description}--></td>
-				<td><!--{$child_cat_infos[id].content_amount}--></td>
+				<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
 				<td><!--{$child_cat_infos[id].current_rating}--></td>
 				<!--{if ($allow_cat_remove == 'true') and ($mode == 'edit')}-->	
 					<td><input name="cat_delete" type="submit" id="<!--{$child_cat_infos[id].id}-->" value="<!--{$child_cat_infos[id].id}-->"></td>
