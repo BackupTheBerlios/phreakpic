@@ -4,7 +4,6 @@ function getmicrotime(){
     return ((float)$usec + (float)$sec); 
     } 
 $start_time = getmicrotime();
-echo ROOT_PATH;
 include_once(ROOT_PATH . 'includes/phpbb.inc.php');
 include_once(ROOT_PATH . 'config.inc.php');
 
