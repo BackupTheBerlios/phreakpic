@@ -27,8 +27,8 @@ $lang['search'] = 'Suchen';
 $lang['new_post'] = 'neu';
 $lang['comment_has_been_changed'] = 'Beitrag wurde %s mal geändert, zuletzt am %s';
 $lang['user_id'] = 'User ID';
-$lang[''] = '';
-$lang[''] = '';
+$lang['do_you_really'] = 'Wollen sie wirklich';
+$lang['delete_comment'] = 'dieses Kommentar löschen ?';
 
 //view_content.tpl
 $lang['nav_back'] = 'Zurück';
@@ -56,6 +56,8 @@ $lang['slideshow']="Slideshow";
 $lang['stop']="Stop";
 
 //view_cat.tpl
+$lang['viewable_total_content'] = 'Du kannst %s von insgesamt %s Objekten sehen';
+$lang['viewable_total_cats'] = 'Du kannst %s von insgesamt %s Kategorien sehen';
 $lang['view_cat']="Kategorie anzeigen";
 $lang['description'] = 'Beschreibung';
 $lang['amount'] = 'Anzahl';
@@ -90,7 +92,7 @@ $lang['default_language'] = 'Standard Sprache';
 
 //admin/config
 $lang['thumb_table_cols'] = 'Spalten in der Thumbansicht';
-$lang['content_per_page'] = 'Thumbanails pro Seite';
+$lang['content_per_page'] = 'Thumbnails pro Seite';
 
 
 //admin/auths.php

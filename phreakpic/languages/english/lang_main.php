@@ -27,6 +27,9 @@ $lang['search'] = 'Search';
 $lang['new_post'] = 'new_post';
 $lang['comment_has_been_changed'] = 'This Post was changed %s times, last at %s';
 $lang['user_id'] = 'user id';
+$lang['do_you_really'] = 'Do you really';
+$lang['delete_comment'] = 'want to delete this comment ?';
+
 $lang[''] = '';
 $lang[''] = '';
 $lang[''] = '';
@@ -61,6 +64,8 @@ $lang['stop']="Stop";
 
 
 //view_cat.tpl
+$lang['viewable_total_content'] = 'You can see %s objects out of %s';
+$lang['viewable_total_cats'] = 'You can see %s categories out of %s';
 $lang['view_cat']="View Categories";
 $lang['description'] = 'Description';
 $lang['amount'] = 'amount';
