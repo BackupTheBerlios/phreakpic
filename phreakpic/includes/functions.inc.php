@@ -117,14 +117,14 @@ define(\"SERVER_NAME\",\"" . $Server_name . "\");
 	'default_upload_dir' => '{$config_vars['default_upload_dir']}',
 	
 	// the ids of the usergroups in which every user is automaicly
-	'default_usergroup_ids' => Array(" . implode(',',$config_vars['default_usergroup_ids']) . "),
+	'default_usergroup_ids' => Array(" . @implode(',',$config_vars['default_usergroup_ids']) . "),
 	
 	// the ids of the usergroups in which every registered user is automaicly
-	'registered_users_usergroup_ids' => Array(" . implode(',',$config_vars['registered_users_usergroup_ids']) . "),
+	'registered_users_usergroup_ids' => Array(" . @implode(',',$config_vars['registered_users_usergroup_ids']) . "),
 	
 	'default_content_per_page' => {$config_vars['default_content_per_page']},
 	
-	'selectable_content_per_page' => Array(" . implode(',',$config_vars['selectable_content_per_page']) . "), 
+	'selectable_content_per_page' => Array(" . @implode(',',$config_vars['selectable_content_per_page']) . "), 
 	
 	'cookie_name' => 'phreakpic',
 	
@@ -377,12 +377,69 @@ function  linkencode($str)
 	return $str;
 }
 
+function check_writeable($dir)
+{
+	
+	$check = @mkdir("$dir/test_install_dir", 0755);
+	if ($check)
+	{
+		rmdir("$dir/test_install_dir");
+	}
+	return $check;
+	
+}
+
+function ensure_writable_dir($dir)
+{
+	/*returns:
+	 	0 if $dir exists and is writeable
+		1 if $dir could be created writeable
+		2 if $dir does exists but is not writeable
+		3 if $dir could be created but is not writeable
+		4 if $dir does not exists and could not be created
+		
+	 
+	*/
+	if (is_dir("./" . $dir))
+	{
+		if (check_writeable($dir))
+		{
+			return 0;
+		}
+		else
+		{
+			return 2;
+		}
+	}
+	else
+	{
+		if (@makedir($dir))
+		{
+			// dir created
+			if (check_writeable($dir))
+			{
+				return 1;
+			}
+			else
+			{
+				return 3;
+			}
+		}
+		else
+		{
+			// dir not creatable
+			return 4;
+		}
+	}
+}
+
 function makedir($dir)
 {
 	// makes directory $dir with dir_mask out of the config and creates an index.html in it so nobdy can se the directory listing
 	global $config_vars;
-	ForceDirectories($dir,$config_vars['dir_mask']);
+	$ret = ForceDirectories($dir,$config_vars['dir_mask']);
 	touch ($dir . '/index.html');
+	return $ret;
 }
 
 function ForceDirectories( $path,$umask) 
