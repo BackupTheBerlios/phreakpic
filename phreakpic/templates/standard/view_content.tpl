@@ -69,8 +69,8 @@ action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--
 					<!--{if $allow_edit eq 1}-->
 						<!--{$lang.name}-->: <input type="text" name="name" value="<!--{$name}-->"><br>
 						<!--{$lang.place_in_cat}-->: <input type="text" name="place_in_cat" value="<!--{$place_in_cat}-->"><br> 
-						<!--{$lang.lock}-->: <input type="checkbox" name="lock" 
-<!--{$locked}-->><br>
+						<!--{$lang.lock}-->: <input type="checkbox" name="lock" <!--{$locked}-->><br>
+						<!--{$lang.rotate}-->: <input type="text" name="rotate"><br> 
 					
 					<!--{/if}-->
 					

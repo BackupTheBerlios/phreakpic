@@ -776,8 +776,7 @@ class picture extends album_content
 		
 		
 		$thumbfile=$this->get_thumbfile();
-		
-		$size= getimagesize($this->file);
+		$size = getimagesize($this->file);
 
 		
 		if ($size[2]==1) $src_img = imagecreatefromgif($this->file);
@@ -862,6 +861,13 @@ class picture extends album_content
 		$array['current_rating'] = $this->get_current_rating();
 		$array['views'] = $this->get_views();
 		return $array;
+	}
+	
+	function rotate($degrees)
+	{
+		exec("convert -rotate $degrees $this->file $this->file");
+		unlink ($this->thumbfile);
+		$this->generate_thumb();
 	}
 }
 
