@@ -3,12 +3,16 @@ include_once('./includes/common.inc.php');
 include_once('./classes/album_content.inc.php');
 include_once('./includes/template.inc.php');
 include_once('./modules/pic_managment/interface.inc.php');
+include_once('./languages/'.$userdata['user_lang'].'/lang_main.php');
+include_once('./includes/functions.inc.php');
 
 if (!isset($cat_id))
 {
-	die ("cat_id nicht gesetzt");
+	$cat_id = $config_vars['root_categorie'];
+	$template_file = 'index';
 }
 
+//get the cats in the actual cat and information about them
 $child_cats = get_cats_of_cat($cat_id);
 if (isset($child_cats))
 {
@@ -25,30 +29,40 @@ if (isset($child_cats))
 }
 else
 {
+	//no child cats
 	$smarty->assign('number_of_child_cats',0);
 }
 
 
 
-
-
+//Get the contents of the actual cat and their thumbnails plus information like
 $contents = get_content_of_cat($cat_id);
-
-for ($i = 1; $i <= sizeof($contents); $i++)
+if (is_array($contents))
 {
-	$thumb_infos = $contents[$i-1]->get_thumb();
-	$array_row[] = $thumb_infos;
-	if ($i % $config_vars['thumb_table_cols'] == 0)
+	for ($i = 1; $i <= sizeof($contents); $i++)
 	{
-		$thumbs[]=$array_row;
-		unset($array_row);
+		$thumb_infos = $contents[$i-1]->get_thumb();
+		$array_row[] = $thumb_infos;
+		if ($i % $config_vars['thumb_table_cols'] == 0)
+		{
+			$thumbs[]=$array_row;
+			unset($array_row);
+		}
 	}
+	$thumbs[]=$array_row;
+	$smarty->assign('thumbs',$thumbs);
+	$smarty->assign('cat_id',$cat_id);
+	$smarty->assign('is_content', true);
 }
-$thumbs[]=$array_row;
 
-
-$smarty->assign('thumbs',$thumbs);
-$smarty->assign('cat_id',$cat_id);
+$smarty->assign('nav_string', build_nav_string($cat_id));
+$smarty->assign('lang',$lang);
 $smarty->assign('title', 'Testtitel');
-$smarty->display($userdata['photo_user_template'].'/view_cat.tpl');
+
+//thats for the index.php who needs another template file. index.php just set the $template_file to another value and includes this file
+if (!isset($template_file))
+{
+	$template_file = 'view_cat';
+}
+$smarty->display($userdata['photo_user_template'].'/'.$template_file.'.tpl');
 ?>
