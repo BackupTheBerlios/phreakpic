@@ -11,6 +11,9 @@ Beta Release:
 - Added basket page
 - Child content amount now saved in db (for performance)
 - Comments amount saved in db (for performace)
+- added phpBB avatars to the comments
+- fixed problem when a picture was in thumb view several times
+- made nav bar an include
 
 Changed Tables:
 Added:
