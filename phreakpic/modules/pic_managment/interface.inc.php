@@ -49,19 +49,23 @@ function get_content_of_cat($cat_id)
 	{
 		return OP_FAILED;
 	}
-	
-	
+		
 
 	$auth_where = get_allowed_contentgroups_where('content.contentgroup_id',$userdata['user_id'], "view");
 	
+
+	
 	// get all content
 	
-	$sql = 	'SELECT content.*,content_in_cat.place_in_cat FROM ' .  $config_vars['table_prefix'] . "content as content,"  . $config_vars['table_prefix'] . "content_in_cat as content_in_cat
-		WHERE  ($auth_where) and 
-			(content.id = content_in_cat.content_id) and (content_in_cat.cat_id = $cat_id)
+	$sql = 	'SELECT content.*,content_in_cat.place_in_cat 
+		FROM ' .	 $config_vars['table_prefix'] . "content as content,
+			"  . $config_vars['table_prefix'] . "content_in_cat as content_in_cat
+		WHERE	($auth_where) and 
+			(content.id = content_in_cat.content_id) and 
+			(content_in_cat.cat_id = $cat_id)
 		ORDER BY content_in_cat.place_in_cat";
 		
-	
+		
 	if (!$result = $db->sql_query($sql))
 	{
 		message_die(GENERAL_ERROR, "Couldnt get data of the of the content in the cat", '', __LINE__, __FILE__, $sql);
@@ -134,12 +138,12 @@ function get_content_object_from_id($id)
 	
 	if (check_content_action_allowed($uncontent->get_contentgroup_id(),$userdata['user_id'],'view'))
 	{
-	
-	
 		$objtyp = $filetypes[getext($uncontent->file)];
 		if (isset($objtyp))
 		{
 			$incontent = new $objtyp;
+			
+			
 			//this sucks (additional sql query) but its ok for now
 			$incontent->generate_from_id($id);
 		}
@@ -315,11 +319,59 @@ function add_dir_to_cat($dir,$cat_id, $contentgroup_id, $name_mode = GENERATE_NA
 
 function add_dir_parsed($dir)
 {
-	// Add all pictures under the Directory $dir to categories and series depending on the relativ path to $dir
-   global $db;
-   global $config_vars;
+		// Add all pictures under the Directory $dir to categories and series depending on the relativ path to $dir
+	global $db;
+	global $config_vars;
 
-   $dir_handle = opendir($dir);
+	$dir_handle = opendir($dir);
+	while ($file = readdir ($dir_handle))
+	{
+		
+		if (($file != ".") && ($file != ".."))
+		{
+			if (isset($filetypes[getext($file)]))
+			{
+				// $file is content
+				$dir_and_file = $dir . '/' . $file;
+				// generate a new album_content obj
+				$content = new $filetypes[getext($file)];
+				//if the name of the picture should be the filename, get it and cutoff the dateiendung	
+				if ($name_mode == GENERATE_NAMES)
+				{
+					$content->set_name(getfile($file));
+
+				}
+				else
+				{
+					$name = '';
+				}
+
+				$content->add_to_cat($cat_id);
+				$content->set_file($dir_and_file);
+				$content->set_contentgroup_id($contentgroup_id);
+
+				$content->commit();
+
+			}
+			elseif (is_dir($file))
+			{
+				//file is a sub dir
+				if (strpos($file,"cat_") === 0) // 3 = for zusätzliche typen gleicheit
+				{
+				// subdir cat
+				}
+				elseif (strpos($file,"serie_") === 0)
+				{
+				// subdir serie
+				}
+			}
+		
+			
+		}
+	}
+	
+	closedir($dir_handle);
+
 }
 
 
