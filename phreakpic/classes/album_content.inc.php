@@ -10,13 +10,12 @@ class album_content
    var $views;
    var $current_rating;
    var $creation_date;
-   var $group_id;
+   var $contentgroup_id;
 
    function album_content() //Constructor
    {
 
    }
-
 
    function generate_thumb($thumb_size = $config_vars['thumb_size'])
    {
@@ -83,7 +82,9 @@ class album_content
       global $config_vars;
 
       $sql = "UPDATE '" . $config_vars['table_prefix'] . "content'
-         SET id = '" . $this->id . "', file = '" . $this->file . "', cat_id = '" . $this->cat_id . "', name = '" . $this->name . "', views = '" . $this->views . "', current_rating = '" . $this->current_rating . "', creation_date = '" . $this->creation_date . "', group_id = '" . $this->group_id . "'";
+         SET id = '" . $this->id . "', file = '" . $this->file . "', cat_id = '" . $this->cat_id . "', name = '
+            " . $this->name . "', views = '" . $this->views . "', current_rating = '" . $this->current_rating . "', creation_date = '
+            " . $this->creation_date . "', group_id = '" . $this->group_id . "'";
 
       if (!$result = $db->query($sql))
       {
@@ -94,8 +95,8 @@ class album_content
    //set and get functions for every variable
    function set_id($id)
    {
-      //set the id of the actual object. Checks if actual user is allowed to.
-      $this->id = $id;
+      //set the id of the actual object. Nobody should do this.
+      return NOT_ALLOWED;
    }
 
    function get_id()
@@ -107,7 +108,14 @@ class album_content
    function set_file($file)
    {
       //set the file of the actual object. Checks if actual user is allowed to.
-      $this->file = $file;
+      if (check_content_action_allowed($this->content_group_id, $userdata['user_id'], "edit"))
+      {
+         $this->file = $file;
+      }
+      else
+      {
+         return NOT_ALLOWED;
+      }
    }
 
    function get_file()
@@ -119,7 +127,14 @@ class album_content
    function set_cat_id($cat_id)
    {
       //set the cat_id of the actual object. Checks if actual user is allowed to.
-      $this->cat_id = $cat_id;
+      if (check_content_action_allowed($this->content_group_id, $userdata['user_id'], "edit"))
+      {
+         $this->cat_id = $cat_id;
+      }
+      else
+      {
+         return NOT_ALLOWED;
+      }
    }
 
    function get_cat_id()
@@ -131,7 +146,14 @@ class album_content
    function set_name($name)
    {
       //set the name of the actual object. Checks if actual user is allowed to.
-      $this->name = $name;
+      if (check_content_action_allowed($this->content_group_id, $userdata['user_id'], "edit"))
+      {
+         $this->name = $name;
+      }
+      else
+      {
+         return NOT_ALLOWED;
+      }
    }
 
    function get_name()
@@ -142,7 +164,7 @@ class album_content
 
    function set_views($views)
    {
-      //set the views of the actual object. Checks if actual user is allowed to.
+      //set the views of the actual object. Allowed check is not usefull.
       $this->views = $views;
    }
 
@@ -154,7 +176,7 @@ class album_content
 
    function set_current_rating($current_rating)
    {
-      //set the current_rating of the actual object. Checks if actual user is allowed to.
+      //set the current_rating of the actual object. Allowed check is not usefull.
       $this->current_rating = $current_rating;
    }
 
@@ -167,7 +189,14 @@ class album_content
    function set_creation_date($creation_date)
    {
       //set the creation_date of the actual object. Checks if actual user is allowed to.
-      $this->creation_date = $creation_date;
+      if (check_content_action_allowed($this->content_group_id, $userdata['user_id'], "edit"))
+      {
+         $this->creation_date = $creation_date;
+      }
+      else
+      {
+         return NOT_ALLOWED;
+      }
    }
 
    function get_creation_date()
@@ -179,7 +208,14 @@ class album_content
    function set_contentgroup_id($contentgroup_id)
    {
       //set the contentgroup_id of the actual object. checks if actual user is allwoed to.
-      $this->contentgroup_id = $contentgroup_id;
+      if (check_content_action_allowed($this->content_group_id, $userdata['user_id'], "edit"))
+      {
+         $this->contentgroup_id = $contentgroup_id;
+      }
+      else
+      {
+         return NOT_ALLOWED;
+      }
    }
 
    function get_contentgroup_id()
