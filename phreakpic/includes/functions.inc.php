@@ -61,4 +61,11 @@ function  linkencode($str)
 	return $str;
 }
 
+function makedir($dir)
+{
+	global $config_vars;
+	mkdir($dir,$config_vars['dir_mask']);
+	touch ($dir . '/index.html');
+}
+
 ?>

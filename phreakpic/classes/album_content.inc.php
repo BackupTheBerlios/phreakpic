@@ -1,6 +1,8 @@
 <?php
 require_once('modules/authorisation/interface.inc.php');
 require_once('classes/categorie.inc.php');
+require_once('includes/functions.inc.php');
+
 
 // Holds information about which object to user with which file ending:
 $filetypes = Array (
@@ -504,7 +506,7 @@ class album_content
 			
 			if (!is_dir($config_vars['content_path_prefix'] . '/' . $path))
 			{
-				mkdir($config_vars['content_path_prefix'] . '/' . $path,$config_vars['dir_mask']);
+				makedir($config_vars['content_path_prefix'] . '/' . $path);
 			}
 			while ($cat_obj->get_parent_id() != $config_vars['root_categorie'])
 			{
@@ -616,7 +618,7 @@ class picture extends album_content
 		
 		$dst_img = imagecreate($new_w,$new_h);
 		imagecopyresized($dst_img,$src_img,0,0,0,0,$new_w,$new_h,imagesx($src_img),imagesy($src_img));
-		if (!is_dir(dirname($thumbfile))) {mkdir(dirname($thumbfile),$config_vars['dir_mask']);}
+		if (!is_dir(dirname($thumbfile))) {makedir(dirname($thumbfile));}
 
 		imagejpeg($dst_img,$thumbfile);
 		ImageDestroy($src_img);
