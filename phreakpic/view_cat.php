@@ -38,7 +38,7 @@ if (isset($HTTP_POST_VARS['newcat']))
 	{
 		$new_cat->set_is_serie(1);
 	}
-	$new_cat->set_catgroup_id($HTTP_POST_VARS['cat_group']);
+	$new_cat->set_catgroup_id($HTTP_POST_VARS['add_to_catgroup']);
 	$new_cat->commit();
 	
 }
@@ -97,12 +97,20 @@ $smarty->assign('allow_cat_add',check_cat_action_allowed($category->get_catgroup
 if ($mode == 'edit')
 {
 	$smarty->assign('mode','edit');
+	$add_to_catgroups = get_catgroups_data_where_perm('id,name','add_to_group');
+	$smarty->assign('add_to_catgroups',$add_to_catgroups);
+
 }
 
 // check if user is allowed to add content
 if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'content_add'))
 {
 	$smarty->assign('allow_content_add',true);
+	
+	// get catgroups where add_to_group is allowed
+	$add_to_contentgroups = get_contentgroups_data_where_perm('id,name','add_to_group');
+	$smarty->assign('add_to_contentgroups',$add_to_contentgroups);
+
 	if (isset($HTTP_POST_VARS['newcontent']))
 	{
 		$objtyp = $filetypes[getext($HTTP_POST_FILES['new_content_file']['name'])];

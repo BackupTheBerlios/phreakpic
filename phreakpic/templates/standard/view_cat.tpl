@@ -43,7 +43,12 @@
 	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content">
 	<!--{$lang.add_new_cat}-->
 	<!--{$lang.name}-->: <input name="cat_name" type="text" size="20">
-	<!--{$lang.catgroup}-->: <input name="cat_group" type="text" size="5">
+	<!--{$lang.catgroup}-->: 
+	<select name="add_to_catgroup">
+		<!--{section name=id loop=$add_to_catgroups}-->
+			<option value="<!--{$add_to_catgroups[id].id}-->"><!--{$add_to_catgroups[id].name}--></option>
+		<!--{/section}-->
+	</select>
 	<!--{$lang.is_serie}-->: <input name="cat_is_serie" type="checkbox"><br>
 	<!--{$lang.description}-->: <textarea name="cat_describtion" cols="70" rows="5"></textarea>
 	<input name="newcat" type="submit" id="submit" value="<!--{$lang.create}-->"><br>
@@ -142,7 +147,12 @@
 	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="add_content" id="add_content" enctype="multipart/form-data">
 	<!--{$lang.add_content}-->:<br>
 	<!--{$lang.file}-->: <INPUT  name="new_content_file" TYPE="file" SIZE="30">
-	<!--{$lang.contentgroup}-->: <input name="new_content_group" type="text" size="5">
+	<!--{$lang.contentgroup}-->: 
+	<select name="new_content_group">
+		<!--{section name=id loop=$add_to_contentgroups}-->
+			<option value="<!--{$add_to_contentgroups[id].id}-->"><!--{$add_to_contentgroups[id].name}--></option>
+		<!--{/section}-->
+	</select>
 	<!--{$lang.name}-->: <input name="new_content_name" type="text" size="20">
 	<!--{$lang.place_in_cat}-->: <input name="new_content_place_in_cat" type="text" size="5"><br>
 	<input name="newcontent" type="submit" id="submit" value="<!--{$lang.add_content}-->">
