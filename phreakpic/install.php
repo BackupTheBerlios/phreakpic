@@ -1,9 +1,61 @@
 <?php
+define ("ROOT_PATH",'');
+include ('includes/common.inc.php');
+include ('classes/group.inc.php');
+include ('classes/categorie.inc.php');
 // Some Config vars
 
 $version = "alpha";
 
 $dbdump = "mysql_$version.sql";
+
+
+$available_dbms = array(
+	"mysql" => array(
+		"LABEL" => "MySQL 3.x",
+		"SCHEMA" => "mysql", 
+		"DELIM" => ";",
+		"DELIM_BASIC" => ";",
+		"COMMENTS" => "remove_remarks"
+	)
+	
+	/*, 
+	"mysql4" => array(
+		"LABEL" => "MySQL 4.x",
+		"SCHEMA" => "mysql", 
+		"DELIM" => ";", 
+		"DELIM_BASIC" => ";",
+		"COMMENTS" => "remove_remarks"
+	), 
+	"postgres" => array(
+		"LABEL" => "PostgreSQL 7.x",
+		"SCHEMA" => "postgres", 
+		"DELIM" => ";", 
+		"DELIM_BASIC" => ";",
+		"COMMENTS" => "remove_comments"
+	), 
+	"mssql" => array(
+		"LABEL" => "MS SQL Server 7/2000",
+		"SCHEMA" => "mssql", 
+		"DELIM" => "GO", 
+		"DELIM_BASIC" => ";",
+		"COMMENTS" => "remove_comments"
+	),
+	"msaccess" => array(
+		"LABEL" => "MS Access [ ODBC ]",
+		"SCHEMA" => "", 
+		"DELIM" => "", 
+		"DELIM_BASIC" => ";",
+		"COMMENTS" => ""
+	),
+	"mssql-odbc" =>	array(
+		"LABEL" => "MS SQL Server [ ODBC ]",
+		"SCHEMA" => "mssql", 
+		"DELIM" => "GO",
+		"DELIM_BASIC" => ";",
+		"COMMENTS" => "remove_comments"
+	)*/
+);
 ?>
 
 <html>
@@ -132,20 +184,61 @@ if ($mode == "check_user_info")
 	}
 	
 	
-	$fd = fopen ("install/"$dbdump, "rb");
-	$filecontent = fread ($fd, filesize ($dbdump));
+	$fd = fopen ("install/" . $dbdump, "rb");
+	if (!$fd)
+	{
+		die ("Can't open the dbdump!");
+	}
+	$filecontent = fread ($fd, filesize ("install/" . $dbdump));
 	fclose ($fd);
 	
 	$usable_dump = str_replace ("photo_", $phreakpic_table_prefix, $filecontent);
 	
-	echo ("Filling the Database with tables ");
-	$check = mysql_db_query ($dbname, $usable_dump, $connect);
-	if ($check == false)
+	$usable_dump = explode($available_dbms[$dbms]["DELIM"], $usable_dump);
+	
+	echo ("Filling the Database with tables <br>");
+	for ($i = 1; $i < (sizeof($usable_dump) -1); $i++)
+	{
+		echo ("Table $i: ");
+		$check = mysql_db_query ($dbname, $usable_dump[$i], $connect);
+		if ($check == false)
 		{
 			die (mysql_errno().": ".mysql_error()."<BR>");
 		}
-		echo ('<font color=#00ff00>OK</font><br>');
-	echo ('</p>');
+		echo ('<font color=#0000ff>done</font><br>');	
+	}
+	echo ('<font color=#00ff00>OK</font><br>');
+	
+	//Filling basic Data in the DB
+	echo("Filling Tables<br>");
+	
+	$admin_group = new catgroup;
+	$admin_group->name = ('Admin Group');
+	$admin_group->description = ('This is the Administrator Category Group, where the deleted content cat can be found');
+	$admin_group->commit();
+	
+	//root cat
+	$root_cat = new categorie;
+	$root_cat->id = 1;
+	$root_cat->parent_id = 1;
+	$root_cat->catgroup_id = $admin_group->get_id();
+	$root_cat->name = ("root_cat");
+	$root_cat->description = ("This is your Root Category. You can change the name and description, but never delete it!");
+	$root_cat->commit();
+	
+	//deleted content cat
+	$deleted_content_cat = new categorie;
+	$deleted_content_cat->id = 2;
+	$deleted_content_cat->parent_id = 1;
+	$deleted_content_cat->catgroup_id = $admin_group->get_id();
+	$deleted_content_cat->name = ("root_cat");
+	$deleted_content_cat->description = ("This is your Deleted Content Category. Here will be your deleted content stored. You can change the name and description, but never delete it!");
+	$deleted_content_cat->commit();
+	
+	
+	echo ('<font color=#00ff00>OK</font><br>');
+	
+	echo ('</p>'); //end of DB stuff
 	
 	
 	//write the config file
