@@ -8,6 +8,10 @@ function generate_where($field,$array)
 		if ($i<sizeof($array)-1)
 			$where=$where." or";
 	}
+	if (!isset($where))
+	{
+		$where = 0;
+	}
 	return $where;
 }
 
