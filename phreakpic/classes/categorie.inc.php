@@ -8,6 +8,7 @@ class categorie
 	var $catgroup_id;
 	var $parent_id;
 	var $current_rating;
+	var $is_serie;
 	
 	function categorie()
 	{
@@ -52,23 +53,36 @@ class categorie
 		global $db,$config_vars;
 		if (isset($this->id))
 		{
-			if ($mode == CDM_MOVE_CONTENT)
-			{
-				// move content in this categorie to the cat with id $mode_params
+			// check if user has permission to do that
+			if (check_cat_action_allowed($this->catgroup_id,$userdata['user_id'],'delete'))
+			{			
+				if ($mode == CDM_MOVE_CONTENT)
+				{
+					
+					// check if user has right to edit all content in this categorie
+					
 				
-				// wie genau soll man hier mit den perms umgehen ?? 
+					// move content in this categorie to the cat with id $mode_params
+
+					// wie genau soll man hier mit den perms umgehen ?? 
+				}
+				else
+				{
+					// check if user has delete right for all pictures in this categorie
+					
+					// delete content of the cat
+				}
+				$sql = 'DELETE FROM '. $config_vars['table_prefix'] . "where id like $this->id";
+				if (!$result = $db->sql_query($sql))
+				{
+					message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
+				}
+				return OP_SUCCESSFULL;
 			}
 			else
 			{
-				// delete content of the cat
-				
+				return OP_NP_MISSING_DELETE;
 			}
-			$sql = 'DELETE FROM '. $config_vars['table_prefix'] . "where id like $this->id";
-			if (!$result = $db->sql_query($sql))
-			{
-				message_die(GENERAL_ERROR, "Error while submitting a new cat object to the db", '', __LINE__, __FILE__, $sql);
-			}
-			return OP_SUCCESSFULL;
 		}
 		else
 		{
@@ -135,7 +149,7 @@ class categorie
 		}
 		else
 		{
-			return OP_NOT_PERMITTED;	
+			return OP_NP_MISSING_EDIT;	
 		}
 	}
 	
@@ -154,7 +168,7 @@ class categorie
 		}
 		else
 		{
-			return OP_NOT_PERMITTED;	
+			return OP_NP_MISSING_EDIT;	
 		}
 		
 	}
@@ -173,15 +187,20 @@ class categorie
 		$parent = new categorie();
 		if ($parent->generate_from_id($new_parent_id) == OP_SUCCESSFUL)
 		{
-			// check if user has edit rights in the parent id
-			if (check_cat_action_allowed($parent->catgroup_id,$userdata['user_id'],'edit'))
+			// check if user has cat_add rights in the parent group
+			if (check_cat_action_allowed($parent->catgroup_id,$userdata['user_id'],'cat_add'))
 			{
+				// if this categoris is already in the db you also need move rights
+				if (isset($this->id) and !check_car_action_allowed($this->catgroup_id,$userdata['user_id'],'move')
+				{
+					return OP_NP_MISSING_CAT_MOVE;
+				}
 				$this->parent_id=$new_parent_id;
 				return OP_SUCCESSFUL;
 			}
 			else
 			{
-				return OP_NOT_PERMITTED;	
+				return OP_NP_MISSING_CAT_ADD;	
 			}
 		}
 		else
