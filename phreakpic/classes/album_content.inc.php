@@ -237,6 +237,7 @@ class album_content
 	
 	function generate_from_row($row)
 	{
+		// fills the object with the data in $row. $row is one result row from an sql query
 		if (is_array($row))
 		{
 			// fill the var of the object with the data from the database (the field names of the database are the same than the var names)
@@ -318,13 +319,9 @@ class album_content
 
 	function add_to_cat($new_cat_id)
 	{
-		global $userdata;
-		
-		
 		//adds the actual object to the cat with id == $new_cat_id. Checks if actual user is allowed to.
-
+		global $userdata;
 		// get objekt for the new_cat
-
 		$new_cat = new categorie();
 		$new_cat->generate_from_id($new_cat_id);
 		
@@ -342,6 +339,7 @@ class album_content
 	
 	function remove_from_cat($old_cat_id)
 	{
+		// removes content from cat $old_cat_id
 		global $userdata;
 		
 		$old_cat = new categorie();
@@ -442,7 +440,7 @@ class album_content
 	{
 		global $userdata;
 		//set the contentgroup_id of the actual object. checks if actual user is allwoed to.
-		if (($this->id == 0) or (check_content_action_allowed($this->content_group_id, $userdata['user_id'], "edit")))
+		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
 			$this->contentgroup_id = $contentgroup_id;
 			return OP_SUCCESSFUL;
@@ -481,6 +479,7 @@ class album_content
 	
 	function clear_content_in_cat()
 	{
+		// deletes content_in_cat table entry for this content
 		global $db;
 		$sql = "DELETE FROM '" . $config_vars['table_prefix'] . "content_in_cat'
 		WHERE content_id = $this->id";
@@ -494,6 +493,7 @@ class album_content
 	
 	function generate_filename()
 	{
+		// returns a string to the filename (with path) to the content. Calculated from the cat it is in
 		global $config_vars;
 		//check if content is already in a cat 
 		if (sizeof($this->cat_ids)>0)
@@ -535,13 +535,11 @@ class album_content
 	
 	function start_view()
 	{
+		//must be called when someone starts watching the pic. (For logging)
 		global $config_vars,$userdata;
 		$now = date("Y-m-d H:i:s");
 		$sql = 'INSERT INTO '. $config_vars['table_prefix'] .'views (user_id,content_id,start) VALUES ('.$userdata['user_id']. ',' . $this->id . ",$now)";
-		if (!$result = $db->sql_query($sql))
-		{
-			message_die(GENERAL_ERROR, "Error adding start view to the db", '', __LINE__, __FILE__, $sql);
-		}
+		
 	}
 
 }
@@ -550,13 +548,13 @@ class album_content
 class picture extends album_content
 {
 
-
+	
 	function calc_size()
 	{
-			// get width and height of pic
-			$size = getimagesize($this->file);
-			$this->width = $size[0];
-			$this->height = $size[1];
+		// get width and height of pic
+		$size = getimagesize($this->file);
+		$this->width = $size[0];
+		$this->height = $size[1];
 	}
 	
 
