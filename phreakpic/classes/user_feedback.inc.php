@@ -88,11 +88,19 @@ class comment extends user_feedback
 	
 	function set_parent_id($new_parent_id)
 	{
-		$this->parent_id = $new_parent_id;
+		if ($this->check_perm('comment_edit'))
+		{
+			$this->parent_id = $new_parent_id;
+			return OP_SUCCESSFUL;
+		}
+		else
+		{
+			return OP_NP_MISSING_COMMENT_EDIT;
+		}
 	}
 	
 	function get_parent_id()
-	{
+	{ 
 		return $this->parent_id;
 	}
 	
@@ -253,10 +261,33 @@ class comment extends user_feedback
 		return $this->generate_from_row($row);
 	}
 	
+	
+	
+	
+	
 }
 
 class content_comment extends comment
 {
+	function check_perm($perm)
+	{
+		global $userdata;
+		
+		if (!isset($this->id))
+		{
+			return true;
+		}
+		
+		if (!isset($this->$perm))
+		{
+			$content = new album_content();
+			$content->generate_from_id($this->owner_id);
+			$this->$perm = check_content_action_allowed($content->get_contentgroup_id(), $userdata['user_id'], $perm);		
+		}
+		return $this->$perm;
+	}
+
+
 	function commit()
 	{
 		if (!isset($this->id))
@@ -307,6 +338,29 @@ class content_comment extends comment
 
 class cat_comment extends comment
 {
+	
+	function check_perm($perm)
+	{
+		global $userdata;
+		if (!isset($this->id))
+		{
+			return true;
+		}
+		
+		
+		if (!isset($this->$perm))
+		{
+			$cat = new categorie();
+			$cat->generate_from_id($this->owner_id);
+
+			
+			$this->$perm = check_cat_action_allowed($cat->get_catgroup_id(), $userdata['user_id'], $perm);
+		}
+		return $this->$perm;
+	}
+
+
+
 	function cat_comment()
 	{
 		comment::comment();
