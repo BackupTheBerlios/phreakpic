@@ -1,16 +1,52 @@
 <?php
 require_once (ROOT_PATH . 'includes/functions.inc.php');
+require_once (ROOT_PATH . 'classes/auth.inc.php');
+
+
+function generate_perm_array()
+{
+	global $userdata,$db,$config_vars;
+	$auth = new content_auth;
+	$usergroup_ids=get_groups_of_user($userdata['user_id']);
+	// add the default usergroups
+	$usergroup_ids=array_merge($usergroup_ids,$config_vars['auto_usergroup_ids']);
+
+	$where = generate_where('usergroup_id',$usergroup_ids);
+
+	$sql = 'select contentgroup_id, ' .KEY_QUOTE . implode(KEY_QUOTE.', '.KEY_QUOTE,$auth->processing_vars) . KEY_QUOTE.' from '.$config_vars['table_prefix']."content_auth where ($where)";
+
+
+	if (!$result = $db->sql_query($sql))
+	{
+		error_report(SQL_ERROR, 'action_allowed' , __LINE__, __FILE__,$sql);
+	}
+
+
+
+
+	while ($row = $db->sql_fetchrow($result))
+	{
+		foreach($auth->processing_vars as $var)
+		{
+			$perm_array[$row['contentgroup_id']][$var] = $row[$var];
+		}
+
+	}
+	return $perm_array;
+}
+
+$perm_array = generate_perm_array();
 
 
 function check_auth_action_allowed()
 {
 	global $userdata;
-	
+
 	if ($userdata['user_level'] == ADMIN)
 	{
 		return '1';
 	}
-	
+
 	return false;
 }
 
@@ -23,13 +59,13 @@ function check_usergroup_action_allowed($usergroupgroup_id,$user_id,$action)
 {
 	// Returns TRUE if the user with id $user_id is allowed to do $action with the categories in in the catgroup with id $catgroup_id
 	global $db,$config_vars,$userdata;
-	
+
 	// if the current user is admin allow everything
 	if ($userdata['user_level'] == ADMIN)
 	{
 		return true;
 	}
-	
+
 	// check in which groups the user is
 	$usergroup_ids=get_groups_of_user($user_id);
 	
@@ -64,16 +100,16 @@ function check_cat_action_allowed($catgroup_id,$user_id,$action)
 {
 	// Returns TRUE if the user with id $user_id is allowed to do $action with the categories in in the catgroup with id $catgroup_id
 	global $db,$config_vars,$userdata;
-	
+
 	// if the current user is admin allow everything
 	if ($userdata['user_level'] == ADMIN)
 	{
 		return true;
 	}
-	
+
 	// check in which groups the user is
 	$usergroup_ids=get_groups_of_user($user_id);
-	
+
 	// add the default usergroups
 	$usergroup_ids=array_merge($usergroup_ids,$config_vars['auto_usergroup_ids']);
 
@@ -82,7 +118,7 @@ function check_cat_action_allowed($catgroup_id,$user_id,$action)
 	{
 		return false;
 	}
-	
+
 	$where = generate_where('usergroup_id',$usergroup_ids);
 	$sql = 'select usergroup_id from '.$config_vars['table_prefix']."cat_auth where (`$action` like 1) and (catgroup_id like $catgroup_id) and ($where) limit 1";
 	if (!$result = $db->sql_query($sql))
@@ -101,57 +137,32 @@ function check_cat_action_allowed($catgroup_id,$user_id,$action)
 	}
 }
 
+
 function check_content_action_allowed($contentgroup_id,$user_id,$action)
 {
 	// Returns TRUE if the user with id $user_id is allowed to do $action with content in $contentgroup_id
-	
-	global $db,$config_vars,$userdata;	
-	
+
+	global $perm_array,$userdata;
 	// if the current user is admin allow everything
 	if ($userdata['user_level'] == ADMIN)
 	{
-	
+
 		return true;
 	}
-
-		
-	
-	// check in which groups the user is
-	$usergroup_ids=get_groups_of_user($user_id);	
-	// check if there is at least one entry where in one of the $user_groups is $action allowed in $contentgroup_id
-	// add the default usergroups
-	$usergroup_ids=array_merge($usergroup_ids,$config_vars['auto_usergroup_ids']);
-	
-	$where = generate_where('usergroup_id',$usergroup_ids);
-
-	$sql = 'select usergroup_id from '.$config_vars['table_prefix']."content_auth where (`$action` like 1) and (contentgroup_id like $contentgroup_id) and ($where) limit 1";
-	
-	if (!$result = $db->sql_query($sql))
-	{
-		error_report(SQL_ERROR, 'action_allowed' , __LINE__, __FILE__,$sql);
-	}
-
-
-	if ($db->sql_affectedrows()>=1)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-
+	return $perm_array[$contentgroup_id][$action];
 }
+
+
 
 function get_allowed_contentgroups_where($user_id,$action,$field='contentgroup_id')
 {
 	// Returns an SQL where that limits a query to the content where $action if allowed by $user_id.
 	// $action must be the name of a field out of the content_auth table, which says if this action is allowed or not
 
-	global $db,$config_vars,$userdata;	
-	
-	
-	
+	global $db,$config_vars,$userdata;
+
+
+
 	// if the current user is admin allow everything
 	if ($userdata['user_level'] == ADMIN)
 	{
@@ -160,7 +171,7 @@ function get_allowed_contentgroups_where($user_id,$action,$field='contentgroup_i
 
 	// first of all get the groups in which the user is.
 //	$user_groups = get_groups_of_user($user_id);
-	
+
 //	if (!isset($user_groups))
 //	{
 		// user is in now usergroups
@@ -169,7 +180,7 @@ function get_allowed_contentgroups_where($user_id,$action,$field='contentgroup_i
 	
 	// get contentgroup_ids from the contents groups where at least one usergroup out of §users_groups is allowed to do $action
 //	$where = generate_where('usergroup_id',$user_groups);
-	
+
 	
 //	$sql = 'select contentgroup_id from '.$config_vars['table_prefix']."content_auth where ($action like 1) and $where";
 
