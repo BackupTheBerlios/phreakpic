@@ -31,9 +31,9 @@ unset($HTTP_SESSION_VARS['contents']);
 
 
 
-if (!isset($cat_id))
+if (!isset($HTTP_GET_VARS['cat_id']))
 {
-	$cat_id = $config_vars['root_categorie'];
+	$HTTP_GET_VARS['cat_id'] = $config_vars['root_categorie'];
 	$template_file = 'index';
 }
 
@@ -42,7 +42,7 @@ if (!isset($cat_id))
 if (isset($HTTP_POST_VARS['newcat']))
 {
 	$new_cat = new categorie();
-	$new_cat->set_parent_id($cat_id);
+	$new_cat->set_parent_id($HTTP_GET_VARS['cat_id']);
 	$new_cat->set_name($HTTP_POST_VARS['cat_name']);
 	$new_cat->set_description($HTTP_POST_VARS['cat_describtion']);
 	if ($HTTP_POST_VARS['cat_is_serie'] == 'on')
@@ -59,7 +59,20 @@ if (isset($HTTP_POST_VARS['newcat']))
 
 
 //get the cats in the actual cat and information about them
-$child_cats = get_cats_of_cat($cat_id);
+$child_cats = get_cats_of_cat($HTTP_GET_VARS['cat_id']);
+
+// get the amount of child_cats without perm checking
+$sql = "SELECT * FROM " . $config_vars['table_prefix'] . "cats WHERE (parent_id = {$HTTP_GET_VARS['cat_id']})";
+
+if (!$result = $db->sql_query($sql))
+{
+	error_report(SQL_ERROR, 'get_cats_of_cat' , __LINE__, __FILE__,$sql);
+}
+
+$child_cats_total_amount = $db->sql_affectedrows($result);
+$child_cats_viewable_amount = sizeof($child_cats);
+
+$smarty->assign('viewable_total_cats',sprintf($lang['viewable_total_cats'],$child_cats_viewable_amount,$child_cats_total_amount));
 
 if (isset($HTTP_POST_VARS['edit_cat']))
 {
@@ -89,14 +102,14 @@ if (isset($HTTP_POST_VARS['edit_cat']))
 		}
 
 	}
-	$child_cats = get_cats_of_cat($cat_id);
+	$child_cats = get_cats_of_cat($HTTP_GET_VARS['cat_id']);
 }
 
 
 
 //Get the contents of the actual cat and their thumbnails plus information like
 $category = new categorie;
-$category->generate_from_id($cat_id);
+$category->generate_from_id($HTTP_GET_VARS['cat_id']);
 
 
 
@@ -119,7 +132,7 @@ if (isset($child_cats))
 
 	}
 	// in edit mode check on which cats user has rights to remove cat
-	if ($mode == 'edit')
+	if ($HTTP_GET_VARS['mode'] == 'edit')
 	{
 		$smarty->assign('allow_cat_remove',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'cat_remove'));
 		$add_to_cats_unparsed = get_cats_data_where_perm('id,name','cat_add');
@@ -141,7 +154,7 @@ else
 
 // check is user is allowed to add a child cat
 $smarty->assign('allow_cat_add',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'cat_add'));
-if ($mode == 'edit')
+if ($HTTP_GET_VARS['mode'] == 'edit')
 {
 	$smarty->assign('mode','edit');
 	$add_to_catgroups = get_catgroups_data_where_perm('id,name','add_to_group');
@@ -176,7 +189,7 @@ if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'
 		$objtyp = $filetypes[getext($HTTP_POST_FILES['new_content_file']['name'])];
 		if (isset($objtyp))
 		{
-			add_content($HTTP_POST_FILES,$HTTP_POST_VARS['new_content_name'],$cat_id,$HTTP_POST_VARS['new_content_place_in_cat'],$HTTP_POST_VARS['new_content_group']);
+			add_content($HTTP_POST_FILES,$HTTP_POST_VARS['new_content_name'],$HTTP_GET_VARS['cat_id'],$HTTP_POST_VARS['new_content_place_in_cat'],$HTTP_POST_VARS['new_content_group']);
 		}
 	}
 }
@@ -218,7 +231,15 @@ else
 
 
 $smarty->assign('content_per_page',$content_per_page);
-$contents = get_content_of_cat($cat_id,$HTTP_SESSION_VARS['first_content'],$content_per_page);
+$returns = get_content_of_cat($HTTP_GET_VARS['cat_id'],$HTTP_SESSION_VARS['first_content'],$content_per_page);
+$contents = $returns['content_obj_array'];
+$viewable_amount = $returns['viewable_amount'];
+
+$smarty->assign('viewable_total_content',sprintf($lang['viewable_total_content'],$viewable_amount,$category->get_content_amount()));
+
+
+
+
 include "includes/view_thumbs.php";
 
 
@@ -227,7 +248,7 @@ include "includes/view_thumbs.php";
 if ($content_per_page > 0)
 {
 	$i=0;
-	while (($i*$content_per_page)<$category->get_content_amount())
+	while (($i*$content_per_page)<$viewable_amount)
 	{
 		$cat_nav_links[] = $i * $content_per_page;
 		$i++;
@@ -240,7 +261,7 @@ if ($content_per_page > 0)
 	}
 	$smarty->assign('first_content',$HTTP_SESSION_VARS['first_content']);
 
-	if ($HTTP_SESSION_VARS['first_content']+$content_per_page>=$category->get_content_amount())
+	if ($HTTP_SESSION_VARS['first_content']+$content_per_page>=$viewable_amount)
 	{
 		$smarty->assign('first_content_next',0);
 	}
@@ -251,7 +272,7 @@ if ($content_per_page > 0)
 
 	if ($HTTP_SESSION_VARS['first_content']-$userdata['content_per_page'] < 0)
 	{
-		$smarty->assign('first_content_prev', (int)($category->get_content_amount()/$content_per_page)*$content_per_page);
+		$smarty->assign('first_content_prev', (int)($viewable_amount/$content_per_page)*$content_per_page);
 	}
 	else
 	{
@@ -279,7 +300,7 @@ if (is_array($config_vars['selectable_content_per_page']))
 }
 
 
-$smarty->assign('cat_id',$cat_id);
+$smarty->assign('cat_id',$HTTP_GET_VARS['cat_id']);
 
 
 // proceed comments
@@ -289,7 +310,7 @@ include ('includes/proceed_comment.inc.php');
 
 
 
-$root_comments = get_comments_of_cat($cat_id);
+$root_comments = get_comments_of_cat($HTTP_GET_VARS['cat_id']);
 
 
 if (sizeof($root_comments) > 0)
@@ -298,7 +319,7 @@ if (sizeof($root_comments) > 0)
 	for ($i = 0; $i < sizeof($root_comments); $i++)
 	{
 	
-		make_comments($root_comments[$i],0,check_cat_action_allowed($cat_id,$userdata['user_id'],'comment_edit'));
+		make_comments($root_comments[$i],0,check_cat_action_allowed($HTTP_GET_VARS['cat_id'],$userdata['user_id'],'comment_edit'));
 	}
 	$smarty->assign('comments',$comments);
 }
@@ -310,7 +331,7 @@ else
 
 
 //link where to go when back to thumbs
-$HTTP_SESSION_VARS['thumb_link']="view_cat.php?cat_id=$cat_id";
+$HTTP_SESSION_VARS['thumb_link']="view_cat.php?cat_id={$HTTP_GET_VARS['cat_id']}";
 $smarty->assign('thumb_link',$HTTP_SESSION_VARS['thumb_link']);
 $smarty->assign('current_page',$HTTP_SESSION_VARS['thumb_link']);
 
@@ -322,7 +343,7 @@ if (!isset($template_file))
 }
 
 
-$smarty->assign('nav_string', build_nav_string($cat_id));
+$smarty->assign('nav_string', build_nav_string($HTTP_GET_VARS['cat_id']));
 $smarty->assign('redirect', PHREAKPIC_PATH . "$template_file.php");
 $smarty->assign('thumb_size', $config_vars['thumb_size']['maxsize']);
 $smarty->assign('title_page',$lang['view_cat']);
