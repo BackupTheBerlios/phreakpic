@@ -149,7 +149,7 @@ function make_comments($comment, $level,$editable)
  		$newest = strtotime($comment->get_last_changed_date());
  	}
 	
-	echo date("Y-m-d H:i:s",$userdata['user_lastvisit'])."<br>";
+	//echo date("Y-m-d H:i:s",$userdata['user_lastvisit'])."<br>";
 	
 	
 	if ($userdata['user_lastvisit'] < $newest)
@@ -186,5 +186,89 @@ function stop_view($start_view,$content_id)
 		message_die(GENERAL_ERROR, "Couldn't start view", '', __LINE__, __FILE__, $sql);
 	}
 }
+
+function get_installed_languages()
+{
+	$dir= ROOT_PATH . './languages/';
+	
+	$dir_handle=opendir($dir);
+	while ($file = readdir ($dir_handle))
+	{
+			
+		if (($file != "." && $file != "..") and (is_dir($dir.$file)))
+		{	
+			if (is_file($dir.$file.'/lang_main.php'))
+			{
+				$langs[]=$file;
+			}
+		
+		}
+	}
+	
+	return $langs;
+	
+	
+}
+
+function generate_values($values)
+{
+	//Either key word or list seperated with ,
+	
+	
+	if ($values == 'OPERATOR')
+	{
+		return Array('=','<','>');
+	}
+	if (strpos($values,','))
+	{
+		return explode(',',$values);
+	}
+	return $values;
+	
+	
+
+}
+
+
+function generate_params($params)
+{
+	global $lang;
+	// gets the parameter infos for the query out of $params
+	/*
+	Types:
+	INPUT = input field
+	DROPDOWN = DropDownField
+	*/
+
+	$rest=$params;
+
+	// get param fields
+	//$start = strpos($rest,'[');
+	while (($start = strpos($rest,'['))!==false)
+	{
+
+		$end = strpos($rest,']');
+	
+		$entry=explode('|',substr($rest,$start+1,$end-$start-1));
+		$assoc_entry['type']=$entry[0];
+			
+		$assoc_entry['value']=generate_values($entry[1]);
+		
+		
+		$assoc_entry['name']=$entry[2];
+		$assoc_entry['text']=$lang[$entry[2]];
+		$param[]=$assoc_entry;
+		$rest=substr($rest,$end+1);
+	
+	}
+	
+	
+	
+	
+	return $param;
+
+}
+
+
 
 ?>
