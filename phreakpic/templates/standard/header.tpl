@@ -11,12 +11,12 @@
 					<tr>
 						<td>
 							::
-							<a href="../phpBB2/index.php?<!--{$sid}-->"><!--{$lang.forum}--></a> ::
-							<a href="<!--{$website}-->?<!--{$sid}-->"><!--{$lang.website_home}--></a> ::
+							<a href="<!--{$server_name}--><!--{$phpbb_path}-->index.php?<!--{$sid}-->"><!--{$lang.forum}--></a> ::
+							<a href="<!--{$server_name}-->?<!--{$sid}-->"><!--{$lang.website_home}--></a> ::
 							<!--{if $username != 'Anonymous'}-->
-								<a href="../phpBB2/login.php?logout=true<!--{$sid}-->"><!--{$lang.logout}--> [<!--{$username}-->]</a>
+								<a href="<!--{$server_name}--><!--{$phpbb_path}-->login.php?logout=true<!--{$sid}-->"><!--{$lang.logout}--> [<!--{$username}-->]</a>
 							<!--{else}-->
-								<a href="../phpBB2/login.php<!--{$sid}-->"><!--{$lang.login}--></a>
+								<a href="<!--{$server_name}--><!--{$phpbb_path}-->login.php?redirect=<!--{$php_self}--><!--{$sid}-->"><!--{$lang.login}--></a>
 							<!--{/if}-->
 							::
 						</td>
