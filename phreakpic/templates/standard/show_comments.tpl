@@ -23,7 +23,8 @@
 am <!--{$comments[index].last_changed_date}-->
 			<!--{/if}-->
 			<!--{if $comments[index].editable == true}-->
-			<a href="comment.php?mode=edit_comment&type=<!--{$type}-->&id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->">edit</a>
+				<a href="comment.php?mode=edit_comment&type=<!--{$type}-->&id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->">edit</a>
+				<a href="view_<!--{$type}-->.php?mode=del_comment&comment_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->">delete</a>
 			<!--{/if}-->
 			
 		</td>
