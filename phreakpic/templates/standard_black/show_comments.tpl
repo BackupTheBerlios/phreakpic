@@ -21,8 +21,8 @@
 		
 		<table border="0">
 			<tr>
-				<td>
-					<b><!--{$comments[index].username}--></b>
+				<td valign="top">
+					<b><!--{$comments[index].username}--><!--{$comments[index].poster_name}--></b>
 					<!--{if $comments[index].new == true}-->
 						<font size="-2">new posting</font>
 					<!--{/if}-->	
@@ -31,7 +31,7 @@
 				</td>
 				<td>
 					<span class="gensmall">
-					<!--{$comments[index].poster_name}--> <!--{$lang.wrote_at}--> <!--{$comments[index].creation_date}-->
+					<!--{$lang.wrote_at}--> <!--{$comments[index].creation_date}-->
 					&nbsp&nbsp&nbsp&nbsp <!--{$lang.topic}-->: <b><!--{$comments[index].topic}--></b> 
 					<!--{if $comments[index].changed_count > 0}-->
 						<br>Beitrag wurde <!--{$comments[index].changed_count}--> mal geändert, zuletzt am <!--{$comments[index].last_changed_date}-->
