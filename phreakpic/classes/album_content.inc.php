@@ -109,7 +109,14 @@ class album_content
 		//commits all changes of the actual object to the database and/or filesystem 
 		//or create a new db entry if object is not yet in db
 		global $db,$config_vars;
+		
+		// move to the new calculated localtaion (may be the same)		
+		$new_file=$this->generate_filename();
+		rename($this->file,$new_file);
+		$this->set_file($new_file); 
 
+		
+		
 		// check if already in db)
 		if (isset($this->id))
 		{
@@ -156,13 +163,15 @@ class album_content
 			{
 				message_die(GENERAL_ERROR, "Konnte Objekt nicht commiten", '', __LINE__, __FILE__, $sql);
 			}
+			// set id of object to the id of the insert
+			$this->id = $db->sql_nextid();
 		}
 		// add content to the cats	
+		
 		$this->fill_content_in_cat();	
-		// move to the new calculated localtaion (may be the same)
-		$new_file=$this->generate_filename();
-		rename($this->file,$new_file);
-		$this->set_file($new_file); 
+		
+
+		
 		return OP_SUCESSFUL;
 	}
 	
@@ -251,13 +260,15 @@ class album_content
 	function add_to_cat($new_cat_id)
 	{
 		global $userdata;
+		
+		
 		//adds the actual object to the cat with id == $new_cat_id. Checks if actual user is allowed to.
 
 		// get objekt for the new_cat
 
 		$new_cat = new categorie();
 		$new_cat->generate_from_id($new_cat_id);
-
+		
 		// user needs content_add rights in the cat where he wants to add that content
 		if (check_cat_action_allowed($new_cat->catgroup_id, $userdata['user_id'], "content_add"))
 		{
@@ -424,22 +435,33 @@ class album_content
 	
 	function generate_filename()
 	{
-		global $congig_vars;
+		global $config_vars;
 		//check if content is already in a cat 
 		if (sizeof($this->cat_ids)>0)
 		{
 			$cat_obj = new categorie();
-			$cat_obj->generate_from_id($cat_ids[0]);
+			$cat_obj->generate_from_id($this->cat_ids[0]);
 			$path = $cat_obj->get_name();
-			while ($cat_obj->get_parent() != $config_vars['root_categorie'])
+			
+			// make $path is it doesnt exists
+			
+			if (!is_dir($config_vars['content_path_prefix'] . '/' . $path))
 			{
+				mkdir($config_vars['content_path_prefix'] . '/' . $path,$config_vars['dir_mask']);
+			}
+			while ($cat_obj->get_parent_id() != $config_vars['root_categorie'])
+			{
+				
 				$old_cat_id=$cat_obj->get_id();
 				$cat_obj = new categorie();
 				$cat_obj->generate_from_id($old_cat_id);
+				
 				$path = $cat_obj->get_name() . '/' . $path;
+				
 			}
-			$path = $path . basename($this->file);
-			return $path;
+			
+			$path = $path . '/' . basename($this->file);
+			return $config_vars['content_path_prefix'] .'/' . $path;
 		}
 		else
 		{
@@ -455,6 +477,11 @@ class picture extends album_content
    function generate_thumb($thumb_size = '0')
    {
 
+   }
+   
+   function get_html()
+   {
+   	return "<img src=".linkencode($this->get_file()).">";
    }
 }
 
