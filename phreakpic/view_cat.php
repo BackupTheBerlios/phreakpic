@@ -236,20 +236,23 @@ if ($content_per_page > 0)
 }
 
 // content_per_page selector
-foreach ($config_vars['selectable_content_per_page'] as $key => $value)
+if (is_array($config_vars['selectable_content_per_page']))
 {
-	$op['amount'] = $value;
-	if ($value == -1)
+	foreach ($config_vars['selectable_content_per_page'] as $key => $value)
 	{
-		$op['text'] = 'all';
+		$op['amount'] = $value;
+		if ($value == -1)
+		{
+			$op['text'] = 'all';
+		}
+		else
+		{
+			$op['text'] = $value;
+		}
+		$selector_options[]=$op;
 	}
-	else
-	{
-		$op['text'] = $value;
-	}
-	$selector_options[]=$op;
+	$smarty->assign('selectable_content_per_page',$selector_options);
 }
-$smarty->assign('selectable_content_per_page',$selector_options);
 
 
 $smarty->assign('cat_id',$cat_id);

@@ -146,16 +146,19 @@
 
 
 <br>
-<!--{$lang.content_per_page}-->:
-<select onChange="change_content_per_page()" name="selected_content_per_page">
-	<!--{section name=id loop=$selectable_content_per_page}-->
-		<!--{if  $selectable_content_per_page[id].amount == $content_per_page}-->
-			<option selected value="<!--{$selectable_content_per_page[id].amount}-->"><!--{$selectable_content_per_page[id].text}--></option>
-		<!--{else}-->
-			<option value="<!--{$selectable_content_per_page[id].amount}-->"><!--{$selectable_content_per_page[id].text}--></option>
-		<!--{/if}-->
-	<!--{/section}-->
-</select>
+
+<!--{if $selectable_content_per_page}-->
+	<!--{$lang.content_per_page}-->:
+	<select onChange="change_content_per_page()" name="selected_content_per_page">
+		<!--{section name=id loop=$selectable_content_per_page}-->
+			<!--{if  $selectable_content_per_page[id].amount == $content_per_page}-->
+				<option selected value="<!--{$selectable_content_per_page[id].amount}-->"><!--{$selectable_content_per_page[id].text}--></option>
+			<!--{else}-->
+				<option value="<!--{$selectable_content_per_page[id].amount}-->"><!--{$selectable_content_per_page[id].text}--></option>
+			<!--{/if}-->
+		<!--{/section}-->
+	</select>
+<!--{/if}-->
 
 
 
