@@ -20,13 +20,11 @@ else
 {
 	if (isset($HTTP_SESSION_VARS['type']))
 	{
-		$type=$HTTP_SESSION_VARS['type'];
-	}
-	else
-	{
-		$type='user';
+		$HTTP_SESSION_VARS['type'] = 'user';
 	}
 }
+
+$type = $HTTP_SESSION_VARS['type'];
 
 $groupclass = $type . 'group';
 
