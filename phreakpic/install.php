@@ -196,12 +196,12 @@ if ($mode == "check_user_info")
 	
 	$usable_dump = explode($available_dbms[$dbms]["DELIM"], $usable_dump);
 	
-	echo ("Filling the Database with tables <br>");
+	echo ("Adding tables toDatabase <br>");
 	for ($i = 0; $i < (sizeof($usable_dump) -1); $i++)
 	{
 		$j++;
 		echo ("Table $j: ");
-		//$check = mysql_db_query ($dbname, $usable_dump[$i], $connect);
+		$check = mysql_db_query ($dbname, $usable_dump[$i], $connect);
 		$check = true;
 		if ($check == false)
 		{
@@ -211,32 +211,39 @@ if ($mode == "check_user_info")
 	}
 	echo ('<font color=#00ff00>OK</font><br>');
 	
+	
+
 	//Filling basic Data in the DB
+	
 	echo("Filling Tables<br>");
+	
+	// set talbe prefix
+	$config_vars['table_prefix'] = $phreakpic_table_prefix;
+	// give admin rights.
+	$userdata['user_level'] = ADMIN;
+	
 	
 	$admin_group = new catgroup;
 	$admin_group->name = ('Admin Group');
 	$admin_group->description = ('This is the Administrator Category Group, where the deleted content cat can be found');
-	echo("bla: " . $admin_group->commit() . "<br>");
+	echo("Admin Group: " . $admin_group->commit() . "<br>");
 	
 	//root cat
 	$root_cat = new categorie;
-	$root_cat->id = 1;
 	$root_cat->parent_id = 1;
 	$root_cat->catgroup_id = $admin_group->get_id();
 	$root_cat->name = ("root_cat");
 	$root_cat->description = ("This is your Root Category. You can change the name and description, but never delete it!");
-	echo("bla: " . $root_cat->commit() . "<br>");
+	echo("Root Cat: " . $root_cat->commit() . "<br>");
 	
 	
 	//deleted content cat
 	$deleted_content_cat = new categorie;
-	$deleted_content_cat->id = 2;
 	$deleted_content_cat->parent_id = 1;
 	$deleted_content_cat->catgroup_id = $admin_group->get_id();
-	$deleted_content_cat->name = ("root_cat");
+	$deleted_content_cat->name = ("Deleted Content");
 	$deleted_content_cat->description = ("This is your Deleted Content Category. Here will be your deleted content stored. You can change the name and description, but never delete it!");
-	echo("bla: " . $deleted_content_cat->commit() . "<br>");
+	echo("Delete Content Cat: " . $deleted_content_cat->commit() . "<br>");
 	
 	
 	echo ('<font color=#00ff00>OK</font><br>');
@@ -292,10 +299,10 @@ define(\"SERVER_NAME\",\"" . $Server_name . "\");
 	),
 
 	// ID of the cat where to put pictures that are no longer linked in any cat
-	'deleted_content_cat' => 2,
+	'deleted_content_cat' => {$deleted_content_cat->id},
 
 	// ID of the root categorie
-	'root_categorie' => 1,
+	'root_categorie' => {$root_cat->id},
 
 	// Umask of new created directories
 	'dir_mask' => 0775,
@@ -307,7 +314,14 @@ define(\"SERVER_NAME\",\"" . $Server_name . "\");
 	'default_template' => '" . $default_template . "',
 
 	// language used if not setted by user
-	'default_lang' => '" . $default_lang . "'
+	'default_lang' => '" . $default_lang . "',
+	
+	'default_upload_dir' => 'upload',
+	
+	// the ids of the usergroups in which every user is automaicly
+	'default_usergroup_ids' => Array(),
+	
+	'default_content_per_page' => 12
 );
 ?>";
 	
@@ -324,6 +338,8 @@ define(\"SERVER_NAME\",\"" . $Server_name . "\");
 	}
 	echo ('<font color=#00ff00>OK</font></p>');
 }
+
+
 
 else
 {
