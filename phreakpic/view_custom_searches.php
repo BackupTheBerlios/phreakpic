@@ -66,7 +66,7 @@ if (isset($query))
 	$smarty->assign('query',$query);
 	
 
-	// get 3s string for thar query
+	// get xml string for that query
 	$sql="SELECT xml from {$config_vars['table_prefix']}custom_searches WHERE id=$query";
 	if (!$result = $db->sql_query($sql))
 	{
@@ -75,11 +75,9 @@ if (isset($query))
 	$row = $db->sql_fetchrow($result);
 	
 	// generate param array
-	
-	
-		
 	$query_sql=parse_xml($row[0]);
-		
+
+			
 	//print_r($query_sql->entities);
 	
 	// generate info for template
