@@ -1,0 +1,1 @@
+<!--{include file="$template_name/view_cat.tpl"}-->
