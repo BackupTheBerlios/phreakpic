@@ -65,6 +65,12 @@ $lang['file'] = 'Datei';
 $lang['to_group'] = 'zu gruppe';
 
 
+//add_content
+$lang['add_selected'] = 'Markierte hinzufügen';
+$lang['check_all'] = 'Alle Markieren';
+$lang['uncheck_all'] = 'Alle Demarkieren';
+
+
 //admin/auths.php
 $lang['usergroups'] = 'Benutzergruppen';
 $lang['perms'] = 'Rechte';
@@ -81,7 +87,7 @@ $lang['new_catgroup'] = 'Kategoriegruppe erstellen';
 $lang['cat_add'] = 'Kategorien hinzufügen';
 $lang['content_add'] = 'Content hinzufügen';
 $lang['content_remove'] = 'Content entfernen';
-$lang['cat_remove'] = 'Categorien hinzufügen';
+$lang['cat_remove'] = 'Categorien entfernen';
 $lang['add_to_group'] = 'Zur Gruppe hinzufügen';
 $lang['remove_from_group'] = 'Von der Gruppe entfernen';
 $lang['change_group'] = 'Gruppe ändern';

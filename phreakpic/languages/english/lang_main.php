@@ -65,6 +65,11 @@ $lang['edit'] = 'Edit';
 $lang['commit'] = 'Commit';
 $lang['file'] = 'File';
 
+//add_content
+$lang['add_selected'] = 'Add Selected';
+$lang['check_all'] = 'Check All';
+$lang['uncheck_all'] = 'Uncheck All';
+
 
 
 //admin/auths.php
