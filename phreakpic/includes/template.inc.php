@@ -13,4 +13,5 @@
 	
 	$smarty->debugging = false;
 	//$smarty->debug_tpl = SMARTY_DIR.'debug.tpl';
+	$smarty->assign('lang',$lang);
 ?>
