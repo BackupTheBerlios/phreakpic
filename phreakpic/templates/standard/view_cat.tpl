@@ -2,13 +2,15 @@
 <script type="text/javascript" language="javascript">
 	var cat_amount=<!--{$number_of_child_cats}-->
 	var cat_sel=0;
-	
 </script>
 
 <a name="nav_link" href="index.php?<!--{$sid}-->"><!--{$lang.home}--></a> --
 <!--{section name=id loop=$nav_string}-->
 	<!--{if $smarty.section.id.last}-->
 		<!--{$nav_string[id].name}-->
+		<script type="text/javascript" language="javascript">
+			catback=<!--{$smarty.section.id.index}-->
+		</script>
 	<!--{else}-->
 		<a name="nav_link" href="view_cat.php?cat_id=<!--{$nav_string[id].id}--><!--{$sid}-->">
 		<!--{$nav_string[id].name}--></a> --

@@ -340,6 +340,9 @@ function getkey_cat(e)
 //	}
 	switch(key) 
 	{
+		case "p": 
+		case "b":
+			catup(); return false; 
 		case "w": moveCursor(0,-1,false); return false;
 		case "s": moveCursor(0,1,false); return false;
 		case "a": moveCursor(-1,0,false); return false;
@@ -362,6 +365,7 @@ function getkey_cat(e)
 		case "A": moveCursor(-1,0,true); return false;
 		case "D": moveCursor(1,0,true); return false;
 		case " ": mark(); return false;
+		case "f": follow_link(); return false;
 	}
 	
 	
@@ -398,7 +402,8 @@ function getkey_content(e)
 	switch(key) 
 	{
 		case "a": view_next(); return false;
-		case "d": view_prev(); return false;		
+		case "d": view_prev(); return false;	
+		case "f": to_thumbs(); return false;	
 	}
 	if (kcode==13)
 	{
@@ -434,4 +439,9 @@ function tog(id) {
 		document.getElementsByName(id)[i].style.display =  (document.getElementsByName(id)[i].style.display == "none") ? "inline" : "none";
 		i++;
 	}
+}
+
+function catup()
+{
+	location.href = document.getElementsByName('nav_link')[catback].href;
 }
