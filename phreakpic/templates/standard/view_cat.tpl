@@ -1,9 +1,4 @@
-<html>
-<!--{config_load file="standard.cfg"}-->
-<head>
-<title><!--{$title|default:"Titel und so"}--></title>
-</head>
-<body bgcolor="<!--{#body_bg_color#}-->" text="<!--{#text_color#}-->">
+<!--{include file="header.tpl"}-->
 <a href="index.php"<!--{$sid}-->><!--{$lang.home}--></a> --
 <!--{section name=id loop=$nav_string}-->
 	<!--{if $smarty.section.id.last}-->
@@ -165,5 +160,4 @@
 		</td>
 	</tr>
 </table>
-</body>
-</html>
+<!--{include file="footer.tpl"}-->

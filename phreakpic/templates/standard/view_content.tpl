@@ -1,10 +1,4 @@
-<html>
-<!--{config_load file="standard.cfg"}-->
-<head>
-<title><!--{$title|default:""}--></title>
-</head>
-
-<body bgcolor="<!--{#body_bg_color#}-->" text="<!--{#text_color#}-->">
+<!--{include file="header.tpl"}-->
 <div align="center">
 	<table width="95%" border="0" cellspacing="0" cellpadding="5">
 		<tr> 
@@ -136,5 +130,4 @@ href="view_content.php?mode=edit&cat_id=<!--{$cat_id}-->&content_id=<!--{$conten
 		</tr>
 	</table>
 </div>
-</body>
-</html>
+<!--{include file="footer.tpl"}-->
