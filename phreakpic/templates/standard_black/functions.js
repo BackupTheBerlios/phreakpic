@@ -2,6 +2,17 @@ var width,height;
 function keyon() { keyactive = true; }
 function keyoff() { keyactive = false; }
 
+function confirmLink(theLink, text)
+{
+    var is_confirmed = confirm(text);
+    if (is_confirmed) {
+        location.href += theLink;
+    }
+
+    return is_confirmed;
+} // end of the 'confirmLink()' function
+
+
 function changeVal(name,val,all)
 	{
 		i=0;
@@ -329,6 +340,10 @@ function default_key_actions(key)
 {
 switch(key) 
 	{
+		case "p": 
+		case "b":
+			catup(); return false; 
+
 		case "1": 
 		case "2": 
 		case "3":
@@ -382,9 +397,6 @@ function getkey_cat(e)
 	key = getkey(e);
 	switch(key) 
 	{
-		case "p": 
-		case "b":
-			catup(); return false; 
 		case "w": moveCursor(0,-1,false); return false;
 		case "s": moveCursor(0,1,false); return false;
 		case "a": moveCursor(-1,0,false); return false;

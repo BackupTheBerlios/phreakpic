@@ -52,7 +52,7 @@
 					<!--{/if}-->
 					<!--{if $comments[index].editable == true and $hide_controlles == false}-->
 						<a href="comment.php?mode=edit_comment&type=<!--{$type}-->&id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">edit</a>
-						<a href="view_<!--{$type}-->.php?mode=del_comment&comment_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">delete</a>
+						<a href="javascript:confirmLink('view_<!--{$type}-->.php?mode=del_comment&comment_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->','<!--{$lang.do_you_really}--> <!--{$lang.delete_comment}-->');">delete</a>
 					<!--{/if}-->
 					</span>
 					<hr />
