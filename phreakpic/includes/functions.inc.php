@@ -10,5 +10,11 @@ function generate_where($field,$array)
 	return $where;
 }
 
+function getext($in_file)
+{
+	return(end(explode('.',$in_file)));
+}
+
+
 
 ?>
