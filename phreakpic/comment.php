@@ -1,6 +1,5 @@
 <?php
 	include_once ("includes/common.inc.php");
-	include_once ('classes/user_feedback.inc.php');
 	include_once('./includes/template.inc.php');
 	
 	$smarty->assign('mode', $mode);
