@@ -16,6 +16,40 @@ class categorie
 	{
 	}
 	
+	function fill_up()
+	{
+		// looks in the database for an entry that matches the already setted data and fills in the rest
+		
+		global $db,$config_vars;
+		
+		$vars = get_object_vars($this);
+		
+		foreach ($vars as $key => $value)
+		{
+			if (isset($value))
+			{
+				$where=$where." ($key = '$value') and";
+			}
+			
+		}
+		$where=  $where." 1";
+				
+		
+		
+		$sql = 'select * from ' . $config_vars['table_prefix'] . "cats WHERE $where";
+		
+		
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
+		}
+		
+		$row = $db->sql_fetchrow($result);
+		return $this->generate_from_row($row);
+
+		
+	}
+	
 	
 	function set_is_serie($new_val)
 	{
