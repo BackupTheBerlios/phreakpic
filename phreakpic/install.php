@@ -1,3 +1,11 @@
+<?php
+// Some Config vars
+
+$version = "alpha";
+
+$dbdump = "mysql_$version.sql";
+?>
+
 <html>
 <head>
 <title>Phreakpic Installation</title>
@@ -87,6 +95,21 @@ if ($mode == "check_user_info")
 	chdir("../../");
 	echo ('Default Template: <font color=#00ff00>OK</font><br>');
 	
+	/*
+	// phreakpic_table_prefix
+	
+	if ($phreakpic_table_prefix)
+	{
+		
+	}
+	else
+	{
+		die ()
+	}
+	
+	echo ('Database table prefix: <font color=#00ff00>OK</font><br>');
+	*/
+	
 	
 	echo ('</p>');
 	
@@ -108,21 +131,20 @@ if ($mode == "check_user_info")
 		die ('Database connect: <font color=#ff0000>FAILED</font><br>');
 	}
 	
-	include ("mysql_db_alpha.sql.php");
 	
+	$fd = fopen ("install/"$dbdump, "rb");
+	$filecontent = fread ($fd, filesize ($dbdump));
+	fclose ($fd);
 	
-	//every Table need it own sql query...
-	for ($x = 0; $x < sizeof($query); $x++)
-	{
-		echo ("Table $x: ");
-		$check = mysql_db_query($dbname, $query[$x], $connect);
-		if ($check == false)
+	$usable_dump = str_replace ("photo_", $phreakpic_table_prefix, $filecontent);
+	
+	echo ("Filling the Database with tables ");
+	$check = mysql_db_query ($dbname, $usable_dump, $connect);
+	if ($check == false)
 		{
-			die (mysql_errno().": ".mysql_error()."<BR> Query: " . $query[$x]);
+			die (mysql_errno().": ".mysql_error()."<BR>");
 		}
-		echo ('<font color=#0000ff>done</font><br>');
-	}
-	echo ('DB make Tables: <font color=#00ff00>OK</font><br>');	
+		echo ('<font color=#00ff00>OK</font><br>');
 	echo ('</p>');
 	
 	
