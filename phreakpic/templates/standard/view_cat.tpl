@@ -17,7 +17,7 @@
 <!--{if $number_of_child_cats > 0}-->
 	<table width="60%" border="1" cellpadding="5" align="center">
 		<tr>
-			<td>Name</td>
+			<td><!--{$lang.name}--></td>
 			<td>Description</td>
 			<td>Anzahl</td>
 			<td>Bewertung</td>
