@@ -555,7 +555,12 @@ function add_content($POST_FILES,$name,$cat_id,$place_in_cat,$content_group)
 
 	// endgültigen dateinamen generieren und das tmp file verschieben. Weil das object nicht des dateiendung bekommen würde, wenn nur file=tmp_file und name=irgenwas gesätzt wäare
 	$new_content->file = $POST_FILES['new_content_file']['name'];
+	
+
+	
 	$new_content->add_to_cat($cat_id);
+	
+	unset($new_content->new_filename);
 	if ($name != "")
 	{
 		$new_content->set_name($name);
@@ -566,13 +571,14 @@ function add_content($POST_FILES,$name,$cat_id,$place_in_cat,$content_group)
 	}
 
 	$new_file_name = $new_content->generate_filename();
+	
 	rename ($POST_FILES['new_content_file']['tmp_name'], $new_file_name); 
 	$new_content->file = $new_file_name;
-
+	
 	$new_content->set_place_in_cat($cat_id,$place_in_cat);
 	$new_content->set_contentgroup_id($content_group);
 
-
+	
 	$new_content->commit();
 	return $new_content;
 
