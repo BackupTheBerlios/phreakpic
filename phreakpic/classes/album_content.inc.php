@@ -14,7 +14,11 @@ $filetypes = Array (
 	'jpe' => 'picture',
 	'bmp' => 'picture',
 	'tiff' => 'picture',
-	'tif' => 'picture');
+	'tif' => 'picture',
+	'avi' => 'movie',
+	'mov' => 'movie',
+	'mpeg' => 'movie',
+	'mpg' => 'movie');
 
 
 class album_content
@@ -872,6 +876,113 @@ class picture extends album_content
 		{
 		
 			exec("convert -rotate $degrees $this->file $this->file");
+			unlink ($this->thumbfile);
+			$this->generate_thumb();
+			return OP_SUCCESSFUL;
+		}
+		return OP_NP_MISSING_EDIT;
+	}
+	
+}
+
+class movie extends album_content
+{
+
+
+	function calc_size()
+	{
+			// get width and height of pic
+	}
+	
+
+
+	function generate_thumb($thumb_size = '0')
+	{
+		global $config_vars;
+		// if $thumb_size is not set == 0 then set it from the config vars
+		if ($thumb_size == '0')
+		{
+			$thumb_size = $config_vars['thumb_size'];
+		}
+		
+		
+		if (isset($thumb_size['percent']))
+		{
+			// resize everthing per percent
+			$new_w = $size[0] * $thumb_size['percent'] / 100;
+			$new_h = $size[1] * $thumb_size['percent'] / 100;
+		}
+		elseif (isset($thumb_size['maxsize']))
+		{
+			// resize the larger value to maxsize
+			if ($size[0] > $size[1])
+			{
+				// set width to maxsize
+				$thumb_size['width'] = $thumb_size['maxsize'];
+			}
+			else
+			{
+				// set height to maxsize;
+				$thumb_size['height'] = $thumb_size['maxsize'];
+			}
+		}
+		if (isset($thumb_size['width'])) 
+		{
+			if (isset($thumb_size['height']))
+			{
+				// to a fixed resize 
+				$new_w = $thumb_size['width'];
+				$new_h = $thumb_size['height'];
+				
+			}
+			else
+			{
+				// to a relative resize to width
+				$new_w = $thumb_size['width'];
+				$new_h = $size[1]*($new_w/$size[0]);
+				
+			}
+		}
+		else 
+		{
+			// do a relative resize to height	
+			$new_h = $thumb_size['height'];
+			$new_w = $size[0]*($new_h/$size[1]);
+			
+		}	
+	}
+
+	function get_html()
+	{
+		album_content::get_html();
+		return "<embed src=".linkencode($this->get_file())."></embed>";
+	}
+
+	function get_thumb()
+	{
+		if (!is_file($this->get_thumbfile()))
+		{
+			$this->generate_thumb();
+		}
+		
+		$array['content_id'] = $this->id;
+		$size=getimagesize($this->get_thumbfile());
+		// $array['html'] = "<img src=".linkencode($this->get_thumbfile())." $size[3]>";
+			$array['width'] = $this->width;
+		$array['height'] = $this->height;
+		$array['name'] = $this->get_name();
+		$array['current_rating'] = $this->get_current_rating();
+		$array['views'] = $this->get_views();
+		return $array;
+	}
+	
+	function rotate($degrees)
+	{
+		
+		if ($this->check_perm('edit')) //Authorisation is okay
+		{
+		
+		//	exec("convert -rotate $degrees $this->file $this->file");
 			unlink ($this->thumbfile);
 			$this->generate_thumb();
 			return OP_SUCCESSFUL;
