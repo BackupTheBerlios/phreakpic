@@ -1,6 +1,7 @@
 <!--{include file="$template_name/admin/header.tpl"}-->
 <br>
 <!--{$lang.add_user_to_group}--><br><br>
+<form action="user_in_groups.php?usergroup=<!--{$sel_usergroup}--><!--{$sid}--><!--{$sid}-->" method="POST">
 <table border=1>
 <tr>
 
