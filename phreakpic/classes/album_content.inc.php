@@ -204,6 +204,7 @@ class album_content
 		//check if the object is in the database
 		if (isset($this->id))
 		{  
+		
 			if ($this->check_perm('delete')) //Authorisation is okay
 			{
 				if (!unlink($this->file))
@@ -220,7 +221,7 @@ class album_content
 				
 					
 				// remove from content table
-				$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content WHERE 'id' = " . $this->id;
+				$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content WHERE id = " . $this->id;
 				if (!$result = $db->sql_query($sql))
 				{
 					message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
@@ -331,7 +332,7 @@ class album_content
 					locked = '$this->locked',
 					width = '$this->width',
 					height = '$this->height'
-				WHERE id like $this->id";
+				WHERE id = $this->id";
 			
 			if (!$result = $db->sql_query($sql))
 			{
@@ -403,7 +404,7 @@ class album_content
 	{
 		// Füllt das Objekt mit den daten des Contents mit id == $id aus der Datenbank
 		global $db,$config_vars;
-		$sql = 'select * from ' . $config_vars['table_prefix'] . "content where id like $id";
+		$sql = 'select * from ' . $config_vars['table_prefix'] . "content where id = $id";
 		if (!$result = $db->sql_query($sql))
 		{
 			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
