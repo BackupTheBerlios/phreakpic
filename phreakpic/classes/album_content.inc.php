@@ -2,6 +2,7 @@
 require_once('modules/authorisation/interface.inc.php');
 require_once('classes/categorie.inc.php');
 require_once('includes/functions.inc.php');
+require_once('modules/statistics.inc.php');
 
 
 // Holds information about which object to user with which file ending:
@@ -155,9 +156,12 @@ class album_content
 
 	function get_html()
 	{
-	// is for extended classes
 	//returns the needed HTML Code to show the actual object.
-	return NOT_SUPPORTED;
+	
+	// incrase views
+	$this->views++;
+	$this->commit();
+	
 	}
 	
 	function lock()
@@ -207,14 +211,12 @@ class album_content
 		
 			if ($this->check_perm('delete')) //Authorisation is okay
 			{
-				if (!unlink($this->file))
+			
+				//remove views for this picture
+				$sql = 'DELETE FROM ' . $config_vars['table_prefix'] . "views WHERE content_id = " . $this->id;
+				if (!$result = $db->sql_query($sql))
 				{
-					message_die(GENERAL_ERROR, "Konnte Datei nicht löschen", '', __LINE__, __FILE__, '');
-				}
-				
-				if (!unlink($this->get_thumbfile()))
-				{
-					message_die(GENERAL_ERROR, "Konnte Thumb nicht löschen", '', __LINE__, __FILE__, '');
+					message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
 				}
 				
 				
@@ -227,6 +229,18 @@ class album_content
 					message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
 				}
 				$this->clear_content_in_cat();
+				
+				
+				if (!unlink($this->file))
+				{
+					message_die(GENERAL_ERROR, "Konnte Datei nicht löschen", '', __LINE__, __FILE__, '');
+				}
+				
+				if (!unlink($this->get_thumbfile()))
+				{
+					message_die(GENERAL_ERROR, "Konnte Thumb nicht löschen", '', __LINE__, __FILE__, '');
+				}
+
 				unset($this->id);
 				
 				// remove from content_in_cat table
@@ -480,6 +494,8 @@ class album_content
 		if (check_cat_action_allowed($new_cat->catgroup_id, $userdata['user_id'], "content_add"))
 		{
 			$this->cat_ids[] = $new_cat_id;
+			$new_cat->set_content_amount($new_cat->get_content_amount()+1);
+			$new_cat->commit();
 			return OP_SUCCESSFUL;
 		}
 		else
@@ -511,6 +527,8 @@ class album_content
 			{
 				// unset the key that contains the cat to be removed
 				array_splice($this->cat_ids,array_search($old_cat_id,$this->cat_ids),1);
+				$old_cat->set_content_amount($old_cat->get_content_amount()-1);
+				$old_cat->commit();
 				return OP_SUCCESSFUL;
 			}
 			else
@@ -564,6 +582,7 @@ class album_content
 	{
 		//get the views of the actual object. Checks if actual user is allowed to.
 		return $this->views;
+		//return get_views($this->id);
 	}
 
 	function set_current_rating($current_rating)
@@ -823,6 +842,7 @@ class picture extends album_content
 
 	function get_html()
 	{
+		album_content::get_html();
 		return "<img src=".linkencode($this->get_file()).">";
 	}
 
