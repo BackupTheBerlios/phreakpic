@@ -1,5 +1,5 @@
 <!--{include file="$template_name/header.tpl"}-->
-<a href="index.php"<!--{$sid}-->><!--{$lang.home}--></a> --
+<a href="index.php?<!--{$sid}-->"><!--{$lang.home}--></a> --
 <!--{section name=id loop=$nav_string}-->
 	<!--{if $smarty.section.id.last}-->
 		<!--{$nav_string[id].name}-->
