@@ -33,7 +33,7 @@ if (!isset($userdata['phreakpic_content_per_page']))
 
 // If youre a registrered user add registered user usergroups to default usergoups
 
-$config_vars['auto_usergroup_ids'] = $config_vars['default_usergroup_ids']:
+$config_vars['auto_usergroup_ids'] = $config_vars['default_usergroup_ids'];
 if ($userdata['user_id'] > -1)
 {
 	$config_vars['auto_usergroup_ids'] = array_merge($config_vars['registered_users_usergroup_ids'],$config_vars['default_usergroup_ids']);
