@@ -1,9 +1,9 @@
 <?php
 define(ROOT_PATH,'../');
-require_once(ROOT_PATH . 'includes/common.inc.php');
-require_once(ROOT_PATH . 'includes/template.inc.php');
-require_once(ROOT_PATH . 'classes/group.inc.php');
-require_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
+include_once(ROOT_PATH . 'includes/common.inc.php');
+include_once(ROOT_PATH . 'includes/template.inc.php');
+include_once(ROOT_PATH . 'classes/group.inc.php');
+include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 
 
 if (!isset($usergroup))
