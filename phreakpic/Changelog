@@ -16,6 +16,9 @@ Beta Release:
 - made nav bar an include (Tesla)
 - added phpBB2 avatar to comments (Tesla)
 - added possibility the change parent cat of cat (Tesla)
+- change group of a cat (Tesla)
+- edit comments (Tesla)
+- some exif informations (Tesla)
 
 Changed Tables:
 Added:
