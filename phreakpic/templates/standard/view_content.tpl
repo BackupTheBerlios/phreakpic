@@ -63,10 +63,28 @@
 				</div>
 			</td>
 			<td>
-				Name: <!--{$name}--><br>
-				Bewertung: <!--{$current_rating}--><br>
-				Views: <!--{$views}--><br>
-				<a href="comment.php?mode=add&type=content&parent_id=0&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->"><!--{$lang.add_comment}--><a><br>
+				<!--{if $mode == edit}-->
+					<form action="view_content.php?&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->" method="POST">
+						Name: <input type="text" name="name" value="<!--{$name}-->"><br>
+						<!--{if $allow_delete eq 1}-->
+						Delete: <input type="checkbox" name="delete"><br>
+						<!--{/if}-->
+						Place in Cat: <input type="text" name="place_in_cat" value="<!--{$place_in_cat}-->"><br> 
+						Lock: <input type="checkbox" name="lock"><br>
+						Move to Cat: <br>
+						<input type="hidden" name="mode" value="commit">
+					<input type="submit">  
+					</form>
+				<!--{else}-->	
+					Name: <!--{$name}--><br>
+					Bewertung: <!--{$current_rating}--><br>
+					Views: <!--{$views}--><br>
+					<a href="comment.php?mode=add&type=content&parent_id=0&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->"><!--{$lang.add_comment}--></a><br>
+					<!--{if $allow_edit eq 1}-->
+						<a href="view_content.php?mode=edit&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->"><!--{$lang.edit_content}--></a><br>
+					<!--{/if}-->	
+				<!--{/if}-->	
+				
 			</td>
 		</tr>
 		<tr>
