@@ -50,7 +50,6 @@ $lang['rotate_left'] = 'Links';
 $lang['rotate_right'] = 'Rechts';
 $lang['rotate_180'] = '180';
 
-
 //view_cat.tpl
 $lang['description'] = 'Beschreibung';
 $lang['amount'] = 'Anzahl';
@@ -63,7 +62,7 @@ $lang['create'] = 'Erstellen';
 $lang['edit'] = 'Editieren';
 $lang['commit'] = 'Abschicken';
 $lang['file'] = 'Datei';
-
+$lang['to_group'] = 'zu gruppe';
 
 
 //admin/auths.php

@@ -49,6 +49,7 @@ $lang['rotate_free'] = 'Free / Not';
 $lang['rotate_left'] = 'left';
 $lang['rotate_right'] = 'right';
 $lang['rotate_180'] = '180';
+$lang['to_group'] = 'to group';
 
 
 //view_cat.tpl

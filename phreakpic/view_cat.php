@@ -2,6 +2,7 @@
 define ("ROOT_PATH",'');
 include_once('./includes/common.inc.php');
 include_once('./classes/album_content.inc.php');
+include_once('./classes/group.inc.php');
 include_once('./modules/pic_managment/interface.inc.php');
 include_once('./includes/functions.inc.php');
 include_once('./languages/' . $userdata['user_lang'] . '/lang_main.php');
@@ -99,6 +100,14 @@ if ($mode == 'edit')
 	$smarty->assign('mode','edit');
 	$add_to_catgroups = get_catgroups_data_where_perm('id,name','add_to_group');
 	$smarty->assign('add_to_catgroups',$add_to_catgroups);
+	
+	// get contentgroups where user has add rights
+	$add_to_contentgroups = get_contentgroups_data_where_perm('id,name','add_to_group');
+	if (is_array($add_to_contentgroups))
+	{
+		$smarty->assign('add_to_contentgroups',$add_to_contentgroups);
+	}
+	
 
 }
 
@@ -253,6 +262,14 @@ if (is_array($contents))
 					
 			}
 			
+			// check change group
+			if ($HTTP_POST_VARS['change_group'][$i] == 'on')
+			{
+				
+				$contents[$i]->set_contentgroup_id($HTTP_POST_VARS['to_contengroup']);
+				
+			}
+			
 			$contents[$i]->commit();
 			// check delete
 			if ($contents[$HTTP_POST_VARS['place_in_array'][$i]]->check_perm('delete'))
@@ -266,6 +283,10 @@ if (is_array($contents))
 					}	
 				}
 			}
+			
+			
+		
+			
 			
 		}
 		$smarty->assign('mode','view');
@@ -297,8 +318,14 @@ if (is_array($contents))
 					$smarty->assign('allow_link',true);	
 					$smarty->assign('add_to_cats',$add_to_cats);
 			}
-
-		
+			
+			// Check if user has the right to remove the content from the contentgroup
+			$thumb_infos['allow_remove_from_group'] = $contents[$i-1]->check_perm('remove_from_group');
+			
+			// get current contentgroup
+			$c_group = new contentgroup();
+			$c_group->generate_from_id($contents[$i-1]->get_contentgroup_id());
+			$thumb_infos['contentgroup_name'] = $c_group->get_name();
 			
 			// check if user has edit perm to that content
 			$thumb_infos['allow_edit'] = $contents[$i-1]->check_perm('edit');
@@ -327,39 +354,6 @@ if (is_array($contents))
 
 $smarty->assign('cat_id',$cat_id);
 
-// // Comments
-// if ($mode == "add")
-// {
-// 	// add a new comment
-// 	$comment = new cat_comment();
-// 	$comment->set_feedback($comment_text);
-// 	$comment->set_topic($topic);
-// 	$comment->set_user_id($userdata['user_id']);
-// 	$comment->set_owner_id($cat_id);
-// 	$comment->set_parent_id($parent_id);
-// 	$comment->commit();
-// }
-// 
-// if ($mode == 'edit_comment')
-// {
-// 	$comment = new cat_comment();
-// 	$comment->generate_from_id($HTTP_POST_VARS['parent_id']);
-// 	$comment->set_feedback($HTTP_POST_VARS['comment_text']);
-// 	$comment->set_topic($HTTP_POST_VARS['topic']);
-// 	$comment->set_changed_count($comment->get_changed_count()+1);
-// 	$comment->set_last_changed_date(date("Y-m-d H:i:s"));
-// 	$comment->commit();	
-// }
-// 
-// if ($mode == 'del_comment')
-// {
-// // TODO: hier fehlt noch was passiert wenn unterkommentare enthalten sind.
-// 	$comment = new cat_comment();
-// 	$comment->generate_from_id($comment_id);
-// 	$comment->delete();
-// }
-// 
-// 
 
 // proceed comments
 $comment_type='cat';

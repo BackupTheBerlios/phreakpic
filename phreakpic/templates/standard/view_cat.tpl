@@ -109,6 +109,11 @@
 								<!--{$lang.move}-->:<input name="move[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox"><br>
 							<!--{/if}-->
 					<!--{/if}-->
+					<!--{if  $$thumbs[thumb_cols][thumb_cell].allow_remove_from_group == true}-->
+				
+						<!--{$lang.change_group}--> (<!--{$thumbs[thumb_cols][thumb_cell].contentgroup_name}-->) :<input name="change_group[<!--{$thumbs[thumb_cols][thumb_cell].place_in_array}-->]" type="checkbox">
+					<!--{/if}-->
+					
 					
 				<!--{/if}-->
 			</td>
@@ -140,6 +145,15 @@
 			<option value="<!--{$add_to_cats[id].id}-->"><!--{$add_to_cats[id].name}--></option>
 		<!--{/section}-->
 		</select><br>
+		
+		<!--{$lang.to_group}-->
+		<select name="to_contengroup">
+		<!--{section name=id loop=$add_to_contentgroups}-->
+			<option value="<!--{$add_to_contentgroups[id].id}-->"><!--{$add_to_contentgroups[id].name}--></option>
+		<!--{/section}-->
+		</select><br>
+		
+		
 	<!--{/if}-->
 	<input name="submit" type="submit" id="submit" value="<!--{$lang.commit}-->">
 	</form>
