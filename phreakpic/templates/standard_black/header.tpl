@@ -1,3 +1,4 @@
+<!--{popup_init src="templates/javascript/overlib.js"}-->
 <html>
 <!--{config_load file="$template_name/config.cfg"}-->
 <head>

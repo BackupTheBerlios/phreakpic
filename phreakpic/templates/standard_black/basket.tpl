@@ -1,4 +1,3 @@
-<!--{popup_init src="templates/$template_name/overlib.js"}-->
 <!--{include file="$template_name/header.tpl"}-->
 <!--{config_load file="$template_name/config.cfg"}-->
 

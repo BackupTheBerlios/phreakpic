@@ -15,7 +15,7 @@
 <table nowrap="nowrap" style="white-space:nowrap" width="40%" bgcolor="<!--{#navbar_bg_color#}-->" border="0" cellpadding="0" id="navbar_table">
 	<tr>
 		<td>
-			<!--{$lang.navbar}--> <a name="nav_link" href="index.php?first_content=0<!--{$sid}-->"><!--{$lang.home}--></a><!--{#navbar_seperator#}-->
+			<!--{$lang.navbar}--> <a name="nav_link" href="index.php?first_content=0<!--{$sid}-->" <!--{popup text="This link takes you to my page!" fgcolor="black"}-->><!--{$lang.home}--></a><!--{#navbar_seperator#}-->
 			<!--{section name=id loop=$nav_string}-->
 				<!--{if $smarty.section.id.last}-->
 					<!--{$nav_string[id].name}-->
