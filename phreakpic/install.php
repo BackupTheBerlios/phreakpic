@@ -1,10 +1,5 @@
 <?php
 
-define ("ROOT_PATH",'');
-include_once ('includes/common.inc.php');
-include_once ('includes/functions.inc.php');
-include_once ('classes/group.inc.php');
-include_once ('classes/categorie.inc.php');
 
 // Some Config vars
 
@@ -89,6 +84,18 @@ if ($mode == "check_user_info")
 	* 
 	*/
 	
+	// prefinde important constants
+	define ("ROOT_PATH",'');
+	
+	
+	define('PHPBB_PATH',$phpBB_Path);
+	define('PHREAKPIC_PATH',$phreakpic_path);
+	
+	include_once ('includes/common.inc.php');
+	include_once ('includes/functions.inc.php');
+	include_once ('classes/group.inc.php');
+	include_once ('classes/categorie.inc.php');
+	
 	echo ('<p>Checking the Data of the Form.<br>');
 	
 	//phpBB Path
@@ -168,6 +175,22 @@ if ($mode == "check_user_info")
 	echo ('Upload Dir permissions: <font color=#00ff00>OK</font><br>');
 	
 	
+	//template_c
+	$check = ensure_writable_dir('templates_c');
+	if ($check <=1)
+	{
+		echo ('templates_c Dir : <font color=#00ff00>OK</font><br>');
+	}
+	elseif ($check <= 3)
+	{
+		die ('templates_c Dir : <font color=#FF0000>Not Writeable</font><br>');
+	}
+	else
+	{
+		die ('templates_c Dir : <font color=#FF0000>Could not be created</font><br>');
+	}
+	
+	
 	//default_lang
 	$check = @chdir("./languages/" . $default_lang);
 	if ($check == false)
@@ -204,7 +227,6 @@ if ($mode == "check_user_info")
 
 	echo ('</p>');
 	
-	
 	//Now do the db stuff
 	
 	echo ('<p>Now we can start with the DB Stuff.<br>');
@@ -222,6 +244,8 @@ if ($mode == "check_user_info")
 		die ('Database connect: <font color=#ff0000>FAILED</font><br>');
 	}
 	
+
+	
 	
 	$fd = fopen ("install/" . $dbdump, "rb");
 	if (!$fd)
@@ -235,16 +259,17 @@ if ($mode == "check_user_info")
 	
 	$usable_dump = explode($available_dbms[$dbms]["DELIM"], $usable_dump);
 	
+	
 	echo ("Adding tables toDatabase <br>");
 	for ($i = 0; $i < (sizeof($usable_dump) -1); $i++)
 	{
 		$j++;
 		echo ("Table $j: ");
 		$check = mysql_db_query ($dbname, $usable_dump[$i], $connect);
-		$check = true;
+		//$check = true;
 		if ($check == false)
 		{
-			die (mysql_errno().": ".mysql_error()."<BR>");
+			echo ("<font color=#ff00ff>".mysql_errno().": ".mysql_error()."</font> ");
 		}
 		echo ('<font color=#0000ff>done</font><br>');	
 	}
@@ -273,6 +298,7 @@ if ($mode == "check_user_info")
 	echo ('<font color=#00ff00>OK</font><br>');
 	
 
+
 	//Filling basic Data in the DB
 	
 	echo("Filling Tables<br>");
@@ -291,18 +317,28 @@ if ($mode == "check_user_info")
 	echo("Admin Group: " . $admin_group->commit() . "<br>");
 	
 	
+	
+	
 	//root cat
 	$root_cat = new categorie;
 	$root_cat->parent_id = 1;
 	$root_cat->catgroup_id = $admin_group->get_id();
 	$root_cat->name = ("root_cat");
 	$root_cat->description = ("This is your Root Category. You can change the name and description, but never delete it!");
+
 	$root_cat->commit();
+
+	// fill config var root cat to prefent infinite update loop on commit
+	$config_vars['root_categorie'] = $root_cat->id;
 	
 	// set parent id to given id
 	$root_cat->parent_id = $root_cat->id;
 	
+
+	
 	echo("Root Cat: " . $root_cat->commit() . "<br>");
+
+
 	
 	
 	
@@ -313,9 +349,22 @@ if ($mode == "check_user_info")
 	$deleted_content_cat->name = ("Deleted Content");
 	$deleted_content_cat->description = ("This is your Deleted Content Category. Here will be your deleted content stored. You can change the name and description, but never delete it!");
 	echo("Delete Content Cat: " . $deleted_content_cat->commit() . "<br>");
-	
+
 	
 	echo ('<font color=#00ff00>OK</font><br>');
+	
+	// alter phpBB tables
+	
+	echo("Add basket_enable to phpbb users: ");
+	
+	$sql = "ALTER TABLE `{$table_prefix}users` ADD `{$phreakpic_table_prefix}basket_enable` ENUM('0','1') NOT NULL";
+	$check = mysql_db_query ($dbname, $sql, $connect);
+	if ($check == false)
+	{
+		echo ("<font color=#ff00ff>".mysql_errno().": ".mysql_error()."</font> ");
+	}
+	echo ('<font color=#0000ff>done</font><br>');
+	
 	
 	echo ('</p>'); //end of DB stuff
 	
