@@ -626,14 +626,15 @@ function get_installed_templates()
 	return $langs;
 }
 
-function add_content($POST_FILES,$name,$cat_id,$place_in_cat,$content_group)
+function add_content($filename,$tmp_file,$name,$cat_id,$place_in_cat,$content_group)
 {
 	global $filetypes;
-	$objtyp = $filetypes[getext($POST_FILES['new_content_file']['name'])];
+	
+	$objtyp = $filetypes[getext($filename)];
 	$new_content = new $objtyp;
 
 	// endgültigen dateinamen generieren und das tmp file verschieben. Weil das object nicht des dateiendung bekommen würde, wenn nur file=tmp_file und name=irgenwas gesätzt wäare
-	$new_content->file = $POST_FILES['new_content_file']['name'];
+	$new_content->file = $filename;
 	
 
 	
@@ -646,12 +647,12 @@ function add_content($POST_FILES,$name,$cat_id,$place_in_cat,$content_group)
 	}
 	else
 	{
-		$new_content->set_name(getfile($POST_FILES['new_content_file']['name']));
+		$new_content->set_name(getfile($filename));
 	}
 
 	$new_file_name = $new_content->generate_filename();
 	
-	rename ($POST_FILES['new_content_file']['tmp_name'], $new_file_name); 
+	rename ($tmp_file, $new_file_name); 
 	$new_content->file = $new_file_name;
 	
 	$new_content->set_place_in_cat($cat_id,$place_in_cat);

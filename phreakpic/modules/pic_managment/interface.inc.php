@@ -360,7 +360,7 @@ function add_dir_to_cat($dir,$cat_id, $contentgroup_id, $name_mode = GENERATE_NA
 	closedir($dir_handle);
 }
 
-function add_dir_parsed($dir,$contentgroup_id,$catgroup_id,$parent_id=-1)
+function add_dir_parsed($dir,$group_id,$parent_id=-1)
 {
 	// Add all pictures under the Directory $dir to categories and series depending on the relativ path to $dir
 	global $db,$config_vars,$filetypes;
@@ -382,15 +382,9 @@ function add_dir_parsed($dir,$contentgroup_id,$catgroup_id,$parent_id=-1)
 			
 				// $file is content
 				// generate a new album_content obj
-				$content = new $filetypes[getext($file)];
-				//if the name of the picture should be the filename, get it and cutoff the dateiendung	
-
-				$content->set_name(getfile($file));
-				$content->add_to_cat($parent_id);
-				$content->set_file($dir_and_file);
-				$content->set_contentgroup_id($contentgroup_id);
-				$content->commit();
 				
+				
+				add_content($file,$dir_and_file,getfile($file),$parent_id,0,$group_id);
 
 			}
 			elseif (is_dir($dir_and_file))
@@ -404,13 +398,13 @@ function add_dir_parsed($dir,$contentgroup_id,$catgroup_id,$parent_id=-1)
 					$cat->set_name(substr($file,4));
 					$cat->set_parent_id($parent_id);
 					$cat->fill_up();
-					$cat->set_catgroup_id($catgroup_id);
+					$cat->set_catgroup_id($group_id);
 					if (!isset($cat->id))
 					{
 					
 						$cat->commit();
 					}
-					add_dir_parsed($dir.'/'.$file,$contentgroup_id,$catgroup_id,$cat->get_id());
+					add_dir_parsed($dir.'/'.$file,$group_id,$cat->get_id());
 				}
 				elseif (strpos($file,"serie_") === 0)
 				{
@@ -425,7 +419,7 @@ function add_dir_parsed($dir,$contentgroup_id,$catgroup_id,$parent_id=-1)
 					
 						$cat->commit();
 					}
-					add_dir_parsed($dir.'/'.$file,$contentgroup_id,$catgroup_id,$cat->get_id());
+					add_dir_parsed($dir.'/'.$file,$group_id,$cat->get_id());
 				// subdir serie
 				}
 			}
