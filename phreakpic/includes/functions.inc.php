@@ -110,10 +110,10 @@ function make_comments($comment, $level,$editable)
 	global $comments,$userdata;
 	$comment_infos['level'] = $level;
 	$comment_infos['id'] = $comment->id;    //get_id();
-	$comment_infos['text'] = nl2br($comment->get_feedback());
+	$comment_infos['text'] = nl2br(htmlspecialchars($comment->get_feedback()));
 	$comment_userdata = get_userdata(intval($comment->get_user_id()));
 	$comment_infos['username'] = $comment_userdata['username'];
-	$comment_infos['topic'] = $comment->get_topic();
+	$comment_infos['topic'] = htmlspecialchars($comment->get_topic());
 	$comment_infos['creation_date'] = $comment->get_creation_date();
 	$comment_infos['changed_count'] = $comment->get_changed_count();
 	$comment_infos['last_changed_date'] = $comment->get_last_changed_date();
