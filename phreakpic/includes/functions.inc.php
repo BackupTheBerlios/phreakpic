@@ -208,9 +208,33 @@ function makedir($dir)
 {
 	// makes directory $dir with dir_mask out of the config and creates an index.html in it so nobdy can se the directory listing
 	global $config_vars;
-	mkdir($dir,$config_vars['dir_mask']);
+	ForceDirectories($dir,$config_vars['dir_mask']);
 	touch ($dir . '/index.html');
 }
+
+function ForceDirectories( $path,$umask) 
+{ 
+	if ( strlen( $path) == 0) 
+	{ 
+		return 0; 
+	} 
+	// 
+	if ( strlen( $path) < 3) 
+	{ 
+		return 1; // avoid 'xyz:\' problem. 
+	} 
+	elseif ( is_dir( $path)) 
+	{ 
+		return 1; // avoid 'xyz:\' problem. 
+	} 
+	elseif ( dirname( $path) == $path) 
+	{ 
+		return 1; // avoid 'xyz:\' problem. 
+	} 
+	return ( ForceDirectories( dirname( $path)) and mkdir( $path, $umask)); 
+}
+ 
+
 //makes the string of cats and content where the user is at the moment
 function build_nav_string($cat_id)
 {
