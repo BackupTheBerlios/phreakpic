@@ -31,6 +31,8 @@
 <!--{$lang.delete}-->: <input type="checkbox" name="delete" <!--{$delete_checked}-->><br>
 <!--{$lang.edit}-->: <input type="checkbox" name="edit" <!--{$edit_checked}-->><br>
 <!--{$lang.comment_edit}-->: <input type="checkbox" name="comment_edit" <!--{$comment_edit_checked}-->><br> 
+<!--{$lang.add_to_group}-->: <input type="checkbox" name="add_to_group" <!--{$add_to_group_checked}-->><br> 
+<!--{$lang.remove_from_group}-->: <input type="checkbox" name="remove_from_group" <!--{$remove_from_group_checked}-->><br> 
 <!--{if $type=="cat"}-->
 	<!--{$lang.cat_add}--> <input type="checkbox" name="cat_add" <!--{$cat_add_checked}-->><br>
 	<!--{$lang.cat_remove}--> <input type="checkbox" name="cat_remove" <!--{$cat_remove_checked}-->><br>
