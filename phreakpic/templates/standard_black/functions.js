@@ -111,6 +111,7 @@ function changeVal(name,val,all)
 			}
 			else
 			{
+				//alert(document.getElementsByName('td_thumb')[1]);
 				selected[y*table_cols+x]=true;
 				document.getElementsByName('td_thumb')[(y*table_cols)+x].bgColor=selectedColor;
 			}
@@ -465,13 +466,23 @@ function imageSize(size)
 	}
 	else
 	{
+		// IE workarounds
+		if (window.innerWidth == undefined)
+		{
+			window.innerWidth=document.body.offsetWidth;
+		}
+		if (window.innerHeight == undefined)
+		{
+			window.innerHeight=document.body.offsetHeight ;
+		}
+
 		if ((window.innerWidth-document.getElementsByName('image')[0].width)>(window.innerHeight-document.getElementsByName('image')[0].height))
 		{
 			// adjust height
 			ratio=(window.innerHeight)/document.getElementsByName('image')[0].height;
 			document.getElementsByName('image')[0].height=(window.innerHeight);
-			document.getElementsByName('height_table')[0].height=(window.innerHeight);
-			document.getElementsByName('height_table')[1].height=(window.innerHeight);
+//			document.getElementsByName('height_table')[0].height=(window.innerHeight);
+//			document.getElementsByName('height_table')[1].height=(window.innerHeight);
 			document.getElementsByName('image')[0].width=document.getElementsByName('image')[0].width*ratio;
 			
 		}
@@ -481,8 +492,8 @@ function imageSize(size)
 			ratio=(window.innerWidth)/document.getElementsByName('image')[0].width;
 			document.getElementsByName('image')[0].width=(window.innerWidth);
 			document.getElementsByName('image')[0].height=document.getElementsByName('image')[0].height*ratio;
-			document.getElementsByName('height_table')[0].height=document.getElementsByName('image')[0].height*ratio;
-			document.getElementsByName('height_table')[1].height=document.getElementsByName('image')[0].height*ratio;
+//			document.getElementsByName('height_table')[0].height=document.getElementsByName('image')[0].height*ratio;
+//			document.getElementsByName('height_table')[1].height=document.getElementsByName('image')[0].height*ratio;
 		}
 	}		
 }

@@ -30,7 +30,7 @@ table_cols = <!--{$table_cols|default:0}-->
 		<!--{section name=thumb_cols loop=$thumbs}-->
 		<tr bgcolor="<!--{#table_bg_color#}-->" valign="bottom">
 			<!--{section name=thumb_cell loop=$thumbs[thumb_cols]}-->
-			<td width="<!--{$thumb_size}-->" height="<!--{$thumb_size}-->" name="td_thumb" onclick="was_shift=false; switchTd(<!--{$smarty.section.thumb_cell.index}-->,<!--{$smarty.section.thumb_cols.index}-->)">
+			<td id="td_thumb" width="<!--{$thumb_size}-->" height="<!--{$thumb_size}-->" name="td_thumb" onclick="was_shift=false; switchTd(<!--{$smarty.section.thumb_cell.index}-->,<!--{$smarty.section.thumb_cols.index}-->)">
 				<!--{*Possible fields of this table are: 
 					html			the html tag to display the content
 					name			the name of it
@@ -116,37 +116,37 @@ For all Change
 <tr>
 <td>
 	<!--{$lang.rotate}-->: 
-<!--{$lang.rotate_free}-->: <input type="radio" name="sel_rotate_mode" value="free" onClick="changeRadio('rotate_free',false)" checked><input type="text" onfocus="keyoff()" onblur="keyon()" name="sel_rotate" onkeyup="changeVal('rotate',document.getElementsByName('sel_rotate')[0].value,false)"><br> 
-	<!--{$lang.rotate_left}--> <input type="radio" name="sel_rotate_mode" value="-90" onClick="changeRadio('rotate_left',false)" >
-	<!--{$lang.rotate_180}--> <input type="radio" name="sel_rotate_mode" value="180" onClick="changeRadio('rotate_180',false)">
-	<!--{$lang.rotate_right}--> <input type="radio" name="sel_rotate_mode" value="90" onClick="changeRadio('rotate_right',false)"><br>
+<!--{$lang.rotate_free}-->: <input type="radio" name="sel_rotate_mode" value="free" onclick="changeRadio('rotate_free',false)" checked><input type="text" onfocus="keyoff()" onblur="keyon()" name="sel_rotate" onkeyup="changeVal('rotate',document.getElementsByName('sel_rotate')[0].value,false)"><br> 
+	<!--{$lang.rotate_left}--> <input type="radio" name="sel_rotate_mode" value="-90" onclick="changeRadio('rotate_left',false)" >
+	<!--{$lang.rotate_180}--> <input type="radio" name="sel_rotate_mode" value="180" onclick="changeRadio('rotate_180',false)">
+	<!--{$lang.rotate_right}--> <input type="radio" name="sel_rotate_mode" value="90" onclick="changeRadio('rotate_right',false)"><br>
 	<!--{$lang.place_in_cat}-->: <input name="sel_place_in_cat" type="text" onfocus="keyoff()" onblur="keyon()"  size="10" onkeyup="changeVal('place_in_cat',document.getElementsByName('sel_place_in_cat')[0].value,false)"><br>
-	<!--{$lang.lock}-->:<input name="sel_lock" type="checkbox" onClick="changeCheckbox('lock',document.getElementsByName('sel_lock')[0].checked,false)">
-	<!--{$lang.delete}-->:<input name="sel_delete" type="checkbox" onClick="changeCheckbox('delete',document.getElementsByName('sel_delete')[0].checked,false)"><br>
-	<!--{$lang.unlink}-->:<input name="sel_unlink" type="checkbox" onClick="changeCheckbox('unlink',document.getElementsByName('sel_unlink')[0].checked,false)"><br>
+	<!--{$lang.lock}-->:<input name="sel_lock" type="checkbox" onclick="changeCheckbox('lock',document.getElementsByName('sel_lock')[0].checked,false)">
+	<!--{$lang.delete}-->:<input name="sel_delete" type="checkbox" onclick="changeCheckbox('delete',document.getElementsByName('sel_delete')[0].checked,false)"><br>
+	<!--{$lang.unlink}-->:<input name="sel_unlink" type="checkbox" onclick="changeCheckbox('unlink',document.getElementsByName('sel_unlink')[0].checked,false)"><br>
 	
-	<!--{$lang.link}-->:<input name="sel_link" type="checkbox" onClick="changeCheckbox('link',document.getElementsByName('sel_link')[0].checked,false)">
+	<!--{$lang.link}-->:<input name="sel_link" type="checkbox" onclick="changeCheckbox('link',document.getElementsByName('sel_link')[0].checked,false)">
 	
-	<!--{$lang.move}-->:<input name="sel_move" type="checkbox" onClick="changeCheckbox('move',document.getElementsByName('sel_move')[0].checked,false)"><br>
-	<!--{$lang.change_group}--> (<!--{$thumbs[thumb_cols][thumb_cell].contentgroup_name}-->):<input name="sel_change_group" type="checkbox" onClick="changeCheckbox('change_group',document.getElementsByName('sel_change_group')[0].checked,false)">
+	<!--{$lang.move}-->:<input name="sel_move" type="checkbox" onclick="changeCheckbox('move',document.getElementsByName('sel_move')[0].checked,false)"><br>
+	<!--{$lang.change_group}--> (<!--{$thumbs[thumb_cols][thumb_cell].contentgroup_name}-->):<input name="sel_change_group" type="checkbox" onclick="changeCheckbox('change_group',document.getElementsByName('sel_change_group')[0].checked,false)">
 	
 
 </td>
 <td>
 	<!--{$lang.rotate}-->: 
-	<!--{$lang.rotate_free}-->: <input type="radio" name="all_rotate_mode" value="free" onClick="changeRadio('rotate_free',true)" checked><input type="text" onfocus="keyoff()" onblur="keyon()" name="all_rotate" onkeyup="changeVal('rotate',document.getElementsByName('all_rotate')[0].value,true)"><br> 
-	<!--{$lang.rotate_left}--> <input type="radio" name="all_rotate_mode" value="-90" onClick="changeRadio('rotate_left',true)" >
-	<!--{$lang.rotate_180}--> <input type="radio" name="all_rotate_mode" value="180" onClick="changeRadio('rotate_180',true)">
-	<!--{$lang.rotate_right}--> <input type="radio" name="all_rotate_mode" value="90" onClick="changeRadio('rotate_right',true)"><br>
+	<!--{$lang.rotate_free}-->: <input type="radio" name="all_rotate_mode" value="free" onclick="changeRadio('rotate_free',true)" checked><input type="text" onfocus="keyoff()" onblur="keyon()" name="all_rotate" onkeyup="changeVal('rotate',document.getElementsByName('all_rotate')[0].value,true)"><br> 
+	<!--{$lang.rotate_left}--> <input type="radio" name="all_rotate_mode" value="-90" onclick="changeRadio('rotate_left',true)" >
+	<!--{$lang.rotate_180}--> <input type="radio" name="all_rotate_mode" value="180" onclick="changeRadio('rotate_180',true)">
+	<!--{$lang.rotate_right}--> <input type="radio" name="all_rotate_mode" value="90" onclick="changeRadio('rotate_right',true)"><br>
 	<!--{$lang.place_in_cat}-->: <input name="all_place_in_cat" type="text" onfocus="keyoff()" onblur="keyon()"  size="10" onkeyup="changeVal('place_in_cat',document.getElementsByName('all_place_in_cat')[0].value,true)"><br>
-	<!--{$lang.lock}-->:<input name="all_lock" type="checkbox" onClick="changeCheckbox('lock',document.getElementsByName('all_lock')[0].checked,true)">
-	<!--{$lang.delete}-->:<input name="all_delete" type="checkbox" onClick="changeCheckbox('delete',document.getElementsByName('all_delete')[0].checked,true)"><br>
-	<!--{$lang.unlink}-->:<input name="all_unlink" type="checkbox" onClick="changeCheckbox('unlink',document.getElementsByName('all_unlink')[0].checked,true)"><br>
+	<!--{$lang.lock}-->:<input name="all_lock" type="checkbox" onclick="changeCheckbox('lock',document.getElementsByName('all_lock')[0].checked,true)">
+	<!--{$lang.delete}-->:<input name="all_delete" type="checkbox" onclick="changeCheckbox('delete',document.getElementsByName('all_delete')[0].checked,true)"><br>
+	<!--{$lang.unlink}-->:<input name="all_unlink" type="checkbox" onclick="changeCheckbox('unlink',document.getElementsByName('all_unlink')[0].checked,true)"><br>
 	
-	<!--{$lang.link}-->:<input name="all_link" type="checkbox" onClick="changeCheckbox('link',document.getElementsByName('all_link')[0].checked,true)">
+	<!--{$lang.link}-->:<input name="all_link" type="checkbox" onclick="changeCheckbox('link',document.getElementsByName('all_link')[0].checked,true)">
 	
-	<!--{$lang.move}-->:<input name="all_move" type="checkbox" onClick="changeCheckbox('move',document.getElementsByName('all_move')[0].checked,true)"><br>
-	<!--{$lang.change_group}--> (<!--{$thumbs[thumb_cols][thumb_cell].contentgroup_name}-->):<input name="all_change_group" type="checkbox" onClick="changeCheckbox('change_group',document.getElementsByName('all_change_group')[0].checked,true)">
+	<!--{$lang.move}-->:<input name="all_move" type="checkbox" onclick="changeCheckbox('move',document.getElementsByName('all_move')[0].checked,true)"><br>
+	<!--{$lang.change_group}--> (<!--{$thumbs[thumb_cols][thumb_cell].contentgroup_name}-->):<input name="all_change_group" type="checkbox" onclick="changeCheckbox('change_group',document.getElementsByName('all_change_group')[0].checked,true)">
 
 </td>
 
