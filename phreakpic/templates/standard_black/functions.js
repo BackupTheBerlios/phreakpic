@@ -325,8 +325,26 @@ function moveCursor(dx,dy,shift)
 }
 
 
+function default_key_actions(key)
+{
+switch(key) 
+	{
+		case "1": 
+		case "2": 
+		case "3":
+		case "4":
+		case "5":
+		case "6":
+		case "7":
+		case "9":
+			if (document.getElementsByName('nav_link')[key-1] != undefined)
+			{
+				location.href = document.getElementsByName('nav_link')[key-1].href;; return false;
+			}
+	}
+}
 
-function getkey_cat(e) 
+function getkey(e)
 {
 	if (!keyactive) return true;
 	if (e == null) 
@@ -348,6 +366,20 @@ function getkey_cat(e)
 //	if (allowkeys.indexOf(key) == -1) {
 //		if (xprekey()) return true;
 //	}
+	return key
+}
+
+function getkey_default(e)
+{
+	key=getkey(e);
+	default_key_actions(key);
+	
+}
+
+
+function getkey_cat(e) 
+{
+	key = getkey(e);
 	switch(key) 
 	{
 		case "p": 
@@ -357,25 +389,13 @@ function getkey_cat(e)
 		case "s": moveCursor(0,1,false); return false;
 		case "a": moveCursor(-1,0,false); return false;
 		case "d": moveCursor(1,0,false); return false;
-		case "1": 
-		case "2": 
-		case "3":
-		case "4":
-		case "5":
-		case "6":
-		case "7":
-		case "9":
-			if (document.getElementsByName('nav_link')[key-1] != undefined)
-			{
-				location.href = document.getElementsByName('nav_link')[key-1].href;; return false;
-			}
-		
 		case "W": moveCursor(0,-1,true); return false;
 		case "S": moveCursor(0,1,true); return false;
 		case "A": moveCursor(-1,0,true); return false;
 		case "D": moveCursor(1,0,true); return false;
 		case " ": mark(); return false;
 		case "f": follow_link(); return false;
+		default: default_key_actions(key);
 	}
 	
 	
@@ -389,31 +409,13 @@ function getkey_cat(e)
 
 function getkey_content(e) 
 {
-	if (!keyactive) return true;
-	if (e == null) 
-	{ 
-		kcode = event.keyCode;
-	} else 
-	{ // mozilla
-		if (e.altKey || e.ctrlKey) 
-		{
-			// moz doesn't override ctrl keys,
-			// eg, Ctrl-N won't bypass this function to open new window
-			return true;
-		}
-		kcode = e.which;
-	}
-	key = String.fromCharCode(kcode);
-	// allow some keys to work w/o triggering prekey
-
-//	if (allowkeys.indexOf(key) == -1) {
-//		if (xprekey()) return true;
-//	}
+	key=getkey(e);
 	switch(key) 
 	{
 		case "a": view_next(); return false;
 		case "d": view_prev(); return false;	
 		case "f": to_thumbs(); return false;	
+		default: default_key_actions(key);
 	}
 	if (kcode==13)
 	{
@@ -422,6 +424,7 @@ function getkey_content(e)
 	
 	return true;
 }
+
 
 
 

@@ -1,11 +1,6 @@
 <!--{config_load file="$template_name/config.cfg"}-->
 <script type="text/javascript" language="javascript">
-table_cols = <!--{$table_cols|default:0}-->
-
-</script>
-<script src="templates/<!--{$template_name}-->/functions.js" type="text/javascript" language="javascript">
-</script>
-<script type="text/javascript" language="javascript">
+	table_cols = <!--{$table_cols|default:0}-->
 	document.onkeypress = getkey_cat;
 	var cookie_name='<!--{$cookie_name}-->'	
 	var cookie_content_amount=0;
@@ -17,14 +12,12 @@ table_cols = <!--{$table_cols|default:0}-->
 	var speedDefault = 10;
 	var animate=false;
 	var was_shift=false;
-	var keyactive = true;
 	var backGroundColor='<!--{#table_bg_color#}-->'
 	var cursorOnSelectedColor='<!--{#cursorOnSelectedColor#}-->'
 	var selectedColor='<!--{#selectedColor#}-->'
 	var selected=new Array();
 	var sx=0;
 	var sy=0;
-		
 </script>
 
 	<!--{if $basket_enable}-->

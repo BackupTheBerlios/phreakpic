@@ -1,3 +1,4 @@
+<!--{config_load file="$template_name/config.cfg"}-->
 <!--{include file="$template_name/header.tpl"}-->
 <!--{include file="$template_name/nav_bar.tpl"}-->
 <b>Custom Searches</b> <br>

@@ -1,6 +1,14 @@
-<!--{popup_init src="templates/javascript/overlib.js"}-->
-<html>
 <!--{config_load file="$template_name/config.cfg"}-->
+<!--{popup_init src="templates/javascript/overlib.js"}-->
+
+<script src="templates/<!--{$template_name}-->/functions.js" type="text/javascript" language="javascript">
+</script>
+<script type="text/javascript" language="javascript">
+document.onkeypress = getkey_default;
+var keyactive = true;
+</script>
+
+<html>
 <head>
 	<!--{$meta}-->
 	<title><!--{$title_site}--> :: <!--{$title_page}--> - <!--{$title_name"}--></title>
