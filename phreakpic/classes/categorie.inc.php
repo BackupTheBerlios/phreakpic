@@ -16,6 +16,32 @@ class categorie
 	{
 	}
 	
+	
+	function get_parent_cat_array()
+	{
+		global $config_vars;
+		$cat_obj = $this;
+		$parent_cat['name'] = $cat_obj->get_name();
+		$parent_cat['id'] = $cat_obj->get_id();
+		$parent_cats[] = $parent_cat;
+		while ($cat_obj->get_parent_id() != $config_vars['root_categorie'])
+		{
+			
+			$old_cat_id=$cat_obj->get_parent_id();
+
+			$cat_obj = new categorie();	
+			$cat_obj->generate_from_id($old_cat_id);
+			
+			$parent_cat['name'] = $cat_obj->get_name();
+			$parent_cat['id'] = $cat_obj->get_id();	
+			$parent_cats[] = $parent_cat;
+			
+		}
+		
+		return array_reverse($parent_cats);
+	}
+
+	
 	function generate_from_row($row)
 	{
 		if (is_array($row))
