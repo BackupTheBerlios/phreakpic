@@ -125,6 +125,8 @@ define(\"SERVER_NAME\",\"" . $Server_name . "\");
 	'default_content_per_page' => {$config_vars['default_content_per_page']},
 	
 	'selectable_content_per_page' => Array(" . implode(',',$config_vars['selectable_content_per_page']) . "), 
+	
+	'cookie_name' => 'phreakpic'
 );
 ?>";
 	$file = fopen(ROOT_PATH . "config.inc.php", "w+b");
