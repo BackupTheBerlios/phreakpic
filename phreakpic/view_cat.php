@@ -76,6 +76,7 @@ if (isset($child_cats))
 		$child_cat_infos[$i]['name'] = $child_cats[$i]->get_name();
 		$child_cat_infos[$i]['description'] = $child_cats[$i]->get_description();
 		$child_cat_infos[$i]['content_amount'] = $child_cats[$i]->get_content_amount();
+		$child_cat_infos[$i]['content_child_amount'] = $child_cats[$i]->get_child_content_amount();
 		$child_cat_infos[$i]['current_rating'] = $child_cats[$i]->get_current_rating();
 		
 	}
