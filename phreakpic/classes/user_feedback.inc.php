@@ -63,6 +63,7 @@ class user_feedback
 
 class comment extends user_feedback
 {
+	var $last_changed_date;
 	var $creation_date;
 	var $change_count;
 	var $parent_id;
@@ -87,6 +88,37 @@ class comment extends user_feedback
 	{
 		return $this->topic;
 	}
+	
+	function set_last_changed_date($new_last_changed_date)
+	{
+		$this->last_changed_date = $new_last_changed_date;
+	}
+	
+	function get_last_changed_date()
+	{
+		return $this->last_changed_date;
+	}
+	
+	function set_creation_date($new_creation_date)
+	{
+		$this->creation_date = $new_creation_date;
+	}
+	
+	function get_creation_date()
+	{
+		return $this->creation_date;
+	}
+
+	function set_changed_count($new_changed_count)
+	{
+		$this->changed_count = $new_changed_count;
+	}
+	
+	function get_changed_count()
+	{
+		return $this->changed_count;
+	}
+
 
 
 	
@@ -123,8 +155,8 @@ class comment extends user_feedback
 		{
 			// this is object is not yet in the datebase, make a new entry
 			$sql = 'INSERT INTO ' . $config_vars['table_prefix'] . get_class($this) . "s 
-				(owner_id, feedback, user_id, creation_date, changed_count, parent_id, comment_topic)
-				VALUES ('$this->owner_id', '$this->feedback', '$this->user_id', '$this->creation_date', '$this->changed_count', '$this->parent_id', '$this->topic')";
+				(owner_id, feedback, user_id, creation_date, changed_count, parent_id, topic, last_changed_date)
+				VALUES ('$this->owner_id', '$this->feedback', '$this->user_id', '$this->creation_date', '$this->changed_count', '$this->parent_id', '$this->topic', '$this->last_changed_date')";
 				
 			if (!$result = $db->sql_query($sql))
 			{
@@ -146,7 +178,8 @@ class comment extends user_feedback
 					creation_date = '$this->creation_date',
 					changed_count = '$this->changed_count', 
 					parent_id = '$this->parent_id', 
-					comment_topic = '$this->topic'
+					topic = '$this->topic',
+					last_changed_date = '$this->last_changed_date'
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
