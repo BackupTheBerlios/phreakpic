@@ -20,7 +20,7 @@ function get_cats_of_cat($parent_id)
 		return;
 	}
 
-	$sql = "SELECT * FROM " . $config_vars['table_prefix'] . "cats WHERE (parent_id = '$parent_id') and ($auth_where)";
+	$sql = "SELECT * FROM " . $config_vars['table_prefix'] . "cats WHERE (parent_id = '$parent_id') and ('$auth_where')";
 
 	if (!$result = $db->sql_query($sql))
 	{
@@ -62,7 +62,7 @@ function get_content_of_cat($cat_id)
 	$sql = 	'SELECT content.*,content_in_cat.place_in_cat 
 		FROM ' .	 $config_vars['table_prefix'] . "content as content,
 			"  . $config_vars['table_prefix'] . "content_in_cat as content_in_cat
-		WHERE	($auth_where) and 
+		WHERE	('$auth_where') and 
 			(content.id = content_in_cat.content_id) and 
 			(content_in_cat.cat_id = $cat_id)
 		ORDER BY content_in_cat.place_in_cat";
@@ -188,7 +188,7 @@ function get_cats_data_where_perm($data,$perm)
 		return;
 	}
 
-	$sql = "SELECT $data FROM " . $config_vars['table_prefix'] . "cats WHERE ($auth_where)";
+	$sql = "SELECT $data FROM " . $config_vars['table_prefix'] . "cats WHERE ('$auth_where')";
 
 	if (!$result = $db->sql_query($sql))
 	{
@@ -207,7 +207,7 @@ function get_catgroups_data_where_perm($data,$perm)
 
 	$where = get_allowed_catgroups_where($userdata['user_id'],$perm,'id');
 	
-	$sql = "select $data from {$config_vars['table_prefix']}catgroups where $where";
+	$sql = "select $data from {$config_vars['table_prefix']}catgroups where '$where'";
 	
 	if (!$result = $db->sql_query($sql))
 	{
@@ -226,8 +226,7 @@ function get_contentgroups_data_where_perm($data,$perm)
 	global $db,$config_vars,$userdata;	
 
 	$where = get_allowed_contentgroups_where($userdata['user_id'],$perm,'id');
-	
-	$sql = "select $data from {$config_vars['table_prefix']}contentgroups where $where";
+	$sql = "select $data from {$config_vars['table_prefix']}contentgroups where '$where'";
 	
 	if (!$result = $db->sql_query($sql))
 	{
@@ -428,8 +427,10 @@ function add_dir_parsed($dir,$contentgroup_id,$catgroup_id,$parent_id=-1)
 
 }
 
-
-
+function get_unread_content_comments()
+{
+	$sql = "select comments.id from photo_content_comments as comments, photo_views as views WHERE (views.start < comments.creation_date) and (comments.id=views.content_id)";
+}
 
 
 ?>
