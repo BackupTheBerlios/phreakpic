@@ -340,10 +340,25 @@ function getfile($in_file)
 	return substr($in_file,0,strrpos($in_file,"."));	
 }
 
-function linkencode ($p_url) {
+function linkencode($str)
+{
+	$array = explode('/',$str);
+	foreach ($array as $key => $value)
+	{
+		#$ret.=urlencode($value).'/';
+		$array[$key]=rawurlencode($value);
+	} 
+
+	$ret = implode('/',$array);
+return $ret;
+}
+
+function linkencode2 ($p_url) {
+
 	// needs php 4.1.0
  $ta = parse_url($p_url);
- if (!empty($ta[scheme])) { $ta[scheme].='://'; }
+print_r($ta); 
+if (!empty($ta[scheme])) { $ta[scheme].='://'; }
  if (!empty($ta[pass]) and !empty($ta[user])) {
  $ta[user].=':';
  $ta[pass]=rawurlencode($ta[pass]).'@';
