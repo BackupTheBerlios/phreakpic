@@ -69,7 +69,7 @@ class categorie
 		$parent_cat['name'] = $cat_obj->get_name();
 		$parent_cat['id'] = $cat_obj->get_id();
 		$parent_cats[] = $parent_cat;
-		while ($cat_obj->get_parent_id() != $config_vars['root_categorie'])
+		while (($cat_obj->get_parent_id() != $config_vars['root_categorie']) and ($cat_obj->id != $cat_obj->get_parent_id()))
 		{
 			
 			$old_cat_id=$cat_obj->get_parent_id();
@@ -294,10 +294,10 @@ class categorie
 				SET 	name = '$this->name', 
 					current_rating = '$this->current_rating', 
 					parent_id = '$this->parent_id', 
-					catgroup_id = '$this->catgroup_id'
-					is_serie = '$this->is_serie'
-					content_amount = '$this->content_amount'
-					description = '$this->description'					
+					catgroup_id = '$this->catgroup_id',
+					is_serie = '$this->is_serie',
+					content_amount = '$this->content_amount',
+					description = '$this->description'
 				WHERE id like $this->id";
 			if (!$result = $db->sql_query($sql))
 			{
