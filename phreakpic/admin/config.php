@@ -68,16 +68,12 @@ else
 
 if (isset($HTTP_POST_VARS['add_registered_users_usergroup']))
 {
-
-	if (isset($HTTP_POST_VARS['selected_not_registered_users_usergroups']))
-	{
-		foreach ($HTTP_POST_VARS['selected_not_registered_users_usergroups'] as $value)
-		{
-			$HTTP_SESSION_VARS['registered_users_usergroup_ids'][] = $value;
-		}
+	foreach ($HTTP_POST_VARS['selected_not_registered_users_usergroups'] as $value)
+	{	
+		$HTTP_SESSION_VARS['registered_users_usergroup_ids'][] = $value;
 	}
 }
-elseif (isset($HTTP_POST_VARS['remove_default_usergroup']))
+elseif (isset($HTTP_POST_VARS['remove_registered_users_usergroup']))
 {
 	foreach ($HTTP_POST_VARS['selected_registered_users_usergroups'] as $value)
 	{
@@ -128,6 +124,7 @@ foreach($HTTP_SESSION_VARS['registered_users_usergroup_ids'] as $group_ids)
 }
 
 
+
 /*foreach($usergroups as $group_obj)
 {
 	$group['id'] = $group_obj->id;
@@ -137,11 +134,10 @@ foreach($HTTP_SESSION_VARS['registered_users_usergroup_ids'] as $group_ids)
 
  
  
- 
-$smarty->assign('default_usergroup_ids',$default_usergroups);
+ $smarty->assign('default_usergroup_ids',$default_usergroups);
 $smarty->assign('registered_users_usergroup_ids',$registered_users_usergroups);
 
-@$smarty->assign('not_default_usergroup_ids',array_minus_array($usergroups,$registered_users_usergroups));
+@$smarty->assign('not_default_usergroup_ids',array_minus_array($usergroups,$default_usergroups));
 @$smarty->assign('not_registered_users_usergroup_ids',array_minus_array($usergroups,$registered_users_usergroups));
 
 
