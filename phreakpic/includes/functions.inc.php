@@ -141,6 +141,22 @@ function make_comments($comment, $level,$editable)
 		$comment_infos['editable'] = true;
 	}
 	
+	// check if comment is new
+	
+	$newest = strtotime($comment->get_creation_date());
+	if (strtotime($comment->get_last_changed_date()) > $newest)
+ 	{
+ 		$newest = strtotime($comment->get_last_changed_date());
+ 	}
+	
+	echo date("Y-m-d H:i:s",$userdata['user_lastvisit'])."<br>";
+	
+	
+	if ($userdata['user_lastvisit'] < $newest)
+	{
+		$comment_infos['new'] = true;
+	}
+	
 	$comments[] = $comment_infos;
 	
 	//echo ($comment->get_feedback()."<br>");

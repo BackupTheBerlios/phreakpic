@@ -18,6 +18,10 @@
 			>
 			<hr>
 		<!--{/if}-->
+			<!--{if $comments[index].new == true}-->
+				new
+			<!--{/if}-->
+			
 			<b><!--{$comments[index].topic}--></b>
 			<!--{$comments[index].username}--> <!--{$lang.wrote_at}--> <!--{$comments[index].creation_date}-->&nbsp;
 			<!--{if $comments[index].last_changed_date > 0}-->
