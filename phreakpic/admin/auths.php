@@ -1,6 +1,7 @@
 <?php
 define(ROOT_PATH,'../');
 require_once(ROOT_PATH . 'includes/common.inc.php');
+include_once(ROOT_PATH . './languages/'.$userdata['user_lang'].'/lang_main.php');
 require_once(ROOT_PATH . 'includes/template.inc.php');
 require_once(ROOT_PATH . 'classes/group.inc.php');
 require_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
@@ -173,6 +174,7 @@ $smarty->assign('usergroups',$usergroups);
 $smarty->assign('sel_group',$group);
 $smarty->assign('groups',$groups);
 
+$smarty->assign('group_name',$lang[$type.'groups']);
 
 $smarty->display($userdata['photo_user_template'].'/admin/auths.tpl');
 
