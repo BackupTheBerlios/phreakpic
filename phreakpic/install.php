@@ -1,8 +1,10 @@
 <?php
 define ("ROOT_PATH",'');
-include ('includes/common.inc.php');
-include ('classes/group.inc.php');
-include ('classes/categorie.inc.php');
+include_once ('includes/common.inc.php');
+include_once ('includes/functions.inc.php');
+include_once ('classes/group.inc.php');
+include_once ('classes/categorie.inc.php');
+
 // Some Config vars
 
 $version = "alpha";
@@ -116,18 +118,54 @@ if ($mode == "check_user_info")
 	$check = @chdir("./" . $content_path_prefix);
 	if ($check == false)
 	{
-		die('Couldn\'t go into the content dir. Is the folder ' . $content_path_prefix . ' existant and have proper rights??');
+		$check = @mkdir("./" . $content_path_prefix , 0775);
+		if ($check == false)
+		{
+			die('Content dir folder does not exist and could not be created. Create the folder ./'.$content_path_prefix . ' or make ./ writeable ');	
+		}
+		
 	}
 	chdir("../");
+	
 	echo ('Content Dir: <font color=#00ff00>OK</font><br>');
 	
-	$check = @mkdir("test_install_dir", 0755);
+	$check = @mkdir("$content_path_prefix/test_install_dir", 0755);
 	if ($check == false)
 	{
-		die ('Content dir have not the right permissions (must be writable for PhreakPic) or the Folder is existing.');
+		die ("Content Dir (./$content_path_prefix) not writable (your webserver must be able to write there");
 	}
-	rmdir("test_install_dir");
-	echo ('Content Dir permissions: <font color=#00ff00>OK</font><br>');
+	
+	rmdir("$content_path_prefix/test_install_dir");
+	
+	
+	echo ('Upload Dir permissions: <font color=#00ff00>OK</font><br>');
+	
+	//upload path 
+	$check = @chdir("./" . $upload_path);
+	if ($check == false)
+	{
+		$check = @mkdir("./" . $upload_path , 0775);
+		if ($check == false)
+		{
+			die('Upload dir folder does not exist and could not be created. Create the folder ./'.$upload_path . ' or make ./ writeable ');	
+		}
+		
+	}
+	chdir("../");
+	
+	echo ('Upload Dir: <font color=#00ff00>OK</font><br>');
+	
+	$check = @mkdir("$upload_path/test_install_dir", 0755);
+	if ($check == false)
+	{
+		die ("Content Dir (./$upload_path) not writable (your webserver must be able to write there");
+	}
+	
+	rmdir("$upload_path/test_install_dir");
+	
+	
+	echo ('Upload Dir permissions: <font color=#00ff00>OK</font><br>');
+	
 	
 	//default_lang
 	$check = @chdir("./languages/" . $default_lang);
@@ -225,7 +263,7 @@ if ($mode == "check_user_info")
 	
 	$admin_group = new catgroup;
 	$admin_group->name = ('Admin Group');
-	$admin_group->description = ('This is the Administrator Category Group, where the deleted content cat can be found');
+	$admin_group->description = ('This is the Administrator Category Group, groups like the Root Car or Deleted Content belong to it. You can change the name and description, but never delete it!');
 	echo("Admin Group: " . $admin_group->commit() . "<br>");
 	
 	//root cat
@@ -234,12 +272,15 @@ if ($mode == "check_user_info")
 	$root_cat->catgroup_id = $admin_group->get_id();
 	$root_cat->name = ("root_cat");
 	$root_cat->description = ("This is your Root Category. You can change the name and description, but never delete it!");
+	$root_cat->commit();
+	// set parent id to given id
+	$root_cat->parent_id = $root_cat->id;
 	echo("Root Cat: " . $root_cat->commit() . "<br>");
 	
 	
 	//deleted content cat
 	$deleted_content_cat = new categorie;
-	$deleted_content_cat->parent_id = 1;
+	$deleted_content_cat->parent_id = $root_cat->id;
 	$deleted_content_cat->catgroup_id = $admin_group->get_id();
 	$deleted_content_cat->name = ("Deleted Content");
 	$deleted_content_cat->description = ("This is your Deleted Content Category. Here will be your deleted content stored. You can change the name and description, but never delete it!");
@@ -255,87 +296,20 @@ if ($mode == "check_user_info")
 	echo ('<p> Writing the Config ');
 	
 	
-	//don't change the following line!
-	$config_content = "<?php
-
-//Template System
-//absolute path to smarty
-define(\"SMARTY_DIR\",\"" . $Smarty_dir . "\");
-
-//relative path from phreakpic to phpBB2 (if the URL is \"http://www.blabla.com/com/phpBB2/\" and phreakpic is at \"http://www.blabla.com/com/phreakpic/\" then PHPBB_DIR will be \"../phpBB2/\")
-//Don't forget the / at end!
-define(\"PHPBB_PATH\",\"" . $phpBB_Path . "\");
-
-//relative path from phpBB2 to phreakpic see above
-define(\"PHREAKPIC_PATH\",\"" . $phreakpic_path . "\");
-
-
-
-define(\"SERVER_NAME\",\"" . $Server_name . "\");
-
-
-
-\$config_vars = array
-(
-	//Database
-	'table_prefix' => '" . $phreakpic_table_prefix . "',
-
-	// path to where the content should be stored
-	'content_path_prefix' => '" . $content_path_prefix . "',
-
-	//Picture stuff
-	// size of thumbs (for generating)
-	'thumb_size' =>
-	array
-	(
-		// if set thumb is percent as big as the original picture
-	//	'percent' => '30',
-		// if set height will be exactly this value (if the width not set the apsectio ratio will be keept)
-	//	'height' => '130',
-		// if set width will be exactly this value
-	//	'width' => '100'
-		// if set the longer size will become this value
-		'maxsize' => '130'
-	),
-
-	// ID of the cat where to put pictures that are no longer linked in any cat
-	'deleted_content_cat' => {$deleted_content_cat->id},
-
-	// ID of the root categorie
-	'root_categorie' => {$root_cat->id},
-
-	// Umask of new created directories
-	'dir_mask' => 0775,
+	//fill config_vars;
+	$config_vars['table_prefix'] = $phreakpic_table_prefix;
+	$config_vars['content_path_prefix'] = $content_path_prefix;
+	$config_vars['deleted_content_cat'] = $deleted_content_cat->id;
+	$config_vars['root_categorie'] = $root_cat->id;
+	$config_vars['default_template'] = $default_template;
+	$config_vars['default_lang'] = $default_lang;
+	$config_vars['default_upload_dir'] = $upload_path;
 	
-	//view_cat.php the Colums of the table, where we can see the thumbnails
-	'thumb_table_cols' => 4,
+	// set default values
+	$config_vars['thumb_table_cols'] = 4;
+ 	$config_vars['default_content_per_page'] = 12;
+ 	write_config($Smarty_dir,$phpBB_Path,$phreakpic_path,$Server_name);
 
-	// template used if not setted by user
-	'default_template' => '" . $default_template . "',
-
-	// language used if not setted by user
-	'default_lang' => '" . $default_lang . "',
-	
-	'default_upload_dir' => 'upload',
-	
-	// the ids of the usergroups in which every user is automaicly
-	'default_usergroup_ids' => Array(),
-	
-	'default_content_per_page' => 12
-);
-?>";
-	
-	$file = fopen("config.inc.php", "w+b");
-	if ($file == false)
-	{
-		die ('<br>Couldn\'t open the config File for writing. Maybe the permissions are not right. Please write the following Text to the file "config.inc.php".<br><p><textarea name="textfield" cols="100" rows="40">' . $config_content . '</textarea></p>');
-	}
-	
-	$write = fwrite($file,$config_content);
-	if ($write == false)
-	{
-		die ('<br>Couldn\'t write the config file. Please write the following Text to the file "config.inc.php".<br><p><textarea name="textfield" cols="100" rows="40">' . $config_content . '</textarea></p>');
-	}
 	echo ('<font color=#00ff00>OK</font></p>');
 }
 
@@ -393,7 +367,14 @@ else
 				<td width="25%"> 
 					<input type="text" name="content_path_prefix" size="30" value="content">
 				</td>
-				<td width="54%">In this Folder the Content (mostly Pictures) will be stored.</td>
+				<td width="54%">In this Folder the Content (mostly Pictures) will be stored. It must be writeable</td>
+			</tr>
+			<tr bgcolor="#FFCC99"> 
+				<td width="21%">Upload Path</td>
+				<td width="25%"> 
+					<input type="text" name="upload_path" size="30" value="upload">
+				</td>
+				<td width="54%">Content to add must be uploaded in this folder. It must be writeable</td>
 			</tr>
 			<tr bgcolor="#FFCC99"> 
 				<td width="21%">Servername</td>
@@ -411,7 +392,7 @@ else
 			<tr bgcolor="#CCCC99"> 
 				<td width="21%">Table Prefix</td>
 				<td width="25%"> 
-					<input type="text" name="phreakpic_table_prefix" size="30" value="photo_">
+					<input type="text" name="phreakpic_table_prefix" size="30" value="phreakpic_">
 				</td>
 				<td width="54%">The prefix for the tables in the database.</td>
 			</tr>
@@ -431,7 +412,7 @@ else
 			<tr bgcolor="#99CCCC"> 
 				<td width="21%" height="38">Default Template</td>
 				<td width="25%" height="38"> 
-					<input type="text" name="default_template" size="30" value="standard">
+					<input type="text" name="default_template" size="30" value="standard_black">
 				</td>
 				<td width="54%" height="38">&nbsp;</td>
 			</tr>
