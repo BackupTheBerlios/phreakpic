@@ -7,6 +7,8 @@
 	var template_name='<!--{$template_name}-->';
 	var px=0;
 	var py=0;
+	var add_to_basket_text="<!--{$lang.add_to_basket}-->";
+	var remove_from_basket_text="<!--{$lang.remove_from_basket}-->";
 	var cursorColor='<!--{#cursorColor#}-->'
 	var midfraction = 0.2;
 	var speedDefault = 10;
@@ -38,7 +40,7 @@
 	<!--{if $mode == edit}-->
 		<form action="view_cat.php?cat_id=<!--{$cat_id}-->&content_per_page=<!--{$content_per_page}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content" name="edit_content" >
 	<!--{/if}-->
-	<table border="0" align="center" cellspacing="10" cellpadding="10">
+	<table border="1" align="center" cellspacing="10" cellpadding="10">
 		<!--{section name=thumb_cols loop=$thumbs}-->
 		<tr bgcolor="<!--{#table_bg_color#}-->" valign="bottom">
 			<!--{section name=thumb_cell loop=$thumbs[thumb_cols]}-->
@@ -59,11 +61,15 @@
 						<a name="<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->">
 						
 						<!--<td width="<!--{$thumb_size}-->" bgcolor="333333">-->
-						
-						<!--{if $basket_enable}-->
-							<img name="basket_icon_name" id="basket_icon[<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->]" src="templates/<!--{$template_name}-->/img/add.gif" onclick="add_to_basket(<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->)">
-						<!--{/if}-->
-							
+						<table border=1>
+							<tr>
+								<td align="right">
+								<!--{if $basket_enable}-->
+									<img title="<!--{$lang.add_to_basket}-->" name="basket_icon_name"  id="basket_icon[<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->]" src="templates/<!--{$template_name}-->/img/add.gif" onclick="add_to_basket(<!--{$thumbs[thumb_cols][thumb_cell].content_id}-->)">
+								<!--{/if}-->
+								</td>
+							</tr>
+							<tr><td>
 							<a name="link" href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$thumbs[thumb_cols][thumb_cell].content_id}--><!--{$sid}-->#pic"><!--{$thumbs[thumb_cols][thumb_cell].html}--></a><br />
 						<!--</td>
 						<td>-->
@@ -105,6 +111,8 @@
 									<!--{/if}-->-->
 								<!--{/if}-->
 							</span>
+							</td></tr>
+							</table>
 						</td>
 						</a>
 					<!--</tr>
@@ -117,8 +125,8 @@
 
 <!--{if $basket_enable}-->
 <div align="center">
-<img name="add_all" src="templates/<!--{$template_name}-->/img/add.gif" onclick="add_all_to_basket()">
-<img name="remove_all" src="templates/<!--{$template_name}-->/img/remove.gif" onclick="remove_all_from_basket()">
+<img name="add_all" title="<!--{$lang.add_all_to_basket}-->" src="templates/<!--{$template_name}-->/img/add.gif" onclick="add_all_to_basket()">
+<img name="remove_all" title="<!--{$lang.remove_all_from_basket}-->" src="templates/<!--{$template_name}-->/img/remove.gif" onclick="remove_all_from_basket()">
 </div>
 <!--{/if}-->
 		

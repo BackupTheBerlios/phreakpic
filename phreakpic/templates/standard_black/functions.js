@@ -593,6 +593,7 @@ function set_add_icon(content_id)
 {
 	document.getElementById("basket_icon["+content_id+"]").src="templates/"+template_name+"/img/add.gif";
 	document.getElementById("basket_icon["+content_id+"]").added=false;	
+	document.getElementById("basket_icon["+content_id+"]").title=add_to_basket_text;
 }
 
 
@@ -602,6 +603,7 @@ function set_remove_icon(content_id)
 	{
 		document.getElementById("basket_icon["+content_id+"]").src="templates/"+template_name+"/img/remove.gif";
 		document.getElementById("basket_icon["+content_id+"]").added=true;
+		document.getElementById("basket_icon["+content_id+"]").title=remove_from_basket_text;
 	}
 }
 
