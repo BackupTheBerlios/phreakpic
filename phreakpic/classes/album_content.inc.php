@@ -2,6 +2,17 @@
 require_once('modules/authorisation/interface.inc.php');
 require_once('classes/categorie.inc.php');
 
+// Holds information about which object to user with which file ending:
+$filetypes = Array (
+	'jpeg' => 'picture',
+	'jpg' => 'picture',
+	'png' => 'picture',
+	'gif' => 'picture',
+	'jpe' => 'picture',
+	'bmp' => 'picture',
+	'tiff' => 'picture',
+	'tif' => 'picture');
+
 
 class album_content
 {
@@ -70,8 +81,8 @@ class album_content
 				// remove from content_in_cat table
 				$this->clear_content_in_cat();
 				
-
-
+				unset($this->cat_ids);
+				
 				if (!unlink($this->file))
 				{
 					message_die(GENERAL_ERROR, "Konnte Datei nicht löschen", '', __LINE__, __FILE__, '');
@@ -159,22 +170,47 @@ class album_content
 	{
 		// Füllt das Objekt mit den daten des Contents mit id == $id aus der Datenbank
 		global $db,$config_vars;
+		$sql = 'select * from ' . $config_vars['table_prefix'] . "content where id like $id";
+		if (!$result = $db->sql_query($sql))
+		{
+			message_die(GENERAL_ERROR, "Could not get content from id", '', __LINE__, __FILE__, $sql);
+		}
 		
+		$row = $db->sql_fetchrow($result);
+		
+		if (is_array($row))
+		{
+			// fill the var of the object with the data from the database (the field names of the database are the same than the var names)
+			foreach ($row as $key => $value)
+			{
+				// filter out all keys which are not strings, because the array containt both assoziativ and numbers
+				if (is_string($key))
+				{
+					$this->$key = $value;
+				}
+
+			}
+			return OP_SUCCESSFUL;
+		}
+		else
+		{
+			return OP_FAILED;
+		}
 	}
-	
+	 
 	//set and get functions for every variable
 	function set_id($id)
 	{
 		//set the id of the actual object. Nobody should do this.
 		return NOT_ALLOWED;
 	}
-
+  
 	function get_id()
 	{
 		//get the id of the actual object. Checks if actual user is allowed to.
 		return $this->id;
 	}
-
+  
 	function set_file($file)
 	{
 		global $userdata;
@@ -381,7 +417,7 @@ class album_content
 }
 
 
-class photo extends album_content
+class picture extends album_content
 {
    function generate_thumb($thumb_size = '0')
    {
