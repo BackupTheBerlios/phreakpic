@@ -511,7 +511,7 @@ class album_content
 			while ($cat_obj->get_parent_id() != $config_vars['root_categorie'])
 			{
 				
-				$old_cat_id=$cat_obj->get_id();
+				$old_cat_id=$cat_obj->get_parent_id();
 				$cat_obj = new categorie();
 				$cat_obj->generate_from_id($old_cat_id);
 				
@@ -643,7 +643,7 @@ class picture extends album_content
 		$array['width'] = $this->width;
 		$array['height'] = $this->height;
 		$array['name'] = $this->get_name();
-		$array['current_rating'] = $this->get_name();
+		$array['current_rating'] = $this->get_current_rating();
 		$array['views'] = $this->get_views();
 		return $array;
 	}
