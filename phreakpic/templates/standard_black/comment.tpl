@@ -23,7 +23,7 @@
 <input type="submit" value="<!--{$lang.send}-->">   
 </td></tr>
 <tr><td>
-<!--{include file="$template_name/show_comments.tpl" type="content"}-->
+<!--{include file="$template_name/show_comments.tpl" hide_controlles=true}-->
 </td></tr>
 <!--{if $type == 'content'}-->
 <tr><td>
