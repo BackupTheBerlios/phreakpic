@@ -24,7 +24,6 @@ function get_cats_of_cat($parent_id)
 	{
 		message_die(GENERAL_ERROR, "Konnte Kategorie nicht auswählen", '', __LINE__, __FILE__, $sql);
 	}
-
 	// generate categorie objects for each categorie that is returned by the query
 	while ($row = $db->sql_fetchrow($result))
 	{
@@ -40,12 +39,16 @@ function get_cats_of_cat($parent_id)
 
 }
 
-function get_content_of_cat($cat_id = 0)
+function get_content_of_cat($cat_id)
 {
 	// Returns an Array of album_content objects of all content which is in the categorie with id $cat_id
 	global $db,$config_vars,$userdata,$filetypes;
 
 	// all content in cat $cat_id	
+	if (!isset($cat_id))
+	{
+		return OP_FAILED;
+	}
 	
 	
 
