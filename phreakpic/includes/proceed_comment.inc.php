@@ -21,20 +21,39 @@ if ($mode == "add")
 if ($mode == 'edit_comment')
 {
 	$comment = new $class;
-	$comment->generate_from_id($HTTP_POST_VARS['parent_id']);
-	$comment->set_feedback($HTTP_POST_VARS['comment_text']);
-	$comment->set_topic($HTTP_POST_VARS['topic']);
-	$comment->set_changed_count($comment->get_changed_count()+1);
-	$comment->set_last_changed_date(date("Y-m-d H:i:s"));
-	$comment->commit();	
+	$error = $comment->generate_from_id($HTTP_POST_VARS['parent_id']);
+	if ($error == OP_SUCCESSFUL)
+	{
+		$comment->set_feedback($HTTP_POST_VARS['comment_text']);
+		$comment->set_topic($HTTP_POST_VARS['topic']);
+		$comment->set_changed_count($comment->get_changed_count()+1);
+		$comment->set_last_changed_date(date("Y-m-d H:i:s"));
+		$comment->commit();	
+	}
 }
 
 if ($mode == 'del_comment')
 {
 	$comment = new $class;
-	$comment->generate_from_id($comment_id);
-	$comment->delete();
-}
+	$error = $comment->generate_from_id($comment_id);
+	if ($error == OP_SUCCESSFUL)
+	{
+		$comment->delete();
+	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}
+
 	
 ?>
