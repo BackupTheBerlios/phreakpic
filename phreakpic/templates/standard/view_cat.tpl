@@ -22,14 +22,20 @@
 			<td>Anzahl</td>
 			<td>Bewertung</td>
 		</tr>
+		<form action="view_cat.php?cat_id=<!--{$cat_id}-->" method="post" name="delete_cat">
 		<!--{section name=id loop=$number_of_child_cats}-->
 			<tr>
 				<td><a href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->"><!--{$child_cat_infos[id].name}--></a></td>
 				<td><!--{$child_cat_infos[id].description}--></td>
 				<td><!--{$child_cat_infos[id].content_amount}--></td>
 				<td><!--{$child_cat_infos[id].current_rating}--></td>
+				<!--{if ($allow_cat_remove == 'true') and ($mode == 'edit')}-->	
+					<td><input name="cat_delete" type="submit" id="<!--{$child_cat_infos[id].id}-->" value="<!--{$child_cat_infos[id].id}-->"></td>
+				<!--{/if}-->
+				
 			</tr>
 		<!--{/section}-->
+		</form>
 	</table>
 <!--{else}-->
 	<p>keine unterkategorien vorhanden</p>

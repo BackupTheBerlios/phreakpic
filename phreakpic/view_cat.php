@@ -32,10 +32,25 @@ if (isset($HTTP_POST_VARS['newcat']))
 	
 }
 
+// delete cat
+if (isset($HTTP_POST_VARS['cat_delete']))
+{
+	$del_cat = new categorie();
+	$del_cat->generate_from_id($HTTP_POST_VARS['cat_delete']);
+	$del_cat->delete('CDM_REMOVE_CONTENT');
+	echo "aa ".$del_cat->content_removed."<br>";
+	echo "bb ".$del_cat->cats_removed."<br";
+}
+
 
 
 //get the cats in the actual cat and information about them
 $child_cats = get_cats_of_cat($cat_id);
+
+//Get the contents of the actual cat and their thumbnails plus information like
+$category = new categorie;
+$category->generate_from_id($cat_id);
+
 
 if (isset($child_cats))
 {
@@ -47,11 +62,13 @@ if (isset($child_cats))
 		$child_cat_infos[$i]['content_amount'] = $child_cats[$i]->get_content_amount();
 		$child_cat_infos[$i]['current_rating'] = $child_cats[$i]->get_current_rating();
 		
-		// in edit mode check on which cats user has rights to remove cat
-		if ($mode='edit')
-		{
-		}
 	}
+	// in edit mode check on which cats user has rights to remove cat
+	if ($mode == 'edit')
+	{
+		$smarty->assign('allow_cat_remove',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'cat_remove'));
+	}
+
 	$smarty->assign('child_cat_infos',$child_cat_infos);
 	$smarty->assign('number_of_child_cats',$i);
 	
@@ -62,9 +79,6 @@ else
 	$smarty->assign('number_of_child_cats',0);
 }
 
-//Get the contents of the actual cat and their thumbnails plus information like
-$category = new categorie;
-$category->generate_from_id($cat_id);
 
 // check is user is allowed to add a child cat
 $smarty->assign('allow_cat_add',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'cat_add'));
