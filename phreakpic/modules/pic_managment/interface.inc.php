@@ -75,46 +75,39 @@ function get_content_of_cat($cat_id)
 	while ($row = $db->sql_fetchrow($result))
 	{
 		// creating objects for every content
-		$objtyp = $filetypes[getext($row['file'])];
-		if (isset($objtyp))
-		{
-			$contentobj = new $objtyp;
-			if ($contentobj->generate_from_row($row) != OP_SUCCESSFUL)
-			{
-				return OP_FAILED;
-			}
-		}
 		
-		$objarray[]=$contentobj;
+		$objarray[]=get_content_from_row($row);
+		
 	}
 	
 	return $objarray;
 
 }
 
-function get_content_from_sql($sql_where_clause, $requested_fields)
+function get_content_from_sql($sql_where_clause)
 {
-   // Returns an Array of the requested fields of the pictures that are returned by the sql where clause $sql_where_clause
-   global $db;
-        global $config_vars;
+	// Returns an Array of the requested fields of the pictures that are returned by the sql where clause $sql_where_clause
+	global $db;
+		global $config_vars;
 
-   $sql = "SELECT $requested_fields FROM " . $config_vars['table_prefix'] . "pics
-      WHERE $sql_where_clause";
+	$sql = "SELECT * FROM " . $config_vars['table_prefix'] . "pics
+		WHERE $sql_where_clause";
 
-   if (!$result = $db->query($sql))
-   {
-      message_die(GENERAL_ERROR, "Konnte Bilder nicht auswählen bei eigener WHERE clause", '', __LINE__, __FILE__, $sql);
-   }
+	if (!$result = $db->query($sql))
+	{
+		message_die(GENERAL_ERROR, "Konnte Bilder nicht auswählen bei eigener WHERE clause", '', __LINE__, __FILE__, $sql);
+	}
 
-   while ($row = $db->sql_fetchrow($result))
-   {
-      $pic_data[] = $row;
-   }
+	while ($row = $db->sql_fetchrow($result))
+	{
+		$objarray[]=get_content_from_row($row);
+	}
 
 
-   return $pic_data;
+	return $objarray;
 
 }
+
 
 function get_content_object_from_id($id)
 {
@@ -148,6 +141,22 @@ function get_content_object_from_id($id)
 	
 }
 
+function get_content_from_row($row)
+{
+	global $filetypes;
+	$objtyp = $filetypes[getext($row['file'])];
+	if (isset($objtyp))
+	{
+		$contentobj = new $objtyp;
+		if ($contentobj->generate_from_row($row) != OP_SUCCESSFUL)
+		{
+			return OP_FAILED;
+		}
+	
+		return $contentobj;
+	}
+	return OP_FAILED;
+}
 
 
 
