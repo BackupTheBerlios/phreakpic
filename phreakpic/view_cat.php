@@ -160,7 +160,9 @@ if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'
 
 
 $contents = get_content_of_cat($cat_id);
+include "includes/view_thumbs.php";
 
+/*
 if (is_array($contents))
 {
 	//editing the contents
@@ -350,7 +352,7 @@ if (is_array($contents))
 	$thumbs[]=$array_row;
 	$smarty->assign('thumbs',$thumbs);
 	$smarty->assign('is_content', true);
-}
+}*/
 
 $smarty->assign('cat_id',$cat_id);
 
@@ -379,8 +381,9 @@ else
 
 
 
-
-
+//link where to go when back to thumbs
+$HTTP_SESSION_VARS['thumb_link']="view_cat.php?cat_id=$cat_id";
+$smarty->assign('thumb_link',$HTTP_SESSION_VARS['thumb_link']);
 
 
 //thats for the index.php who needs another template file. index.php just set the $template_file to another value and includes this file
