@@ -64,8 +64,11 @@ function get_content_of_cat($cat_id = 0)
 		message_die(GENERAL_ERROR, "Couldnt get data of the of the content in the cat", '', __LINE__, __FILE__, $sql);
 	}
 	
+	
+	
 	while ($row = $db->sql_fetchrow($result))
 	{
+		
 		// creating objects for every content
 /*		$objtyp = $filetypes[getext($row['file'])];
 		if (isset($objtyp))
@@ -79,7 +82,8 @@ function get_content_of_cat($cat_id = 0)
 		
 		$objarray[]=$contentobj;*/
 		
-		
+		// delete place_in_cat from $row
+		unset($row['place_in_cat']);
 		$objarray[]=get_content_from_row($row);
 		
 	}
