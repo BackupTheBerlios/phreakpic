@@ -67,6 +67,7 @@ $lang['edit'] = 'Editieren';
 $lang['commit'] = 'Abschicken';
 $lang['file'] = 'Datei';
 $lang['to_group'] = 'zu gruppe';
+$lang['comments_amount'] = 'Kommentare';
 
 
 //add_content

@@ -69,6 +69,7 @@ $lang['create'] = 'Creata';
 $lang['edit'] = 'Edit';
 $lang['commit'] = 'Commit';
 $lang['file'] = 'File';
+$lang['comments_amount'] = 'Comments';
 
 //add_content
 $lang['add_selected'] = 'Add Selected';
