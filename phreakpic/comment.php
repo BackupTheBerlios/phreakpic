@@ -24,9 +24,6 @@ $smarty->assign('cat_id', $cat_id);
 	if ($mode == "add")
 	{
 		$smarty->assign('parent_id', $parent_id);
-		
-
-	
 	}
 	
 	if ($mode == 'edit_comment')
