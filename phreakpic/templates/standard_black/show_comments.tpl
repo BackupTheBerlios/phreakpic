@@ -24,7 +24,7 @@
 			
 			<b><!--{$comments[index].topic}--></b>
 			<!--{$comments[index].username}--> <!--{$comments[index].poster_name}--> <!--{$lang.wrote_at}--> <!--{$comments[index].creation_date}-->&nbsp;
-			<!--{if $comments[index].last_changed_date > 0}-->
+			<!--{if $comments[index].changed_count > 0}-->
 				Beitrag wurde <!--{$comments[index].changed_count}--> mal geändert, zuletzt am <!--{$comments[index].last_changed_date}-->
 			<!--{/if}-->
 			<!--{if $comments[index].editable == true}-->

@@ -433,9 +433,9 @@ function make_comments($comment, $level,$editable)
 	$comment_userdata = get_userdata(intval($comment->get_user_id()));
 	$comment_infos['username'] = $comment_userdata['username'];
 	$comment_infos['topic'] = htmlspecialchars($comment->get_topic());
-	$comment_infos['creation_date'] = $comment->get_creation_date();
+	$comment_infos['creation_date'] = date($userdata['user_dateformat'],strtotime($comment->get_creation_date()));
 	$comment_infos['changed_count'] = $comment->get_changed_count();
-	$comment_infos['last_changed_date'] = $comment->get_last_changed_date();
+	$comment_infos['last_changed_date'] = date($userdata['user_dateformat'],strtotime($comment->get_last_changed_date()));
 	$comment_infos['poster_name'] = $comment->get_poster_name();
 	if (($comment_userdata['user_id'] == $userdata['user_id']) or ($editable))
 	{
