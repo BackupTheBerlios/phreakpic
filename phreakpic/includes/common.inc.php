@@ -21,7 +21,7 @@ if (!is_file('./languages/'.$userdata['user_lang'].'/lang_main.php'))
 	$userdata['user_lang'] = $config_vars['default_lang'];
 }
 
-if (!is_dir($userdata['photo_user_template']))
+if ((!is_dir($userdata['photo_user_template'])) or (!isset($userdata['photo_user_template'])))
 {
 	$userdata['photo_user_template'] = $config_vars['default_template'];
 }
