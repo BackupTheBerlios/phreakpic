@@ -37,6 +37,14 @@ class custom_sql
 					$this->entities[]=$s;
 				}
 				
+				if ($value->tagname=='param')
+				{
+					$s=new sql_param;
+					$s->create_from_xml($value);
+					$this->entities[]=$s;
+				}
+				
+				
 			}
 		}
 
@@ -66,6 +74,7 @@ class sql_subsql
 		$this->name=$element->get_attribute('name');
 	}
 }
+
 class sql_field
 {
 	var $name;
@@ -97,9 +106,31 @@ class sql_field
 	}
 }
 
+
 class sql_string
 {
 	var $sql;
+}
+
+class sql_param
+{
+	var $type;
+	function create_from_xml($element)
+	{
+		$this->type=$element->get_attribute('type');
+	}
+	
+	function get_value()
+	{
+		global $userdata;
+		if ($this->type =='current_user_id')
+		{
+			return $userdata['user_id'];
+		}
+		
+		
+		
+	}
 }
 
 
@@ -152,6 +183,11 @@ function make_sql($returns)
 		if (get_class($value) == 'sql_field')
 		{	
 			$sql = $sql . $returns[$value->name][0];
+		}
+		
+		if (get_class($value) == 'sql_param')
+		{	
+			$sql = $sql . $value->get_value();
 		}
 		
 		if (get_class($value) == 'custom_sql')
