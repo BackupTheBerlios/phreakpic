@@ -259,6 +259,7 @@ class album_content
 		
 		
 		// move to the new calculated localtaion (may be the same)		
+		
 		$new_file=$this->generate_filename();
 		rename($this->file,$new_file);
 		$this->set_file($new_file); 
@@ -450,7 +451,7 @@ class album_content
 		if (in_array($old_cat_id,$this->cat_ids))
 		{
 			// unset the key that contains the cat to be removed
-			unset($this->cat_ids[array_search($old_cat_id,$this->cat_ids)]);
+			array_splice($this->cat_ids,array_search($old_cat_id,$this->cat_ids),1);
 			return OP_SUCCESSFUL;
 		}
 		else
@@ -592,9 +593,10 @@ class album_content
 	{
 		global $config_vars;
 		//check if content is already in a cat 
+		
 		if (!isset($this->cat_ids))
 		{
-			
+		
 			$this->generate_content_in_cat_data();
 		}
 		if (sizeof($this->cat_ids)>0)
