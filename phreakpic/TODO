@@ -1,19 +1,25 @@
 for alpha release:
+- name finden
+- Design authorisation for adding people to groups creating auths.... 
+- interfaces für add_dir...
 - Polls
+- add_parsed_dir_to_cat
 X Anonymouse Login
 X Edit Comments
-- Delete Comments: unterschiedliche behandlung falls unter kommentare vorhanden sind
-- Bigbrother feature
+  - Delete Comments: unterschiedliche behandlung falls unter kommentare vorhanden sind
+X Bigbrother feature
+  X Bigbrother auswertungen
+    - User Interface
 X session id bei jedem link weitergeben
-- Design authorisation for adding people to groups creating auths.... 
-- add_parsed_dir_to_cat
 X Add file to cat edit hinzufügen
-- interfaces für add_dir
+
+
 
 for beta relase:
 - code review und einheitlich machen (speziell view_cat, view_content)
+- doppelten code in funktionen packen
 - vollständiges admin interface (wie letzendlich auch immer)
-
+- remove vars from url and use sessions for them
 
 afterwards:
 - custom fields
