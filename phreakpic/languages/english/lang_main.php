@@ -86,7 +86,6 @@ $lang['default_template'] = 'Default Template';
 $lang['default_language'] = 'Default language';
 
 
-
 //admin/auths.php
 $lang['usergroups'] = 'Usergroups';
 $lang['perms'] = 'Permissions';
@@ -102,8 +101,8 @@ $lang['new_contentgroup'] = 'create contentgroup';
 $lang['new_catgroup'] = 'create categoriegorup';
 $lang['cat_add'] = 'add categorie';
 $lang['content_add'] = 'add content';
-$lang['content_remove'] = 'delete content';
-$lang['cat_remove'] = 'add categorie';
+$lang['content_remove'] = 'remove content';
+$lang['cat_remove'] = 'remove categorie';
 $lang['add_to_group'] = 'add to group';
 $lang['remove_from_group'] = 'remove from group';
 $lang['change_group'] = 'change group';
