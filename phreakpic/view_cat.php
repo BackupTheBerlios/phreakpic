@@ -67,6 +67,7 @@ if (isset($HTTP_POST_VARS['edit_cat']))
 		$child_cats[$i]->set_name($HTTP_POST_VARS['cat_name'][$i]);
 		$child_cats[$i]->set_description($HTTP_POST_VARS['cat_description'][$i]);
 		$child_cats[$i]->set_catgroup_id($HTTP_POST_VARS['cat_catgroup'][$i],$HTTP_POST_VARS['cat_apply_recursive'][$i]);
+		$child_cats[$i]->set_parent_id($HTTP_POST_VARS['cat_parent_cat'][$i]);
 
 		if ($HTTP_POST_VARS['cat_delete'][$i] == 'on')
 		{
@@ -103,12 +104,14 @@ if (isset($child_cats))
 	for ($i = 0; $i < sizeof($child_cats); $i++)
 	{
 		$child_cat_infos[$i]['id'] = $child_cats[$i]->get_id();
+		$child_cat_infos[$i]['parent_id'] = $child_cats[$i]->get_parent_id();
 		$child_cat_infos[$i]['name'] = $child_cats[$i]->get_name();
 		$child_cat_infos[$i]['description'] = $child_cats[$i]->get_description();
 		$child_cat_infos[$i]['content_amount'] = $child_cats[$i]->get_content_amount();
 		$child_cat_infos[$i]['content_child_amount'] = $child_cats[$i]->get_child_content_amount() - $child_cat_infos[$i]['content_amount'];
 		$child_cat_infos[$i]['current_rating'] = $child_cats[$i]->get_current_rating();
 		$child_cat_infos[$i]['remove_from_group'] = $child_cats[$i]->check_perm('remove_from_group');
+		$child_cat_infos[$i]['delete'] = $child_cats[$i]->check_perm('delete');
 		$child_cat_infos[$i]['edit'] = $child_cats[$i]->check_perm('edit');
 		$child_cat_infos[$i]['catgroup_id'] = $child_cats[$i]->get_catgroup_id();
 		$child_cat_infos[$i]['comments_amount'] = $child_cats[$i]->get_child_comments_amount();
@@ -118,6 +121,10 @@ if (isset($child_cats))
 	if ($mode == 'edit')
 	{
 		$smarty->assign('allow_cat_remove',check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'cat_remove'));
+		$add_to_cats_unparsed = get_cats_data_where_perm('id,name','cat_add');
+		$add_to_cats = get_cats_string($add_to_cats_unparsed);
+		$smarty->assign('add_to_cats',$add_to_cats);
+		
 	}
 
 	$smarty->assign('child_cat_infos',$child_cat_infos);

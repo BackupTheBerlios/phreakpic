@@ -26,6 +26,7 @@
 			<td><!--{$lang.comments_amount}--></td>
 			<!--{if $mode == 'edit'}-->
 				<td><!--{$lang.catgroup}--></td>
+				<td><!--{$lang.parent_cat}--></td>
 				<td><!--{$lang.delete}--></td>
 				
 			<!--{/if}-->
@@ -61,10 +62,27 @@
 						</select><input type="checkbox" name="cat_apply_recursive[<!--{$smarty.section.id.index}-->]">
 					<!--{/if}-->
 					</td>
-					
-					<!--{if ($allow_cat_remove == 'true')}-->	
-						<td><input name="cat_delete[<!--{$smarty.section.id.index}-->]" type="checkbox"></td>
+					<td>
+						<!--{if ($allow_cat_remove == 'true')}-->	
+						<select name="cat_parent_cat[]">
+							<!--{section name=cat_parent_id loop=$add_to_cats}-->
+								<!--{if $child_cat_infos[id].parent_id == $add_to_cats[cat_parent_id].id}-->
+									<option selected value="<!--{$add_to_cats[cat_parent_id].id}-->"><!--{$add_to_cats[cat_parent_id].name}--></option>
+								<!--{else}-->
+									<!--{if $child_cat_infos[id].id != $add_to_cats[cat_parent_id].id}-->
+										<option value="<!--{$add_to_cats[cat_parent_id].id}-->"><!--{$add_to_cats[cat_parent_id].name}--></option>
+									<!--{/if}-->
+								<!--{/if}-->
+							<!--{/section}-->
+						</select>
+						
+						<!--{/if}-->
+					</td>
+					<td>
+					<!--{if ($child_cat_infos[id].delete == 'true')}-->	
+						<input name="cat_delete[<!--{$smarty.section.id.index}-->]" type="checkbox">
 					<!--{/if}-->
+					</td>
 				<!--{else}-->
 					<td id="td_cat" name="td_cat"><a name="cat_link" href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->&first_content=0<!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
 					<td><!--{$child_cat_infos[id].description}--></td>
