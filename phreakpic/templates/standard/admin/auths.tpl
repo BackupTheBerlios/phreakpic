@@ -1,7 +1,19 @@
 <!--{include file="header.tpl"}-->
 <form action="auths.php?usergroup=<!--{$sel_usergroup}-->&group=<!--{$sel_group}-->" method="POST">
 <table border=1>
-<tr><td>
+<tr>
+<td>
+	<!--{$lang.usergroups}-->
+</td>
+<td>
+	<!--{$lang.perms}-->
+</td>
+<td>
+	<!--{$group_name}-->
+</td>
+</tr>
+<tr>
+<td>
 
 <!--{section name=id loop=$usergroups}-->
 	<!--{ if $usergroups[id].id != $sel_usergroup}-->
@@ -16,7 +28,7 @@
 
 <!--{if $auth_exists == true}-->
 view: <input type="checkbox" name="view" <!--{$view_checked}-->><br>
-delete: <input type="checkbox" name="delete" <!--{$delete_checked}-->><br>
+<!--{$lang.delete}-->: <input type="checkbox" name="delete" <!--{$delete_checked}-->><br>
 edit: <input type="checkbox" name="edit" <!--{$edit_checked}-->><br>
 comment_edit: <input type="checkbox" name="comment_edit" <!--{$comment_edit_checked}-->><br> 
 <input name="delete_auth" type="submit" value="Delete Auth"><br>
@@ -28,12 +40,13 @@ comment_edit: <input type="checkbox" name="comment_edit" <!--{$comment_edit_chec
 </td>
 <td>
 <!--{section name=id loop=$groups}-->
-	<a href="auths.php?del_group=<!--{$groups[id].id}-->">del</a>
+	
 	<!--{ if $groups[id].id != $sel_group}-->
-		<a href="auths.php?usergroup=<!--{$sel_usergroup}-->&group=<!--{$groups[id].id}-->"><!--{$groups[id].name}--></a><br>
+		<a href="auths.php?usergroup=<!--{$sel_usergroup}-->&group=<!--{$groups[id].id}-->"><!--{$groups[id].name}--></a>
 	<!--{else}-->	
-		<b><!--{$groups[id].name}--></b><br>
+		<b><!--{$groups[id].name}--></b>
 	<!--{/if}-->	
+	<a href="auths.php?del_group=<!--{$groups[id].id}-->"><!--{$lang.delete}--></a><br>
 <!--{/section}-->
 </td>
 </tr>
