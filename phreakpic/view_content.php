@@ -90,7 +90,8 @@ if ($mode=="edit")
 	$edit_info = $content->get_editable_values($cat_id);
 	
 	// add to cats
-	$add_to_cats = get_cats_data_where_perm('id,name','content_add');
+	$add_to_cats_unparsed = get_cats_data_where_perm('id,name','content_add');
+	$add_to_cats = get_cats_string($add_to_cats_unparsed);
 	if (is_array($add_to_cats))
 	{
 		$smarty->assign('allow_link',true);	

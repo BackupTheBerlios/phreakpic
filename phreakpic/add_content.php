@@ -8,7 +8,9 @@ include_once('./includes/functions.inc.php');
 include_once('./languages/' . $userdata['user_lang'] . '/lang_main.php');
 include_once('./includes/template.inc.php');
 
+
 session_start();
+
 
 $add_to_contentgroups = get_contentgroups_data_where_perm('id,name','add_to_group');
 if (!is_array($add_to_contentgroups))
@@ -19,7 +21,10 @@ $smarty->assign('add_to_contentgroups',$add_to_contentgroups);
 
 
 
-$add_to_cats = get_cats_data_where_perm('id,name','content_add');
+
+
+$cats = get_cats_data_where_perm('id,name','content_add');
+$add_to_cats = get_cats_string($cats);
 if (!is_array($add_to_cats))
 {
 	die ('You dont have perms to add content to any categorie');

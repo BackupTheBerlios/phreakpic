@@ -1,6 +1,29 @@
 <?php
 include_once(ROOT_PATH . './classes/album_content.inc.php');
 
+function get_cats_string($cats)
+{
+	global $config_vars;
+	
+	
+	foreach ($cats as $key => $value)
+	{
+		$cat_obj = new categorie();
+		$cat_obj->generate_from_id($value['id']);
+		$name = $cat_obj->get_name();
+		
+		while ($cat_obj->get_parent_id() != $config_vars['root_categorie'])
+		{
+			$old_cat_id=$cat_obj->get_parent_id();
+			$cat_obj = new categorie();
+			$cat_obj->generate_from_id($old_cat_id);
+			$name = $cat_obj->get_name() . '/' . $name;
+		}
+		$cats[$key]['name']=$name;
+	}
+	return $cats;
+}
+
 function validate_config()
 {
 	global $config_vars;

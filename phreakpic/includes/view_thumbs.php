@@ -5,7 +5,8 @@ if (is_array($contents))
 	//editing the contents
 	if ((isset($submit)) and ($HTTP_POST_VARS['mode'] == 'edited'))
 	{
-		$add_to_cats = get_cats_data_where_perm('id,name','content_add');
+		$add_to_cats_unparsed = get_cats_data_where_perm('id,name','content_add');
+		$add_to_cats = get_cats_string($add_to_cats_unparsed);
 		// loop through all content
 		for ($i = 0; $i < sizeof($contents); $i++)	
 		{
@@ -24,6 +25,7 @@ if (is_array($contents))
 				$vals['to_cat']=$HTTP_POST_VARS['to_cat'];
 				$vals['move']=$HTTP_POST_VARS['move'][$i];
 				$vals['change_group']=$HTTP_POST_VARS['change_group'][$i];
+				echo $HTTP_POST_VARS['to_contentgroup'];
 				$vals['to_contentgroup']=$HTTP_POST_VARS['to_contentgroup'];
 				$vals['delete']=$HTTP_POST_VARS['delete'][$i];
 				$contents[$i]->edit_content($vals,$cat_id);
@@ -49,7 +51,9 @@ if (is_array($contents))
 
 		// Check if user has rights to add content to a cat (zu irgendeiner)
 		//dass auch
-		$add_to_cats = get_cats_data_where_perm('id,name','content_add');
+		$add_to_cats_unparsed = get_cats_data_where_perm('id,name','content_add');
+		$add_to_cats = get_cats_string($add_to_cats_unparsed);
+		
 		if (is_array($add_to_cats))
 		{
 				$smarty->assign('allow_link',true);	

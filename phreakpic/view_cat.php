@@ -160,32 +160,6 @@ if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'
 		$objtyp = $filetypes[getext($HTTP_POST_FILES['new_content_file']['name'])];
 		if (isset($objtyp))
 		{
-			
-			
-/*			$new_content = new $objtyp;
-						
-			// endgültigen dateinamen generieren und das tmp file verschieben. Weil das object nicht des dateiendung bekommen würde, wenn nur file=tmp_file und name=irgenwas gesätzt wäare
-			$new_content->file = $HTTP_POST_FILES['new_content_file']['name'];
-			$new_content->add_to_cat($cat_id);
-			if ($HTTP_POST_VARS['new_content_name'] != "")
-			{
-				$new_content->set_name($HTTP_POST_VARS['new_content_name']);
-			}
-			else
-			{
-				$new_content->set_name(getfile($HTTP_POST_FILES['new_content_file']['name']));
-			}
-			
-			$new_file_name = $new_content->generate_filename();
-			//echo "source: ".$HTTP_POST_FILES['new_content_file']['tmp_name'];
-			rename ($HTTP_POST_FILES['new_content_file']['tmp_name'], $new_file_name); 
-			$new_content->file = $new_file_name;
-						
-			$new_content->set_place_in_cat($cat_id,$HTTP_POST_VARS['new_content_place_in_cat']);
-			$new_content->set_contentgroup_id($HTTP_POST_VARS['new_content_group']);
-			
-			
-			$new_content->commit();*/
 			add_content($HTTP_POST_FILES,$HTTP_POST_VARS['new_content_name'],$cat_id,$HTTP_POST_VARS['new_content_place_in_cat'],$HTTP_POST_VARS['new_content_group']);
 		}
 	}
