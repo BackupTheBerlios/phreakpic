@@ -121,7 +121,9 @@ define(\"SERVER_NAME\",\"" . $Server_name . "\");
 	// the ids of the usergroups in which every registered user is automaicly
 	'registered_users_usergroup_ids' => Array(" . implode(',',$config_vars['registered_users_usergroup_ids']) . "),
 	
-	'default_content_per_page' => {$config_vars['default_content_per_page']}
+	'default_content_per_page' => {$config_vars['default_content_per_page']},
+	
+	'selectable_content_per_page' => Array(" . implode(',',$config_vars['selectable_content_per_page']) . "), 
 );
 ?>";
 	$file = fopen(ROOT_PATH . "config.inc.php", "w+b");

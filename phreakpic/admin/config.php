@@ -6,6 +6,7 @@ include_once(ROOT_PATH . 'includes/template.inc.php');
 
 session_start();
 
+
 if (isset($HTTP_POST_VARS['submit']))
 {
  $config_vars['thumb_table_cols'] = $HTTP_POST_VARS['thumb_table_cols'];
@@ -14,6 +15,8 @@ if (isset($HTTP_POST_VARS['submit']))
  $config_vars['default_lang'] = $HTTP_POST_VARS['default_lang'];
  $config_vars['default_usergroup_ids'] = $HTTP_SESSION_VARS['default_usergroup_ids'];
  $config_vars['registered_users_usergroup_ids'] = $HTTP_SESSION_VARS['registered_users_usergroup_ids'];
+ sort($HTTP_SESSION_VARS['selectable_content_per_page'], SORT_NUMERIC);
+ $config_vars['selectable_content_per_page'] = $HTTP_SESSION_VARS['selectable_content_per_page'];
  
  write_config(SMARTY_DIR,PHPBB_PATH,PHREAKPIC_PATH,SERVER_NAME);
  
@@ -89,6 +92,32 @@ else
 }
 
 
+if (isset($HTTP_POST_VARS['add_selectable']))
+{
+	if (intval($HTTP_POST_VARS['selectable_add_value'] != 0))
+	{
+		$HTTP_SESSION_VARS['selectable_content_per_page'][] = intval($HTTP_POST_VARS['selectable_add_value']);
+		$HTTP_SESSION_VARS['selectable_content_per_page'] = array_unique($HTTP_SESSION_VARS['selectable_content_per_page']);
+		sort($HTTP_SESSION_VARS['selectable_content_per_page'], SORT_NUMERIC);
+	}
+}
+elseif (isset($HTTP_POST_VARS['remove_selectable']))
+{
+
+	foreach ($HTTP_POST_VARS['selected_selecteable_content_per_page'] as $value)
+	{
+		unset($HTTP_SESSION_VARS['selectable_content_per_page'][$value]);
+	}
+	sort($HTTP_SESSION_VARS['selectable_content_per_page'], SORT_NUMERIC);
+}
+else
+{
+	$HTTP_SESSION_VARS['selectable_content_per_page'] = $config_vars['selectable_content_per_page'];
+}
+
+//print_r($HTTP_SESSION_VARS['selectable_content_per_page']);
+$smarty->assign('selectable_content_per_page',$HTTP_SESSION_VARS['selectable_content_per_page']);
+
 
 
 // get all usergroups
@@ -139,16 +168,6 @@ foreach($HTTP_SESSION_VARS['registered_users_usergroup_ids'] as $key => $group_i
 	}
 }
 
-
-
-/*foreach($usergroups as $group_obj)
-{
-	$group['id'] = $group_obj->id;
-	$group['name'] = $group_obj->get_name();
-	$not_default_usergroups[] = $group;
-}*/
-
- 
  
  $smarty->assign('default_usergroup_ids',$default_usergroups);
 $smarty->assign('registered_users_usergroup_ids',$registered_users_usergroups);

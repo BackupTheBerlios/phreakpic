@@ -92,7 +92,31 @@
 	</td></tr>
 	</table>
 </tr>
+<tr>
+<td>Selectalbe Content Per Page</td>
+<td>
+<table>
+	<tr>
+		<td><input type="text" name="selectable_add_value"></td>
+		<td>
+			<input type="submit" name="add_selectable" value="-->"><br>
+			<input type="submit" name="remove_selectable" value="<--">
+		</td>
+		<td>
+			<select name="selected_selecteable_content_per_page[]" size="5" multiple>
+				<!--{section name=selected_index loop=$selectable_content_per_page}-->
+					<option value="<!--{$smarty.section.selected_index.index}-->">
+						 <!--{$selectable_content_per_page[selected_index]}-->
+					</option>
+				<!--{/section}-->
+			</select>
+		
+		</tr>
+	</tr>
+</table>
+</td>
 
+</tr>
 
 
 </table>

@@ -4,6 +4,11 @@
 	<!--
 	var cat_amount=<!--{$number_of_child_cats}-->
 	var cat_sel=0;
+	
+	function change_content_per_page()
+	{
+		location.href = "view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$first_content}--><!--{$sid}-->"   + "&content_per_page=" + document.getElementsByName('selected_content_per_page')[0].value;
+	}
 	-->
 </script>
 
@@ -139,6 +144,18 @@
 	<a name="next_page" href="view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$first_content_next}--><!--{$sid}-->"><!--{$lang.nav_next}--></a>
 <!--{/if}-->
 
+
+<br>
+<!--{$lang.content_per_page}-->:
+<select onChange="change_content_per_page()" name="selected_content_per_page">
+	<!--{section name=id loop=$selectable_content_per_page}-->
+		<!--{if  $selectable_content_per_page[id].amount == $content_per_page}-->
+			<option selected value="<!--{$selectable_content_per_page[id].amount}-->"><!--{$selectable_content_per_page[id].text}--></option>
+		<!--{else}-->
+			<option value="<!--{$selectable_content_per_page[id].amount}-->"><!--{$selectable_content_per_page[id].text}--></option>
+		<!--{/if}-->
+	<!--{/section}-->
+</select>
 
 
 
