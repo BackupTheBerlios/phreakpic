@@ -7,8 +7,15 @@ function check_cat_action_allowed($catgroup_id,$user_id,$action)
 	global $db,$config_vars;
 	
 	// check in which groups the user is
-	$group_ids=get_groups_of_user($user_id);
-	$where = generate_where('usergroup_id',$user_groups);
+	$usergroup_ids=get_groups_of_user($user_id);
+
+	// if the user is in no usergroup then disallow the action
+	if (!isset($usergroup_ids))
+	{
+		return false;
+	}
+	
+	$where = generate_where('usergroup_id',$usergroup_ids);
 	$sql = 'select usergroup_id from '.$config_vars['table_prefix']."cat_auth where ($action like 1) and (catgroup_id like $catgroup_id) and ($where) limit 1";
 	
 	if (!$result = $db->sql_query($sql))
@@ -37,8 +44,7 @@ function check_content_action_allowed($contentgroup_id,$user_id,$action)
 	global $db,$config_vars;	
 	
 	// check in which groups the user is
-	$user_groups=get_groups_of_user($user_id);
-	
+	$user_groups=get_groups_of_user($user_id);	
 	// check if there is at least one entry where in one of the $user_groups is $action allowed in $contentgroup_id
 	$where = generate_where('usergroup_id',$user_groups);
 	$sql = 'select usergroup_id from '.$config_vars['table_prefix']."content_auth where ($action like 1) and (contentgroup_id like $contentgroup_id) and ($where) limit 1";
