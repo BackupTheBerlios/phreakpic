@@ -61,7 +61,7 @@ function move(id)
 
 <!--{include file="$template_name/header.tpl"}-->
 
-
+<a href="index.php?<!--{$sid}-->">Start</a> -- <a href="admin/index.php?<!--{$sid}-->">Admin</a> -- Add Content
 <form action="add_content.php?dir=<!--{$dir}-->&<!--{$sid}-->" method="post" name="content">
 <input type="hidden" name="id">
 <input type="hidden" name="thumbs">
