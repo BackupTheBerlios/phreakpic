@@ -1,4 +1,7 @@
 <?php
+require_once('includes/common.inc.php');
+
+// Get Functions
 
 function get_cats($parent_id)
 {
@@ -36,6 +39,9 @@ function get_pic_path($pic_id)
 // Returns the path to the pic with id $pic_id
 }
 
+
+// Add Functions
+
 function add_dir_to_cat($dir,$cat_id)
 {
 // Adds all pictures in the Directory $dir into the Categorie with the id $cat_id
@@ -49,6 +55,34 @@ function add_dir_parsed($dir)
 function add_pic_to_cat($pic_dir,$cat_id)
 {
 // Add the pic located in $pic_dir to the Categorie with the id $cat_id
-
 }
+
+// Cateogries and series
+
+function new_categorie($parent_id,$name)
+{
+// Creates an new categorie with name $name under the categorie with the id $parent_id
+	global $db;
+
+	$sql = '
+		INSERT INTO '.$talbe_prefix."categories (name,parent_id)
+		VALUES ('$name',$parent_id)";
+	
+	$result = $db->query($sql);
+
+	if (DB::isError($result)) 
+	{
+		echo ("ERROR");
+		message_die("", $result->getMessage(), '', __LINE__, __FILE__,$sql);
+	}
+	
+	$result->free();	
+}
+
+function new_serie($cat_id,$name,$pictures)
+{
+// Creates a serie in the Categorie with the id $cat_id, namde $name with the pictures in the array $pictures in the same order as they are in the array
+}
+
+
 ?> 
