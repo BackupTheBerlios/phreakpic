@@ -59,7 +59,7 @@ class album_content
 		}
 
 		$content_where = generate_where('id',$content_ids);
-		$auth_where = get_allowed_contentgroups_where($userdata['user_id'], "view");
+		$auth_where = get_allowed_contentgroups_where('contentgroup_id',$userdata['user_id'], "view");
 
 		// get all content
 

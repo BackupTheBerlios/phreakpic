@@ -66,7 +66,7 @@ function check_content_action_allowed($contentgroup_id,$user_id,$action)
 
 }
 
-function get_allowed_contentgroups_where($user_id,$action)
+function get_allowed_contentgroups_where($field,$user_id,$action)
 {
 	// Returns an SQL where that limits a query to the content where $action if allowed by $user_id.
 	// $action must be the name of a field out of the content_auth table, which says if this action is allowed or not
@@ -90,7 +90,7 @@ function get_allowed_contentgroups_where($user_id,$action)
 		
 	}
 
-	return generate_where('contentgroup_id',$allowed_contentgroups);	
+	return generate_where($field,$allowed_contentgroups);	
 }
 
 function get_allowed_catgroups_where($user_id,$action)
