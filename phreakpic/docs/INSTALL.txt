@@ -1,0 +1,73 @@
+Installation and Configuration
+
+Install & Configure PHPBB 2 (I will assume in this docu that you use /phpbb2)
+
+Install Smarty (I will assume in this docu that you use /smarty)
+
+Extract all files under your webbrowsers document root (I will assume in this docu that you use /phreakpic)
+
+DB Setup
+Create the tables in your db like described in /phreakpic/docs/db.dql
+This is an PhpMyAdmin dump of the db structure. So you can just execute the whole file in your db.
+All tables will have the prefix photo_ if you want to change this you have to edit the file.
+
+Configure PhreakPic
+Open /phreakpic/config.inc.php and edit the following options.
+The First 4 defines are pathes to required locations (Smarty,phpbb2,phreakpic,home)
+Just follow the comments above them.
+Afterward their is the config array this holds all settings for phreakpic.
+You can mostly leave the defaults. The comments should help you if you want to change something.
+Only one setting is very important: The 'root_categorie'. We will come to this later.
+
+Now create a content/cat and usergroups (you must be logged into phpBB2 with an user that has admin rights)
+Goto /phreakpic/admin/user_in_groups.php
+On top of the page you can create usergroups. Enter a name and describtion and press the submit button.
+Now add your user the group.
+The table has 4 columns. In the first you select the usergroup where you want to change something. 
+Here you can also delete groups.
+The seccond show the users that are not in that group.
+In the third there are buttons to add or remove the selected user from the group
+And in the last are the users which are in this group
+
+Now create catgroups
+Goto /phreakpic/admin/auths.php
+Create cat group the same way you created the usergroup.
+On top of the page you have a table with 3 columns.
+The first show all usergroups
+The second show the rights which the selected usergroup has in the selected catgroup, which is in the last column.
+Your created cat and usergroup should already be selected. Now click on create auth in the middle column.
+Now you can select what the selected usergroup is allowed to do in the selected catgroup. 
+For now maybe you just select everything (not so important because admin are always allowed to do everything)
+When finished click on submit below the table.
+
+And at last the contentgroups
+Goto /phreakpic/admin/auths.php?type=content
+This works exactly as the catgroups.
+
+Now the bit tricky part: Create the root categorie.
+Execute the following line in your db (change table_prefix if you have changed it before)
+INSERT INTO photo_cats (id, name, current_rating, parent_id, catgroup_id, is_serie, content_amount, description) 
+		VALUES (0, 'Root Cat', 0,            0,          0,          '0',       0,         Description');
+
+This creates the root categorie important is, that id and parent_id are the same. 
+For catgroup_id you should enter the id of you previously created catgroup. (Look in the db to find out)
+Now you have to change the 'root_categorie' setting in /phreakpic/config.inc.php. Set it to the id of the root categorie, 
+if you use the line above it would be 0.
+
+
+Finished ;) 
+Read the usermanual (/phreakpic/docs/userdoc.txt) to see how to create new cats and add content.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

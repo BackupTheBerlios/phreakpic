@@ -1,0 +1,10 @@
+Users Documentation
+
+Creating Categories
+- go to the categorie where you want to create the new categorie
+- click on edit
+Under the already existing categories there are now controlls to add a new cat.
+Enter Name, Catgroup, Is serie and a description. With is serie you can say if this cat contains a serie.
+This has for now no effect and will on future only have a optical effect.
+- Click on create
+
