@@ -6,6 +6,7 @@
 	include_once(ROOT_PATH . './languages/'.$userdata['user_lang'].'/lang_main.php');
 	// include lang file with admin customizable words (no error message because their might not be one
 	@include_once(ROOT_PATH . './languages/'.$userdata['user_lang'].'/lang_custom.php');
+	@include_once(ROOT_PATH . './languages/'.$userdata['user_lang'].'/lang_error.php');
 	
 
 	$smarty = new Smarty;

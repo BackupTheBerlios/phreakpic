@@ -1,5 +1,39 @@
-<?php
+<?php 
 include_once(ROOT_PATH . './classes/album_content.inc.php');
+
+DEFINE('SQL_ERROR','SQL_ERROR');
+DEFINE('AUTH_ERROR','AUTH_ERROR');
+DEFINE('FILE_ERROR','FILE_ERROR');
+
+function error_report($type, $ident , $line, $file,$sql='')
+{
+	global $userdata,$smarty,$db,$config_vars,$QUERY_STRING;
+	
+	
+	$error_info['type'] = $type;
+	$error_info['ident'] = $ident;
+	$error_info['text'] = 'not yet';
+	$error_info['line'] = $line;
+	$error_info['file'] = $file;
+	$error_info['sql'] = $sql;
+	$error_info['debug'] = DEBUG;
+	
+	
+	
+	// submit error to db
+	$sql = "INSERT INTO " . $config_vars['table_prefix'] . "error_reports
+				(type,file,line,sql,ident,user_id,query_string)
+				VALUES ('{$error_info['type']}','{$error_info['file']}','{$error_info['line']}','{$error_info['sql']}','{$error_info['ident']}','{$userdata['user_id']}','$QUERY_STRING')";
+	if (!$result = $db->sql_query($sql))
+	{
+		message_die(GENERAL_ERROR, "Error report failed", '', __LINE__, __FILE__, $sql);
+	}
+	$error_info['id'] = $db->sql_nextid();
+
+	$smarty->assign('error_info',$error_info);
+	$smarty->display($userdata['photo_user_template']."/error_msg.tpl");
+	die();
+}
 
 function write_config($Smarty_dir,$phpBB_Path,$phreakpic_path,$Server_name)
 {
