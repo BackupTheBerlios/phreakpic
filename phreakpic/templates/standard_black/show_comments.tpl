@@ -35,7 +35,11 @@
 		</td>
 	</tr>
 		<td>&nbsp;</td>
-		<td><div class="comment_text"><!--{$comments[index].text}--></div> <br> <a href="comment.php?mode=add&type=<!--{$type}-->&parent_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">Antworten</a></td>
+		<td><div class="comment_text"><!--{$comments[index].text}--></div> <br> 
+		<!--{if $hide_controlles == false}-->
+		<a href="comment.php?mode=add&type=<!--{$type}-->&parent_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">Antworten</a>
+		<!--{/if}-->
+		</td>
 </table>
 <!--{if $comments[index.index_next].level == 0}-->
 		</td>
