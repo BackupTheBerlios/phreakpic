@@ -80,7 +80,7 @@ class phreak_auth
 				// get the set vars from db_vars
 				foreach ($this->db_vars as $value)
 				{			
-					$sql = $sql . "$value = '{$this->$value}', ";
+					$sql = $sql . KEY_QUOTE .$value . KEY_QUOTE . " = '{$this->$value}', ";
 				}
 				// unset the last ','
 				$sql{strlen($sql)-2}=' ';

@@ -178,8 +178,8 @@ function stop_view($start_view,$content_id)
 	}
 	global $db,$config_vars,$userdata;
 	$now = date("Y-m-d H:i:s");
-	$sql = 'UPDATE  '. $config_vars['table_prefix'] ."views 
-		SET	\"end\" = '$now'
+	$sql = 'UPDATE  '. $config_vars['table_prefix'] ."views SET" .
+		KEY_QUOTE.'end' . KEY_QUOTE . " = '$now'
 		WHERE (user_id = " . $userdata['user_id'] . ") and (start = '$start_view') and (content_id = $content_id)";
 	if (!$result = $db->sql_query($sql))
 	{
