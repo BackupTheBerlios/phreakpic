@@ -18,7 +18,7 @@
 					</a><br>
 					<!--{$lang.nav_back}-->
 				<!--{else}-->
-					&nbsp;
+					 
 				<!--{/if}-->
 			</td>
 			
@@ -31,7 +31,7 @@
 						</a><br>
 						<!--{$lang.nav_next}-->
 					<!--{else}-->
-						&nbsp;
+						 
 					<!--{/if}-->
 				</div>
 			</td>
@@ -63,7 +63,7 @@
 				<div align="center">
 			<!--{$lang.full_size}--> <input type="radio" name="size" onclick="imageSize(0)"> <!--{$lang.fit_size}--> <input type="radio" name="size" onclick="imageSize(1)">
 				<a name="#pic"></a>
-						<table width="1" border="1" cellpadding="0" cellspacing="0">
+						<table width="1" border="0" cellpadding="0" cellspacing="0">
 							<tr>
 								<td width="1"><img src="templates/<!--{$template_name}-->/img/elo.gif" width="14" height="14" /></td>
 								<td width="1"><img src="templates/<!--{$template_name}-->/img/lor.gif" width="10" height="14" /></td>
@@ -73,7 +73,7 @@
 							</tr>
 							<tr>
 								<td>
-									<table width="9" name="height_table" height="<!--{$content_height}-->" border="1" cellpadding="0" cellspacing="0">
+									<table width="9" name="height_table" height="<!--{$content_height}-->" border="0" cellpadding="0" cellspacing="0">
 										<tr>
 											<td height="1"><img src="templates/<!--{$template_name}-->/img/lou.gif" width="14" height="10" /></td>
 										</tr>
@@ -87,7 +87,7 @@
 								</td>
 							<td colspan="3" valign="top"><a name="thumbs_link" href="<!--{$thumb_link}--><!--{$sid}-->#<!--{$content_id}-->" class="content"><!--{$html}--> align="top" border="0" name="image" onload="saveImage()"></a></td>
 								<td>
-									<table width="9" name="height_table" height="<!--{$content_height}-->" border="1" cellpadding="0" cellspacing="0">
+									<table width="9" name="height_table" height="<!--{$content_height}-->" border="0" cellpadding="0" cellspacing="0">
 										<tr>
 											<td height="1"><img src="templates/<!--{$template_name}-->/img/rou.gif" width="14" height="10" /></td>
 										</tr>
