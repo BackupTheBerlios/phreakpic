@@ -165,9 +165,9 @@ $smarty->assign('cat_id', $cat_id);
 $smarty->assign('redirect', PHREAKPIC_PATH . 'view_content.php');
 
 //calculate first_content
-if ($userdata['content_per_page']>0)
+if ($HTTP_SESSION_VARS['content_per_page']>0)
 {
-	$first_content = (int)($surrounding_content['place']/$userdata['content_per_page'])*$userdata['content_per_page'];
+	$first_content = (int)($surrounding_content['place']/$HTTP_SESSION_VARS['content_per_page'])*$HTTP_SESSION_VARS['content_per_page'];
 }
 //assign link back to thumbs;
 $smarty->assign('thumb_link',$HTTP_SESSION_VARS['thumb_link']."&first_content=".$first_content);
