@@ -51,7 +51,7 @@
 				
 				
 				<!--{if $mode == 'edit'}-->
-					<td name="td_cat"><input name="cat_name[]" type="text" value="<!--{$child_cat_infos[id].name}-->"></td>
+					<td id="td_cat" name="td_cat"><input name="cat_name[]" type="text" value="<!--{$child_cat_infos[id].name}-->"></td>
 					<td><input name="cat_description[]" type="text" value="<!--{$child_cat_infos[id].description}-->"></td>
 					<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
 					<td><!--{$child_cat_infos[id].current_rating}--></td>
@@ -75,7 +75,7 @@
 						<td><input name="cat_delete[<!--{$smarty.section.id.index}-->]" type="checkbox"></td>
 					<!--{/if}-->
 				<!--{else}-->
-					<td name="td_cat"><a name="cat_link" href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->&first_content=0<!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
+					<td id="td_cat" name="td_cat"><a name="cat_link" href="view_cat.php?cat_id=<!--{$child_cat_infos[id].id}-->&first_content=0<!--{$sid}-->"><!--{$child_cat_infos[id].name}--></a></td>
 					<td><!--{$child_cat_infos[id].description}--></td>
 					<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
 					<td><!--{$child_cat_infos[id].current_rating}--></td>
@@ -160,8 +160,8 @@
 
 <table width="95%" align="center" border="0">
 	<tr>
-		<td width="20%">
-			&nbsp;
+		<td width="20%">&nbsp;
+			
 		</td>
 		<td>
 			<!--{*if $comments != false*}-->
