@@ -196,7 +196,7 @@ if ($content_per_page > 0)
 	$smarty->assign('cat_nav_links',$cat_nav_links);
 	$smarty->assign('first_content',$HTTP_SESSION_VARS['first_content']);
 	
-	if ($HTTP_SESSION_VARS['first_content']+$content_per_page>$category->get_content_amount())
+	if ($HTTP_SESSION_VARS['first_content']+$content_per_page>=$category->get_content_amount())
 	{
 		$smarty->assign('first_content_next',0);
 	}
