@@ -108,8 +108,11 @@
 								<td width="1" height="1"><img src="templates/<!--{$template_name}-->/img/eru.gif" width="14" height="14" /></td>
 							</tr>
 						</table>
-						
+						<!--{if !$meta}-->
 						<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}-->&slideshow=5<!--{$sid}-->#pic"><!--{$lang.slideshow}--></a>
+						<!--{else}-->
+						<a href="view_content.php?cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->#pic"><!--{$lang.stop}--></a>
+						<!--{/if}-->
 						
 							
 						
