@@ -14,7 +14,6 @@ include_once('./includes/custom_searches.inc.php');
 session_start();
 
 
-
 if (isset($add))
 {		
 		$HTTP_SESSION_VARS['lines'][$HTTP_POST_VARS['row']]++;
@@ -42,7 +41,7 @@ $sql="SELECT * from {$config_vars['table_prefix']}custom_searches";
 
 if (!$result = $db->sql_query($sql))
 {
-	error_report(SQL_ERROR, 'get_custom_searches' , __LINE__, __FILE__,$sql);
+	message_die(GENERAL_ERROR, "Error in sql", '', __LINE__, __FILE__, $sql);
 }
 while ($row = $db->sql_fetchrow($result))
 {
@@ -57,31 +56,33 @@ while ($row = $db->sql_fetchrow($result))
 $smarty->assign('searches',$searches);
 
 
-
 // if a query has been selected
+$no_instand_submit=true;
 if (isset($query))
 {
+	$no_instand_submit=false;
+	
 	//smarty needs to now this for adding it to the link again
 	$smarty->assign('query',$query);
-
+	
 
 	// get 3s string for thar query
 	$sql="SELECT xml from {$config_vars['table_prefix']}custom_searches WHERE id=$query";
 	if (!$result = $db->sql_query($sql))
 	{
-		error_report(SQL_ERROR, 'custom_search' , __LINE__, __FILE__,$sql);
+		message_die(GENERAL_ERROR, "Error in sql", '', __LINE__, __FILE__, $sql);
 	}
 	$row = $db->sql_fetchrow($result);
 	
 	// generate param array
 	
+	
+		
 	$query_sql=parse_xml($row[0]);
-	
-	
+		
 	//print_r($query_sql->entities);
 	
 	// generate info for template
-	
 	$x=0;
 	$y=-1;
 	foreach ($query_sql->entities as $query_part)
@@ -89,6 +90,7 @@ if (isset($query))
 		$loops=0;
 		if (get_class($query_part)=='custom_sql')
 		{
+			$no_instand_submit=true;
 			$loops++;
 			foreach ($query_part->entities as $value)
 			{
@@ -104,8 +106,16 @@ if (isset($query))
 		}
 		if (get_class($query_part)=='sql_field')
 		{
+			$no_instand_submit=true;
 			$y++;
 			field_param($query_part,$query_sql);
+// 			$field['name']=$query_part->name;
+// 			$field['type']=$query_part->type;
+// 			$field['descr']=$query_part->descr;
+// 			$field['value']=generate_values($query_part->value);
+// 			$field['loop']=0;
+// 			$fields[0][$y]=$field;
+			
 			
 		}
 		
@@ -121,11 +131,9 @@ $smarty->assign('fields',$fields);
 
 
 
-
-
-if (isset($submit))
+if (($submit) or (!$no_instand_submit))
 {
-	
+
 	
 	
 	
@@ -137,7 +145,7 @@ if (isset($submit))
 	
 	if (!$result = $db->sql_query($sql))
 	{
-		error_report(SQL_ERROR, 'custom_search' , __LINE__, __FILE__,$sql);
+		message_die(GENERAL_ERROR, "Error in sql", '', __LINE__, __FILE__, $sql);
 	}
 		
 	//fill content array with result from query
