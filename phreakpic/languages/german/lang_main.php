@@ -4,6 +4,11 @@
 * 
 */
 
+//Header
+$lang['login'] = 'Login';
+$lang['logout'] = 'logout';
+$lang['forum'] = 'Zum Forum';
+$lang['website_home'] = 'Home';
 //in more than one file
 $lang['home'] = 'Start';
 
