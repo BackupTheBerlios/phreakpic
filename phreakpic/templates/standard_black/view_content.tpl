@@ -54,11 +54,20 @@
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
-			<td>&nbsp;</td>
+			<td>&nbsp;</td> 
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td></td>
+			<td>
+			
+			<!--{foreach from=$additional_infos key=key item=value}-->
+			
+				<!--{$key}-->: <!--{$value}--> <br>
+			
+			<!--{/foreach}-->
+			
+			
+			</td>
 			<td>
 				<div align="center">
 			<!--{$lang.full_size}--> <input type="radio" name="size" checked onclick="imageSize(0)"> <!--{$lang.fit_size}--> <input type="radio" name="size" onclick="imageSize(1)">

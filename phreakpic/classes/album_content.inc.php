@@ -1146,9 +1146,30 @@ class picture extends album_content
 		ImageDestroy($src_img);
 		ImageDestroy($dst_img);
 	}
+	
+	function get_additinal_infos()
+	{
+		$exif_fields = Array('DateTimeOriginal','Flash');
+		$ifd0_fields = Array('Model');
+		
+		$exif= exif_read_data($this->get_file(),'',true);
+				
+		foreach ($exif_fields as $value)
+		{
+			$returns[$value] = $exif['EXIF'][$value];
+		}
+		
+		foreach ($ifd0_fields as $value)
+		{
+			$returns[$value] = $exif['IFD0'][$value];
+		}	
+		
+		return $returns;
+	}
 
 	function get_html()
 	{
+		
 		return "<img src=".linkencode($this->get_file())." width=\"{$this->width}\" height=\"{$this->height}\"";
 	}
 

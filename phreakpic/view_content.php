@@ -193,6 +193,7 @@ $smarty->assign('views', $content->get_views());
 $smarty->assign('current_rating', $content->get_current_rating());
 $smarty->assign('cat_id', $HTTP_GET_VARS['cat_id']);
 $smarty->assign('redirect', PHREAKPIC_PATH . 'view_content.php');
+$smarty->assign('additional_infos',$content->get_additinal_infos());
 
 //calculate first_content
 if ($HTTP_SESSION_VARS['content_per_page']>0)
