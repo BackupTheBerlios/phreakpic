@@ -35,11 +35,11 @@ asd
 			<!--{section name=v loop=$fields[x][y].value}-->
 			<!--{$fields[x][y].selected}-->
 			<!--{if ($smarty.section.v.index == $fields[x][y].selected)}-->		
-				<option selected>
+				<option selected value="<!--{$fields[x][y].value[v]}-->">
 			<!--{else}-->
-				<option>
+				<option value="<!--{$fields[x][y].value[v]}-->">
 			<!--{/if}-->
-			<!--{$fields[x][y].value[v]}--></option>
+			<!--{$fields[x][y].displayed[v]}--></option>
 			<!--{/section}-->
 			</select>
 
