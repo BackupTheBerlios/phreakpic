@@ -331,7 +331,8 @@ class album_content
  		{
 			error_report(SQL_ERROR, 'get_surrounding_content' , __LINE__, __FILE__,$sql);
  		}
-		$objarray['place']=0;
+		$objarray['place']=1;
+		
 		while ($row = $db->sql_fetchrow($result))
 		{
 			if ($row['id'] == $this->id)
@@ -342,6 +343,7 @@ class album_content
 				return $objarray;
 			}
 			$objarray['place']++;
+			$objarray['amount'] = $db->sql_affectedrows();
 			$lastrow = $row;
 		}
 	}
@@ -513,7 +515,6 @@ class album_content
 		global $db,$config_vars;
 				
 		
-		
 		// fill palce_in_cat and cat_ids array if they are not yet filled;
 		
 		if (isset($this->id))
@@ -523,7 +524,6 @@ class album_content
 				$this->generate_content_in_cat_data();
 			}
 		}
-		
 		
 		
 		
@@ -547,7 +547,6 @@ class album_content
 		
 		if (isset($this->new_filename))
 		{
-		
 			if (!is_dir(dirname($this->new_filename)))
 			{
 				makedir(dirname($this->new_filename));
@@ -578,6 +577,7 @@ class album_content
 		// but first check if thumb exists
 		
 		//echo "rename({$this->thumbfile},".$this->get_thumbfile().")<br>";
+		
 		if (is_file($this->thumbfile))
 		{
 			if (rename($this->thumbfile,$this->get_thumbfile()))
@@ -627,6 +627,7 @@ class album_content
 		}
 		else
 		{
+		
 			$this->calc_size();	
 			//not in db
 			$this->creation_date=date("Y-m-d H:i:s");

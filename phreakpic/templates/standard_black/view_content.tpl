@@ -8,7 +8,7 @@
 </script>
 
 
-<div align="center">
+
 	<table width="95%" border="0" cellspacing="0" cellpadding="5">
 		<tr> 
 			<td height="45">
@@ -22,7 +22,11 @@
 				<!--{/if}-->
 			</td>
 			
-			<td height="45">&nbsp;</td>
+			<td height="45">
+				<div align="center">
+					<!--{$content_nr}--> / <!--{$content_amount}-->
+				</div>
+			</td>
 			<td height="45"> 
 				<div align="right">
 					<!--{if $is_next_content eq "true"}-->
@@ -35,6 +39,7 @@
 					<!--{/if}-->
 				</div>
 			</td>
+			
 		</tr>
 		<tr> 
 			<td>&nbsp;</td>

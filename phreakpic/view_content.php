@@ -42,10 +42,12 @@ if ((!isset($cat_id)) or ($cat_id==''))
 // $surrounding_content = $content->get_surrounding_content($cat_id);
 if (isset($HTTP_SESSION_VARS['contents']))
 {
+	$smarty->assign('content_amount',sizeof($HTTP_SESSION_VARS['contents']));
 	for ($i=0;$i<sizeof($HTTP_SESSION_VARS['contents']);$i++)
 	{
 		if ($HTTP_SESSION_VARS['contents'][$i]->get_id() == $content_id)
 		{
+			$smarty->assign('content_nr',$i+1);
 			$surrounding_content['next']=$HTTP_SESSION_VARS['contents'][$i+1];
 			$surrounding_content['prev']=$HTTP_SESSION_VARS['contents'][$i-1];
 			break;
@@ -55,6 +57,10 @@ if (isset($HTTP_SESSION_VARS['contents']))
 else
 {
 	$surrounding_content = $content->get_surrounding_content($cat_id);
+	$smarty->assign('content_nr',$surrounding_content['place']);
+	$smarty->assign('content_amount',$surrounding_content['amount']);
+
+	
 }
 
 if (is_object($surrounding_content['prev']))
