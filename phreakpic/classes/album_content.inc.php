@@ -332,18 +332,18 @@ class album_content
 			error_report(SQL_ERROR, 'get_surrounding_content' , __LINE__, __FILE__,$sql);
  		}
 		$objarray['place']=1;
-		
+		$objarray['amount'] = $db->sql_affectedrows();
 		while ($row = $db->sql_fetchrow($result))
 		{
 			if ($row['id'] == $this->id)
 			{
 				$objarray['prev'] = get_content_from_row($lastrow);
 				$objarray['next'] = get_content_from_row($db->sql_fetchrow($result));
-
+				
 				return $objarray;
 			}
 			$objarray['place']++;
-			$objarray['amount'] = $db->sql_affectedrows();
+			
 			$lastrow = $row;
 		}
 	}
@@ -1066,7 +1066,6 @@ class picture extends album_content
 			$this->height = $size[1];
 	}
 	
-
 
 	function generate_thumb($thumb_size = '0')
 	{
