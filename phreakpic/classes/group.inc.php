@@ -38,17 +38,17 @@ class group
 				{
 					error_report(SQL_ERROR, 'commit' , __LINE__, __FILE__,$sql);
 				}
-				return OP_SUCCESSFULL;
+				
 
 				// set id;
 				$this->id = $db->sql_nextid();
 
-
+				return OP_SUCCESSFULL;
 			}
 			else
 			{
 				// object is already in the database just du an update
-				$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . " 
+				$sql = 'UPDATE ' . $config_vars['table_prefix'] . get_class($this) . "s
 					SET 	name = '$this->name', 
 						description = '$this->description'
 					WHERE id = $this->id";
