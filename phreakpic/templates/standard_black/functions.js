@@ -1,3 +1,4 @@
+var width,height;
 function keyon() { keyactive = true; }
 function keyoff() { keyactive = false; }
 
@@ -452,4 +453,61 @@ function tog(id) {
 function catup()
 {
 	location.href = document.getElementsByName('nav_link')[catback].href;
+}
+
+function imageSize(size)
+{
+	if (size==0)
+	{
+		
+		document.getElementsByName('image')[0].width=width;
+		document.getElementsByName('image')[0].height=height;
+	}
+	else
+	{
+		if ((window.innerWidth-document.getElementsByName('image')[0].width)>(window.innerHeight-document.getElementsByName('image')[0].height))
+		{
+			if (document.getElementsByName('image')[0].height<(window.innerHeight))
+			{
+				ratio=(window.innerHeight)/document.getElementsByName('image')[0].height;
+				document.getElementsByName('image')[0].height=(window.innerHeight);
+				document.getElementsByName('height_table')[0].height=(window.innerHeight);
+				document.getElementsByName('height_table')[1].height=(window.innerHeight);
+				document.getElementsByName('image')[0].width=document.getElementsByName('image')[0].width*ratio;
+			}
+			else
+			{
+				ratio=(window.innerWidth)/document.getElementsByName('image')[0].width;
+				document.getElementsByName('image')[0].width=(window.innerWidth);
+				document.getElementsByName('image')[0].height=document.getElementsByName('image')[0].height*ratio;
+				document.getElementsByName('height_table')[0].height=document.getElementsByName('image')[0].height*ratio;
+				document.getElementsByName('height_table')[1].height=document.getElementsByName('image')[0].height*ratio;
+			}
+		}
+		else
+		{
+			if (document.getElementsByName('image')[0].width<(window.innerWidth))
+			{
+				ratio=(window.innerWidth)/document.getElementsByName('image')[0].width;
+				document.getElementsByName('image')[0].width=(window.innerWidth);
+				document.getElementsByName('image')[0].height=document.getElementsByName('image')[0].height*ratio;
+				document.getElementsByName('height_table')[0].height=document.getElementsByName('image')[0].height*ratio;
+				document.getElementsByName('height_table')[1].height=document.getElementsByName('image')[0].height*ratio;
+			}
+			else
+			{
+				ratio=(window.innerHeight)/document.getElementsByName('image')[0].height;
+				document.getElementsByName('image')[0].height=(window.innerHeight);
+				document.getElementsByName('image')[0].width=document.getElementsByName('image')[0].width*ratio;
+				document.getElementsByName('height_table')[0].Height=(window.innerHeight);
+				document.getElementsByName('height_table')[1].Height=(window.innerHeight);
+			}
+		}
+	}		
+}
+
+function saveImage()
+{
+width=document.getElementsByName('image')[0].width;
+height=document.getElementsByName('image')[0].height;
 }
