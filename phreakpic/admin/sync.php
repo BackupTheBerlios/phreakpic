@@ -88,7 +88,7 @@ foreach ($catarray as $cat)
 	
 	// check child_content_amount
 	$calc_child_content_amount = $cat->calc_child_content_amount();
-	
+
 	if ($calc_child_content_amount != $cat->get_child_content_amount())
 	{
 		$missmatch['type']=CHILD_CONTENT_IN_CAT_AMOUNT;
@@ -125,11 +125,17 @@ if (!$result = $db->sql_query($sql))
 while ($row = $db->sql_fetchrow($result))
 {
 	$content = get_content_object_from_id($row['id']);
-	$contentarray[]=$content;
+	if (is_object($content))
+	{
+		$contentarray[]=$content;
+	}
+
 }
+
 
 foreach ($contentarray as $content)
 {
+
 	$calc_comments_amount = $content->calc_comments_amount();
 	if ($calc_comments_amount != $content->get_comments_amount())
 	{
