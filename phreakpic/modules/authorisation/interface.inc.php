@@ -43,8 +43,7 @@ function check_cat_action_allowed($catgroup_id,$user_id,$action)
 	}
 	
 	$where = generate_where('usergroup_id',$usergroup_ids);
-	$sql = 'select usergroup_id from '.$config_vars['table_prefix']."cat_auth where ($action like 1) and (catgroup_id like $catgroup_id) and ($where) limit 1";
-	
+	$sql = 'select usergroup_id from '.$config_vars['table_prefix']."cat_auth where (`$action` like 1) and (catgroup_id like $catgroup_id) and ($where) limit 1";
 	if (!$result = $db->sql_query($sql))
 	{
 		error_report(SQL_ERROR, 'action_allowed' , __LINE__, __FILE__,$sql);
