@@ -23,7 +23,7 @@ table_cols = <!--{$table_cols|default:0}-->
 
 <!--{if $is_content == true}-->
 	<!--{if $mode == edit}-->
-		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content" name="content" onKeyDown="switchTd('1','1')">
+		<form action="view_cat.php?cat_id=<!--{$cat_id}-->&content_per_page=<!--{$content_per_page}--><!--{$sid}-->" method="post" name="edit_content" id="edit_content" name="edit_content" >
 	<!--{/if}-->
 	<table border="0" align="center" cellspacing="10" cellpadding="3">
 		<!--{section name=thumb_cols loop=$thumbs}-->
@@ -98,7 +98,7 @@ table_cols = <!--{$table_cols|default:0}-->
 
 <div align="center">
 <!--{if $mode != edit}-->
-	<a href="<!--{$thumb_link}-->&mode=edit<!--{$sid}-->"><!--{$lang.edit}--></a>
+	<a href="<!--{$thumb_link}-->&mode=edit&content_per_page=<!--{$content_per_page}--><!--{$sid}-->"><!--{$lang.edit}--></a>
 	<!--{if $edited == true}-->
 		<!--{$lang.cat_edited}-->
 	<!--{/if}-->
