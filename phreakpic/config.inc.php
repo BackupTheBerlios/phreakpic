@@ -4,6 +4,15 @@
 //absolute path to smarty
 define("SMARTY_DIR","/home/httpd/htdocs/smarty/");
 
+//relative path to phpBB2 (if the URL is "http://www.blabla.com/com/phpBB2/" then PHPBB_DIR will be "/com/phpBB2/")
+//Don't forget the / at end!
+define("PHPBB_PATH","/phpBB2/");
+
+
+//
+define("SERVER_NAME","http://www.blabla.com");
+
+
 $config_vars = array
 (
 	//Database
