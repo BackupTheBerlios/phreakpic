@@ -31,8 +31,7 @@ function get_cats_of_cat($parent_id)
 
 	$cat_objects[]=$catobj;
 	}
-
-	return $cat_data;
+	return $cat_objects;
 
 }
 
