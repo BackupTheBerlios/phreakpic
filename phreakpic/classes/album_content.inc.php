@@ -1175,13 +1175,13 @@ class picture extends album_content
 		if ($size[2]==2) $src_img = imagecreatefromjpeg($this->file);
 		if ($size[2]==3) $src_img = imagecreatefrompng($this->file);
 
-		if (isset($thumb_size['percent']))
+		if ($thumb_size['percent']!='')
 		{
 			// resize everthing per percent
 			$new_w = $size[0] * $thumb_size['percent'] / 100;
 			$new_h = $size[1] * $thumb_size['percent'] / 100;
 		}
-		elseif (isset($thumb_size['maxsize']))
+		elseif ($thumb_size['maxsize']!='')
 		{
 			// resize the larger value to maxsize
 			if ($size[0] > $size[1])
@@ -1195,9 +1195,9 @@ class picture extends album_content
 				$thumb_size['height'] = $thumb_size['maxsize'];
 			}
 		}
-		if (isset($thumb_size['width'])) 
+		if ($thumb_size['width']!='') 
 		{
-			if (isset($thumb_size['height']))
+			if ($thumb_size['height']!='')
 			{
 				// to a fixed resize 
 				$new_w = $thumb_size['width'];
