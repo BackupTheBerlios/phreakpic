@@ -30,7 +30,6 @@ if ($mode == 'edit_comment')
 
 if ($mode == 'del_comment')
 {
-// TODO: hier fehlt noch was passiert wenn unterkommentare enthalten sind.
 	$comment = new $class;
 	$comment->generate_from_id($comment_id);
 	$comment->delete();
