@@ -397,7 +397,7 @@ class categorie
 				$child_cats = get_cats_of_cat($this->id);
 				foreach ($child_cats as $cat)
 				{
-					$cat->set_catgroup_id($new_catgroup_id);
+					$cat->set_catgroup_id($new_catgroup_id,$recursive);
 					$cat->commit();
 				}
 			}
