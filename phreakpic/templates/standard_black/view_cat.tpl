@@ -4,7 +4,7 @@
 	<!--
 	var cat_amount=<!--{$number_of_child_cats}-->
 	var cat_sel=0;
-	
+
 	function change_content_per_page()
 	{
 		location.href = "view_cat.php?cat_id=<!--{$cat_id}-->&first_content=<!--{$first_content}--><!--{$sid}-->"   + "&content_per_page=" + document.getElementsByName('selected_content_per_page')[0].value;
@@ -17,6 +17,7 @@
 <br>
 
 <!--{if $number_of_child_cats > 0}-->
+<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_cat">
 	<table width="100%" border="0" cellpadding="4">
 		<tr bgcolor="<!--{#table_head_bg_color#}-->" class="genmed" id="cat_table_head">
 			<td width="25%"><!--{$lang.name}--></td>
@@ -28,15 +29,15 @@
 				<td><!--{$lang.catgroup}--></td>
 				<td><!--{$lang.parent_cat}--></td>
 				<td><!--{$lang.delete}--></td>
-				
+
 			<!--{/if}-->
-			
+
 		</tr>
-		<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post" name="edit_cat">
+
 		<!--{section name=id loop=$number_of_child_cats}-->
 			<tr bgcolor="<!--{#table_bg_color#}-->">
-				
-				
+
+
 				<!--{if ($mode == 'edit') and ($child_cat_infos[id].edit == true)}-->
 					<td id="td_cat" name="td_cat">
 						<input name="cat_name[<!--{$smarty.section.id.index}-->]" type="text" value="<!--{$child_cat_infos[id].name}-->">
@@ -48,9 +49,9 @@
 					<td><!--{$child_cat_infos[id].current_rating}--></td>
 					<td><!--{$child_cat_infos[id].comments_amount}--></td>
 					<td>
-					
-					<!--{if ($child_cat_infos[id].remove_from_group == 'true')}-->	
-					
+
+					<!--{if ($child_cat_infos[id].remove_from_group == 'true')}-->
+
 						<select name="cat_catgroup[<!--{$smarty.section.id.index}-->]">
 							<!--{section name=cat_id loop=$add_to_catgroups}-->
 							<!--{if $child_cat_infos[id].catgroup_id == $add_to_catgroups[cat_id].id}-->
@@ -97,14 +98,14 @@
 		
 		
 	</table>
-	<!--{if $mode == 'edit'}-->
+<!--{if $mode == 'edit'}-->
 	<input type="submit" name="edit_cat" >
-	<!--{/if}-->
-	</form>
+<!--{/if}-->
+
 <!--{else}-->
 	<p><!--{$lang.no_subcategories}--></p>
 <!--{/if}-->
-
+</form>
 
 <!--{if  ($allow_cat_add == true) and ($mode == edit)}-->
 	<form action="view_cat.php?cat_id=<!--{$cat_id}--><!--{$sid}-->" method="post">
