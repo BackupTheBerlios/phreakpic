@@ -17,7 +17,6 @@
 
 
 <table border=1>
-asd
 <!--{section name=x loop=$fields}-->
 <tr>
 	
