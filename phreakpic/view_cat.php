@@ -18,8 +18,13 @@ stop_view($HTTP_SESSION_VARS['view_start'],$HTTP_SESSION_VARS['view_content_id']
 $HTTP_SESSION_VARS['view_start'] = 0;
 $HTTP_SESSION_VARS['view_content_id'] = 0;
 
+if (isset($HTTP_GET_VARS['first_content']))
+{
+	$HTTP_SESSION_VARS['first_content'] = $HTTP_GET_VARS['first_content'];
+}
 
 
+unset($HTTP_SESSION_VARS['contents']);
 
 
 
@@ -162,45 +167,54 @@ if (check_cat_action_allowed($category->get_catgroup_id(),$userdata['user_id'],'
 
 
 
-if (!isset($first_content))
+if (!isset($HTTP_SESSION_VARS['first_content']))
 {
-	$first_content = 0;
+	$HTTP_SESSION_VARS['first_content'] = 0;
 }
 
-$contents = get_content_of_cat($cat_id,$first_content,$userdata['content_per_page']);
+if ((!isset($content_per_page)) or ($content_per_page == 0))
+{
+	$content_per_page = $userdata['content_per_page'];
+}
+
+
+$contents = get_content_of_cat($cat_id,$HTTP_SESSION_VARS['first_content'],$content_per_page);
 
 include "includes/view_thumbs.php";
 
 
 // build navigtion 
-$i=0;
-while (($i*$userdata['content_per_page'])<$category->get_content_amount())
-{
-	$cat_nav_links[] = $i * $userdata['content_per_page'];
-	$i++;
-}
 
-$smarty->assign('cat_nav_links',$cat_nav_links);
-$smarty->assign('first_content',$first_content);
-
-if ($first_content+$userdata['content_per_page']>$category->get_content_amount())
+if ($content_per_page > 0)
 {
-	$smarty->assign('first_content_next',0);
+	$i=0;
+	while (($i*$content_per_page)<$category->get_content_amount())
+	{
+		$cat_nav_links[] = $i * $content_per_page;
+		$i++;
+	}
+	
+	$smarty->assign('cat_nav_links',$cat_nav_links);
+	$smarty->assign('first_content',$HTTP_SESSION_VARS['first_content']);
+	
+	if ($HTTP_SESSION_VARS['first_content']+$content_per_page>$category->get_content_amount())
+	{
+		$smarty->assign('first_content_next',0);
+	}
+	else
+	{
+		$smarty->assign('first_content_next',$HTTP_SESSION_VARS['first_content']+$content_per_page);
+	}
+	
+	if ($HTTP_SESSION_VARS['first_content']-$userdata['content_per_page'] < 0)
+	{
+			$smarty->assign('first_content_prev', (int)($category->get_content_amount()/$content_per_page)*$content_per_page);
+	}
+	else
+	{
+		$smarty->assign('first_content_prev', $HTTP_SESSION_VARS['first_content']-$content_per_page);
+	}
 }
-else
-{
-	$smarty->assign('first_content_next',$first_content+$userdata['content_per_page']);
-}
-
-if ($first_content-$userdata['content_per_page']<0)
-{
-	$smarty->assign('first_content_prev',(int)($category->get_content_amount()/$userdata['content_per_page'])*$userdata['content_per_page']);
-}
-else
-{
-	$smarty->assign('first_content_prev',$first_content-$userdata['content_per_page']);
-}
-
 
 
 
