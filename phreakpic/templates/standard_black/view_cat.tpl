@@ -127,9 +127,11 @@
 
 
 
-<div align="center"><!--{$viewable_total_cats}--><br><!--{$viewable_total_content}--></div> 
+<div align="center"><!--{$viewable_total_cats}--><br><!--{$viewable_total_content}-->
+</div>
 
 <!--{include file="$template_name/view_thumbs.tpl"}-->
+
 
 <br>
 
@@ -201,4 +203,5 @@
 		</td>
 	</tr>
 </table>
-<!--{include file="$template_name/footer.tpl"}-->
+<div align=center><br><!--{$lang.total_content}-->: <!--{$total_content}--> <!--{#navbar_seperator#}--> <!--{$lang.total_comments}-->: <!--{$total_comments}--> </div>
+<!--{include file="$template_name/footer.tpl"}-->		
