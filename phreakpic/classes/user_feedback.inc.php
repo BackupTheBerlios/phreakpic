@@ -14,18 +14,6 @@ class user_feedback
 		
 	}
 	
-	function delete()
-	{
-		global $db,$config_vars;
-		// remove from content table
-		$sql = "DELETE FROM '" . $config_vars['table_prefix'] . get_class($this) . "s WHERE 'id' = " . $this->id;
-		if (!$result = $db->sql_query($sql))
-		{
-			message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
-		}
-		unset($this->id);
-
-	}
 	
 	function generate_from_row($row)
 	{
@@ -254,12 +242,53 @@ class comment extends user_feedback
 
 class content_comment extends comment
 {
+	function delete()
+	{
+		global $db,$config_vars,$userdata;
+		// remove from content table
+		// check is user is allowed
+		$content = new album_content();
+		$content->generate_from_id($this->owner_id);
+	echo "HH";		
+		
+		if (($userdata['user_id'] == $this->user_id) or (check_content_action_allowed($content->get_contentgroup_id(),$userdata['user_id'],'content_edit')))
+		{
+			$sql = "DELETE FROM " . $config_vars['table_prefix'] . "content_comments WHERE 'id' = " . $this->id;
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+			}
+			unset($this->id);
+		}
+
+	}
 	
 	
 }
 
 class cat_comment extends comment
 {
+	function delete()
+	{
+		global $db,$config_vars,$userdata;
+		// remove from content table
+		// check is user is allowed
+		$cat = new categorie();
+		$cat->generate_from_id($this->owner_id);
+		
+		
+		if (($userdata['user_id'] == $this->user_id) or (check_cat_action_allowed($cat->get_catgroup_id(),$userdata['user_id'],'content_edit')))
+		{
+			$sql = "DELETE FROM " . $config_vars['table_prefix'] . "cat_comments WHERE id = " . $this->id;
+			echo $sql;
+			if (!$result = $db->sql_query($sql))
+			{
+				message_die(GENERAL_ERROR, "Konnte Objekt nicht löschen", '', __LINE__, __FILE__, $sql);
+			}
+			unset($this->id);
+		}
+
+	}
 	
 	
 }
@@ -321,6 +350,7 @@ class rating extends user_feedback
 
 class content_rating extends rating
 {
+	
 }
 
 
