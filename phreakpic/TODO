@@ -1,9 +1,9 @@
 for alpha release:
-- name finden
+X name finden
 - Design authorisation for adding people to groups creating auths.... 
 - interfaces für add_dir...
 - Polls
-- add_parsed_dir_to_cat
+X add_parsed_dir_to_cat
 X Anonymouse Login
 X Edit Comments
   - Delete Comments: unterschiedliche behandlung falls unter kommentare vorhanden sind
@@ -19,6 +19,8 @@ for beta relase:
 - code review und einheitlich machen (speziell view_cat, view_content)
 - doppelten code in funktionen packen
 - vollständiges admin interface (wie letzendlich auch immer)
+  X usergroups
+  - auths
 - remove vars from url and use sessions for them
 
 afterwards:
