@@ -73,19 +73,24 @@ function get_allowed_contentgroups_where($field,$user_id,$action)
 
 	global $db,$config_vars;	
 	// first of all get the groups in which the user is.
-	$user_groups = get_groups_of_user($user_id);
+//	$user_groups = get_groups_of_user($user_id);
 	
-	if (!isset($user_groups))
-	{
+//	if (!isset($user_groups))
+//	{
 		// user is in now usergroups
-		return '0';
-	}
+//		return '0';
+//	}
 	
 	// get contentgroup_ids from the contents groups where at least one usergroup out of §users_groups is allowed to do $action
-	$where = generate_where('usergroup_id',$user_groups);
+//	$where = generate_where('usergroup_id',$user_groups);
 	
 	
-	$sql = 'select contentgroup_id from '.$config_vars['table_prefix']."content_auth where ($action like 1) and $where";
+//	$sql = 'select contentgroup_id from '.$config_vars['table_prefix']."content_auth where ($action like 1) and $where";
+
+// EXPERIMENTAL SQL which doesnt needs get_groups_of_user
+	$sql ='SELECT auth.contentgroup_id, uig.group_id FROM '.$config_vars['table_prefix'].'content_auth as auth, '.$config_vars['table_prefix']."user_in_group AS uig 
+	WHERE ($action like 1) and (uig.user_id = $user_id) and (auth.usergroup_id=uig.group_id) group by auth.contentgroup_id";
+
 	
 	if (!$result = $db->sql_query($sql))
 	{
