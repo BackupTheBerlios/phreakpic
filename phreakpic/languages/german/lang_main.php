@@ -109,7 +109,7 @@ $lang['remove_from_group'] = 'Von der Gruppe entfernen';
 $lang['change_group'] = 'Gruppe ändern';
 $lang['cat_auth'] = 'Kategorie Rechte';
 $lang['content_auth'] = 'Content Rechte';
-
+$lang['groups'] = 'Gruppen';
 
 
 //admin/user_in_group

@@ -7,7 +7,7 @@
 <a href="groups.php?<!--{$sid}-->&type=user" target="site"><!--{$lang.usergroups}--></a><br>
 <a href="user_in_groups.php?<!--{$sid}-->" target="site"><!--{$lang.users_in_group}--></a><br>
 <br>
-<a href="groups.php?<!--{$sid}-->&type=" target="site"><!--{$lang.groups}-->:Gruppen</a><br>
+<a href="groups.php?<!--{$sid}-->&type=" target="site"><!--{$lang.groups}--></a><br>
 <br>
 <a href="auths.php?<!--{$sid}-->&type=content" target="site"><!--{$lang.content_auth}--></a><br>
 <br>
