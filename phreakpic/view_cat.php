@@ -12,6 +12,7 @@ include_once('./includes/template.inc.php');
 validate_config();
 
 
+
 // bigbrother stop the view of the last viewed content
 session_start();
 
@@ -285,10 +286,13 @@ include ('includes/proceed_comment.inc.php');
 
 $root_comments = get_comments_of_cat($cat_id);
 
+
 if (sizeof($root_comments) > 0)
 {
+
 	for ($i = 0; $i < sizeof($root_comments); $i++)
 	{
+	
 		make_comments($root_comments[$i],0,check_cat_action_allowed($cat_id,$userdata['user_id'],'comment_edit'));
 	}
 	$smarty->assign('comments',$comments);
@@ -303,6 +307,7 @@ else
 //link where to go when back to thumbs
 $HTTP_SESSION_VARS['thumb_link']="view_cat.php?cat_id=$cat_id";
 $smarty->assign('thumb_link',$HTTP_SESSION_VARS['thumb_link']);
+$smarty->assign('current_page',$HTTP_SESSION_VARS['thumb_link']);
 
 
 //thats for the index.php who needs another template file. index.php just set the $template_file to another value and includes this file

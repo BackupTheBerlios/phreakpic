@@ -1,5 +1,8 @@
 <!--{config_load file="$template_name/config.cfg"}-->
+<form action="<!--{$thumb_link}--><!--{$sid}-->" method="post" name="edit_comments">
 <!--{section name=index loop=$comments}-->
+
+
 <!--{if $comments[index].level == 0}-->
 <table border="0" cellpadding="0" cellspacing="0" id="comment_thread_table">
 	<tr>
@@ -8,6 +11,9 @@
 <table border="0" cellpadding="3" cellspacing="0">
 	<tr>
 		<td>
+			<!--{if $mode == 'edit_comments'}-->
+				<input type="radio" name="comment_to" value="<!--{$comments[index].id}-->">
+			<!--{/if}-->
 			<!--{section name=level loop=$comments[index].level}-->
 				&nbsp; &nbsp; &nbsp; &nbsp;
 			<!--{/section}-->
@@ -43,9 +49,14 @@
 					</span>
 					<hr />
 					<div class="comment_text"><!--{$comments[index].text}--></div> <br>
+										
 					<!--{if $hide_controlles == false}-->
+						<!--{if $mode == 'edit_comments'}-->
+							<input type="checkbox" name="comment_move[]" value="<!--{$comments[index].id}-->" >
+						<!--{/if}-->
 						<a href="comment.php?mode=add&type=<!--{$type}-->&parent_id=<!--{$comments[index].id}-->&cat_id=<!--{$cat_id}-->&content_id=<!--{$content_id}--><!--{$sid}-->">Antworten</a>
 					<!--{/if}-->
+
 				</td>
 			</tr>
 		</table>	
@@ -57,3 +68,6 @@
 <br>
 <!--{/if}-->
 <!--{/section}-->
+<input type="submit" name="edit_comments">
+</form>
+<div align="center"><a href="<!--{$current_page}-->&mode=edit_comments<!--{$sid}-->">Edit Comments</a></div>

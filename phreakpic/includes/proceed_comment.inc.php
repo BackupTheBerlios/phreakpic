@@ -3,6 +3,17 @@
 $class=$comment_type."_comment";
 $id=$comment_type."_id";
 
+if ($HTTP_GET_VARS['mode'] == 'edit_comments')
+{
+	$comment_edit=true;
+	$smarty->assign('mode','edit_comments');
+}
+else
+{
+	$comment_edit=false;
+}
+
+
 
 // Comments
 if ($mode == "add")
@@ -40,18 +51,21 @@ if ($mode == 'del_comment')
 	{
 		$comment->delete();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+}
+
+if (isset($HTTP_POST_VARS['edit_comments']))
+{
+	foreach ($HTTP_POST_VARS['comment_move'] as $comment_id)
+	{
+		if ($comment_id != $HTTP_POST_VARS['comment_to'])
+		{
+			$comment = new cat_comment;
+			$comment->generate_from_id($comment_id);
+			$comment->set_parent_id($HTTP_POST_VARS['comment_to']);
+			$comment->commit();
+		}
+	}
 	
 }
 
