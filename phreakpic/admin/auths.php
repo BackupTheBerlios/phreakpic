@@ -6,10 +6,27 @@ require_once(ROOT_PATH . 'includes/template.inc.php');
 require_once(ROOT_PATH . 'classes/group.inc.php');
 require_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 
+
+
+session_start();
+
+$HTTP_GET_VARS['type'];
+
+if (($HTTP_GET_VARS['type']=='content') or $HTTP_GET_VARS['type']=='cat')
+{
+	$HTTP_SESSION_VARS['type']=$HTTP_GET_VARS['type'];
+}
+else
+{
+	$type=$HTTP_SESSION_VARS['type'];
+}
+
+
+
 // get all usergroups
 $sql = 'SELECT id,name FROM ' . $config_vars['table_prefix'] . 'usergroups';
 
-$type='content';
+
 
 if (!isset($group))
 {
@@ -99,6 +116,46 @@ if (isset($HTTP_POST_VARS['change_auth']))
 	{
 		$auth->set_comment_edit(0);
 	}
+	
+	if ($type=='cat')
+	{
+	// additional cat fields
+		if ($HTTP_POST_VARS['cat_add'] == 'on')
+		{
+			$auth->set_cat_add(1);
+		}
+		else
+		{
+			$auth->set_cat_add(0);
+		}
+		
+		if ($HTTP_POST_VARS['cat_remove'] == 'on')
+		{
+			$auth->set_cat_remove(1);
+		}
+		else
+		{
+			$auth->set_cat_remove(0);
+		}
+		
+		if ($HTTP_POST_VARS['content_add'] == 'on')
+		{
+			$auth->set_content_add(1);
+		}
+		else
+		{
+			$auth->set_content_add(0);
+		}
+		
+		if ($HTTP_POST_VARS['content_remove'] == 'on')
+		{
+			$auth->set_content_remove(1);
+		}
+		else
+		{
+			$auth->set_content_remove(0);
+		}
+	}
 	$auth->commit();
 	
 }
@@ -162,6 +219,26 @@ if ($row = $db->sql_fetchrow($result))
 	{
 		$smarty->assign('comment_edit_checked','checked');	
 	}
+	
+	if ($type=='cat')
+	{
+		if ($auth->get_cat_add())
+		{
+			$smarty->assign('cat_add_checked','checked');	
+		}
+		if ($auth->get_cat_remove())
+		{
+			$smarty->assign('cat_remove_checked','checked');	
+		}
+		if ($auth->get_content_add())
+		{
+			$smarty->assign('content_add_checked','checked');	
+		}
+		if ($auth->get_content_remove())
+		{
+			$smarty->assign('content_remove_checked','checked');	
+		}	
+	}
 }
 
 
@@ -175,6 +252,8 @@ $smarty->assign('sel_group',$group);
 $smarty->assign('groups',$groups);
 
 $smarty->assign('group_name',$lang[$type.'groups']);
+$smarty->assign('new_group',$lang['new_'.$type.'group']);
+$smarty->assign('type',$type);
 
 $smarty->display($userdata['photo_user_template'].'/admin/auths.tpl');
 
