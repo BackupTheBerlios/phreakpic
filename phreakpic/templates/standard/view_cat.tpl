@@ -15,7 +15,7 @@
 <!--{/section}-->
 
 <!--{if $number_of_child_cats > 0}-->
-	<table width="60%" border="0" cellpadding="5" align="center">
+	<table width="60%" border="1" cellpadding="5" align="center">
 		<tr>
 			<td>Name</td>
 			<td>Description</td>
@@ -40,7 +40,7 @@
 <!--{if $mode == edit}-->
 	<form action="view_cat.php?cat_id=<!--{$cat_id}-->" method="post" name="edit_content" id="edit_content">
 <!--{/if}-->
-	<table border=0 align=center>
+	<table border=1 align=center>
 		<!--{section name=thumb_cols loop=$thumbs}-->
 		<tr>
 			<!--{section name=thumb_cell loop=$thumbs[thumb_cols]}-->
@@ -96,5 +96,19 @@
 <!--{else}-->
 	In dieser Kategorie gibts noch keine Bilder...
 <!--{/if}-->
+<table width="95%" align="center" border="1">
+	<tr>
+		<td width="20%">
+			&nbsp;
+		</td>
+		<td>
+			<!--{*if $comments != false*}-->
+				<!--{include file="$template_name/show_comments.tpl" type="cat"}-->
+			<!--{*else*}-->
+				<a href="comment.php?mode=add&type=cat&parent_id=0&cat_id=<!--{$cat_id}-->"><!--{$lang.add_comment}--></a>
+			<!--{*/if*}-->
+		</td>
+	</tr>
+</table>
 </body>
 </html>
