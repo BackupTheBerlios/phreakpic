@@ -3,6 +3,7 @@ include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 include_once(ROOT_PATH . 'classes/categorie.inc.php');
 include_once(ROOT_PATH . 'classes/base.inc.php');
 include_once(ROOT_PATH . 'classes/group.inc.php');
+include_once(ROOT_PATH . 'classes/error.inc.php');
 include_once(ROOT_PATH . 'includes/functions.inc.php');
 include_once(ROOT_PATH . 'modules/statistics.inc.php');
 
@@ -45,7 +46,7 @@ class album_content extends phreakpic_base
 	var $add_to_group;
 	var $remove_from_group;
 	var $new_filename;
-	
+
 	
 	var $commit_parent_cats;
 	var $remove_from_cat;
@@ -76,12 +77,12 @@ class album_content extends phreakpic_base
 	function dec_comments_amount()
 	{
 		$this->comments_amount--;
-		
+
 		if (!is_array($this->cat_ids))
 		{
 			$this->generate_content_in_cat_data();
 		}
-		
+
 		if (is_array($this->cat_ids))
 		{
 			foreach($this->cat_ids as $cat_id)
@@ -90,16 +91,16 @@ class album_content extends phreakpic_base
 				$cat->generate_from_id($cat_id);
 				$cat->dec_child_comments_amount();
 				$this->commit_parent_cats[] = $cat;
-				
+
 			}
 		}
 	}
-	
+
 	function get_comments_amount()
 	{
 		return $this->comments_amount;
 	}
-	
+
 	function set_comments_amount($val)
 	{
 		$this->comments_amount = $val;
@@ -107,7 +108,7 @@ class album_content extends phreakpic_base
 	}
 
 	
-	
+
 	function calc_comments_amount()
 	{
 		global $db,$config_vars;
@@ -121,76 +122,70 @@ class album_content extends phreakpic_base
 		return $row[0];
 	}
 	
-	
+
 	
 	
 	function get_editable_values($cat_id)
 	{
 		global $userdata;
 		
-		
+
 		// Check if user has the right to remove the content from the contentgroup
 		$thumb_infos['allow_remove_from_group'] = $this->check_perm('remove_from_group');
 
-		
+
 		// get current contentgroup
 		$c_group = new group();
 		$c_group->generate_from_id($this->get_contentgroup_id());
 		$thumb_infos['contentgroup_name'] = $c_group->get_name();
-		
+
 		// check if user has edit perm to that content
 		$thumb_infos['allow_edit'] = $this->check_perm('edit');
 			
 		// check if user has delete perm to that content
 		$thumb_infos['allow_delete'] = $this->check_perm('delete');
-		
+
 		// get place_in_cat
 		$place_in_cat_array = $this->get_place_in_cat();
 		$thumb_infos['place_in_cat'] = $place_in_cat_array[$cat_id];
-		
+
 		// check if locked
 		if ($this->get_locked())
 		{
 			$thumb_infos['locked'] = 'checked';
 		}
-		
+
 		return $thumb_infos;
 	}
-	
+
 	function edit_content($vals,$cat_id)
 	{
 		// name
-		
-		
-		if ($this->set_name($vals['name']) != OP_SUCCESSFUL)
-		{
-			die('Konnte Name '.$vals['name'].' von '.$this->id.' nicht setzen ('.$i);
-		}
-  
-		// place_in_cat
-		if ($this->set_place_in_cat($cat_id,$vals['place_in_cat']) != OP_SUCCESSFUL)
-		{
-			die('Konnte Place in cat '.$vals['place_in_cat'].' von '.$this->get_id().' nicht setzen');
-		}
+
+		$results[] = $this->set_name($vals['name']);
+
+
+
+		// place_in_cat, no errors can occure here
+		$this->set_place_in_cat($cat_id,$vals['place_in_cat']);
+
+
 
 		// lock
 
 		if ($vals['lock'] == 'on')
 		{
-			if ($this->lock() != OP_SUCCESSFUL)
-			{
-				die('Konnte '.$vals['name'].' nicht locken');
-			}	
+			$results[] = $this->lock();
 		}
 		else
 		{
-			$this->unlock();
+			$results[] = $this->unlock();
 		}
 
 		//rotate
 		if ($vals['rotate_mode'] == 'free')
 		{
-			if (intval($vals['rotate'])!=0) 
+			if (intval($vals['rotate'])!=0)
 			{
 				$this->rotate($vals['rotate']);
 			}
@@ -199,66 +194,51 @@ class album_content extends phreakpic_base
 		{
 			$this->rotate($vals['rotate_mode']);
 		}
-		
+
 		// check unlink
 		if ($vals['unlink'] == 'on')
 		{
-			if ($this->remove_from_cat($cat_id) != OP_SUCCESSFUL)
-			{
-				die ('Konnte '.$vals['name'].' nicht von der cat entfernen');
-			}
+			$results[] = $this->remove_from_cat($cat_id);
 			$redirect_to_cat=true;
-		}				
-		
+		}
+
 
 		// check link
 		if ($vals['link'] == 'on')
 		{
-			if ($this->add_to_cat($vals['to_cat']) != OP_SUCCESSFUL)
-			{
-				die ('Konnte '.$vals['name'].' nicht linken');
-			}
+			$results[] = $this->add_to_cat($vals['to_cat']);
 		}
-		
+
 		// check if you have content remove rights
 		if ($vals['move'] == 'on')
 		{
-			if ($this->add_to_cat($vals['to_cat']) != OP_SUCCESSFUL)
-			{
-				die ('Konnte '.$vals['name'].' nicht moven (add)');
-			}
-			if ($this->remove_from_cat($cat_id) != OP_SUCCESSFUL)
-			{
-				die ('Konnte '.$vals['name'].' nicht moven (remove)');
-			}
+			$results[] = $this->add_to_cat($vals['to_cat']);
+			$results[] = $this->remove_from_cat($cat_id);
 			$redirect_to_cat=true;
 		}
-		
+
 		// check change group
 		if ($vals['change_group'] == 'on')
 		{
-			
-			if ($this->set_contentgroup_id($vals['to_contentgroup']) != OP_SUCCESSFUL)
-			{
-				die ("konnte die Contentgruppe von {$vals['name']} nicht ändern");
-			}
+
+			$results[] = $this->set_contentgroup_id($vals['to_contentgroup']);
 		}
 
 		$this->commit();
 		// check delete
-		
+
 		if ($vals['delete'] == 'on')
 		{
 			if ($this->delete() != OP_SUCCESSFUL)
 			{
 				die('Konnte '.$vals['name'].' nicht löschen');
-			}	
+			}
 			$redirect_to_cat=true;
 		}
 		return $redirect_to_cat;
 	}
-	
-	
+
+
 	function check_perm($perm)
 	{
 		global $userdata;
@@ -269,7 +249,7 @@ class album_content extends phreakpic_base
 		return $this->$perm;
 	}
 
-	
+
 
 	function album_content() //Constructor
 	{
@@ -304,7 +284,7 @@ class album_content extends phreakpic_base
 		}
 		return $this->place_in_cat;
 	}
-	
+
 	function set_place_in_cat($cat,$place)
 	{
 		if (!isset($this->place_in_cat))
@@ -346,7 +326,7 @@ class album_content extends phreakpic_base
 				return $objarray;
 			}
 			$objarray['place']++;
-			
+
 			$lastrow = $row;
 		}
 	}
@@ -358,7 +338,7 @@ class album_content extends phreakpic_base
 		//Generates a thumbnail picture from the actual content in the size $thumb_size. check for making the size of the thumb right (higher pictures other than widther pictures).
 		return NOT_SUPPORTED;
 	}
-	
+
 	
 
 	function change_compression($compression)
@@ -389,52 +369,78 @@ class album_content extends phreakpic_base
 		$this->commit();
 	
 	}
-	
+
 	function lock()
 	{
 		global $userdata;
+
+		$result = new phreak_error();
+		$result->set_object_id($this->id);
+		$result->set_is_value($this->lock);
+		$result->set_should_value(1);
+		$result->set_opeartion('lock');
 		//set the name of the actual object. Checks if actual user is allowed to.
 		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
 			$this->locked=1;
-			return OP_SUCCESSFUL;
+			$result->set_type(NO_ERROR);
+			return $result;
+
 		}
 		else
 		{
-			return OP_NP_MISSING_EDIT;
+			$result->set_why(OP_NP_MISSING_EDIT);
+			$result->set_type(AUTH_ERROR);
+			return $result;
 		}
 	}
-	
+
 	function get_locked()
 	{
 		return $this->locked;
 	}
-	
+
 	function unlock()
 	{
 		global $userdata;
+
+		$result = new phreak_error();
+		$result->set_object_id($this->id);
+		$result->set_is_value($this->lock);
+		$result->set_should_value(0);
+		$result->set_operation('unlock');
+
 		//set the name of the actual object. Checks if actual user is allowed to.
 		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
 			$this->locked=0;
-			return OP_SUCCESSFULL;
+			$result->set_type(NO_ERROR);
+			return $result;
+
 		}
 		else
 		{
-			return OP_NP_MISSING_EDIT;
+			$result->set_why(OP_NP_MISSING_EDIT);
+			$result->set_type(AUTH_ERROR);
+			return $result;
 		}
 	}
-	
+
 
 	function delete()
 	{
 	//delete the actual object from Database and filesystem. Checks if the actual object ist yet in database. Also checks authorisation.
 	global $db, $config_vars;
 
+	$result = new phreak_error();
+	$result->set_object_id($this->id);
+	$result->set_operation('delete');
+
+
 		//check if the object is in the database
 		if (isset($this->id))
-		{  
-		
+		{
+
 			if ($this->check_perm('delete')) //Authorisation is okay
 			{
 			
@@ -492,7 +498,7 @@ class album_content extends phreakpic_base
 				unset($this->file);
 				unset($this->cat_ids);
 				unset($this->place_in_cat);
-				
+
 				
 				
 				
@@ -513,13 +519,13 @@ class album_content extends phreakpic_base
 
 	function commit()
 	{
-		//commits all changes of the actual object to the database and/or filesystem 
+		//commits all changes of the actual object to the database and/or filesystem
 		//or create a new db entry if object is not yet in db
 		global $db,$config_vars;
-				
-		
+
+
 		// fill palce_in_cat and cat_ids array if they are not yet filled;
-		
+
 		if (isset($this->id))
 		{
 			if ((!isset($this->cat_ids)) or (!isset($this->place_in_cat)))
@@ -527,11 +533,11 @@ class album_content extends phreakpic_base
 				$this->generate_content_in_cat_data();
 			}
 		}
-		
-		
-		
-		
-		
+
+
+
+
+
 		// if content is in no cat anymore
 		if (sizeof($this->cat_ids) == 0)
 		{
@@ -541,31 +547,31 @@ class album_content extends phreakpic_base
 			$del_content_cat->content_amount++;
 			$this->cat_ids[0] = $config_vars['deleted_content_cat'];
 			$this->new_filename=$this->generate_filename();
-			
+
 		}
-		
-		
-		
-		// move to the new calculated localtaion (may be the same)		
-		
+
+
+
+		// move to the new calculated localtaion (may be the same)
+
 		if (isset($this->new_filename))
 		{
 			if (!is_dir(dirname($this->new_filename)))
 			{
 				makedir(dirname($this->new_filename));
 			}
-			
+
 
 			//echo "rename({$this->file},$new_file)<br>";
 			if (rename($this->file,$this->new_filename))
 			{
-				$this->set_file($this->new_filename); 
+				$this->set_file($this->new_filename);
 			}
-			else 
+			else
 			{
 				die('content rename failed '.$this->file.' to '.$this->new_filename);
 			}
-			
+
 			//echo "rename pic" .$this->file." -> ".$new_file."<br>";
 
 			// move thumb
@@ -575,12 +581,11 @@ class album_content extends phreakpic_base
 			}
 		}
 
-		
+
 		//echo "rename thumb" .$this->thumbfile." -> ".$this->get_thumbfile()."<br>";
 		// but first check if thumb exists
-		
+
 		//echo "rename({/*$this->thumbfile*/},".$this->get_thumbfile().")<br>";
-		
 		if (is_file($this->thumbfile))
 		{
 			if (rename($this->thumbfile,$this->get_thumbfile()))
@@ -606,7 +611,7 @@ class album_content extends phreakpic_base
 					name = '" . database_encode($this->name) . "',
 					views = '$this->views',
 					current_rating = '$this->current_rating', 
-					creation_date = '$this->creation_date', 
+					creation_date = '$this->creation_date',
 					contentgroup_id = '$this->contentgroup_id',
 					locked = '$this->locked',
 					width = '$this->width',
@@ -627,8 +632,8 @@ class album_content extends phreakpic_base
 		}
 		else
 		{
-		
-			$this->calc_size();	
+
+			$this->calc_size();
 			//not in db
 			$this->creation_date=date("Y-m-d H:i:s");
 			// add content to the content table
@@ -646,7 +651,7 @@ class album_content extends phreakpic_base
 			$this->id = $db->sql_nextid();
 		}
 		
-		
+
 		
 		
 		// add content to the cats	
@@ -687,7 +692,7 @@ class album_content extends phreakpic_base
 		// Füllt das Objekt mit den daten des Contents mit id == $id aus der Datenbank
 		global $db,$config_vars;
 		$sql = 'select * from ' . $config_vars['table_prefix'] . "content where id = $id";
-		
+
 		if (!$result = $db->sql_query($sql))
 		{
 			error_report(SQL_ERROR, 'generate' , __LINE__, __FILE__,$sql);
@@ -697,7 +702,7 @@ class album_content extends phreakpic_base
 		$result =  $this->generate_from_row($row);
 		$this->thumbfile = $this->get_thumbfile();
 		return $result;
-		
+
 	}
 	 
 	//set and get functions for every variable
@@ -706,7 +711,7 @@ class album_content extends phreakpic_base
 		//set the id of the actual object. Nobody should do this.
 		return NOT_ALLOWED;
 	}
-  
+
 	function get_id()
 	{
 		//get the id of the actual object. Checks if actual user is allowed to.
@@ -734,7 +739,7 @@ class album_content extends phreakpic_base
 		{
 			return OP_NOT_A_FILE;
 		}
-		
+
 	}
 
 	function get_file()
@@ -746,61 +751,79 @@ class album_content extends phreakpic_base
 	function add_to_cat($new_cat_id)
 	{
 		global $userdata;
-		
+
+		$result = new phreak_error();
+		$result->set_object_id($this->id);
+		$result->set_should_value($new_cat_id);
+		$result->set_opeartion('add_to_cat');
+
+
 		if (!is_array($this->cat_ids))
 		{
 			$this->generate_content_in_cat_data();
 		}
-		
+
 		if (is_array($this->cat_ids))
 		{
 			if (in_array($new_cat_id,$this->cat_ids))
 			{
-				return OP_CONTENT_ALREADY_IN_CAT;
+				$result->set_why(OP_CONTENT_ALREADY_IN_CAT);
+				$result->set_type(GENERAL_ERROR);
+				return $result;
 			}
 		}
-		
 
-		
-		
+
+
+
 		//adds the actual object to the cat with id == $new_cat_id. Checks if actual user is allowed to.
 
 		// get objekt for the new_cat
 
 		$this->add_to_cat = new categorie();
 		$this->add_to_cat->generate_from_id($new_cat_id);
-		
+
 		// user needs content_add rights in the cat where he wants to add that content
 		if (check_cat_action_allowed($this->add_to_cat->catgroup_id, $userdata['user_id'], "content_add"))
 		{
 			$this->cat_ids[] = $new_cat_id;
 			$this->add_to_cat->set_content_amount($this->add_to_cat->get_content_amount()+1);
 			$this->new_filename=$this->generate_filename();
-			return OP_SUCCESSFUL;
+
+			$result->set_type(NO_ERROR);
+			return $result;
 		}
 		else
 		{
-			return OP_NP_MISSING_CONTENT_ADD;
+			$result->set_why(OP_NP_MISSING_CONTENT_ADD);
+			$result->set_type(AUTH_ERROR);
+			return $result;
 		}
 	}
-	
+
 	function remove_from_cat($old_cat_id)
 	{
 		global $userdata;
-		
-				
+
+		$result = new phreak_error();
+		$result->set_object_id($this->id);
+		$result->set_should_value($old_cat_id);
+		$result->set_opeartion('remove_from_cat');
+
+
+
 		if (!is_array($this->cat_ids))
 		{
 			$this->generate_content_in_cat_data();
 		}
-				
+
 		$this->remove_from_cat = new categorie();
 		if ($this->remove_from_cat->generate_from_id($old_cat_id) != OP_SUCCESSFUL)
 		{
 			error_report(GENERAL_ERROR, 'generate' , __LINE__, __FILE__);
 		}
 
-		
+
 
 		// check perms (needs content_remove)
 		if (check_cat_action_allowed($this->remove_from_cat->catgroup_id, $userdata['user_id'], "content_remove"))
@@ -812,16 +835,26 @@ class album_content extends phreakpic_base
 				array_splice($this->cat_ids,array_search($old_cat_id,$this->cat_ids),1);
 				$this->remove_from_cat->set_content_amount($this->remove_from_cat->get_content_amount()-1);
 				$this->new_filename=$this->generate_filename();
-				return OP_SUCCESSFUL;
+
+				$result->set_type(NO_ERROR);
+				return $result;
 			}
 			else
 			{
-				return OP_CONTENT_NOT_IN_CAT;
+				$result->set_why(OP_CONTENT_NOT_IN_CAT);
+				$result->set_type(GENERAL_ERROR);
+				return $result;
 			}
 		}
+		else
+		{
+			$result->set_why(OP_NP_MISSING_EDIT);
+			$result->set_type(AUTH_ERROR);
+			return $result;
+		}
 	}
-	
-	
+
+
 	function get_cat_ids()
 	{
 		if (!is_array($this->cat_ids))
@@ -836,15 +869,25 @@ class album_content extends phreakpic_base
 	function set_name($name)
 	{
 		global $userdata;
+
+		$result = new phreak_error();
+		$result->set_object_id($this->id);
+		$result->set_is_value($this->name);
+		$result->set_should_value($name);
+		$result->set_operation('set_name');
+
 		//set the name of the actual object. Checks if actual user is allowed to.
 		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
 			$this->name = $name;
-			return OP_SUCCESSFUL;
+			$result->set_type(NO_ERROR);
+			return $result;
 		}
 		else
 		{
-			return OP_NP_MISSING_EDIT;
+			$result->set_why(OP_NP_MISSING_EDIT);
+			$result->set_type(AUTH_ERROR);
+			return $result;
 		}
 	}
 
@@ -905,15 +948,27 @@ class album_content extends phreakpic_base
 	function set_contentgroup_id($contentgroup_id)
 	{
 		global $userdata;
+
+		$result = new phreak_error();
+		$result->set_object_id($this->id);
+		$result->set_is_value($this->contentgroup_id);
+		$result->set_should_value($contentgroup_id);
+
+		$result->set_opeartion('set_contentgroup_id');
+
 		//set the contentgroup_id of the actual object. checks if actual user is allwoed to.
 		if (($this->id == 0) or (check_content_action_allowed($this->contentgroup_id, $userdata['user_id'], "edit")))
 		{
 			$this->contentgroup_id = $contentgroup_id;
-			return OP_SUCCESSFUL;
+			$result->set_type(NO_ERROR);
+			return $result;
+
 		}
 		else
 		{
-			return OP_NP_MISSIN_EDIT;
+			$result->set_why(OP_NP_MISSING_EDIT);
+			$result->set_type(AUTH_ERROR);
+			return $result;
 		}
 	}
 
@@ -922,9 +977,9 @@ class album_content extends phreakpic_base
 		//get the creation_date of the actual object. Checks if actual user is allowed to.
 		return $this->contentgroup_id;
 	}
-	
-	
-	// helpers 
+
+
+	// helpers
 	// private:
 	function fill_content_in_cat()
 	{

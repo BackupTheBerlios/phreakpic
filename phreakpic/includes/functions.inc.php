@@ -1,11 +1,12 @@
-<?php 
+<?php
 include_once(ROOT_PATH . './classes/album_content.inc.php');
 
-DEFINE('INFORMATION','0');
-DEFINE('SQL_ERROR','1');
-DEFINE('AUTH_ERROR','2');
-DEFINE('FILE_ERROR','3');
-DEFINE('GENERAL_ERROR','3');
+DEFINE('NO_ERROR','0');
+DEFINE('INFORMATION','1');
+DEFINE('SQL_ERROR','2');
+DEFINE('AUTH_ERROR','3');
+DEFINE('FILE_ERROR','4');
+DEFINE('GENERAL_ERROR','5');
 
 function database_encode($string)
 {
@@ -17,11 +18,11 @@ function database_encode($string)
 function error_report($type, $ident , $line, $file,$sql='')
 {
 	global $userdata,$smarty,$db,$config_vars,$QUERY_STRING,$error;
-	
+
 	switch ($type)
 	{
-		case SQL_ERROR: 
-			$error_info['type'] = 'SQL_ERROR'; 
+		case SQL_ERROR:
+			$error_info['type'] = 'SQL_ERROR';
 			$error_info['sql_error'] = $db->sql_error();
 			break;
 		case AUTH_ERROR: $error_info['type'] = 'AUTH_ERROR'; break;
