@@ -9,6 +9,7 @@ $lang['login'] = 'Login';
 $lang['logout'] = 'logout';
 $lang['forum'] = 'Forum';
 $lang['website_home'] = 'Home';
+$lang['profile'] = 'Profile';
 //in more than one file
 $lang['home'] = 'Start';
 
