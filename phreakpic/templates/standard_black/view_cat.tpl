@@ -40,10 +40,10 @@
 
 				<!--{if ($mode == 'edit') and ($child_cat_infos[id].edit == true)}-->
 					<td id="td_cat" name="td_cat">
-						<input name="cat_name[<!--{$smarty.section.id.index}-->]" type="text" value="<!--{$child_cat_infos[id].name}-->">
+						<input name="cat_name[<!--{$smarty.section.id.index}-->]" type="text" value="<!--{$child_cat_infos[id].name}-->" onfocus="keyoff()" onblur="keyon()">
 					</td>
 					<td>
-						<input name="cat_description[<!--{$smarty.section.id.index}-->]" type="text" value="<!--{$child_cat_infos[id].description}-->">
+						<input name="cat_description[<!--{$smarty.section.id.index}-->]" type="text" value="<!--{$child_cat_infos[id].description}-->" onfocus="keyoff()" onblur="keyon()">
 					</td>
 					<td><!--{$child_cat_infos[id].content_amount}--> (<!--{$child_cat_infos[id].content_child_amount}-->)</td>
 					<td><!--{$child_cat_infos[id].current_rating}--></td>
