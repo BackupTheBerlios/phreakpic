@@ -68,7 +68,7 @@
 				
 				<!--{foreach from=$meta_data[$id]  key=entry_id item=value}-->
 					<!--{if $mode == 'edit_meta'}-->
-						<input type="input" value="<!--{$value}-->" name="set_meta_data[<!--{$entry_id}-->]">
+						<input type="input" value="<!--{$value}-->" name="set_meta_data[<!--{$entry_id}-->]" size="15">
 					<!--{else}-->
 						<!--{$value}--> 
 					<!--{/if}-->
@@ -76,7 +76,7 @@
 				<!--{/foreach}-->
 				
 				<!--{if $mode == 'edit_meta'}-->
-					<input type="input" name="new_meta_data[<!--{$id}-->]" value="">
+					<input type="input" name="new_meta_data[<!--{$id}-->]" size="15"><br>
 				<!--{/if}-->
 			
 			<!--{/foreach}-->
