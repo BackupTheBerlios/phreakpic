@@ -10,6 +10,7 @@ Beta Release:
 - Added user profile configuration
 - Added basket page
 - Child content amount now saved in db (for performance)
+- Comments amount saved in db (for performace)
 
 Changed Tables:
 Added:
@@ -20,4 +21,6 @@ Deleted:
 - contentgroups
 
 Fileds:
-- in phreakpic_cats added child_content_amount
+- phreakpic_cats: added child_content_amount
+- phreakpic_cats: added child_comments_amount
+- phreakpic_content: added comments_amount
