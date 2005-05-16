@@ -2,7 +2,7 @@
 
 //Template System
 //absolute path to smarty
-define("SMARTY_DIR","/home/httpd/htdocs/smarty/");
+define("SMARTY_DIR","/home/www/alte-sauna/smarty/");
 
 //relative path from phreakpic to phpBB2 (if the URL is "http://www.blabla.com/com/phpBB2/" and phreakpic is at "http://www.blabla.com/com/phreakpic/" then PHPBB_DIR will be "../phpBB2/")
 //Don't forget the / at end!
@@ -11,14 +11,16 @@ define("PHPBB_PATH","../phpBB2/");
 //relative path from phpBB2 to phreakpic see above
 define("PHREAKPIC_PATH","../phreakpic/");
 
-//link for the home button
-define("SERVER_NAME","http://192.168.101.2");
+
+
+define("SERVER_NAME","http://sauna.events-for-love.de");
+
 
 
 $config_vars = array
 (
 	//Database
-	'table_prefix' => 'photo_',
+	'table_prefix' => 'phreakpic_',
 
 	// path to where the content should be stored
 	'content_path_prefix' => 'content',
@@ -46,12 +48,12 @@ $config_vars = array
 
 	// Umask of new created directories
 	'dir_mask' => 0775,
-  
+	
 	//view_cat.php the Colums of the table, where we can see the thumbnails
 	'thumb_table_cols' => 4,
 
 	// template used if not setted by user
-	'default_template' => 'standard',
+	'default_template' => 'standard_black',
 
 	// language used if not setted by user
 	'default_lang' => 'german',
@@ -59,8 +61,17 @@ $config_vars = array
 	'default_upload_dir' => 'upload',
 	
 	// the ids of the usergroups in which every user is automaicly
-	'default_usergroup_ids' => Array(1),
+	'default_usergroup_ids' => Array(2),
 	
+	// the ids of the usergroups in which every registered user is automaicly
+	'registered_users_usergroup_ids' => Array(3),
 	
+	'default_content_per_page' => 20,
+	
+	'selectable_content_per_page' => Array(-1,12,20,24,48), 
+	
+	'cookie_name' => 'phreakpic',
+	
+	'default_basket_enable' => false
 );
 ?>
