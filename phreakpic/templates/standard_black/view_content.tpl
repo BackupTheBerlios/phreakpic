@@ -80,7 +80,7 @@
 			
 			<!--{/foreach}-->
 			<br>
-			
+
 			
 			<!--{if $mode == 'edit_meta'}-->
 					<input type="submit" name="edit_meta" value="<!--{$lang.commit}-->"> 
