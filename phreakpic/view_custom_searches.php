@@ -132,20 +132,20 @@ $smarty->assign('fields',$fields);
 if (($submit) or (!$no_instand_submit))
 {
 
-	
-	
-	
+
+
+
 	// replace placeholder with data from params
 	$sql=make_sql($HTTP_POST_VARS['returns']);
-	
 	//clear content array
+#	echo $sql;
 	unset ($contents);
-	
+
 	if (!$result = $db->sql_query($sql))
 	{
 		message_die(GENERAL_ERROR, "Error in sql", '', __LINE__, __FILE__, $sql);
 	}
-		
+
 	//fill content array with result from query
 	while ($row = $db->sql_fetchrow($result))
 	{
@@ -157,12 +157,12 @@ if (($submit) or (!$no_instand_submit))
 			{
 				$new_content->add_params[$arr_keys[$i]] = $row[$arr_keys[$i]];
 			}
-			
+
 			$contents[]=$new_content;
 		}
 	}
 	
-	
+
 	// save contents array for view_content next and back buttons
 	$HTTP_SESSION_VARS['contents']=$contents;
 	// save link back to the thumbs for view_content
@@ -170,8 +170,8 @@ if (($submit) or (!$no_instand_submit))
 	$smarty->assign('thumb_link',$HTTP_SESSION_VARS['thumb_link']);
 	// also the setted params
 	$HTTP_SESSION_VARS['rets']=$HTTP_POST_VARS['returns'];
-	
-	
+
+
 
 	include "includes/view_thumbs.php";
 }
@@ -188,6 +188,6 @@ $template_execution_time = $template_end_time - $end_time;
 echo("execution_time: $execution_time seconds<br>");
 echo("template_execution_time: $template_execution_time seconds<br>");
 $execution_time = $end_time - $start_time + $template_execution_time;
-echo("gesamt execution_time: $execution_time seconds<br>");	
+echo("gesamt execution_time: $execution_time seconds<br>");
 
 ?>
