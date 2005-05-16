@@ -58,16 +58,16 @@ $smarty->assign('searches',$searches);
 
 // if a query has been selected
 $no_instand_submit=true;
-if (isset($query))
+if (isset($_GET['query']))
 {
 	$no_instand_submit=false;
 	
 	//smarty needs to now this for adding it to the link again
-	$smarty->assign('query',$query);
+	$smarty->assign('query',$_GET['query']);
 	
 
 	// get xml string for that query
-	$sql="SELECT xml from {$config_vars['table_prefix']}custom_searches WHERE id=$query";
+	$sql="SELECT xml from {$config_vars['table_prefix']}custom_searches WHERE id={$_GET['query']}";
 	if (!$result = $db->sql_query($sql))
 	{
 		message_die(GENERAL_ERROR, "Error in sql", '', __LINE__, __FILE__, $sql);
