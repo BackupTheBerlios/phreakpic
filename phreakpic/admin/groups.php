@@ -13,6 +13,7 @@ if ($userdata['user_level'] != 1)
 	error_report(AUTH_ERROR, 'no_admin' , __LINE__, __FILE__);
 }
 
+
 $allowed_types= Array ('content_meta_field','usergroup','group');
 
 if (in_array($HTTP_GET_VARS['type'],$allowed_types))
@@ -30,7 +31,7 @@ else
 
 
 
-$entry = new $_GET['type']();
+$entry = new $_SESSION['type']();
 
 
 if (isset($HTTP_POST_VARS['delete']))
@@ -69,7 +70,7 @@ if (isset($HTTP_POST_VARS['change']))
 
 
 // get all usergroups
-$sql = "SELECT * from " . $config_vars['table_prefix'] . "{$_GET[type]}s";
+$sql = "SELECT * from " . $config_vars['table_prefix'] . "{$_SESSION[type]}s";
 if (!$result = $db->sql_query($sql))
 {
 	error_report(AUTH_ERROR, 'get_groups' , __LINE__, __FILE__,$sql);
@@ -97,7 +98,7 @@ $smarty->assign('processing_vars',$entry->processing_vars);
 $smarty->assign('groups',$groups);
 $smarty->assign('sel_group_id',$HTTP_GET_VARS['sel_group_id']);
 $smarty->assign('sel_group',$sel_group);
-$smarty->assign('group_name',$lang[$_GET['type'].'s']);
+$smarty->assign('group_name',$lang[$_SESSION['type'].'s']);
 $smarty->assign('new_group',$lang["new_".$type]);
 $smarty->display($userdata['photo_user_template'].'/admin/groups.tpl');
 
