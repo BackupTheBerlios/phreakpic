@@ -12,6 +12,8 @@ include_once(ROOT_PATH . 'modules/authorisation/interface.inc.php');
 // 	error_report(AUTH_ERROR, 'no_admin' , __LINE__, __FILE__,$sql);
 // }
 
+$usergroup=$_GET['usergroup'];
+
 if (!isset($usergroup))
 {
 	$usergroup=1;

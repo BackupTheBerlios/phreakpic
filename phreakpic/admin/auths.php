@@ -32,7 +32,8 @@ else
 $type = $HTTP_SESSION_VARS['type'];
 
 
-
+$group=$_GET['group'];
+$usergroup=$_GET['usergroup'];
 
 if (!isset($group))
 {
