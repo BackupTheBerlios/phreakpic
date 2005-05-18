@@ -30,7 +30,7 @@ else
 
 
 
-$entry = new $type();
+$entry = new $_GET['type']();
 
 
 if (isset($HTTP_POST_VARS['delete']))
@@ -69,7 +69,7 @@ if (isset($HTTP_POST_VARS['change']))
 
 
 // get all usergroups
-$sql = "SELECT * from " . $config_vars['table_prefix'] . "{$type}s";
+$sql = "SELECT * from " . $config_vars['table_prefix'] . "{$_GET[type]}s";
 if (!$result = $db->sql_query($sql))
 {
 	error_report(AUTH_ERROR, 'get_groups' , __LINE__, __FILE__,$sql);
@@ -97,7 +97,7 @@ $smarty->assign('processing_vars',$entry->processing_vars);
 $smarty->assign('groups',$groups);
 $smarty->assign('sel_group_id',$HTTP_GET_VARS['sel_group_id']);
 $smarty->assign('sel_group',$sel_group);
-$smarty->assign('group_name',$lang[$type.'s']);
+$smarty->assign('group_name',$lang[$_GET['type'].'s']);
 $smarty->assign('new_group',$lang["new_".$type]);
 $smarty->display($userdata['photo_user_template'].'/admin/groups.tpl');
 
